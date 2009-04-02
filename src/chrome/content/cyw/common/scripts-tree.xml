@@ -1,0 +1,66 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		<binding id="scriptsTree">
+			<content>
+            <xul:vbox flex="1">
+               <xul:label control="filterStringTB" accesskey="S" value="Select an script to open (? = any character, * = any string):"/>
+               <xul:textbox id="filterStringTB" anonid="filterStringTB" oninput="document.getBindingParent(this).filterScripts(event)"/>
+               <xul:tree id="scriptsTree" anonid="scriptsTree" flex="1" style="margin-top:7px" enableColumnDrag="true" seltype="single" xbl:inherits="editable" >
+                  <xul:treecols>
+                     <xul:treecol id="treeColName" label="Name" flex="1" sortDirection="none" sortActive="false"/>
+                     <xul:splitter class="tree-splitter"/>
+                     <xul:treecol id="treeColUrlPattern" label="URL Pattern" flex="2"  sortDirection="none" sortActive="false"/>
+                     <xul:splitter class="tree-splitter"/>
+                     <xul:treecol id="treeColDisabled" label="Disabled" type="checkbox" editable="true" sortDirection="none" sortActive="false"/>
+                  </xul:treecols>
+                  <xul:treechildren alternatingbackground="true"/>
+               </xul:tree>
+            </xul:vbox>
+			</content>
+			<implementation>
+            <constructor>
+               //imports
+               //customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/common/ScriptTreeItem.js", customizeyourweb)
+               //customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/common/ScriptTreeView.js", customizeyourweb)
+
+               this.filterStringTB = customizeyourweb.DomUtils.getElementByAnonId(this, "filterStringTB")
+               this.scriptsTree = customizeyourweb.DomUtils.getElementByAnonId(this, "scriptsTree")
+               customizeyourweb.CywConfig.init()
+               this.scriptsTreeView = new customizeyourweb.ScriptTreeView(this.scriptsTree, customizeyourweb.CywConfig.getScripts())
+            </constructor>
+            <method name="filterScripts">
+               <parameter name="event"/>
+               <body>
+                  var filterString = event.target.value
+                  customizeyourweb.Utils.executeDelayed("FILTER_SCRIPTS", 500, function(){
+                     this.scriptsTreeView.filter(filterString)
+                  }, this) 
+               </body>
+            </method>
+            <method name="focusTree">
+               <body>
+                  this.scriptsTree.focus()
+               </body>
+            </method>
+            <method name="getTreeView">
+               <body>
+                  return this.scriptsTreeView
+               </body>
+            </method>
+            <method name="isEditable">
+               <body>
+                  return this.getAttribute('editable')=="true"
+               </body>
+            </method>
+			</implementation>
+			<handlers>
+            <handler keycode="vk_delete" event="keydown">
+               if(this.isEditable()){
+                  this.scriptsTreeView.removeSelected(true)
+               }   
+            </handler>
+			</handlers>
+		</binding>
+</bindings>

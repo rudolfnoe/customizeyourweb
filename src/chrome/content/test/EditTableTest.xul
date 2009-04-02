@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+    buttons="accept,cancel"
+    ondialogaccept="" ondialogcancel=""
+    onload="customizeyourweb.Handler.doOnload(); setView()"
+    title="EditTableTest" style="position:relative">
+   <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
+   <script src="EditTableTest.js"/>
+   
+   <popupset>
+      <!--menupopup id="testpup">
+         <menuitem label="Test" />
+         <menuitem label="Test" selected="true"/>
+         <menuitem label="Test"/>
+      </menupopup-->
+      <panel id="testpup">
+         <listbox>
+            <listitem label="test"></listitem>
+            <listitem label="test" selected="true"></listitem>
+            <listitem label="test"></listitem>
+            <listitem label="test"></listitem>
+         </listbox>
+      </panel>
+   </popupset>
+   <vbox >
+      <label value="Input1"/>
+      <menulist id="myTextbox1" editable="true">
+         <menupopup>
+            <menuitem label="test"/>
+            <menuitem label="test"/>
+            <menuitem label="test"/>
+            <menuitem label="test"/>
+         </menupopup>
+      </menulist>
+      <label value="Input1"/>
+      <menulist id="myMenulist1" editable="true">
+         <menupopup>
+            <menuitem label="test"/>
+            <menuitem label="test"/>
+            <menuitem label="test"/>
+            <menuitem label="test"/>
+         </menupopup>
+      </menulist>
+      <label value="Input2"/>
+      <textbox id="myTextbox2"/>
+      <label value="Result"/>
+      <textbox id="validationResult"/>
+      <button id="myButton" label="MyButton"></button>
+      <listbox id="myListbox">
+         <listitem label="Test"></listitem>
+         <listitem label="Test"></listitem>
+         <listitem label="Test"></listitem>
+         <listitem label="Test"></listitem>
+      </listbox>
+  
+<script>
+ var treeView = {  
+     rowCount : 10000,  
+     getCellText : function(row,column){  
+       if (column.id == "namecol") return "Row "+row;  
+       else return "February 18";  
+     },  
+     setTree: function(treebox){ this.treebox = treebox; },  
+     isContainer: function(row){ return false; },  
+     isSeparator: function(row){ return false; },  
+     isSorted: function(){ return false; },  
+     getLevel: function(row){ return 0; },  
+     getImageSrc: function(row,col){ return null; },  
+     getRowProperties: function(row,props){},  
+     getCellProperties: function(row,col,props){},  
+     getColumnProperties: function(colid,col,props){}  
+ };  
+   
+ function setView(){  
+     document.getElementById('my-tree').view = treeView;  
+ }  
+ </script>  
+   
+ <tree id="my-tree" flex="1" height="100px" enableColumnDrag="true" seltype="single">  
+   <treecols>  
+                     <treecol id="treeColName" label="Name" flex="1" sortDirection="ascending" sortActive="true"/>
+                     <splitter class="tree-splitter"/>
+                     <treecol id="treeColUrlPattern" label="URL Pattern" flex="2"  sortDirection="ascending" sortActive="true"/>
+                     <splitter class="tree-splitter"/>
+                     <treecol id="treeColDisabled" label="Disabled" type="checkbox" editable="true" sortDirection="ascending" sortActive="true"/>
+   
+     <!--treecol id="namecol" label="Name" flex="1"/>
+     <splitter class="tree-splitter"/>  
+     <treecol id="datecol" label="Date" flex="1"/>  
+     <splitter class="tree-splitter"/>  
+     <treecol id="testcol" label="Date" flex="1"/-->  
+   </treecols>  
+   <treechildren/>  
+ </tree>  
+
+ </vbox>
+
+</dialog>
