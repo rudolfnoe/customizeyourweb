@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://browser/skin/"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/common/scripts-tree.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://customizeyourweb/locale/prefs.dtd">
+
+<!-- 
+	 *
+	 * Mouseless Browsing 
+	 * Version 0.5
+	 * Created by Rudolf No�
+	 * 01.01.2008
+	 *
+	 * The "keyinputbox" is borrowed from Hit-a-Hint created by 
+	 * Pekka P. Sillanpaa (c) (THANKS!)
+	 * 
+	 * -->
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	id="pref-customizeyourweb"
+	title="Customize Your Web"
+	centerWindowOnScreen="true"
+	modal="true"
+	onload="customizeyourweb.CywPrefsDialogHandler.doOnload()"
+	ondialogaccept="return customizeyourweb.CywPrefsDialogHandler.doOk()"
+   persist="screenX screenY width height">
+   
+	<script type="application/x-javascript" src="../CywCommon.js"/>
+   <script type="application/x-javascript" src="../common/ScriptTreeView.js"/>
+   <script type="application/x-javascript" src="../common/ScriptTreeItem.js"/>
+	<script type="application/x-javascript" src="../core/CywConfig.js"/>
+	<script type="application/x-javascript" src="cyw_prefs_dialog.js"/>
+   
+   <stringbundleset>
+   	<!--stringbundle id="jsStrings" src="chrome://mouselessbrowsing/locale/prefs.properties"/-->
+   </stringbundleset>
+
+   <broadcasterset>
+      <broadcaster id="keyListboxBC" disabled="true"/>
+   </broadcasterset>
+   
+	<popupset>
+		<menupopup id="keyboxKeysPU" position="after_start">
+			<menuitem label="&keyboxKeys.menuitem.tab.label;" oncommand="setKeyboxFromKeyboxMenu('keyInputBox', 'TAB')"/>
+			<menuitem label="&keyboxKeys.menuitem.shift_tab.label;" oncommand="setKeyboxFromKeyboxMenu('keyInputBox', 'SHIFT_TAB')"/>
+		</menupopup>
+		
+	</popupset>
+	<vbox>
+	<tabbox>
+		<tabs>
+			<tab label="Scripts" />
+			<tab label="Options" />
+			<tab label="Keys" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<vbox flex="1">
+               <scriptstree id="scriptsTree" flex="1" editable="true" persist="colOrdinals" colOrdinals=""/>
+					<hbox style="margin-top:7px">
+						<spacer flex="1"/>
+						<button label="Edit" accesskey="e"></button>
+						<button label="Delete" accesskey="d" oncommand="customizeyourweb.CywPrefsDialogHandler.removeScript()"></button>
+					</hbox>
+				</vbox>
+			</tabpanel>
+			<tabpanel>
+				<vbox flex="1">
+               <hbox>
+                  <groupbox flex="1" style="min-width:200px">
+                     <caption label="General options"></caption>
+                     <grid flex="1">
+                        <columns>
+                           <column></column>
+                           <column></column>
+                        </columns>
+                        <rows>
+                           <row align="center">
+                              <checkbox label="Disable Customize Your Web" prefid="customizeyourweb.disabled"/>
+                           </row>
+                           <row align="center">
+                              <checkbox label="Automatically update page after saving script" prefid="customizeyourweb.autoUpatePageOnSave"/>
+                           </row>
+                        </rows>
+                     </grid>
+                     <hbox align="center">
+                        <label value="Shortstring execution delay"/>
+                        <textbox type="number" prefid="customizeyourweb.shortcut.executionDelay" width="100px"/>
+                     </hbox>
+                  </groupbox>
+                  <groupbox flex="1" style="min-width:200px">
+                     <caption label="Layout Options"/>
+                     <grid flex="1">
+                        <columns>
+                           <column></column>
+                           <column></column>
+                        </columns>
+                        <rows>
+                           <row align="center">
+                              <checkbox label="Hide statusbar icon" prefid="customizeyourweb.ui.hideStatusbarIcon"/>
+                           </row>
+                           <row align="center">
+                              <checkbox label="Hide tools menuitem" prefid="customizeyourweb.ui.hideToolsMenu"/>
+                           </row>
+                        </rows>
+                     </grid>
+                  </groupbox>
+               </hbox>
+				</vbox>
+			</tabpanel>
+         <tabpanel>
+            <vbox flex="1">
+               <listbox id="keyListBox" prefLoadFunction="customizeyourweb.loadKeyListbox('keyListBox')" prefSaveFunction="customizeyourweb.saveKeyListbox('keyListBox')" onselect="byId('keyListboxBC').setAttribute('disabled', false)" height="290px">
+                  <listcols>
+                  	<listcol flex="1"/>
+                  	<listcol width="150px"/>
+                  </listcols>
+                  <listhead>
+                     <listheader label="Action" />
+                     <listheader label="Key Combination" />
+                  </listhead>
+                  <listitem prefid="customizeyourweb.keys.blockKeyboardInputForEnteringShortString">
+                     <listcell label="Block keyboard input for entering shortstring"/>
+                     <listcell />
+                  </listitem>
+                  <listitem prefid="customizeyourweb.keys.openConfiguration">
+                     <listcell label="Open Configuration"/>
+                     <listcell />
+                  </listitem>
+                  <listitem prefid="customizeyourweb.keys.toggleEditMode">
+                     <listcell label="Toggle Editing"/>
+                     <listcell />
+                  </listitem>
+               </listbox>
+               <hbox align="center" style="margin-top:5px">
+                  <label value="Key Combination"/>
+                  <keyinputbox id="keyInputBox" maxlength="1" allowmodifiers="true" flex="1" context="keyboxKeysPU" namespaceObj="customizeyourweb"/>
+                  <button label="&keys.assignBU.label;" accesskey="&keys.assignBU.accesskey;" oncommand="customizeyourweb.onCommandAssignShortcut('keyListBox', 'keyInputBox')" observes="keyListboxBC"></button>
+                  <button label="&keys.removeBU.label;" accesskey="&keys.removeBU.accesskey;" oncommand="customizeyourweb.onCommandRemoveShortcut('keyListBox')" observes="keyListboxBC"></button>
+                  <button label="&keys.restore_defaultBU.label;" accesskey="&keys.restore_defaultBU.accesskey;" oncommand="customizeyourweb.onCommandRestoreDefault('keyListBox')" observes="keyListboxBC"></button>
+               </hbox>              
+            </vbox>
+         </tabpanel>
+		</tabpanels>
+	</tabbox>
+   <label value="&description.label;" style="margin-top:5px"/>
+   <textbox id="helpDescriptionTB" multiline="true" rows="4" readonly="true" tabindex="-1"/>
+	</vbox>
+</dialog>

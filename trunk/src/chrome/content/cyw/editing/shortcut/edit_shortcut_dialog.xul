@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/targetdefinition.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="editDialog"
+    buttons="accept,cancel"
+    ondialogaccept="customizeyourweb.EditShortcutDialogHandler.doOk()" 
+    onload="customizeyourweb.EditShortcutDialogHandler.doOnload()"
+    title="Edit Shortcut Action"
+    persist="screenX screenY width height">
+   
+   <script src="../../CywCommon.js"/>
+   <script src="edit_shortcut_dialog.js"/>
+   
+   <vbox>
+      <dialogheader title="Edit properties for shortcut"/>
+      <groupbox>
+         <caption label="Shortcut properties"></caption>
+         
+         <grid>
+            <columns>
+               <column></column>
+               <column flex="1"></column>
+            </columns>
+            <rows>
+               <row align="center">
+                  <label value="Key Combination"/>
+                  <keyinputbox id="keyCombinationKIB" namespaceObj="customizeyourweb"/>
+               </row>
+               <row align="center">
+                  <label value="Short String"/>
+                  <shortstringinputbox/>
+               </row>
+               <row id="linkTargetRow" align="center" collapsed="true">
+                  <label value="Link target"/>
+                  <menulist id="linkTargetML" persist="value">
+                     <menupopup>
+                        <menuitem label="Same tab" value="current" selected="true"/>
+                        <menuitem label="New tab" value="tab"/>
+                        <menuitem label="New window" value="window"/>
+                     </menupopup>
+                  </menulist>
+               </row>
+               <row id="initStateRow" align="center" collapsed="true">
+                  <label value="Initial state"/>
+                  <menulist id="initalStateML">
+                     <menupopup>
+                        <menuitem label="Hidden" value="hidden"/>
+                        <menuitem label="Visible" value="visible"/>
+                     </menupopup>
+                  </menulist>
+               </row>
+               <row id="keepSpaceRow" align="center" collapsed="true">
+                  <label value="Keep space if hidden"/>
+                  <menulist id="keepSpaceML">
+                     <menupopup>
+                        <menuitem label="Yes" value="true"/>
+                        <menuitem label="No" value="false"/>
+                     </menupopup>
+                  </menulist>
+               </row>
+               <row id="macroRow" align="center" collapsed="true">
+                  <label value="Macro name"/>
+                  <textbox id="macroNameTB" flex="1"/>
+               </row>
+            </rows>
+         </grid>
+      </groupbox>
+      <checkbox id="selectCB" label="Select content of textfield" persist="checked" collapsed="true"/>
+      <targetdefinition id="targetdefinition" autoInit="false"/>
+   </vbox>
+
+</dialog>

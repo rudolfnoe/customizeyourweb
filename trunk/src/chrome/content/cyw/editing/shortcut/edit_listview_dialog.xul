@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/bindings/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/targetdefinition.css" type="text/css"?>
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="editDialog"
+    buttons="accept,cancel"
+    ondialogaccept="customizeyourweb.EditListViewDialogHandler.doOk()"
+    ondialogcancel="customizeyourweb.EditListViewDialogHandler.doCancel()"
+    onload="customizeyourweb.EditListViewDialogHandler.doOnload()"
+    title="Edit List View Action"
+    persist="screenX screenY width height">
+   <script src="../../CywCommon.js"/>
+   <script src="edit_listview_dialog.js"/>
+   
+   <dialogheader title="Define the settings for the listview" rows="1"/>
+   <vbox>
+      <groupbox>
+         <caption label="Listview properties"/>
+         <grid style="margin-bottom:7px">
+            <columns>
+               <column></column>
+               <column flex="1"></column>
+            </columns>
+            <rows>
+               <row align="center">
+                  <label value="Key Combination to focus list view"/>
+                  <keyinputbox id="keyCombinationKIB" flex="1" namespaceObj="customizeyourweb"/>
+               </row>
+               <row align="center">
+                  <label value="Shortstring to focus list view"/>
+                  <shortstringinputbox/>
+               </row>
+               <row align="center">
+                  <label value="List items tag name"/>
+                  <textbox id="listItemsTagNameTB"/>
+               </row>
+               <row align="center">
+                  <label value="Highlight background-color"/>
+                  <colorfield id="highlightBackgroundCF" flex="1"/>
+               </row>
+               <row>
+                  <label value="Number of header rows"/>
+                  <textbox id="noOfHeaderRowsTB" type="number" min="0" maxwidth="40px"/>
+               </row>
+            </rows>
+         </grid>
+         <checkbox id="focusOnLoadCB" label="Automatically focus after page load"/>
+      </groupbox>
+      <targetdefinition id="targetdefinition"/>      
+   </vbox>
+
+</dialog>

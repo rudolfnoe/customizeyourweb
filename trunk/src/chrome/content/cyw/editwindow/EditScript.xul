@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
+<?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+
+<page id="cywEditScriptSidebar" title="Edit Script"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:html="http://www.w3.org/1999/xhtml"
+   onload="customizeyourweb.CywSidebarWinHandler.doOnload(event)" >
+   <script src="../CywCommon.js"/>
+   <script src="../core/CywConfig.js"/>
+   <script src="../core/CywContext.js"/>
+   <script src="../core/CywUtils.js"/>
+   <script src="AbstractActionTreeItem.js"/>
+   <script src="ActionLeafTreeItem.js"/>
+   <script src="ActionContainerTreeItem.js"/>
+   <script src="ActionsTreeView.js"/>
+   <script src="SidebarWinHandler.js"/>
+
+   <commandset>
+      <command id="cancelCmd" label="Cancel" oncommand="customizeyourweb.CywSidebarWinHandler.cancel()" />
+      <command id="copyActionCmd" label="Copy" oncommand="customizeyourweb.CywSidebarWinHandler.copyAction()"/>
+      <command id="cutActionCmd" label="Cut" oncommand="customizeyourweb.CywSidebarWinHandler.cutAction()"/>
+      <command id="deleteScriptCmd" label="Delete Script" oncommand="customizeyourweb.CywSidebarWinHandler.deleteScript()" disabled="true" />
+      <command id="editActionCmd" label="Edit" oncommand="customizeyourweb.CywSidebarWinHandler.editAction()" disabled="true" />
+      <command id="moveDownCmd" label="Down" oncommand="customizeyourweb.CywSidebarWinHandler.moveDown()" disabled="true" />
+      <command id="moveUpCmd" label="Up" oncommand="customizeyourweb.CywSidebarWinHandler.moveUp()" disabled="true" />
+      <command id="pasteActionTreeClipboardCmd" label="Paste" oncommand="customizeyourweb.CywSidebarWinHandler.pasteActionTreeClipboard()"/>
+      <command id="removeActionCmd" label="Remove" oncommand="customizeyourweb.CywSidebarWinHandler.removeAction()" disabled="true" />
+      <command id="selectScriptCmd" label="Select..." oncommand="customizeyourweb.CywSidebarWinHandler.selectScript()"/>
+      <command id="saveCmd" label="Save" oncommand="customizeyourweb.CywSidebarWinHandler.saveScript(false)" />
+   </commandset>
+   
+   <popupset>
+      <menupopup id="editlistboxMPU">
+         <menuitem label="test"/>
+      </menupopup>
+      <menupopup id="treeContextMPU">
+         <menuitem command="copyActionCmd"/>
+         <menuitem command="cutActionCmd"/>
+         <menuitem command="pasteActionTreeClipboardCmd"/>
+      </menupopup>
+   </popupset>
+   
+   <dialogheader title="Edit Script Properties" style="margin-top:0px" rows="2"/>
+   <tabbox>
+      <tabs>
+         <tab label="Main"/>
+         <tab label="Settings"/>
+      </tabs>             
+   <tabpanels>
+      <tabpanel>
+         <vbox flex="1">
+            <label value="Scripts" accesskey="p"/>
+            <hbox>
+               <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1">
+                  <menupopup>
+                  </menupopup>
+               </menulist>
+               <button command="selectScriptCmd" style="width:30px"/>
+            </hbox>
+            <label value="Name (optional)" />
+            <hbox>
+               <textbox id="name" flex="1"/>
+               <checkbox id="scriptDisabled" label="Disabled"/>
+            </hbox>
+            <!-- editor for editable menulist-->
+            <menulist id="urlPatternProposals" editable="true" flex="1">
+               <menupopup id="urlPatternPopup">
+               </menupopup>
+            </menulist>
+            <label value="Include URL Patterns (* = any string)" accesskey="U" />
+            <richlistbox id="includePatterns" height="100px" flex="1" selType="single">
+               <!-- will be dynamically filled -->
+            </richlistbox>
+            <label value="Actions" accesskey="a"/>
+            <tree id="actionsTreeView" height="400px" flex="1" rows="20" seltype="single" context="treeContextMPU" 
+                  onselect="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
+                  onclick="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
+                  ondblclick="document.getElementById('editBU').click()">
+               <treecols>
+                  <treecol id="nameCol" label="Name" flex="1" primary="true"/>
+               </treecols>
+               <treechildren/>
+            </tree>
+            <grid style="margin-top:7px" flex="1"> 
+               <columns>
+                  <column flex="1"></column>
+                  <column></column>
+                  <column></column>
+                  <column></column>
+               </columns>
+               <rows>
+                  <row>
+                     <button id="editBU" class="button" command="editActionCmd" tooltiptext="Enter, Alt+Shift+E">
+                        <html:u>E</html:u>dit
+                     </button>
+                     <button class="button" command="removeActionCmd" tooltiptext="Del, Alt+Shift+R">
+                        <html:u>R</html:u>emove
+                     </button>
+                     <button command="moveUpCmd" tooltiptext="Ctrl+Arrow up"/>
+                     <button command="moveDownCmd" tooltiptext="Ctrl+Arrow down"/>
+                  </row>
+               </rows>
+            </grid>
+         </vbox>
+      </tabpanel>
+      <tabpanel>
+         <vbox flex="1">
+            <label value="Time when script should run"/>
+            <menulist id="loadEventType" editable="false">
+               <menupopup>
+                  <menuitem label="Before page is fully loaded (techn. on DOMContentLoaded)" value="DOMContentLoaded"/>
+                  <menuitem label="After page is fully loaded (techn. on Pageshow)" value="pageshow"/>
+               </menupopup>
+            </menulist>
+            <label value="Behavior on dynamic page changes (via JavaScript)"/>
+            <menulist id="behaviorOnMutationEvent" editable="false">
+               <menupopup>
+                  <menuitem label="Rerun script when page is changed via JavaScript" value="RUN_ALWAYS"/>
+                  <menuitem label="Run script only once on page load" value="RUN_NEVER"/>
+               </menupopup>
+            </menulist>
+         </vbox>
+      </tabpanel>
+   </tabpanels>
+   </tabbox>
+   <grid flex="1" style="margin-top:7px; margin-left:10px; margin-right:10px"> 
+      <columns>
+         <column></column>
+         <column flex="1"></column>
+         <column></column>
+         <column></column>
+      </columns>
+      <rows>
+         <row >
+            <button class="button" command="deleteScriptCmd" tooltiptext="Alt+Shift+D">
+               <html:u>D</html:u>elete Script
+            </button>
+            <spacer flex="1"/>
+            <button class="button" command="saveCmd" tooltiptext="Ctrl+S, Alt+Shift+S">
+               <html:u>S</html:u>ave
+            </button>
+            <button class="button" command="cancelCmd" tooltiptext="Alt+Shift+C">
+               <html:u>C</html:u>ancel
+            </button>
+         </row>
+      </rows>
+   </grid>
+</page>
