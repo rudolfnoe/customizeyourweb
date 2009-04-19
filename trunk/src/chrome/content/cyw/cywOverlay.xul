@@ -23,6 +23,7 @@
       <command id="customizeyourweb_disableCustomizeYourWeb" label="Disable Customize Your Web" oncommand="customizeyourweb.InitManager.toggleEnableDisableAll(event)"
                accesskey="d"/>
       <command id="customizeyourweb_focusCmd" label="Focus" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_giveFeedback" label="Give Feedback" oncommand="customizeyourweb.EventHandler.giveFeedback(event)"/>   	
       <command id="customizeyourweb_hideStatusbar" label="Hide statusbar" oncommand="customizeyourweb.StatusbarManager.hideStatusbar()"/>   	
       <command id="customizeyourweb_hideToolsMenu" label="Hide menu" oncommand="customizeyourweb.EventHandler.hideToolsMenu()"
                accesskey="h"/>   	
@@ -34,6 +35,8 @@
       <command id="customizeyourweb_modifyCmd" label="Modify" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
       <command id="customizeyourweb_openConfiguration" label="Open Configuration..." oncommand="customizeyourweb.EventHandler.openConfiguration(event)" 
                accesskey="c"/>
+      <command id="customizeyourweb_openIssueList" label="Report Bug" oncommand="customizeyourweb.EventHandler.openIssueList()" 
+               accesskey="b"/>
       <command id="customizeyourweb_pasteBeforeCmd" label="Paste before" where="before" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
       <command id="customizeyourweb_pasteAfterCmd" label="Paste after" where="after" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
       <command id="customizeyourweb_pasteFirstChildCmd" label="Paste as first child" where="firstChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
@@ -42,6 +45,7 @@
       <command id="customizeyourweb_retargetActionCmd" label="Retarget Action" oncommand="customizeyourweb.EditScriptHandler.retargetAction()"/>   	
       <command id="customizeyourweb_shortcutCmd" label="Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_toggleVisibilityShortcutCmd" label="Toggle Visibility" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_toggleEditMode" label="Toggle Editing" oncommand="customizeyourweb.EditScriptHandler.toggleEditMode()"/>   	
    </commandset>
    
    <popupset>
@@ -166,8 +170,12 @@
       </panel>
       
       <menupopup id="customizeyourweb_statusbar_context">
+         <menuitem command="customizeyourweb_toggleEditMode"/>
          <menuitem command="customizeyourweb_openConfiguration"/>
          <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
+         <menuseparator/>
+         <menuitem command="customizeyourweb_openIssueList"/>
+         <menuitem command="customizeyourweb_giveFeedback"/>
          <menuseparator/>
          <menuitem command="customizeyourweb_hideStatusbar"/>
       </menupopup>
@@ -177,8 +185,12 @@
    <menupopup id="menu_ToolsPopup">
       <menu id="customizeyourweb_tools_menu" label="Customize Your Web" insertbefore="sanitizeSeparator" accesskey="c" >
          <menupopup>
+            <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
             <menuitem command="customizeyourweb_openConfiguration"/>
             <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
+            <menuseparator/>
+            <menuitem command="customizeyourweb_openIssueList"/>
+            <menuitem command="customizeyourweb_giveFeedback"/>
             <menuseparator/>
             <menuitem command="customizeyourweb_hideToolsMenu"/>
          </menupopup>      

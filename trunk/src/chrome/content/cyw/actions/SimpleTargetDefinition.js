@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
    const ATTRITBUTES_FOR_XPATH = "name, id, href";
-   const SLASH_REPLACE_RCYW_EXP = /\//g
-   const WORD_RCYW_EXP = /\w+/
+   const SLASH_REPLACE_REG_EXP = /\//g
+   const WORD_REG_EXP = /\w+/
    
    function SimpleTargetDefinition(tagName){
       //Map with attribute / value pairs
@@ -14,7 +14,7 @@ with(customizeyourweb){
    //static methods
    SimpleTargetDefinition.getAttributeValue = function(element, attrName){
       if(attrName=="form"){
-         return element.form.name
+         return element.form?element.form.name:null
       }else if(attrName=="text"){
          return this.getTextContent(element) 
       }
@@ -78,11 +78,11 @@ with(customizeyourweb){
                xPathExp += " and"
             var attrValueDef = this.attributeDefinitions[attrName]
             if(attrName=="text"){
-               var matches = attrValueDef.match(WORD_RCYW_EXP)
+               var matches = attrValueDef.match(WORD_REG_EXP)
                if(matches.length==0){
                   xPathExp += "true()"
                }else {
-                  xPathExp += ' contains(descendant-or-self::text(), "' + matches[0] + '")'   
+                  xPathExp += ' contains(string(), "' + matches[0] + '")'   
                }
             }else if(this.isAttrValuePrefixDef(attrValueDef)){
                xPathExp += " starts-with(@" + attrName + ', "' +  this.getAttributeValueDefPrefix(attrValueDef) + '")'

@@ -36,6 +36,8 @@
             if(body){
                body.focus()
             }
+         }else if (target.tagName=="IFRAME" || target.tagName=="FRAME"){
+            target.contentDocument.defaultView.focus()
          }else{
             var elemWrapper = new ElementWrapper(target)
             if(!target.hasAttribute('tabindex')){

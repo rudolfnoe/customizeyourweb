@@ -25,13 +25,14 @@ with(customizeyourweb){
    ListViewHandler.prototype = {
       checkBlur: function(){
          var focusedElement = document.commandDispatcher.focusedElement
-         if(!focusedElement){
-            return
+         var isBlurred = true
+         if(focusedElement){
+            var compDocPosResult = this.rootElement.compareDocumentPosition( focusedElement )
+            if((compDocPosResult & Node.DOCUMENT_POSITION_CONTAINED_BY)!=0 || this.rootElement == focusedElement){
+               var isBlurred = false
+            }
          }
-         var compDocPosResult = this.rootElement.compareDocumentPosition( focusedElement )
-         if((compDocPosResult & Node.DOCUMENT_POSITION_CONTAINED_BY)!=0 || this.rootElement == focusedElement){
-            return
-         }else{
+         if(isBlurred) {
             this.updateHighlighting(-1)
          }
       },
@@ -92,8 +93,8 @@ with(customizeyourweb){
          this.scm.addShortcut("j", this.moveDown, this)
          this.scm.addShortcut("Home", this.moveFirst, this)
          this.scm.addShortcut("End", this.moveLast, this)
-         this.scm.addShortcut("Return", function(){this.openFirstLinkIn(LinkTarget.CURRENT)}, this)
-         this.scm.addShortcut("Ctrl+Return", function(){this.openFirstLinkIn(LinkTarget.TAB)}, this)
+         this.scm.addShortcut("Return", function(){this.openItemIn(LinkTarget.CURRENT)}, this)
+         this.scm.addShortcut("Ctrl+Return", function(){this.openItemIn(LinkTarget.TAB)}, this)
          this.scm.addShortcut("Space", this.toggleFirstCheckbox, this)
       },
       isFirst: function(index){
@@ -125,11 +126,18 @@ with(customizeyourweb){
             return
          this.updateHighlighting(this.currentIndex-1) 
       },
-      openFirstLinkIn: function(linkTarget){
+      openItemIn: function(linkTarget){
          var ci = this.getCurrentItem()
          var links = ci.getElementsByTagName('a')
-         if(links.length==0)
+         if(links.length==0){
+            var mouseEvent = new MouseEvent("mousedown")
+            mouseEvent.dispatch(ci)
+            mouseEvent.setType("click")
+            mouseEvent.dispatch(ci)
+            mouseEvent.setType("mouseup")
+            mouseEvent.dispatch(ci)
             return
+         }
          (new LinkWrapper(links[0])).open(linkTarget)
       },
       toggleFirstCheckbox: function(){
@@ -137,7 +145,8 @@ with(customizeyourweb){
          var firstCheckbox = XPathUtils.getElement(".//input[@type='checkbox']", ci)
          if(!firstCheckbox)
             return
-         firstCheckbox.checked = !firstCheckbox.checked
+         firstCheckbox.click() //to also trigger other eventhandler
+         this.updateHighlighting(this.currentIndex)
       },
       unhighlight: function(){
          if(this.currentItemWrapper){

@@ -5,36 +5,43 @@ with(customizeyourweb){
    }
    
    var EditShortcutDialogHandler = {
+      targetElement: null,
+      
       doOnload: function(){
-         var action = Dialog.getNamedArgument("action")
-         this.targetElement = Dialog.getNamedArgument("targetElement")
-         if(ObjectUtils.instanceOf(action, AbstractTargetedAction)){
-            byId('targetdefinition').initTargetDefintionField(action.getTargetDefinition(), this.targetElement)
-         }else{
-            byId('targetdefinition').collapsed=true
-         }
-         if(action.getCombinedKeyCode()!=null)
-            byId("keyCombinationKIB").setCombinedValue(action.getCombinedKeyCode())
-         if(action.getShortString()!=null)
-            byId("shortstringinputbox").value = action.getShortString()
-         if(ObjectUtils.instanceOf(action, ShortcutAction) && this.targetElement){
-            if(this.targetElement.tagName=="A"){
-               byId('linkTargetRow').collapsed=false
-               byId('linkTargetML').value = action.getLinkTarget()
-            }else if(action.isEditableField(this.targetElement)){
-               byId('selectCB').collapsed=false
-               byId('selectCB').checked = action.getSelectText()?true:false
+         try{
+            var action = Dialog.getNamedArgument("action")
+            this.targetElement = Dialog.getNamedArgument("targetElement")
+            if(ObjectUtils.instanceOf(action, AbstractTargetedAction)){
+               byId('targetdefinition').initTargetDefintionField(action.getTargetDefinition(), this.targetElement)
+            }else{
+               byId('targetdefinition').collapsed=true
             }
-         }else if(ObjectUtils.instanceOf(action, ToggleVisibilityShortcutAction)){
-            byId('initStateRow').collapsed=false
-            byId('initalStateML').value = action.getInitStateHidden()?"hidden":"visible"
-            byId('keepSpaceRow').collapsed=false
-            byId('keepSpaceML').value = action.isKeepSpaceIfHidden()
-         }else if(ObjectUtils.instanceOf(action, MacroShortcutAction) || !this.targetElement){
-            byId('macroNameTB').value = StringUtils.defaultString(action.getName())
-            byId('macroRow').collapsed=false
-         }else{
-            throw new Error('unknown action')
+            if(action.getCombinedKeyCode()!=null)
+               byId("keyCombinationKIB").setCombinedValue(action.getCombinedKeyCode())
+            if(action.getShortString()!=null)
+               byId("shortstringinputbox").value = action.getShortString()
+            if(ObjectUtils.instanceOf(action, ShortcutAction) && this.targetElement){
+               if(this.targetElement.tagName=="A"){
+                  byId('linkTargetRow').collapsed=false
+                  byId('linkTargetML').value = action.getLinkTarget()
+               }else if(action.isEditableField(this.targetElement)){
+                  byId('selectCB').collapsed=false
+                  byId('selectCB').checked = action.getSelectText()?true:false
+               }
+            }else if(ObjectUtils.instanceOf(action, ToggleVisibilityShortcutAction)){
+               byId('initStateRow').collapsed=false
+               byId('initalStateML').value = action.getInitStateHidden()?"hidden":"visible"
+               byId('keepSpaceRow').collapsed=false
+               byId('keepSpaceML').value = action.isKeepSpaceIfHidden()
+            }else if(ObjectUtils.instanceOf(action, MacroShortcutAction) || !this.targetElement){
+               byId('macroNameTB').value = StringUtils.defaultString(action.getName())
+               byId('macroRow').collapsed=false
+            }else{
+               throw new Error('unknown action')
+            }
+            this.initValidators(this.targetElement)
+         }catch(e){
+            Log.logError(e)
          }
       },
       
@@ -64,6 +71,20 @@ with(customizeyourweb){
             action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
          }
          Dialog.setNamedResult("action", action)
+      },
+      
+      initValidators: function(targetElement){
+         var okValidator = new AndValidator()
+         if(targetElement){
+            okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement)))
+         }
+         var orValidator = new OrValidator()
+         okValidator.addValidator(orValidator)
+         orValidator.addValidator(ValidatorFactory.createKeyInputboxNotEmptyValidator(byId('keyCombinationKIB')))
+         orValidator.addValidator(ValidatorFactory.createShortStringInputboxNotEmptyValidator(byId('shortstringinputbox')))
+         
+         Dialog.addOkValidator(okValidator)
+         okValidator.validate()
       }
    }
 

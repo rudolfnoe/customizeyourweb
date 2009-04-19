@@ -13,6 +13,7 @@
     title="Edit common action attributes"
     persist="screenX screenY width height">
    <script src="../../../CywCommon.js"/>
+   <script src="common_edit_dialog_include.js"/>
    <script src="CommonAttributesEditDialogHandler.js"/>
    <dialogheader title="Edit target definition" message="" rows="1"/>
    <targetdefinition width="400px" autoInit="false"/>

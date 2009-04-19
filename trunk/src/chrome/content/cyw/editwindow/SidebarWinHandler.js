@@ -26,7 +26,8 @@
        * Add or updates action
        * @param AbstractAction action
        * @param AbstractAction parentAction: Container action which acts as parent for action
-       * @param Window actionTargetWindow: Window the action belongs to 
+       * @param Window actionTargetWindow: Window the action belongs to
+       * @retuns if add or update was successfull 
        */
       addOrUpdateAction: function(action, actionTargetWindow){
       	if(byId('includePatterns').itemCount==0){
@@ -34,12 +35,14 @@
       	}
          var currentScript = this.getCurrentScript()
       	if(!currentScript.matchUrl(actionTargetWindow.location.href)){
-      		this.setMessage("Action could not be added as URL of window doesn't match with the url patterns defined for this script.", Severity.ERROR)
-      		return
+            var message = "Action could not be added as URL of window doesn't match with the url patterns defined for this script."
+      		this.setMessage(message, Severity.ERROR)
+      		return false
       	}
       	this.setMessage("")
          currentScript.setActionId(action)
          this.actionsTreeView.addOrUpdateAction(action)
+         return true
       },
       
       addScriptToML: function(script){
@@ -420,7 +423,7 @@
       },
       
       selectScript: function(){
-          var selectDialog = new Dialog(CywCommon.CYW_CHROME_URL+"editwindow/select_script_dialog.xul", "SelectScript", true, window)
+          var selectDialog = new Dialog(CywCommon.CYW_CHROME_URL+"editwindow/select_script_dialog.xul", "SelectScript", true, window, "all")
           selectDialog.show()
           var selectedScript = selectDialog.getNamedResult("script") 
           if(!selectedScript)

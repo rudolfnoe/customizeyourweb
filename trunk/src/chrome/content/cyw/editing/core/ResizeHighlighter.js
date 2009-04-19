@@ -24,7 +24,7 @@ with(customizeyourweb){
          function createGrip(name) {
             var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
             div.gripName = name 
-            div.CYWIgnore = true;
+            div.cywIgnore = true;
             div.className = "resizeGrip";
             div.style.cursor = name + "-resize"
             div.addEventListener("mousedown", this, true)
@@ -38,7 +38,7 @@ with(customizeyourweb){
          }
          
          var span = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
-         span.CYWIgnore = true;
+         span.cywIgnore = true;
          span.className = "sizeInfoSpan"
          nodes.sizeInfoSpan = span
          

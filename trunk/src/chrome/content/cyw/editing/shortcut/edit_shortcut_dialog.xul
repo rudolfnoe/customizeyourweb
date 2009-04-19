@@ -32,7 +32,7 @@
                </row>
                <row align="center">
                   <label value="Short String"/>
-                  <shortstringinputbox/>
+                  <shortstringinputbox namespaceObj="customizeyourweb"/>
                </row>
                <row id="linkTargetRow" align="center" collapsed="true">
                   <label value="Link target"/>

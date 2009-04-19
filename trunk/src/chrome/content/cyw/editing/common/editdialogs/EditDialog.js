@@ -6,6 +6,15 @@ with(customizeyourweb){
       this.Dialog(url, name, modal, parentWin, features, argObj)
    }
    
+   //statics
+   EditDialog.getAction = function(){
+      return Dialog.getNamedArgument('action')
+   }
+   
+   EditDialog.getTargetElement = function(){
+      return Dialog.getNamedArgument('targetElement')
+   }
+   
    EditDialog.prototype = {
       constructor: EditDialog   
    }

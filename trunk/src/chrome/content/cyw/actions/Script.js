@@ -152,10 +152,10 @@
                else
    			      action.doAction(cywContext)
             }catch(e){
+               Utils.logError(e)
                ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.ACTION_FAILED, 
                                                    [action.getId(), e.message], action,
                                                    cywContext.getTargetWindow())
-               Utils.logError(e)
             }
    		}
    	},

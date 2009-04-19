@@ -41,7 +41,7 @@
          var doc = this.targetWin.document
          var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
          div.setAttribute('id',SHADOWER_ID)
-         div.CYWIgnore = true;
+         div.cywIgnore = true;
          div.style.cssText = "position:absolute; top:0px; left:0px; background-color:#e7eaFF; opacity:0.6; z-index:2147483646"
          div.style.height = doc.height+"px"
          div.style.width = doc.width+"px"

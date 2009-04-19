@@ -95,8 +95,10 @@ with(customizeyourweb){
          }
          this.removeStyleObserver()
          var nodes = this.getNodes();
-         for(var nodeName in nodes)
+         for(var nodeName in nodes){
             DomUtils.removeElement(nodes[nodeName])
+         }
+         this.targetElement = null
       },
       
       removeStyleObserver: function(){

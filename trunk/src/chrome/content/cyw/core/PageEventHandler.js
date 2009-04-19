@@ -24,6 +24,9 @@
    //Statics 
    PageEventHandler.initPage = function(event){
 		var targetWin = event.originalTarget.defaultView
+      if(EditScriptHandler.isEditing(targetWin)){
+         return
+      }
       var applicableScripts = CywConfig.getActiveScriptsForUrl(targetWin.location.href)
       if(applicableScripts.length>0){
          var pageEventHandler = new PageEventHandler(targetWin, applicableScripts)
@@ -101,7 +104,11 @@
          }
          Utils.executeDelayed(this.timerId, this.reinitDelay, function(){
 //            CywUtils.logDebugMessage('delayed reinit total nodes added: ' + this.nodesAdded + ", total nodes removed: " + this.nodesRemoved)
+            //var perfTimer = new PerfTimer()
             this.cleanUpScript(PageEvents.MUTATION_EVENT)
+//            if(perfTimer){
+//               Log.logDebug("Cleanup took " + perfTimer.stop() + "msec.")
+//            }
             this.runAppliedScripts(PageEvents.MUTATION_EVENT, false)
          }, this)
       },
@@ -177,10 +184,14 @@
       runAppliedScripts: function(eventType, persisted){
          //suspend event listening during script running as it could cause mutation events
          this.suspend()
+         //var perfTimer = new PerfTimer()
          for (var i = 0; i < this.appliedScripts.length; i++) {
 //            CywUtils.logDebugMessage('Script ' + this.appliedScripts[i] + "applied on " +  eventType)
             this.appliedScripts[i].runScript(new CywContext(this.targetWin, eventType, persisted))
          }
+//         if(perfTimer){
+//            Log.logDebug("Script init took " + perfTimer.stop() + "msec.")
+//         }
          //Resume handling of mutation events
          this.resume()
       },

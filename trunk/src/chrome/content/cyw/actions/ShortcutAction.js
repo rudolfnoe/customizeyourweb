@@ -52,7 +52,7 @@
          //TODO scroll into view if not in visible
          //scrollIntoView scrolls always even it is visible
 //         element.scrollIntoView()
-         if(DomUtils.isEditableElement(element) && this.selectText){
+         if(DomUtils.isEditableElement(element) && this.selectText && element.select){
             element.select()
             return
          }else{

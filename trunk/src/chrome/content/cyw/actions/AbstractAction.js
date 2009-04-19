@@ -31,14 +31,14 @@
       },
 
       doAction: function(cywContext){
-         this._doAction(this.doActionInternal, cywContext)
+         this.doCommonAction(this.doActionInternal, cywContext)
    	},
 
       doActionForCachedPage: function(cywContext){
-         this._doAction(this.doActionForCachedPageInternal, cywContext)
+         this.doCommonAction(this.doActionForCachedPageInternal, cywContext)
    	},
       
-      _doAction: function(actionMethod, cywContext){
+      doCommonAction: function(actionMethod, cywContext){
          if(this.isMaxRepetitionAchieved()){
             return
          }
@@ -50,7 +50,7 @@
    		Assert.fail('Not implemented')
    	},
 
-      doActionForCachedPageInteral: function(cywContext){
+      doActionForCachedPageInternal: function(cywContext){
    		//do noting by default as this is correct in the most cases
    	},
       
@@ -59,6 +59,10 @@
             return true
          else
             return false
+      },
+      
+      getDetailedDescription: function(){
+         return null
       },
    	
       isContainer: function(){
@@ -79,7 +83,7 @@
          var actionIndex = typeName.lastIndexOf('Action')
          var result = typeName.substring(0, actionIndex)
          if(this.id)
-            result += " (" + this.getId() + ")"
+            result += " [" + this.getId() + "]"
          return result
       },
    	

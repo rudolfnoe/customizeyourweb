@@ -1,7 +1,7 @@
 (function(){with(customizeyourweb){
    
 	function ActionsTreeView(tree, script){
-      this.AbstractTreeView(tree, new ActionsRootTreeItem())
+      this.AbstractTreeView(tree, new ActionsRootTreeItem(), false)
       this.clipboard = null
       this.script = script
    }

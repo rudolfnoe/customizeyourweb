@@ -67,6 +67,7 @@
                //dynamically load scripts
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/core/CywUtils.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblHandler.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblValidator.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/XPathTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/SimpleTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractTargetDefinitionFactory.js", customizeyourweb)
@@ -82,6 +83,12 @@
             </constructor>
             <field name="handler"></field>
             <property name="collapsed" onget="return this.getAttribute('collapsed')" onset="this.setAttribute('collapsed', val); return val"> </property>
+            <method name="addValueChangedListener">
+               <parameter name="eventHandler"/>
+               <body>
+                  this.handler.addValueChangedListener(eventHandler)
+               </body>
+            </method>
             <method name="createDefaultTargetDefinitions">
                <body>this.handler.createDefaultTargetDefinitions()</body>
             </method>

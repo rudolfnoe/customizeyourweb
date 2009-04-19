@@ -46,7 +46,12 @@ with (customizeyourweb) {
                   text += " (name:" + element.name + ")"
             }
             infoSpan.innerHTML = text
-            DomUtils.moveTo(nodes.infoSpan, x + w + edgeSize - infoSpan.offsetWidth, y - edgeSize - infoSpan.offsetHeight);
+            var infoSpanX = x + w + edgeSize - infoSpan.offsetWidth
+            var infoSpanY = y - edgeSize - infoSpan.offsetHeight
+            if(infoSpanY<0){
+               infoSpanY += infoSpan.offsetHeight + edgeSize
+            }
+            DomUtils.moveTo(nodes.infoSpan, infoSpanX, infoSpanY);
 			}
 		},
 

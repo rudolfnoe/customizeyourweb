@@ -12,6 +12,7 @@
     title="Edit List View Action"
     persist="screenX screenY width height">
    <script src="../../CywCommon.js"/>
+   <script src="../common/editdialogs/common_edit_dialog_include.js"/>   
    <script src="edit_listview_dialog.js"/>
    
    <dialogheader title="Define the settings for the listview" rows="1"/>
@@ -30,7 +31,7 @@
                </row>
                <row align="center">
                   <label value="Shortstring to focus list view"/>
-                  <shortstringinputbox/>
+                  <shortstringinputbox namespaceObj="customizeyourweb"/>
                </row>
                <row align="center">
                   <label value="List items tag name"/>
@@ -40,9 +41,20 @@
                   <label value="Highlight background-color"/>
                   <colorfield id="highlightBackgroundCF" flex="1"/>
                </row>
-               <row>
+               <row align="center">
                   <label value="Number of header rows"/>
-                  <textbox id="noOfHeaderRowsTB" type="number" min="0" maxwidth="40px"/>
+                  <textbox id="noOfHeaderRowsTB" type="number" min="0" maxwidth="60px"/>
+               </row>
+               <row align="center">
+                  <label value="Ommit every Xth item"/>
+                  <menulist id="ommitEveryXthItemTB" maxwidth="60px">
+                     <menupopup>
+                        <menuitem label="None" value="0"/>
+                        <menuitem label="2nd" value="2"/>
+                        <menuitem label="3rd" value="3"/>
+                        <menuitem label="4th" value="4"/>
+                     </menupopup>
+                  </menulist>
                </row>
             </rows>
          </grid>

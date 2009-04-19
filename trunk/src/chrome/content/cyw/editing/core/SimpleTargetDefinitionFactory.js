@@ -1,7 +1,7 @@
 with(customizeyourweb){
 (function(){
-   const TARGET_DEF_TOKEN_REPLACE_WITH_QUOTES_RCYW_EXP = /(^|\s)(\w*)[ ]*=[ ]*(?!")(\S+)/g;
-   const TARGET_DEF_TOKEN_WITH_QUOTES_RCYW_EXP = /(\w*)[ ]*=[ ]*(".*?")/g;
+   const TARGET_DEF_TOKEN_REPLACE_WITH_QUOTES_REG_EXP = /(^|\s)(\w*)[ ]*=[ ]*(?!")(\S+)/g;
+   const TARGET_DEF_TOKEN_WITH_QUOTES_REG_EXP = /(\w*)[ ]*=[ ]*(".*?")/g;
    
    const UNIQUE_ATTRIBUTES = ["id", "href"];
    const NONE_UNIQUE_ATTRIBUTES = ["type", "name", "form"];
@@ -118,14 +118,14 @@ with(customizeyourweb){
       
       tokenizeDefinitionString: function(definitionString){
          //Insert missing quotes
-         definitionString = definitionString.replace(TARGET_DEF_TOKEN_REPLACE_WITH_QUOTES_RCYW_EXP, '$2="$3"')
+         definitionString = definitionString.replace(TARGET_DEF_TOKEN_REPLACE_WITH_QUOTES_REG_EXP, '$2="$3"')
          //check correctness
-         var checkString =  definitionString.replace(TARGET_DEF_TOKEN_WITH_QUOTES_RCYW_EXP, '')
+         var checkString =  definitionString.replace(TARGET_DEF_TOKEN_WITH_QUOTES_REG_EXP, '')
          if(!StringUtils.isEmpty(StringUtils.trim(checkString)))
             throw new Error('Incorrect syntax')
          //Remove whitespace
-         definitionString = definitionString.replace(TARGET_DEF_TOKEN_WITH_QUOTES_RCYW_EXP, '$1=$2')
-         var tokens =  definitionString.match(TARGET_DEF_TOKEN_WITH_QUOTES_RCYW_EXP)
+         definitionString = definitionString.replace(TARGET_DEF_TOKEN_WITH_QUOTES_REG_EXP, '$1=$2')
+         var tokens =  definitionString.match(TARGET_DEF_TOKEN_WITH_QUOTES_REG_EXP)
          var keyValueMap = new Object()
          for (var i = 0; i < tokens.length; i++) {
             var token = tokens[i]
