@@ -30,9 +30,10 @@
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return
          }
-         var doc = cywContext.getTargetDocument()
-         var event = doc.createEvent("MouseEvents")
-         event.initMouseEvent("click", //type
+         var target = this.getTarget(cywContext)
+         function performEvent(type){
+            var clickEvent = cywContext.getTargetDocument().createEvent("MouseEvents");
+            clickEvent.initMouseEvent(type, //type
                                     true, //canBubble
                                     true, //cancelable
                                     cywContext.getTargetWindow(), //view
@@ -44,9 +45,14 @@
                                     this.modifierMask & Event.META_MASK,
                                     this.button,
                                     null) //relatedTarget
-         var target = this.getTarget(cywContext)
-         var result = target.dispatchEvent(event)
-         if(!result)
+            return target.dispatchEvent(clickEvent)?1:0
+         }
+         var result = performEvent.apply(this, ["mouseover"])
+         result += performEvent.apply(this, ["mousedown"])
+         result += performEvent.apply(this, ["click"])
+         result += performEvent.apply(this, ["mouseup"])
+         
+         if(result==0)
             throw new Error("Click Event not successfully dispatched")
       },
       

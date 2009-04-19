@@ -20,14 +20,15 @@ with(customizeyourweb){
       doOnload: function(){
          //move to left
          this.initShortcuts()
-         this.action = Dialog.getNamedArgument("action")
+         this.action = EditDialog.getAction()
+         this.targetElement = EditDialog.getTargetElement()
          this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
-         this.targetElement = Dialog.getNamedArgument("targetElement")
          if(this.action.getWhereToInsert()!=null){
             byId('whereML').value = StringUtils.defaultString(this.action.getWhereToInsert())
          }
          byId('htmlCodeTB').value = StringUtils.defaultString(this.action.getHtmlCode())
          byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
+         this.initValidators(this.targetElement)
       },
       
       initShortcuts: function(){
@@ -35,6 +36,14 @@ with(customizeyourweb){
          this.scm.addShortcutForElement("htmlCodeTB", "ctrl+Return", Dialog.acceptDialog)
       },
       
+      initValidators: function(targetElement){
+         var okValidator = new AndValidator() 
+         okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('htmlCodeTB')))
+         okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement)))
+         Dialog.addOkValidator(okValidator)
+         okValidator.validate()
+      },
+
       updatePage: function(){
          Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._updatePage, this)         
       },

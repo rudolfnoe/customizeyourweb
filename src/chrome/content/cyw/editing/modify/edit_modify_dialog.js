@@ -1,7 +1,8 @@
 with(customizeyourweb){
 (function(){
-   const NUMERIC_VALUE_RCYW_EXP = /^(-?\d+)(.*)$/;
+   const NUMERIC_VALUE_REG_EXP = /^(-?\d+)(.*)$/;
    const UNDEFINED_VALUE = "<Undefined>";
+   const STYLE_PROPS = ["border", "border-width", "border-style"]
    
    function byId(id){
       return document.getElementById(id)
@@ -63,17 +64,19 @@ with(customizeyourweb){
        */
       doOnload: function(){
          this.setGlobals()
-         this.action = Dialog.getNamedArgument("action")
-         this.targetElement = Dialog.getNamedArgument("targetElement")
+         this.action = EditDialog.getAction()
+         this.targetElement = EditDialog.getTargetElement()
          this.targetElementBackup = this.targetElement.cloneNode(false)
          this.elementWrapper = new ElementWrapper(this.targetElement)
-         this.compTargetStyle = this.getCurrentStyle()
+         //Clone is given so the style doesn't change any more
+         this.compTargetStyle = this.getCurrentStyle(this.targetElement)
          this.initShortcuts()
          this.initObservers()
          this.fillExpertAttributeMenulist(this.compTargetStyle)
          this.initHtmlAttributes()
          this.initSimpleStyles()
          this.initFromAction(this.action)
+         this.initValidators(this.targetElement)
          //This must be after! initializing simple controls
          //TODO remove
 //         this.initSimpleAttrEditedListener()
@@ -152,12 +155,13 @@ with(customizeyourweb){
        * instead of their style values.
        * Reason: When setting a width and re-read the value, the values are different  
        */
-      getCurrentStyle: function(){
-         var targetWin = this.targetElement.ownerDocument.defaultView
-         var cssStyle = targetWin.getComputedStyle(this.targetElement, "")
+      getCurrentStyle: function(targetElement){
+         var clonedTargetElem = targetElement.cloneNode(true)
+         var targetWin = targetElement.ownerDocument.defaultView
+         var cssStyle = targetWin.getComputedStyle(clonedTargetElem, "")
          //store values for width and height
-         var width = this.targetElement.offsetWidth + "px"
-         var height = this.targetElement.offsetHeight + "px"
+         var width = targetElement.offsetWidth + "px"
+         var height = targetElement.offsetHeight + "px"
          cssStyle.getPropertyValueExt = function(styleAttr){
             switch (styleAttr){
                case "width": return width
@@ -214,7 +218,7 @@ with(customizeyourweb){
             
          var value = target.value
          //Reg splits numeric from the unit part
-         var parsedValue = NUMERIC_VALUE_RCYW_EXP.exec(value)
+         var parsedValue = NUMERIC_VALUE_REG_EXP.exec(value)
          if(parsedValue==null)
             return
          var number = parseInt(parsedValue[1], 10)
@@ -347,15 +351,20 @@ with(customizeyourweb){
        */
       initSimpleStyles: function(){
          var simpleStyleElems = XPathUtils.getElements("//*[@styleProp]")
-         var currentStyle = this.getCurrentStyle()
          for (var i = 0; i < simpleStyleElems.length; i++) {
             var styleElem = simpleStyleElems[i]
             var styleProp = styleElem.getAttribute('styleProp')
             if(styleProp.indexOf("border")==0){
                styleProp = StringUtils.insertAt(styleProp, "-top", 6)
             }
-            styleElem.value = currentStyle.getPropertyValueExt(styleProp)
+            styleElem.value = this.compTargetStyle.getPropertyValueExt(styleProp)
          }
+      },
+      
+      initValidators: function(targetElement){
+         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement))
+         Dialog.addOkValidator(okValidator)
+         okValidator.validate()
       },
       
       /*
@@ -368,14 +377,15 @@ with(customizeyourweb){
             this.setValueControl("colorValueCF")
          else
             this.setValueControl("stringValueTB")
-         this.getValueControl().value = this.getCurrentStyle().getPropertyValueExt(attributeML.value)
+         this.getValueControl().value = this.compTargetStyle.getPropertyValueExt(attributeML.value)
       },
       
       /*
        * Checks whether an attribute is a style attribute or not
        */
       isStyle: function(attr){
-         return this.compTargetStyle.getPropertyValue(attr).length>0
+         var convertedAttr = CssUtils.convertCssPropNameToCamelCase(attr)
+         return this.compTargetStyle[convertedAttr]!=undefined
       },
       
       removeAttrFromAttrList: function(attr){
@@ -478,8 +488,11 @@ with(customizeyourweb){
          var value = srcControl.value
          if(srcControl.hasAttribute('styleProp')){
             var styleProp = srcControl.getAttribute('styleProp')
+            Log.logDebug("value: " + value + "   compStyle: " + this.compTargetStyle.getPropertyValueExt(styleProp))
             if(this.compTargetStyle.getPropertyValueExt(styleProp)!=value){
                this.addToAttributesLB(styleProp, value)
+            }else{
+               this.removeAttrFromAttrList(styleProp)
             }
          }else if (srcControl.hasAttribute('attr')){
             var attr = srcControl.getAttribute('attr')

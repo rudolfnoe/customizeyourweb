@@ -6,13 +6,14 @@ with(customizeyourweb){
    
    var EditClickDialogHandler = {
       doOnload: function(){
-         var action = Dialog.getNamedArgument("action")
+         var action = EditDialog.getAction()
          byId('buttonML').value = action.getButton()
          var modifierMask = action.getModifierMask()
          byId('ctrlCB').checked = (modifierMask & Event.CONTROL_MASK)?true:false
          byId('altCB').checked = (modifierMask & Event.ALT_MASK)?true:false
          byId('shiftCB').checked = (modifierMask & Event.SHIFT_MASK)?true:false
          byId('metaCB').checked = (modifierMask & Event.META_MASK)?true:false
+         this.initValidators(EditDialog.getTargetElement())
       },
       
       doOk: function(){
@@ -33,7 +34,13 @@ with(customizeyourweb){
          byId('altCB').checked = event.altKey
          byId('shiftCB').checked = event.shiftKey
          byId('metaCB').checked = event.metaKey
-      }
+      },
+      
+      initValidators: function(targetElement){
+         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement))
+         Dialog.addOkValidator(okValidator)
+         okValidator.validate()
+     }
    }
 
    Namespace.bindToNamespace("customizeyourweb", "EditClickDialogHandler", EditClickDialogHandler)

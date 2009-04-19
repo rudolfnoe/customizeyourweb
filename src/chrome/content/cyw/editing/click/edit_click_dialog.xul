@@ -13,6 +13,8 @@
          title="Edit Click Action"
          persist="screenX screenY width height">
    <script src="../../CywCommon.js"/>
+   <script src="../common/editdialogs/common_edit_dialog_include.js"/>
+   
    <script src="edit_click_dialog.js"/>
    <dialogheader title="Define the details of the click action" rows="1"/>
    <vbox>

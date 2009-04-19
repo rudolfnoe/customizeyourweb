@@ -8,7 +8,7 @@ with(customizeyourweb){
    const COL_WIDTHS_PREF_KEY = "customizeyourweb.prefs.scriptTreeColWidths";
    
    function ScriptTreeView(tree, scripts){
-      this.AbstractTreeView(tree)
+      this.AbstractTreeView(tree, null, true)
       this.fixRezieTreeColBug45818346()
       this.restorePersistentColAttributes()
       this.initView(scripts)

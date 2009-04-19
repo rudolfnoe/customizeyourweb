@@ -17,11 +17,18 @@ with(customizeyourweb){
          this.initShortcuts()
          this.action = Dialog.getNamedArgument("action")
          byId('jsCodeTB').value = StringUtils.defaultString(this.action.getJsCode())
+         this.initValidators()
       },
       
       initShortcuts: function(){
          this.scm = new ShortcutManager(window, "keydown", true)
          this.scm.addShortcutForElement("jsCodeTB", "ctrl+Return", Dialog.acceptDialog)
+      },
+      
+      initValidators: function(){
+         var okValidator = ValidatorFactory.createTextboxNotEmptyValidator(byId('jsCodeTB'))
+         Dialog.addOkValidator(okValidator)
+         okValidator.validate()
       }
    }
 

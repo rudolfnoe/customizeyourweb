@@ -99,10 +99,13 @@
          DomUtils.iterateWindows(targetWin, function(subWin){urls.push(subWin.location.href)})
          
          var matchingScripts = new ArrayList()
+         var containsCompareFct = function(objSearched, elementFromList){
+            return objSearched.getId() == elementFromList.getId()
+         }
          for (var scriptIndex = 0; scriptIndex < this.scripts.size(); scriptIndex++) {
             for (var urlIndex = 0; urlIndex < urls.length; urlIndex++) {
                var script = this.scripts.get(scriptIndex)
-               if(script.matchUrl(urls[urlIndex]) && !matchingScripts.contains(script)){
+               if(script.matchUrl(urls[urlIndex]) && !matchingScripts.contains(script, containsCompareFct)){
                   matchingScripts.add(this.cloneScript(script))
                }
             }

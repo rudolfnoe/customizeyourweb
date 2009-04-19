@@ -129,6 +129,10 @@
       return TabContextManager.getContext(contentWin, CYW_EDIT_HANDLER)!=null
    }
    
+   EditScriptHandler.isEditing = function(contentWin){
+      return TabContextManager.hasContext(contentWin, CYW_EDIT_HANDLER)   
+   },
+   
    EditScriptHandler.notifyEditListener = function(eventType, targetWin){
       this.eventListener.notifyListeners({type:eventType, targetWin:targetWin})
    }
@@ -166,6 +170,7 @@
          browserForTab[functionName]("pagehide", this.suspendableEventHandler, true)
          browserForTab[functionName]("mouseover", this.suspendableEventHandler, false)
          browserForTab[functionName]("click", this.suspendableEventHandler, true)
+         browserForTab[functionName]("contextmenu", this.suspendableEventHandler, true)
          //context menu
          getEgMenuPopup()[functionName]("popupshowing", this.suspendableEventHandler, true)
          //Registering for change of edit contexts clipboard property content to de/activate paste commands
@@ -191,6 +196,11 @@
        */
       cancelEditing: function(isHideSidebar){
          this.disableEditHandler(isHideSidebar) 
+      },
+      
+      checkCurrentWinMatchesToCurrentScript: function(){
+         var targetWin = this.getActionTargetWin()   
+         return getSidebarWinHandler().getCurrentScript().matchUrl(targetWin.location.href)
       },
       
       /*
@@ -295,14 +305,22 @@
             //Editing ended sucessful
             this.editCommandHistory.push(wrapperCommand)
             this.updateCurrentTarget(modifiedAction, actionTargetWin)
-            this.highlightCurrentTarget()
          }
+         this.highlightCurrentTarget()
          return modifiedAction
       },
       
       doCreateAction: function(commandId){
          if(this.currentTarget==null && TARGETLESS_COMMANDS.indexOf(commandId)==-1)
            return
+         if(this.currentTarget!=null){
+            var match = this.checkCurrentWinMatchesToCurrentScript()
+            if(!match){
+               alert("Action could not be added because the URL of the target window \n" +
+                     "doesn't match with the url patterns defined for the current script.")
+               return
+            }
+         }
          DomUtils.blurActiveElement(this.targetWin)
          this.unhighlightAllHighlighters()
          var wrapperCommand = this.createWrapperCommandFromCommandId(commandId)
@@ -310,12 +328,16 @@
          var actionTargetWin = this.getActionTargetWin()
          var newAction = wrapperCommand.doCreateAction(this.editContext)
          if(newAction){
-            getSidebarWinHandler().addOrUpdateAction(newAction, this.getActionTargetWin())
             //If creation successfull
-            this.editCommandHistory.push(wrapperCommand)
-            this.updateCurrentTarget(newAction, actionTargetWin)
-            this.highlightCurrentTarget()
+            var successful = getSidebarWinHandler().addOrUpdateAction(newAction, this.getActionTargetWin())
+            if(successful){
+               this.editCommandHistory.push(wrapperCommand)
+               this.updateCurrentTarget(newAction, actionTargetWin)
+            }else{
+               wrapperCommand.undo(this.editContext)
+            }
          }
+         this.highlightCurrentTarget()
       },
       
       enableEditHandler: function(){
@@ -357,10 +379,16 @@
       handleClick: function(event){
          Utils.stopEvent(event)
          var target = event.target
-         if(event.altKey)
+         if(event.altKey){
             this.retargetAction(target)
-         else
-           getEgMenuPopup().openPopupAtScreen(event.screenX-20, event.screenY, true)
+         }else{
+            getEgMenuPopup().openPopupAtScreen(event.screenX-20, event.screenY, true)
+         }
+      },
+      
+      //Suppress popup of standard context menu
+      handleContextmenu: function(event){
+         event.preventDefault()
       },
 
       handleMouseover: function(event){
@@ -440,7 +468,9 @@
             //suspending event handling as highlighting can cause new events
             this.suspendEventHandling()
             this.mouseOverHighlighter.highlight(this.currentTarget)
-            this.resumeEventHandling()
+            //resume eventhandling a little bit later as overwise mouseover event is
+            //handled which could set back highlight to previous element
+            setTimeout(Utils.bind(this.resumeEventHandling, this), 100)
          }
       },
       
@@ -524,6 +554,7 @@
          this.shortcutManager.addShortcut("ctrl+v", new CommandWrapper('customizeyourweb_pasteAfterCmd'))
          this.shortcutManager.addShortcut("ctrl+shift+v", new CommandWrapper('customizeyourweb_pasteBeforeCmd'))
          this.shortcutManager.addShortcut("F1", this.showShortcutHelpPanel, this)
+         this.shortcutManager.addShortcut("CONTEXT_MENU", this.openEditPopupMenuByContextKey, this)
       },
       
       initSidebarContext: function(scripts){
@@ -541,8 +572,16 @@
          }
          switch (direction){
             case "parentNode":
-               if(this.currentTarget.tagName=="BODY")
-                  return
+               if(this.currentTarget.tagName=="BODY"){
+                  var ownerWindow = DomUtils.getOwnerWindow(this.currentTarget) 
+                  if(ownerWindow.frameElement != null &&
+                     ownerWindow.frameElement.tagName == "IFRAME"){
+                     this.currentTarget = ownerWindow.frameElement
+                     break
+                  }else{
+                     return
+                  }
+               }
                this.currentTarget = this.currentTarget.parentNode
                break
             case "firstChild":
@@ -568,6 +607,13 @@
          this.highlightCurrentTarget()
       },
       
+      openEditPopupMenuByContextKey: function(){
+         if(!this.currentTarget){
+            return
+         }
+         getEgMenuPopup().openPopup(this.currentTarget, "after_start", 0, 0, true)
+      },
+
       prepareContentWinForEditing: function(){
          DomUtils.blurActiveElement(this.targetWin)
          EditScriptHandler.notifyEditListener(EditScriptHandler.Events.EDIT_START, this.targetWin)
@@ -609,11 +655,10 @@
          var dialog = new CommonAttributesEditDialog(selectedAction, newTarget) 
          dialog.show()
          if(dialog.isOk()){
-            var targetDef = dialog.getTargetDefinition()
-            selectedAction.setTargetDefinition(targetDef)
-            this.currentTarget = targetDef.getTarget(DomUtils.getOwnerWindow(newTarget))
+            var updatedAction = dialog.getAction()
+            this.currentTarget = updatedAction.getTargetDefinition().getTarget(DomUtils.getOwnerWindow(newTarget))
             this.highlightCurrentTarget()
-            getSidebarWinHandler().updateAction(selectionAction)
+            getSidebarWinHandler().updateAction(updatedAction)
          }
       },
       

@@ -124,6 +124,16 @@ with(customizeyourweb){
          this.superCleanUp(cywContext)
       },
       
+      getDetailedDescription: function(){
+         if(this.combinedKeyCode!=null && this.combinedKeyCode>0){
+            return KeyInputbox.getStringForKeyCombination(this.combinedKeyCode)    
+         }else if(this.shortString!=null){
+            return this.shortString
+         }else{
+            return null
+         }
+      },
+      
       performShortcut: function(){
          throw new Error('must be implemented')
       },

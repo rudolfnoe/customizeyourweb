@@ -6,6 +6,7 @@
       this.highlightCss = null
       this.listItemsTagName = null
       this.noOfHeaderRows = 0
+      this.ommitEveryXthItem = 0
       this.t_listViewHandler = null
    }
    
@@ -44,18 +45,22 @@
          this.noOfHeaderRows = noOfHeaderRows
       },
 
-      doActionInternal: function(cywContext){//Todo change
-         if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
-         }
-         var rootElement = this.getTarget(cywContext)
+      getOmmitEveryXthItem: function(){
+         return this.ommitEveryXthItem
+      },
+
+      setOmmitEveryXthItem: function(ommitEveryXthItem){
+         this.ommitEveryXthItem = ommitEveryXthItem
+      },
+      
+      determineListItems: function(rootElement){
          var potListItems = rootElement.getElementsByTagName(this.listItemsTagName)
-         var listItems = []
+         var listItemsFiltered1 = []
          for (var i = 0; i < potListItems.length; i++) {
             var listItem = node = potListItems[i]
             while(node = node.parentNode){
                if(node == rootElement){
-                  listItems.push(listItem)
+                  listItemsFiltered1.push(listItem)
                   break
                }
                if(node.localName == this.listItemsTagName){
@@ -63,7 +68,27 @@
                }
             }
          }
-         var listItems = listItems.slice(this.noOfHeaderRows)
+         var listItemsFiltered2 = listItemsFiltered1.slice(this.noOfHeaderRows)
+         var resultItems = []
+         if(this.ommitEveryXthItem>=2){
+            for (var i = 0; i < listItemsFiltered2.length; i++) {
+               if((i+1)%this.ommitEveryXthItem==0){
+                  continue
+               }
+               resultItems.push(listItemsFiltered2[i])
+            }
+         }else{
+            resultItems = listItemsFiltered2
+         }
+         return resultItems
+      },
+
+      doActionInternal: function(cywContext){//Todo change
+         if(this.isTargetOptionalAndTargetMissing(cywContext)){
+            return
+         }
+         var rootElement = this.getTarget(cywContext)
+         var listItems = this.determineListItems(rootElement)
          this.t_listViewHandler = new ListViewHandler(rootElement, listItems, this.highlightCss) 
          this.registerShortcut(cywContext)
          if(this.focusOnLoad){

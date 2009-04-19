@@ -7,7 +7,7 @@ with(customizeyourweb){
    RemoveAction.prototype = {
       constructor: RemoveAction,
       doActionInternal: function(cywContext){
-         if(this.isTargetOptionalAndTargetMissing(cywContext)){
+         if(!this.isTargetInPage(cywContext.getTargetWindow())){
             return
          }
          var target = this.getTarget(cywContext)

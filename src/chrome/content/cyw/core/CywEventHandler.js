@@ -18,6 +18,10 @@
          }
          DomUtils.blurActiveElement(content)
       },
+
+      giveFeedback:function(){
+         Utils.getMostRecentBrowserWin().content.location.href="mailto:cyw_info@mouseless.de"
+      },
       
 		hideToolsMenu: function(){
          CywConfig.setPref("ui.hideToolsMenu", true)
@@ -27,6 +31,10 @@
       openConfiguration : function(event) {
 			openDialog(CywCommon.CYW_CHROME_URL + "/preferences/cyw_prefs.xul", "cyw_prefs", "all, chrome, centerscreen").focus()
 		},
+      
+      openIssueList: function(){
+         Utils.openUrlInNewTab("http://code.google.com/p/customizeyourweb/issues/list", true)   
+      },
       
       toggleEditModeOnStatusbarClick: function(event){
          //toggle only on left click

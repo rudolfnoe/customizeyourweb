@@ -6,15 +6,18 @@
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     xmlns:html="http://www.w3.org/1999/xhtml"
     buttons="accept,cancel"
+    id="select-script-dialog" 
     ondialogaccept="return customizeyourweb.SelectScriptDialogHandler.doOk()" 
-    title="Select Script"
-    width="500px" height="400px">
+    title="Select Script xx"
+    persist="screenX screenY width height"
+    flex="1">
+   
    <script type="application/x-javascript" src="../CywCommon.js"/>
    <script type="application/x-javascript" src="../common/ScriptTreeView.js"/>
    <script type="application/x-javascript" src="../common/ScriptTreeItem.js"/>
    <script type="application/x-javascript" src="../core/CywConfig.js"/>
    <script type="application/x-javascript" src="select_script_dialog_handler.js"/>
-   <vbox flex="1">
+   <vbox flex="1" style="min-height:300px; min-width:500px">
       <scriptstree id="scriptsTree" flex="1" editable="false"/>   
    </vbox>
 </dialog>

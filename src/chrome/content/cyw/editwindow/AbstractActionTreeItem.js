@@ -51,11 +51,14 @@
          var cellText = this.action.toString()
          if(ObjectUtils.instanceOf(this.action, AbstractTargetedAction) && 
                !StringUtils.isEmpty(this.action.getTargetDefinition().getTargetName())){
-            cellText += " | " + this.action.getTargetDefinition().getTargetName()
+            cellText += " | T: " + this.action.getTargetDefinition().getTargetName()
          }
          if(ObjectUtils.instanceOf(this.action, AbstractNamedAction) && 
             !StringUtils.isEmpty(this.action.getName())){
-            cellText += " | " + this.action.getName()
+            cellText += " | N: " + this.action.getName()
+         }
+         if(this.action.getDetailedDescription()!=null){
+            cellText += " | D: " + this.action.getDetailedDescription()
          }
          return cellText
       },

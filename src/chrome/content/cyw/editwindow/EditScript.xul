@@ -53,7 +53,8 @@
          <vbox flex="1">
             <label value="Scripts" accesskey="p"/>
             <hbox>
-               <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1">
+               <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
+                         crop="center">
                   <menupopup>
                   </menupopup>
                </menulist>
@@ -77,9 +78,10 @@
             <tree id="actionsTreeView" height="400px" flex="1" rows="20" seltype="single" context="treeContextMPU" 
                   onselect="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
                   onclick="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
-                  ondblclick="document.getElementById('editBU').click()">
+                  ondblclick="document.getElementById('editBU').click()"
+                  hidecolumnpicker="true">
                <treecols>
-                  <treecol id="nameCol" label="Name" flex="1" primary="true"/>
+                  <treecol id="actionCol" label="Action" flex="1" primary="true"/>
                </treecols>
                <treechildren/>
             </tree>

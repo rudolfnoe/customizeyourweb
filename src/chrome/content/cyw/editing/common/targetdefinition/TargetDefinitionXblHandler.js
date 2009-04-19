@@ -1,8 +1,10 @@
 with(customizeyourweb){
 (function(){
-   const CURSOR_CHANGE_KEY_CODES = [KeyEvent.DOM_VK_LEFT, KeyEvent.DOM_VK_RIGHT, KeyEvent.DOM_VK_HOME, KeyEvent.DOM_VK_END]
+   const CURSOR_CHANGE_KEY_CODES = [KeyEvent.DOM_VK_LEFT, KeyEvent.DOM_VK_RIGHT, KeyEvent.DOM_VK_HOME, KeyEvent.DOM_VK_END];
+   const VALUE_CHANGED_EVENT_TYPE = "VALUE_CHANGED_EVENT_TYPE";
    
    function TargetDefinitionXblHandler(targetDefinitionField){
+      this.GenericEventSource()
       this.oldTargetDefinitionRow = DomUtils.getElementByAnonId(targetDefinitionField, "oldTargetDefinitionRow")
       this.oldTargetDefinitionTB = DomUtils.getElementByAnonId(targetDefinitionField, "oldTargetDefinitionTB")
       this.targetDefinitionField = targetDefinitionField
@@ -23,10 +25,17 @@ with(customizeyourweb){
    TargetDefinitionXblHandler.prototype = {
       constructor: TargetDefinitionXblHandler,
       
+      addValueChangedListener: function(eventHandler){
+         this.addListener(VALUE_CHANGED_EVENT_TYPE, eventHandler)   
+      },
+      
       /*
        * Returns the current target definition object
        */
       getTargetDefinition: function(){
+         if(!this.targetDefinitionMLHandler){
+            return null
+         }
          var targetDef = this.targetDefinitionMLHandler.getTargetDefinition()
          if(!StringUtils.isEmpty(this.targetNameTB.value)){
             targetDef.setTargetName(this.targetNameTB.value)
@@ -112,6 +121,7 @@ with(customizeyourweb){
          Utils.executeDelayed('ON_TARGET_DEF_INPUT', 500, function(){
             this.targetDefinitionMLHandler.handleCursorPositionChange()
             this.highlightCurrentTargets()
+            this.notifyValueChangedListener()
          }, this)
       },
       
@@ -119,7 +129,8 @@ with(customizeyourweb){
          if(event.target.selectedIndex==-1)
             return
          this.setMessage("")
-         this.getTargetElementsHighlighter().updateHighlighting(this.targetDefinitionMLHandler.getCurrentTargets())   
+         this.getTargetElementsHighlighter().updateHighlighting(this.targetDefinitionMLHandler.getCurrentTargets())
+         this.notifyValueChangedListener()
       },
       
       handleTargetDefinitionStyleSelect: function(){
@@ -165,6 +176,10 @@ with(customizeyourweb){
          this.initEventHandlers()
       },
       
+      notifyValueChangedListener: function(){
+         this.notifyListeners({type:VALUE_CHANGED_EVENT_TYPE, value: this.getTargetDefinition()})   
+      },
+      
       setMessage: function(message, severity){
          Dialog.setMessageInHeader(message, severity)
          //TODO maybe change background color of field
@@ -181,6 +196,7 @@ with(customizeyourweb){
          this.setTargetDefinitionStyle(targetDefinition.getDefinitionStyle())
          this.setTargetNameAndOptionalFlag(targetDefinition)
          this.highlightCurrentTargets()
+         this.notifyValueChangedListener()
       },
       
       setTargetNameAndOptionalFlag: function(targetDefinition){
@@ -208,6 +224,8 @@ with(customizeyourweb){
       }
       
    }
+   
+   ObjectUtils.extend(TargetDefinitionXblHandler, "GenericEventSource", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "TargetDefinitionXblHandler", TargetDefinitionXblHandler)
    

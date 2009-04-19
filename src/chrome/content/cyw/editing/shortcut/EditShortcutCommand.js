@@ -7,13 +7,13 @@ with(customizeyourweb){
    EditShortcutCommand.prototype = {
       doCreateAction: function(editContext){
          var action = null
-         var targetElement = null
+         var targetElement = editContext.getTargetElement()
          var commandId = editContext.getCommand().id
          if(commandId=="customizeyourweb_shortcutCmd"){
             action = new ShortcutAction(editContext.getTargetDefinition())
-            targetElement = editContext.getTargetElement()
          }else if(commandId=="customizeyourweb_macroShortcutCmd"){
             action = new MacroShortcutAction()
+            targetElement = null
          }else if(commandId=="customizeyourweb_toggleVisibilityShortcutCmd"){
             action = new ToggleVisibilityShortcutAction(editContext.getTargetDefinition())
          }else{

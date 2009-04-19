@@ -12,12 +12,13 @@
     onload="customizeyourweb.EditInsertHTMLDialogHandler.doOnload()"
     title="Insert HTML"
     persist="screenX screenY width height"
-    minwidth="200" minheight="300">
+    flex="1">
    <script src="../../CywCommon.js"/>
+   <script src="../common/editdialogs/common_edit_dialog_include.js"/>
    <script src="../../common/WhereToInsertEnum.js"/>
    <script src="edit_insert_html_dialog.js"/>
    <dialogheader title="Define html to insert into the page" rows="1"/>
-   <vbox>
+   <vbox flex="1">
       <grid>
          <columns>
             <column></column>
@@ -39,7 +40,7 @@
       </grid>
       <label value="HTML Code"/>
       <xmleditor flex="1" id="htmlCodeTB" oninput="customizeyourweb.EditInsertHTMLDialogHandler.updatePage()" 
-               style="width: 500px; margin-bottom:7px" namespaceObj="customizeyourweb"/>
+               style="height:300px; width: 500px; margin-bottom:7px" namespaceObj="customizeyourweb"/>
       <targetdefinition id="targetdefinition"/>
       <commonactionattributes/>
    </vbox>

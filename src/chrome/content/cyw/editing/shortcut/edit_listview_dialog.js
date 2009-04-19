@@ -15,7 +15,7 @@ with(customizeyourweb){
       },
       
       doOnload: function(){
-         this.action = Dialog.getNamedArgument("action")
+         this.action = EditDialog.getAction()
          if(this.action.getCombinedKeyCode()!=null){
             byId("keyCombinationKIB").setCombinedValue(this.action.getCombinedKeyCode())
          }
@@ -24,9 +24,11 @@ with(customizeyourweb){
          var higlightCssObj = CssUtils.parseCssText(this.action.getHighlightCss())
          byId('highlightBackgroundCF').value = higlightCssObj["background-color"]
          byId('noOfHeaderRowsTB').value = this.action.getNoOfHeaderRows()
+         byId('ommitEveryXthItemTB').value = this.action.getOmmitEveryXthItem()
          byId('focusOnLoadCB').checked = this.action.isFocusOnLoad()
-         this.rootElement = Dialog.getNamedArgument("targetElement")
+         this.rootElement = EditDialog.getTargetElement()
          this.highlightAllItems()
+         this.initValidators(this.rootElement)
       },
       
       doOk: function(){
@@ -35,6 +37,7 @@ with(customizeyourweb){
          this.action.setListItemsTagName(byId("listItemsTagNameTB").value)
          this.action.setHighlightCss(this.getHighlightCss())
          this.action.setNoOfHeaderRows(byId('noOfHeaderRowsTB').value) 
+         this.action.setOmmitEveryXthItem(byId('ommitEveryXthItemTB').value) 
          this.action.setFocusOnLoad(byId('focusOnLoadCB').checked)
          this.action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
          Dialog.setNamedResult("action", this.action)
@@ -52,6 +55,14 @@ with(customizeyourweb){
             this.listItemWrappers.push(itemWrapper)
             itemWrapper.setCss(this.getHighlightCss())
          }
+      },
+      
+      initValidators: function(targetElement){
+         var okValidator = new AndValidator()
+         okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement)))
+         okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('listItemsTagNameTB')))
+         Dialog.addOkValidator(okValidator)
+         okValidator.validate()
       },
       
       unhighlightAllItems: function(){
