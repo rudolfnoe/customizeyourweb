@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
    
    function Script (){
       
@@ -211,4 +212,5 @@
       RUN_NEVER: "RUN_NEVER"
    }
 
-}})()
+})()
+}

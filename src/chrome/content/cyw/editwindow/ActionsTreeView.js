@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
    
 	function ActionsTreeView(tree, script){
       this.AbstractTreeView(tree, new ActionsRootTreeItem(), false)
@@ -258,4 +259,5 @@
    //Must be public for cloning
    Namespace.bindToNamespace("customizeyourweb", "ActionsRootTreeItem", ActionsRootTreeItem)
 
-}})()
+})()
+}

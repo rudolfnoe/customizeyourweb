@@ -32,7 +32,7 @@ with(customizeyourweb){
       },
       
    }
-   ObjectUtils.extend(EditInsertJSCommand, AbstractEditCommand)
+   ObjectUtils.extend(EditInsertJSCommand, "AbstractEditCommand", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "EditInsertJSCommand", EditInsertJSCommand)
 })()

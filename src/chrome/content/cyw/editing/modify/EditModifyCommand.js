@@ -57,7 +57,7 @@ with(customizeyourweb){
          }
       }
    }
-   ObjectUtils.extend(EditModifyCommand, AbstractEditCommand)
+   ObjectUtils.extend(EditModifyCommand, "AbstractEditCommand", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "EditModifyCommand", EditModifyCommand)
 })()

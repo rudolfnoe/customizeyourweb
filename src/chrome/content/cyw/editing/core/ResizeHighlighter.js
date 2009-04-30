@@ -170,9 +170,9 @@ with(customizeyourweb){
       
    };
    
-   ObjectUtils.extend(ResizeHighlighter, AbstractHighlighter)
-   ObjectUtils.extend(ResizeHighlighter, AbstractGenericEventHandler)
-   ObjectUtils.extend(ResizeHighlighter, GenericEventSource)
+   ObjectUtils.extend(ResizeHighlighter, "AbstractHighlighter", customizeyourweb)
+   ObjectUtils.extend(ResizeHighlighter, "AbstractGenericEventHandler", customizeyourweb)
+   ObjectUtils.extend(ResizeHighlighter, "GenericEventSource", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "ResizeHighlighter", ResizeHighlighter)
 })()

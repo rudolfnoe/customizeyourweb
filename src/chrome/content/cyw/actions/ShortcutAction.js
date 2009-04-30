@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
    
    function ShortcutAction (targetDefinition){
       this.AbstractTargetedAction(targetDefinition)
@@ -74,4 +75,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ShortcutAction", ShortcutAction)
    
-}})()
+})()
+}

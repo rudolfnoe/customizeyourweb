@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
       
    function InsertHTMLAction (targetDefinition){
       this.AbstractTargetedAction(targetDefinition)
@@ -99,4 +100,5 @@
    
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertHTMLAction", InsertHTMLAction)
-}})()
+})()
+}

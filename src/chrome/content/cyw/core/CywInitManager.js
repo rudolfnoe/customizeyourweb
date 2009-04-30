@@ -5,7 +5,8 @@
  * 25.09.2008
  */
 
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
 	
    var initPageHandler = {handleEvent: function(event){PageEventHandler.initPage(event)}}
    
@@ -135,6 +136,7 @@
 	
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb","InitManager", InitManager)
 
-}})()
+})()
+}
 
 

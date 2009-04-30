@@ -59,7 +59,7 @@ with(customizeyourweb){
    }
    
    
-   ObjectUtils.extend(EditListViewCommand, AbstractEditCommand)
+   ObjectUtils.extend(EditListViewCommand, "AbstractEditCommand", customizeyourweb)
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "EditListViewCommand", EditListViewCommand)
 })()

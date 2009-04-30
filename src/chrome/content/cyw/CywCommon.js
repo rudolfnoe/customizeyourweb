@@ -22,35 +22,34 @@
       
       init: function(){
 			
-			
-			//Load script loader all the rest
-			var tempScriptLoaderNS = new Object()
-         var sm = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].
-                     getService(Components.interfaces.mozIJSSubScriptLoader)
-         sm.loadSubScript(this.CHROME_CONTENT_URL + "common/script/ScriptLoader.js", tempScriptLoaderNS);
-			var scriptLoader = tempScriptLoaderNS.ScriptLoader
-         scriptLoader.loadBaseClasses(this.CHROME_CONTENT_URL + "common", "customizeyourweb")
-			var exclude = ["Shortcutmanager.js"]
-			scriptLoader.loadScripts(this.CHROME_CONTENT_URL+"common/", "customizeyourweb", null, exclude, true)
-			
-			
-			//Load Customize Your Web Scripts
-			scriptLoader.loadScript(this.CYW_CHROME_URL+ "CywEnums.js")
          try{
+   			//Load script loader all the rest
+   			var tempScriptLoaderNS = new Object()
+            var sm = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].
+                        getService(Components.interfaces.mozIJSSubScriptLoader)
+            sm.loadSubScript(this.CHROME_CONTENT_URL + "common/script/ScriptLoader.js", tempScriptLoaderNS);
+   			var scriptLoader = tempScriptLoaderNS.ScriptLoader
+            scriptLoader.loadBaseClasses(this.CHROME_CONTENT_URL + "common", "customizeyourweb")
+   			var exclude = ["Shortcutmanager.js"]
+   			scriptLoader.loadScripts(this.CHROME_CONTENT_URL+"common/", "customizeyourweb", null, exclude, true)
+   			
+   			
+   			//Load Customize Your Web Scripts
+   			scriptLoader.loadScript(this.CYW_CHROME_URL+ "CywEnums.js")
             scriptLoader.loadScripts(this.CYW_CHROME_URL + "actions/", null, null, true)
+   			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
+   			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")
+   			scriptLoader.loadScript(this.CYW_CHROME_URL+ "editing/core/SidebarContext.js")
+   
+   			// Init version
+   			this.VERSION = customizeyourweb.Utils.getExtension(this.GUI_ID).version
+            
+            //Create common Logger instance
+            this.createLogger()
          }catch(e){
-            Utils.logMessage(e.stack)
+            Components.utils.reportError(e.message + " Stack: " + e.stack)
          }
-			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
-			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")
-			scriptLoader.loadScript(this.CYW_CHROME_URL+ "editing/core/SidebarContext.js")
-
-			// Init version
-			this.VERSION = customizeyourweb.Utils.getExtension(this.GUI_ID).version
-         
-         //Create common Logger instance
-         this.createLogger()
-		}
+   	}
       
 	}
 	

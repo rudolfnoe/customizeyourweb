@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
       
    function ModifyAction (targetDefinition){
       this.AbstractTargetedAction(targetDefinition)
@@ -54,4 +55,5 @@
    ObjectUtils.extend(ModifyAction, "AbstractTargetedAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ModifyAction", ModifyAction)
-}})()
+})()
+}

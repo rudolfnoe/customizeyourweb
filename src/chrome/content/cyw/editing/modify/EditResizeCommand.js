@@ -40,7 +40,7 @@ with(customizeyourweb){
       }
    }
    
-   ObjectUtils.extend(EditResizeCommand, EditModifyCommand)
+   ObjectUtils.extend(EditResizeCommand, "EditModifyCommand", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "EditResizeCommand", EditResizeCommand)
 })()

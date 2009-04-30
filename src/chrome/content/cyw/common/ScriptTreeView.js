@@ -125,7 +125,7 @@ with(customizeyourweb){
          }
       }
    }
-   ObjectUtils.extend(ScriptTreeView, AbstractTreeView)
+   ObjectUtils.extend(ScriptTreeView, "AbstractTreeView", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "ScriptTreeView", ScriptTreeView)
 })()

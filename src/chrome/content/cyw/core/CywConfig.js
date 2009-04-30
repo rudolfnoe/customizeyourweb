@@ -5,7 +5,8 @@
  * 25.09.2008
  */
 
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
    
    const PREF_KEY_NOT_FOUND = "PREF_KEY_NOT_FOUND";
    
@@ -166,4 +167,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywConfig", CywConfig)
    
-}})()
+})()
+}

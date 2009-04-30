@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){   
+(function(){
    
    function AbstractTargetedAction(targetDefinition) {
          this.AbstractAction()
@@ -36,7 +37,8 @@
          return this.targetDefinition.getTarget(cywContextOrTargetWin)
       },
       
-      getTargetWithoutError: function(cywContext){
+      
+      getTargetWithoutError : function(cywContext){
          try{
             return this.getTarget(cywContext)
          }catch(e){
@@ -46,8 +48,9 @@
       }
       
    }
+   
    ObjectUtils.extend(AbstractTargetedAction, "AbstractAction", customizeyourweb)   
-
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractTargetedAction", AbstractTargetedAction)
-}})()
+})()
+}

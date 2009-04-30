@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
    var AbstractTargetedAction = customizeyourweb.AbstractTargetedAction
       
    function ClickAction (targetDefinition){
@@ -68,4 +69,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ClickAction", ClickAction)
 
-}})()
+})()
+}

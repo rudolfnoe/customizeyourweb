@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
    const ERROR_ICON_PATH = "chrome://customizeyourweb/content/common/ui/resources/error.ico";
    const WARNING_ICON_PATH = "chrome://customizeyourweb/content/common/ui/resources/warning.ico";
    
@@ -81,4 +82,5 @@
    }
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractActionTreeItem", AbstractActionTreeItem)
-}})()
+})()
+}

@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
    
    function MacroShortcutAction (){
       this.AbstractShortcutAction()
@@ -29,4 +30,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "MacroShortcutAction", MacroShortcutAction)
    
-}})()
+})()
+}

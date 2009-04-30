@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
 	
 	const SHADOWER_ID="CYWFrameShadower"
 	
@@ -55,4 +56,5 @@
 	
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "FrameShadower", FrameShadower)
 
-}})()
+})()
+}
