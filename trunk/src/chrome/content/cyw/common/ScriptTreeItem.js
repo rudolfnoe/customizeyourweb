@@ -34,7 +34,7 @@ with(customizeyourweb){
          return this.script
       }
    }
-   ObjectUtils.extend(ScriptTreeItem, AbstractLeafTreeItem)
+   ObjectUtils.extend(ScriptTreeItem, "AbstractLeafTreeItem", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "ScriptTreeItem", ScriptTreeItem)
 })()

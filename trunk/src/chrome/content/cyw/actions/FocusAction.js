@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
       
    function FocusAction (targetDefinition){
    	this.AbstractTargetedAction(targetDefinition)
@@ -53,4 +54,5 @@
    ObjectUtils.extend(FocusAction, "AbstractTargetedAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "FocusAction", FocusAction)
-}})()
+})()
+}

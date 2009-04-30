@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
    
    function ToggleVisibilityShortcutAction (targetDefinition){
       this.AbstractShortcutAction()
@@ -94,4 +95,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ToggleVisibilityShortcutAction", ToggleVisibilityShortcutAction)
    
-}})()
+})()
+}

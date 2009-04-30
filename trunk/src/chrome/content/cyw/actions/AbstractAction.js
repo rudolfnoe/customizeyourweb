@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
 	
    function AbstractAction (){
    	this.id = null
@@ -100,4 +101,5 @@
       RUN_ONCE_SUCCESSFULLY: "RUN_ONCE_SUCCESSFULLY"
    }
 
-}})()
+})()
+}

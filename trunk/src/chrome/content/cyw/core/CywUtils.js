@@ -3,7 +3,8 @@
  * Rudolf Noé
  * 25.09.2008
  */
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
 
    var CywUtils = {
       
@@ -18,4 +19,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywUtils", CywUtils)
 
-}})()
+})()
+}

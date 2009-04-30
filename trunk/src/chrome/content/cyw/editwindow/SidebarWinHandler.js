@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
 
 	const EDIT_WIN_SHORTCUTS = "EDIT_WIN_SHORTCUTS";
    const ACTION_SELECTION_CHANGEND_EVENT = "ACTION_SELECTION_CHANGEND_EVENT";
@@ -480,4 +481,5 @@
    }
    
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywSidebarWinHandler", CywSidebarWinHandler)
-}})()
+})()
+}

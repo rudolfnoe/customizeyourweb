@@ -41,7 +41,7 @@ with(customizeyourweb){
    }
    
    
-   ObjectUtils.extend(EditShortcutCommand, AbstractEditCommand)
+   ObjectUtils.extend(EditShortcutCommand, "AbstractEditCommand", customizeyourweb)
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "EditShortcutCommand", EditShortcutCommand)
 })()

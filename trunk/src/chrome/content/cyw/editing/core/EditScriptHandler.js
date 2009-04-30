@@ -1,7 +1,8 @@
 /*
  * Event handler during editing a script
  */
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
    
    //Constants
    //Tab context id for edit handler
@@ -863,4 +864,5 @@
    function byId(id){
       return document.getElementById(id)
    }
-}})()
+})()
+}

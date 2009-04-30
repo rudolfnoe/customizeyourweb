@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
       
    function InsertJSAction (){
       this.AbstractAction()
@@ -31,4 +32,5 @@
    ObjectUtils.extend(InsertJSAction, "AbstractAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertJSAction", InsertJSAction)
-}})()
+})()
+}

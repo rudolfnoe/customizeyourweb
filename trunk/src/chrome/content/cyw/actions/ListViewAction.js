@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){   
+with(customizeyourweb){
+(function(){   
    
    function ListViewAction (targetDefinition){
       this.AbstractTargetedAction(targetDefinition)
@@ -118,4 +119,5 @@
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ListViewAction", ListViewAction)
    
-}})()
+})()
+}

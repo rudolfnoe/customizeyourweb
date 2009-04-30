@@ -1,4 +1,5 @@
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
    
    function ActionContainerTreeItem(action, open){
       this.AbstractActionTreeItem(action)
@@ -14,4 +15,5 @@
    ObjectUtils.extend(ActionContainerTreeItem, "AbstractContainerTreeItem", customizeyourweb)
    
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ActionContainerTreeItem", ActionContainerTreeItem)
-}})()
+})()
+}

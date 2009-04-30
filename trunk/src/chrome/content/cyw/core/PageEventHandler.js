@@ -4,7 +4,8 @@
  * Created by Rudolf Noé
  * 25.09.2008
  */
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
 	const CYW_NAMESPACE = "de_mouseless_CYW"
    const EVENT_TYPES_LISTENING = ["pagehide", "DOMNodeInserted", "DOMNodeRemoved"]
    
@@ -245,5 +246,6 @@
       MUTATION_EVENT: "MUTATION_EVENT"
    }
    Namespace.bindToNamespace("customizeyourweb", "PageEvents", PageEvents)
-}})()
+})()
+}
 

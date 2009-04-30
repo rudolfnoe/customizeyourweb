@@ -1,5 +1,6 @@
 //Probably throw away as FF offers this by default
-(function(){with(customizeyourweb){
+with(customizeyourweb){
+(function(){
       
    function ZoomAction (){
       this.AbstractAction()
@@ -27,4 +28,5 @@
    ObjectUtils.extend(ZoomAction, "AbstractAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ZoomAction", ZoomAction)
-}})()
+})()
+}

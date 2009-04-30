@@ -23,7 +23,7 @@ with(customizeyourweb){
       constructor: EditDialog   
    }
    
-   ObjectUtils.extend(EditDialog, Dialog)
+   ObjectUtils.extend(EditDialog, "Dialog", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "EditDialog", EditDialog)
 })()
