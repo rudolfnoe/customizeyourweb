@@ -70,6 +70,8 @@
       this.mouseOverHighlighter = null
       //Context in which information from the sidebar is stored, needed for tab change handling
       this.sidebarContext = null
+      //Sidebar load listener
+      this.sidebarLoadListener = Utils.bind(function(){this.registerActionSelectionListener()}, this)
       //The edit handler extends the AbstractGenericEventHandler
       //To suspend the edit handler during the editing of command 
       //a suspendableEvenHandler wraps the edit handler
@@ -173,6 +175,8 @@
          browserForTab[functionName]("contextmenu", this.suspendableEventHandler, true)
          //context menu
          getEgMenuPopup()[functionName]("popupshowing", this.suspendableEventHandler, true)
+         
+         getSidebar()[functionName]("load", this.sidebarLoadListener, true)
          //Registering for change of edit contexts clipboard property content to de/activate paste commands
          if(isAdd){
             this.addContextClipboardObserver()
@@ -199,8 +203,9 @@
       },
       
       checkCurrentWinMatchesToCurrentScript: function(){
-         var targetWin = this.getActionTargetWin()   
-         return getSidebarWinHandler().getCurrentScript().matchUrl(targetWin.location.href)
+         var targetWin = this.getActionTargetWin()
+         var currentScript = getSidebarWinHandler().getCurrentScript()
+         return currentScript.matchUrl(targetWin.location.href) || !currentScript.hasIncludePattern()
       },
       
       /*
@@ -298,8 +303,8 @@
             this.unhighlightAllHighlighters()
          }
          var wrapperCommand = this.createWrapperCommandFromAction(action)
-         this.initEditContextForEditAction(action, script)
          var actionTargetWin = this.getActionTargetWin()
+         this.initEditContextForEditAction(action, script)
          var modifiedAction = wrapperCommand.doEditAction(this.editContext)
          if(modifiedAction!=null){
             //Editing ended sucessful
@@ -325,14 +330,13 @@
          this.unhighlightAllHighlighters()
          var wrapperCommand = this.createWrapperCommandFromCommandId(commandId)
          this.initEditContextForCreateAction(commandId)
-         var actionTargetWin = this.getActionTargetWin()
          var newAction = wrapperCommand.doCreateAction(this.editContext)
          if(newAction){
             //If creation successfull
             var successful = getSidebarWinHandler().addOrUpdateAction(newAction, this.getActionTargetWin())
             if(successful){
                this.editCommandHistory.push(wrapperCommand)
-               this.updateCurrentTarget(newAction, actionTargetWin)
+               this.updateCurrentTarget(newAction, this.getActionTargetWin())
             }else{
                wrapperCommand.undo(this.editContext)
             }
@@ -352,8 +356,12 @@
          scripts.add(Script.createNewScript(this.targetWin.location.href))
          
          //init sidebar stuff
+         if(isSidebarWinOpen()){
+            this.registerActionSelectionListener()
+         }
          this.initSidebarContext(scripts)
          initSidebarWin()
+         
       },
       
       getCurrentScript: function(){
@@ -376,13 +384,22 @@
          }
       },
       
+      handleActionSelectionChanged: function(event){
+         var selectedAction = event.selectedAction
+         if(selectedAction && selectedAction.isTargeted()){
+            byId('customizeyourweb_retargetActionCmd').setAttribute('disabled', "false")
+         }else{
+            byId('customizeyourweb_retargetActionCmd').setAttribute('disabled', "true")
+         }
+      },
+      
       handleClick: function(event){
          Utils.stopEvent(event)
          var target = event.target
          if(event.altKey){
             this.retargetAction(target)
          }else{
-            getEgMenuPopup().openPopupAtScreen(event.screenX-20, event.screenY, true)
+            getEgMenuPopup().openPopupAtScreen(event.screenX-20, event.screenY-10, true)
          }
       },
       
@@ -397,22 +414,20 @@
                getEgMenuPopup().hidePopup()
             //CywUtils.logDebugMessage("Target: " + event.target.tagName)
             this.unhighlightActionTargets()
-            this.setCurrentTarget(event.target)
+            var newTarget = event.target
+            if(this.isContainedInEditableIframe(newTarget)){
+               newTarget = newTarget.ownerDocument.defaultView.frameElement 
+            }
+
+            this.setCurrentTarget(newTarget)
             //Focus content win to enable shortcuts automatically
             //TODO make configurable
-            event.target.ownerDocument.defaultView.focus()
+            newTarget.ownerDocument.defaultView.focus()
          }, this)
       },
       
       handlePagehide: function(){
          //TODO is this still neccessary?
-      },
-      
-      /*
-       * Handles popup showing of edit context menu
-       */
-      handlePopupshowing: function(){
-         this.setActivationOfRetargetCommand()
       },
       
       /*
@@ -496,28 +511,39 @@
        */
       initEditContextForEditAction: function(action, script){
          var targetElement = null
+         var targetWindow = null
          if(action.isTargeted()){
             //Determine the target element
             var targetDef = action.getTargetDefinition()
             var targetElements = new ArrayList();
+            var targetWindows = new ArrayList();
             DomUtils.iterateWindows(this.targetWin, function(subWin){
-               if(script.matchUrl(subWin.location.href) && targetDef.isTargetInPage(subWin)){
-                  targetElements.add(targetDef.getTarget(subWin))
-               }
+               if(script.matchUrl(subWin.location.href)){
+                  targetWindows.add(subWin)
+                  if(targetDef.isTargetInPage(subWin)){
+                     targetElements.addAll(targetDef.getTargets(subWin))
+                  }
+            }
             })
             //TODO check, could be more than 1
-            if(targetElements.size()>0)
+            if(targetElements.size()>0){
                targetElement = targetElements.get(0)
-            else
-               throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND_ON_EDITING)
+               targetWindow = targetElement.ownerDocument.defaultView 
+            }else if(targetWindows.size()>0){
+               targetWindow = targetWindows.get(0) 
+            }else{
+               Assert.fail("Target window could not be determined!")
+            }
          }
          this.editContext.setAction(action)
          this.editContext.setTargetElement(targetElement)
+         this.editContext.setTargetWindow(targetWindow)
       },
       
       initEditContextForCreateAction: function(commandId){
          this.editContext.setCommand(document.getElementById(commandId))
          this.editContext.setTargetElement(this.currentTarget)
+         this.editContext.setTargetWindow(this.getActionTargetWin())
          var targetDefinition = null
          if(this.currentTarget)
            targetDefinition = AbstractTargetDefinitionFactory.createDefaultDefinition(this.currentTarget)
@@ -562,6 +588,10 @@
          this.setApplicationEditContext(this.sidebarContext)
       },
       
+      isContainedInEditableIframe: function(element){
+         return element.ownerDocument.designMode=="on"
+      },
+      
       navigateWithKeys: function(direction){
          if(this.currentTarget==null){
             var win = this.targetWin
@@ -572,7 +602,8 @@
          }
          switch (direction){
             case "parentNode":
-               if(this.currentTarget.tagName=="BODY"){
+               var tagName = this.currentTarget.tagName
+               if(tagName=="BODY" || tagName=="HTML"){
                   var ownerWindow = DomUtils.getOwnerWindow(this.currentTarget) 
                   if(ownerWindow.frameElement != null &&
                      ownerWindow.frameElement.tagName == "IFRAME"){
@@ -619,6 +650,10 @@
          EditScriptHandler.notifyEditListener(EditScriptHandler.Events.EDIT_START, this.targetWin)
       },
       
+      registerActionSelectionListener: function(){
+        getSidebarWinHandler().addActionSelectionChangedListener(this.handleActionSelectionChanged, this) 
+      },
+      
       reloadPage: function(win, script){
          if(script.matchUrl(win.location.href)){
             win.location.reload()
@@ -641,6 +676,7 @@
       //TODO make it undoable
       retargetAction: function(newTarget){
          newTarget = newTarget?newTarget:this.currentTarget
+         var newTargetWindow = DomUtils.getOwnerWindow(newTarget)
          var selectedAction = getSidebarWinHandler().getSelectedAction()
          var errorMessage = null
          if(!selectedAction)
@@ -652,11 +688,11 @@
             return
          }
          this.unhighlightMouseOverHighlighter()   
-         var dialog = new CommonAttributesEditDialog(selectedAction, newTarget) 
+         var dialog = new CommonAttributesEditDialog(selectedAction, newTargetWindow, newTarget) 
          dialog.show()
          if(dialog.isOk()){
             var updatedAction = dialog.getAction()
-            this.currentTarget = updatedAction.getTargetDefinition().getTarget(DomUtils.getOwnerWindow(newTarget))
+            this.currentTarget = updatedAction.getTargetDefinition().getTarget(newTargetWindow)
             this.highlightCurrentTarget()
             getSidebarWinHandler().updateAction(updatedAction)
          }
@@ -691,24 +727,13 @@
             this.reloadPage(this.targetWin, script)
       },
       
-      setActivationOfRetargetCommand: function(){
-         var selectedAction = getSidebarWinHandler().getSelectedAction() 
-         if(selectedAction!=null && selectedAction.isTargeted())
-            byId('customizeyourweb_retargetActionCmd').setAttribute('disabled', "false")
-         else
-            byId('customizeyourweb_retargetActionCmd').setAttribute('disabled', "true")
-      },
-
       shadowFrames: function(script){
          this.unshadowFrames()
          var shadowers = new Array()
-         //TODO change frame shadowing as overlayed divs in different frames could disable everything
          DomUtils.iterateWindows(this.targetWin, function(win){
             if(!script.matchUrl(win.location.href)){
                var body = DomUtils.getBody(win.document)
                if(body){
-//                  var frameHighlighter = new FrameHighlighter(null, "red")
-//                  frameHighlighter.highlight(body)
                   var newShadower = new FrameShadower(win)
                   newShadower.shadow()
                   shadowers.push(newShadower)
@@ -784,9 +809,14 @@
    }
    ObjectUtils.extend(EditScriptHandler, AbstractGenericEventHandler)
    
+   //TODO Refactor this
    //Helper methods
+   function getSidebar(){
+      return document.getElementById("sidebar")
+   }
+   
    function getSidebarWin(){
-      return document.getElementById("sidebar").contentWindow;
+      return getSidebar().contentWindow;
    }
    
    function getSidebarWinHandler() {

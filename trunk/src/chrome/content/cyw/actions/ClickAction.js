@@ -28,7 +28,7 @@
       
       doActionInternal: function(cywContext){//Todo change
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var target = this.getTarget(cywContext)
          function performEvent(type){
@@ -54,10 +54,11 @@
          
          if(result==0)
             throw new Error("Click Event not successfully dispatched")
+         return true
       },
       
       doActionForCachedPageInternal: function(cywContext){
-         this.doActionInternal(cywContext)
+         return this.doActionInternal(cywContext)
       }
       
       

@@ -48,8 +48,11 @@
          return this.targetWrapper
       },
 
-      doActionInternal: function(cywContext){//Todo change
+      doActionInternal: function(cywContext){
          this.registerShortcut(cywContext)
+         if(this.isTargetOptionalAndTargetMissing(cywContext)){
+            return
+         }
          var targetElement = this.getTarget(cywContext) 
          if(this.initStateHidden)
             this.hideElement(targetElement)

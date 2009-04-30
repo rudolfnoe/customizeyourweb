@@ -6,7 +6,9 @@ with(customizeyourweb){
    EditIfElementExistsCommand.prototype = {
 
       createAction: function(editContext) {
-         return new IfElementExistsAction(editContext.getTargetDefinition())
+         var action = new IfElementExistsAction(editContext.getTargetDefinition()) 
+         action.setRepetitionBehavior(RepetitionBehavior.RUN_ALWAYS)
+         return action
       }
       
    }

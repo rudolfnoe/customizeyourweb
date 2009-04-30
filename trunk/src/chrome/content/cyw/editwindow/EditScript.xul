@@ -43,51 +43,60 @@
    </popupset>
    
    <dialogheader title="Edit Script Properties" style="margin-top:0px" rows="2"/>
-   <tabbox>
+   <tabbox flex="1">
       <tabs>
          <tab label="Main"/>
          <tab label="Settings"/>
       </tabs>             
-   <tabpanels>
-      <tabpanel>
+   <tabpanels flex="1">
+      <tabpanel flex="1">
          <vbox flex="1">
             <label value="Scripts" accesskey="p"/>
             <hbox>
                <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
-                         crop="center">
+                         crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Ctrl+Shift+P)'>
                   <menupopup>
                   </menupopup>
                </menulist>
-               <button command="selectScriptCmd" style="width:30px"/>
+               <button command="selectScriptCmd" style="width:30px" tooltiptext="Opens dialog to select another script">
+                  Se<html:u>l</html:u>ect
+               </button>
             </hbox>
+            
             <label value="Name (optional)" />
             <hbox>
-               <textbox id="name" flex="1"/>
-               <checkbox id="scriptDisabled" label="Disabled"/>
+               <textbox id="name" flex="1" tooltiptext="Name of the script"/>
+               <checkbox id="scriptDisabled" label="Disabled" tooltiptext="Disables script"/>
             </hbox>
             <!-- editor for editable menulist-->
-            <menulist id="urlPatternProposals" editable="true" flex="1">
+            <menulist id="urlPatternProposals" editable="true" flex="1" >
                <menupopup id="urlPatternPopup">
                </menupopup>
             </menulist>
+
             <label value="Include URL Patterns (* = any string)" accesskey="U" />
-            <richlistbox id="includePatterns" height="100px" flex="1" selType="single">
+            <richlistbox id="includePatterns" height="100px" flex="1" selType="single" 
+                         tooltiptext="List of URL patterns for which the script will be applied (Ctrl+Shift+U)">
                <!-- will be dynamically filled -->
             </richlistbox>
+
             <label value="Actions" accesskey="a"/>
-            <tree id="actionsTreeView" height="400px" flex="1" rows="20" seltype="single" context="treeContextMPU" 
+            <tree id="actionsTreeView" flex="10" seltype="single" context="treeContextMPU" 
                   onselect="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
                   onclick="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
                   ondblclick="document.getElementById('editBU').click()"
-                  hidecolumnpicker="true">
+                  hidecolumnpicker="true"
+                  style="min-height:100px"
+                  tooltiptext="List of actions which will be executed after page load / page change (Ctrl+Shift+A)">
                <treecols>
                   <treecol id="actionCol" label="Action" flex="1" primary="true"/>
                </treecols>
-               <treechildren/>
+               <treechildren flex="1"/>
             </tree>
-            <grid style="margin-top:7px" flex="1"> 
+
+            <grid style="margin-top:7px" > 
                <columns>
-                  <column flex="1"></column>
+                  <column></column>
                   <column></column>
                   <column></column>
                   <column></column>
@@ -107,8 +116,13 @@
             </grid>
          </vbox>
       </tabpanel>
-      <tabpanel>
+      <tabpanel flex="1">
          <vbox flex="1">
+            <label value="Exclude URL Patterns (* = any string)" accesskey="U"/>
+            <richlistbox id="excludePatterns" height="100px" selType="single" 
+                         tooltiptext="List of URL patterns for which the script will not be applied (overrules include patterns)">
+               <!-- will be dynamically filled -->
+            </richlistbox>
             <label value="Time when script should run"/>
             <menulist id="loadEventType" editable="false">
                <menupopup>
@@ -117,9 +131,9 @@
                </menupopup>
             </menulist>
             <label value="Behavior on dynamic page changes (via JavaScript)"/>
-            <menulist id="behaviorOnMutationEvent" editable="false">
+            <menulist id="behaviorOnMutationEvent" editable="false" tooltiptext="Defines whether script should re-run after page has changed dynmaically or not">
                <menupopup>
-                  <menuitem label="Rerun script when page is changed via JavaScript" value="RUN_ALWAYS"/>
+                  <menuitem label="Re-run script when page is changed via JavaScript" value="RUN_ALWAYS"/>
                   <menuitem label="Run script only once on page load" value="RUN_NEVER"/>
                </menupopup>
             </menulist>
@@ -127,7 +141,7 @@
       </tabpanel>
    </tabpanels>
    </tabbox>
-   <grid flex="1" style="margin-top:7px; margin-left:10px; margin-right:10px"> 
+   <grid style="margin-top:7px; margin-left:10px; margin-right:10px; margin-bottom:7px"> 
       <columns>
          <column></column>
          <column flex="1"></column>

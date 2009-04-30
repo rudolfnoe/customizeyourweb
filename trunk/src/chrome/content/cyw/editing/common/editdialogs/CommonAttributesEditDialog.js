@@ -3,10 +3,11 @@ with(customizeyourweb){
    const CHROME_URL_COMMON_ATTR_EDIT_DIALOG =
          "chrome://customizeyourweb/content/cyw/editing/common/editdialogs/common_attributes_edit_dialog.xul"
    
-   function CommonAttributesEditDialog(targetedAction, newTargetElement){
+   function CommonAttributesEditDialog(targetedAction, targetWindow, targetElement){
       this.dialog = null
       this.targetedAction = targetedAction
-      this.newTargetElement = newTargetElement
+      this.targetElement = targetElement
+      this.targetWindow = targetWindow
    }
    
    CommonAttributesEditDialog.prototype = {
@@ -30,7 +31,7 @@ with(customizeyourweb){
       
       show: function(){
          this.dialog = new EditDialog(CHROME_URL_COMMON_ATTR_EDIT_DIALOG, "CommonAttrEdit", true, 
-                  window, null, {action: this.targetedAction, targetElement:this.newTargetElement})
+                  window, null, {action: this.targetedAction, targetElement:this.targetElement, targetWindow:this.targetWindow})
          this.dialog.show()
          if(this.dialog.isCancel()){
             return DialogResult.CANCEL

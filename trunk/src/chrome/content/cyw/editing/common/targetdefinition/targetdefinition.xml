@@ -54,7 +54,8 @@
                         <xul:label value="Target name"/>
                         <xul:hbox>
                            <xul:textbox anonid="targetNameTB" flex="1"/>
-                           <xul:checkbox label="Target is optional in page" anonid="targetIsOptionalCB" flex="1"/>
+                           <xul:checkbox label="Target is optional in page" anonid="targetIsOptionalCB" flex="1" 
+                                         oncommand="document.getBindingParent(this).handler.handleOptionalFlagChanged()"/>
                         </xul:hbox>
                      </xul:row>
                   </xul:rows>
@@ -99,12 +100,16 @@
                <body>return this.handler.getTargetDefinition()</body>
             </method>
             <method name="initTargetDefintionField">
-               <parameter name="targetDefinition"/>
+               <parameter name="targetWindow"/>
                <parameter name="targetElement"/>
+               <parameter name="targetDefinition"/>
                <body>
                   this.setTargetElement(targetElement)
+                  this.setTargetWindow(targetWindow)
                   this.setTargetDefinition(targetDefinition)
-                  this.createTargetDefinitions()
+                  if(targetElement!=null){
+                     this.createTargetDefinitions()
+                  }
                </body>
             </method>
             <method name="setTargetElement">
@@ -118,6 +123,10 @@
             <method name="setTargetDefinition">
                <parameter name="targetDefinition"/>
                <body>this.handler.setTargetDefinition(targetDefinition)</body>
+            </method>
+            <method name="setTargetWindow">
+               <parameter name="targetWindow"/>
+               <body>this.handler.setTargetWindow(targetWindow)</body>
             </method>
 			</implementation>
 			<handlers>

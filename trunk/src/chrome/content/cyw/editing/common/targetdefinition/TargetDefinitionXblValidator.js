@@ -13,7 +13,7 @@ with(customizeyourweb){
       
       isValid: function(){
          var targetDef = this.targetDefinitionField.getTargetDefinition()
-         return targetDef!=null && targetDef.isTargetInPage(this.targetWin)
+         return (targetDef!=null && (targetDef.isTargetInPage(this.targetWin) || targetDef.isTargetOptional()))
       },
       
       registerListener: function(){

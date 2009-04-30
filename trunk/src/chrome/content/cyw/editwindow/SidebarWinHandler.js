@@ -1,6 +1,7 @@
 (function(){with(customizeyourweb){
 
-	const EDIT_WIN_SHORTCUTS = "EDIT_WIN_SHORTCUTS"
+	const EDIT_WIN_SHORTCUTS = "EDIT_WIN_SHORTCUTS";
+   const ACTION_SELECTION_CHANGEND_EVENT = "ACTION_SELECTION_CHANGEND_EVENT";
 	
    var unloadHandler = {handleEvent: function(){CywSidebarWinHandler.handleUnexpectedUnload()}}
    
@@ -15,8 +16,10 @@
       currentScriptId: null,
       //Backup of currently edited script for detecting changes
       currentScriptBackup: null,
+      eventManager: new GenericEventSource(),
       idToScriptMap: new Map(),
       includeUrlPatternsELB: null,
+      excludeUrlPatternsELB: null,
       shortcutManager: new ShortcutManager(window, "keydown", true),
       sidebarContext: null,
       
@@ -58,6 +61,10 @@
          byId('scripts').appendItem(scriptLabel, script.id, null)
       },
 
+      addActionSelectionChangedListener: function(callbackFuncOrEventHandler, thisObj){
+         this.eventManager.addListener(ACTION_SELECTION_CHANGEND_EVENT, callbackFuncOrEventHandler, thisObj)
+      },
+
       addShortcut: function(tabSCM, keyCombination, shortcutTarget){
          tabSCM.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS)
          this.shortcutManager.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS)
@@ -68,7 +75,7 @@
             this.saveScript(sidebarClosedAbnormal)
          }else{
             if(this.isScriptModified())
-               this.reloadContentIfWished(this.getTargetWin(), this.currentScriptBackup)
+               this.reloadContentIfWanted(this.getTargetWin(), this.currentScriptBackup)
             this.getEditScriptHandler().cancelEditing(!sidebarClosedAbnormal)
          }
       },
@@ -84,8 +91,8 @@
             ObjectUtils.instanceOf(action, CutAction)){
                return
          }
-         //TODO exclude Patterns
-         var targetWinDefinition = new TargetWinDefinition(this.includeUrlPatternsELB.getValues(), null)
+         
+         var targetWinDefinition = new TargetWinDefinition(this.includeUrlPatternsELB.getValues(), this.excludeUrlPatternsELB.getValues())
          var targetFound = false
          targetWinDefinition.iterateMatchingWins(this.getTargetWin(), function(subWin){
             if(action.isTargetInPage(subWin)){
@@ -113,7 +120,7 @@
       	var scriptML = byId('scripts')
       	var scriptId = scriptML.value
       	this.getEditScriptHandler().deleteScript(scriptId)
-         this.reloadContentIfWished(this.getTargetWin(), this.idToScriptMap.get(scriptId))
+         this.reloadContentIfWanted(this.getTargetWin(), this.idToScriptMap.get(scriptId))
          
          //clean up
       	this.idToScriptMap.remove(scriptId) 
@@ -125,6 +132,7 @@
       	scriptML.removeItemAt(selIndex)
          //Select next in the list
       	scriptML.selectedIndex = selIndex
+         
       },
       
       doOnload: function(){
@@ -138,6 +146,7 @@
          try{
             var modifiedAction = this.getEditScriptHandler().doEditAction(selectedAction, this.getCurrentScript())
          }catch(e){
+            Log.logError(e)
             this.setMessage(e.message, Severity.ERROR)
          }
          if(modifiedAction!=null)
@@ -169,6 +178,7 @@
          currentScript.setName(byId('name').value)
          currentScript.setDisabled(byId('scriptDisabled').checked)
          currentScript.setIncludeUrlPatterns(this.includeUrlPatternsELB.getValues())
+         currentScript.setExcludeUrlPatterns(this.excludeUrlPatternsELB.getValues())
          currentScript.setActions(this.actionsTreeView.getActions())
          currentScript.setLoadEventType(byId('loadEventType').value)
          currentScript.setBehaviorOnMutationEvent(byId('behaviorOnMutationEvent').value)
@@ -224,23 +234,27 @@
             !ObjectUtils.instanceOf(selectedAction, AbstractTargetedAction) ||
             ObjectUtils.instanceOf(selectedAction, RemoveAction)){
             this.getEditScriptHandler().unhighlightActionTargets()
-          }else{
+         }else{
             var targetFound = this.getEditScriptHandler().highlightActionTargets(this.getCurrentScript(), selectedAction.getTargetDefinition())
             if(!targetFound && !selectedItem.hasMessage()){
                var errorMessage = ScriptErrorHandler.getErrorMessage(ErrorConstants.TARGET_NOT_FOUND, 
                   [selectedAction.getTargetDefinition().getDefinitionAsString()])
                byId('dialogheader').setWarningMessage(errorMessage)
             }
-          }
+         }
+
+         //Notify listeners
+         this.notifyListeners({type:ACTION_SELECTION_CHANGEND_EVENT, selectedAction:selectedAction})
+          
       },
       
-      handleIncludePatternsChanged: function(){
+      handleUrlPatternsChanged: function(){
          if(this.includeUrlPatternsELB.getItemCount()==0)
             this.getEditScriptHandler().unshadowFrames()
          else
             this.getEditScriptHandler().shadowFrames(this.getCurrentScript())
       },
-      
+            
       handleScriptSelect: function(event){
          var scriptsML = event.target
          var selectedScriptId = scriptsML.value
@@ -263,6 +277,7 @@
       	scm.clearAllShortcuts(EDIT_WIN_SHORTCUTS)
          this.shortcutManager.clearAllShortcuts(EDIT_WIN_SHORTCUTS)
          this.addShortcut(scm, "shift+alt+p", Utils.bind(function(){this.focusControl("scripts")}, this))
+         this.addShortcut(scm, "shift+alt+l", Utils.bind(function(){this.selectScript()}, this))
          this.addShortcut(scm, "shift+alt+u", Utils.bind(function(){this.focusControl("includePatterns")}, this))
          this.addShortcut(scm, "shift+alt+a", Utils.bind(function(){this.focusControl("actionsTreeView")}, this))
          this.addShortcut(scm, "shift+alt+e", new CommandShortcut(byId('editActionCmd')))
@@ -272,7 +287,7 @@
          this.addShortcut(scm, "ctrl+s", Utils.bind(function(){this.saveScript(false)}, this))
          this.addShortcut(scm, "shift+alt+c", Utils.bind(function(){this.cancel(false)}, this))
          
-         //Sidebar specifc shortcuts
+         //Element specifc shortcuts
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+c", new CommandShortcut(byId('copyActionCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+x", new CommandShortcut(byId('cutActionCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "Return", new CommandShortcut(byId('editActionCmd')))
@@ -312,11 +327,16 @@
             menuitem.setAttribute('crop', "center")
          })
          
-         //Create Include pattersn edit listbox
-         this.includeUrlPatternsELB = new EditListbox(byId('includePatterns'), 
-            new GenericMenulistCellEditor(DomUtils.removeElement(byId('urlPatternProposals'))))
-         this.includeUrlPatternsELB.addListener("*", this.handleIncludePatternsChanged, this)
          
+         //Create Include pattersn edit listbox
+         var menulistCellEditor = new GenericMenulistCellEditor(byId('urlPatternProposals')) 
+         this.includeUrlPatternsELB = new EditListbox(byId('includePatterns'), menulistCellEditor)
+         this.includeUrlPatternsELB.addListener("*", this.handleUrlPatternsChanged, this)
+         
+         //Create exclude pattern edit listbox
+         this.excludeUrlPatternsELB = new EditListbox(byId('excludePatterns'), menulistCellEditor)
+         this.excludeUrlPatternsELB.addListener("*", this.handleUrlPatternsChanged, this)
+
          var selectedScriptId = null
          if(this.sidebarContext.currentScriptId!=null){
             selectedScriptId = this.sidebarContext.currentScriptId
@@ -347,8 +367,10 @@
          
          //set include pattern
          if(currentScript.isPersisted()){
-            var urlPatternStrings = currentScript.getIncludeUrlPatternStrings()
-            this.includeUrlPatternsELB.setItems(urlPatternStrings, urlPatternStrings)
+            var includePatternStrings = currentScript.getIncludeUrlPatternStrings()
+            this.includeUrlPatternsELB.setItems(includePatternStrings, includePatternStrings)
+            var excludePatternStrings = currentScript.getExcludeUrlPatternStrings()
+            this.excludeUrlPatternsELB.setItems(excludePatternStrings, excludePatternStrings)
          }else if(byId('includePatterns').itemCount==0 && !DomUtils.containsFrames(this.sidebarContext.targetWin)){
             this.setUrlPatternWithMostLikely(this.sidebarContext.targetWin)
          }
@@ -360,6 +382,11 @@
          this.actionsTreeView.addListener("update", this.checkTargetDefinitionForAction, this)
          this.actionsTreeView.setActions(currentScript.getActions(), ScriptErrorHandler.getErrorsForScript(scriptId))
          
+         //After tree is fill trigger shadowing of frames
+         if(currentScript.isPersisted()){
+            this.handleUrlPatternsChanged()
+         }
+
          //Save backup for detecting changes
          if(scriptBackup!=null)
             this.currentScriptBackup = scriptBackup
@@ -389,11 +416,15 @@
          this.actionsTreeView.moveSelectedUp()
       },
       
+      notifyListeners: function(event){
+         this.eventManager.notifyListeners(event)
+      },
+      
       pasteActionTreeClipboard: function(){
          this.actionsTreeView.pasteClipboard()   
       },
       
-      reloadContentIfWished: function(win, script){
+      reloadContentIfWanted: function(win, script){
          if(CywConfig.isAutoUpdateOnSave())
             this.getEditScriptHandler().reloadPage(win, script)
       },

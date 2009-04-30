@@ -28,7 +28,7 @@ with(customizeyourweb){
          byId('focusOnLoadCB').checked = this.action.isFocusOnLoad()
          this.rootElement = EditDialog.getTargetElement()
          this.highlightAllItems()
-         this.initValidators(this.rootElement)
+         this.initValidators(EditDialog.getTargetWindow())
       },
       
       doOk: function(){
@@ -48,8 +48,16 @@ with(customizeyourweb){
          return "background-color: " + byId('highlightBackgroundCF').value
       },
       
+      updateHighlighting: function(){
+         Utils.executeDelayed("LISTVIEW_ITEMS_CHANGED", 500, this.highlightAllItems, this)
+      },
+      
       highlightAllItems: function(){
-         var listItems = this.rootElement.getElementsByTagName(this.action.getListItemsTagName())
+         this.unhighlightAllItems()
+         if(!this.rootElement){
+            return
+         }
+         var listItems = this.rootElement.getElementsByTagName(byId("listItemsTagNameTB").value)
          for (var i = 0; i < listItems.length; i++) {
             var itemWrapper = new ElementWrapper(listItems[i])
             this.listItemWrappers.push(itemWrapper)
@@ -57,9 +65,9 @@ with(customizeyourweb){
          }
       },
       
-      initValidators: function(targetElement){
+      initValidators: function(targetWindow){
          var okValidator = new AndValidator()
-         okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement)))
+         okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow))
          okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('listItemsTagNameTB')))
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
@@ -69,6 +77,7 @@ with(customizeyourweb){
          for (var i = 0; i < this.listItemWrappers.length; i++) {
             this.listItemWrappers[i].restoreStyle()
          }
+         this.listItemWrappers = []
       }
    }
 

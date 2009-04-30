@@ -15,6 +15,25 @@
       prefObserver: null,
 		shortcutManager: new ShortcutManager(window, "keydown", true),
       
+      assureAIOSCompatibility: function(){
+         if(!Application.prefs.has("extensions.aios.collapse")){
+            return
+         }
+         var sidebarCollapses = Application.prefs.getValue("extensions.aios.collapse", true)
+         if(sidebarCollapses){
+            Application.prefs.setValue("extensions.aios.collapse", false)
+            setTimeout(function(){
+               alert('The All-in-One Sidebar feature "Sidebar Collapsing" got disabled\n' +
+                     'to ensure compatibility with Customize Your Web.\n' +
+                     'Firefox will be restarted to load the new settings.')
+               var appStartup = Components.classes["@mozilla.org/toolkit/app-startup;1"]
+								.getService(Components.interfaces.nsIAppStartup);
+					appStartup.quit(appStartup.eAttemptQuit | appStartup.eRestart);
+               
+            })
+         }
+      },
+      
       disableAll: function(){
          this.initEventHandlers("removeEventListener")
          this.eventHandlersActive = false
@@ -61,6 +80,7 @@
       intializedOnce: function(){
 			if(!this.intializedOnceDone){
    		   this.registerObservers()
+            this.assureAIOSCompatibility()
    		   this.intializedOnceDone = true
 			}
       },

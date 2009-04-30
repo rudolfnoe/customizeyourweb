@@ -7,12 +7,17 @@ with(customizeyourweb){
       doOnload: function(){
          try{
             this.targetDefinitionField = byId('targetdefinition')
-            this.targetDefinitionField.setTargetElement(EditDialog.getTargetElement())
-            this.targetDefinitionField.createDefaultTargetDefinitions()
+            var targetWindow = EditDialog.getTargetWindow()
+            this.targetDefinitionField.setTargetWindow(targetWindow)
+            var targetElement = EditDialog.getTargetElement(targetElement)
+            if(targetElement){
+               this.targetDefinitionField.setTargetElement(targetElement)
+               this.targetDefinitionField.createDefaultTargetDefinitions()
+            }
             var action = Dialog.getNamedArgument('action') 
             //Must be set at the end as createDefaultTargetDefinitions would override name and optional flag
             this.targetDefinitionField.setOldTargetDefinition(action.getTargetDefinition())
-            this.initValidators(EditDialog.getTargetElement())
+            this.initValidators(targetWindow)
          }catch(e){
             Utils.logError(e)
          }
@@ -25,8 +30,8 @@ with(customizeyourweb){
          Dialog.setNamedResult("action", action)
       },
       
-      initValidators: function(targetElement){
-         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement))
+      initValidators: function(targetWindow){
+         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow)
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
       }

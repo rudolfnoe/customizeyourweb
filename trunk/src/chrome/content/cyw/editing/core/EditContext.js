@@ -8,6 +8,7 @@ with(customizeyourweb){
       this.script = null,
       this.targetDefinition = null
       this.targetElement = null
+      this.targetWindow = null
    }
    
    EditContext.prototype = {
@@ -57,7 +58,16 @@ with(customizeyourweb){
 
       setTargetElement: function(targetElement){
          this.targetElement = targetElement
+      },
+      
+      getTargetWindow: function(){
+         return this.targetWindow
+      },
+
+      setTargetWindow: function(targetWindow){
+         this.targetWindow = targetWindow
       }
+      
    }
 
    Namespace.bindToNamespace("customizeyourweb", "EditContext", EditContext)

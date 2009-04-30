@@ -24,6 +24,7 @@
    //Statics 
    PageEventHandler.initPage = function(event){
 		var targetWin = event.originalTarget.defaultView
+      Log.logDebug(event.type + " " + targetWin.location.href)
       if(EditScriptHandler.isEditing(targetWin)){
          return
       }
@@ -140,6 +141,7 @@
       },
       
       handlePagehide: function(event){
+//         Log.logDebug(event.type + " " + event.target.location.href)
          this.commonCleanUp(event.type)
          this.unregisterAllEventListener()
       },

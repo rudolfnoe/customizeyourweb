@@ -36,7 +36,11 @@
 			
 			//Load Customize Your Web Scripts
 			scriptLoader.loadScript(this.CYW_CHROME_URL+ "CywEnums.js")
-			scriptLoader.loadScripts(this.CYW_CHROME_URL + "actions/", null, null, true)
+         try{
+            scriptLoader.loadScripts(this.CYW_CHROME_URL + "actions/", null, null, true)
+         }catch(e){
+            Utils.logMessage(e.stack)
+         }
 			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
 			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")
 			scriptLoader.loadScript(this.CYW_CHROME_URL+ "editing/core/SidebarContext.js")

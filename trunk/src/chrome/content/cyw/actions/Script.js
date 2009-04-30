@@ -93,6 +93,10 @@
       getUrlPatternDescription: function(){
          return this.targetWinDefinition.getUrlPatternDescription()
       },
+      
+      hasIncludePattern: function(){
+         return this.targetWinDefinition.hasIncludePattern()
+      },
 
    	isPersisted: function(){
    		return this.t_persisted
@@ -123,6 +127,7 @@
                Log.logError(e)
             }
          }
+         Log.logDebug("Script " + this.getId() + " cleaned up on " + cywContext.getPageEventType())
             
       },
    	

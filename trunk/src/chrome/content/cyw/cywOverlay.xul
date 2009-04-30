@@ -42,7 +42,7 @@
       <command id="customizeyourweb_pasteFirstChildCmd" label="Paste as first child" where="firstChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
       <command id="customizeyourweb_pasteLastChildCmd" label="Paste as last child" where="lastChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
       <command id="customizeyourweb_removeCmd" label="Remove" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
-      <command id="customizeyourweb_retargetActionCmd" label="Retarget Action" oncommand="customizeyourweb.EditScriptHandler.retargetAction()"/>   	
+      <command id="customizeyourweb_retargetActionCmd" label="Retarget Action" oncommand="customizeyourweb.EditScriptHandler.retargetAction()" disabled="true"/>   	
       <command id="customizeyourweb_shortcutCmd" label="Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_toggleVisibilityShortcutCmd" label="Toggle Visibility" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_toggleEditMode" label="Toggle Editing" oncommand="customizeyourweb.EditScriptHandler.toggleEditMode()"/>   	

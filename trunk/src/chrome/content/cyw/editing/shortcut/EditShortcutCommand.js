@@ -19,15 +19,17 @@ with(customizeyourweb){
          }else{
             throw new Error ('unkown shortcut command id')
          }
-         return this.editAction(action, targetElement)
+         action.setRepetitionBehavior(RepetitionBehavior.RUN_ALWAYS)
+         return this.editAction(action, editContext)
       },
          
       doEditAction: function(editContext){
-         return this.editAction(editContext.getAction(), editContext.getTargetElement())
+         return this.editAction(editContext.getAction(), editContext)
       },
 
-      editAction: function(action, targetElement){
-         var editDialog = new EditDialog(EDIT_SHORTCUT_DIALOG_URL, "EditShortcut", true, window, null, {action: action, targetElement:targetElement})
+      editAction: function(action, editContext){
+         var editDialog = new EditDialog(EDIT_SHORTCUT_DIALOG_URL, "EditShortcut", true, window, null, 
+                                {action: action, targetElement:editContext.getTargetElement(), targetWindow:editContext.getTargetWindow()})
          editDialog.show()
          action = editDialog.getNamedResult("action")
          if(action==null)

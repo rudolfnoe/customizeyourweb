@@ -31,6 +31,9 @@
       
       unshadow: function(){
       	var doc = this.targetWin.document
+         if(!doc){
+            return
+         }
       	var shadower = doc.getElementById(SHADOWER_ID)
       	if(shadower!=null){
          	shadower.parentNode.removeChild(shadower)

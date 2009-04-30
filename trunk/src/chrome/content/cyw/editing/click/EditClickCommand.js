@@ -7,15 +7,16 @@ with(customizeyourweb){
    EditClickCommand.prototype = {
       doCreateAction: function(editContext){
          var action = new ClickAction(editContext.getTargetDefinition())
-         return this.editAction(action, editContext.getTargetElement())
+         return this.editAction(action, editContext)
       },
       
       doEditAction: function(editContext){
-         return this.editAction(editContext.getAction(), editContext.getTargetElement())
+         return this.editAction(editContext.getAction(), editContext)
       },
 
-      editAction: function(action, targetElement){
-         var editDialog = new EditDialog(EDIT_CLICK_DIALOG_URL, "Edit Click", true, window, null, {action: action, targetElement: targetElement})
+      editAction: function(action, editContext){
+         var editDialog = new EditDialog(EDIT_CLICK_DIALOG_URL, "Edit Click", true, window, null, 
+                                  {action: action, targetElement:editContext.getTargetElement(), targetWindow:editContext.getTargetWindow()})
          editDialog.show()
          action = editDialog.getNamedResult("action")
          if(action==null)

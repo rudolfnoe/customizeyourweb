@@ -1,6 +1,7 @@
 with(customizeyourweb){
 (function(){
    function XPathTargetDefinition(xPath){
+      this.AbstractTargetDefinition()
       this.xPath = xPath      
    }
    

@@ -27,17 +27,18 @@ with(customizeyourweb){
       },
 
       doCreateAction: function(editContext){
-         var action = new ModifyAction(editContext.getTargetDefinition())
-         return this.editAction(action, editContext.getTargetElement())
+         var action = new ModifyAction(editContext.getTargetDefinition()) 
+         return this.editAction(action, editContext)
       },
       
       doEditAction: function(editContext){
-         return this.editAction(editContext.getAction(), editContext.getTargetElement())
+         return this.editAction(editContext.getAction(), editContext)
       },
       
-      editAction: function(action, targetElement){
-         this.targetElement = targetElement
-         var editDialog = new EditDialog(EDIT_MODIFY_DIALOG_URL, "EditModify", true, window, null, {action: action, targetElement:targetElement})
+      editAction: function(action, editContext){
+         this.targetElement = editContext.getTargetElement()
+         var editDialog = new EditDialog(EDIT_MODIFY_DIALOG_URL, "EditModify", true, window, null, 
+                                  {action: action, targetElement:this.targetElement, targetWindow:editContext.getTargetWindow()})
          editDialog.show()
          if(editDialog.getResult()==DialogResult.OK){
             this.changeMemento = editDialog.getNamedResult("changeMemento")
@@ -49,11 +50,12 @@ with(customizeyourweb){
       },
       
       undo: function(){
-         var elementWrapper = new ElementWrapper(this.targetElement)
-         elementWrapper.setChangeMemento(this.changeMemento)
-         elementWrapper.restore()
+         if(this.targetElement){
+            var elementWrapper = new ElementWrapper(this.targetElement)
+            elementWrapper.setChangeMemento(this.changeMemento)
+            elementWrapper.restore()
+         }
       }
-      
    }
    ObjectUtils.extend(EditModifyCommand, AbstractEditCommand)
 

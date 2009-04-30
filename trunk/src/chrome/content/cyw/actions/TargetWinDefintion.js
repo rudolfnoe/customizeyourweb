@@ -44,6 +44,10 @@ with(customizeyourweb){
          return this.includeUrlPatterns.get(0).getString()
       },
       
+      hasIncludePattern: function(){
+         return this.includeUrlPatterns.size()>0
+      },
+      
       iterateMatchingWins: function(win, callbackFct, thisObj){
          var matchingWins = this.getMatchingWindows(win)
          for (var i = 0; i < matchingWins.length; i++) {
@@ -63,7 +67,7 @@ with(customizeyourweb){
             return false
             
          for (var i = 0;i < this.excludeUrlPatterns.size(); i++) {
-            if(this.excludeUrlPattern.get(i).matchUrl(url))
+            if(this.excludeUrlPatterns.get(i).matchUrl(url))
                return false
          }
          return true

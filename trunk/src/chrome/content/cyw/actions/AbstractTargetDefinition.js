@@ -50,7 +50,7 @@ with(customizeyourweb){
       },
       
       isTargetInPage: function(targetWin){
-         return this.getTargets(targetWin).length==1
+         return this.getTargets(targetWin).length>=1
       }
       
    }

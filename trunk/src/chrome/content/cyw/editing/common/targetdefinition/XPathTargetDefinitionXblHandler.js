@@ -1,6 +1,6 @@
 with(customizeyourweb){
 (function(){
-   function XPathTargetDefinitionXblHandler(targetDefinitionML, targetWin, targetElement){
+   function XPathTargetDefinitionXblHandler(targetDefinitionML, targetWin){
       this.targetDefinitionML = targetDefinitionML
       this.targetDefinitionPartHighlighter = new MultiElementHighlighter("#208F1A", true)
       this.targetWin = targetWin

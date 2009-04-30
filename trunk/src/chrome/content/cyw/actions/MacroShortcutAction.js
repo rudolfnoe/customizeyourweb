@@ -9,6 +9,7 @@
       
       doActionInternal: function(cywContext){
          this.registerShortcut(cywContext)
+         return true
       },
       
       isContainer: function(){

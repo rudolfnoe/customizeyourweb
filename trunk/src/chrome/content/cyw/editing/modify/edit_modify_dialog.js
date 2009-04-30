@@ -544,6 +544,9 @@ with(customizeyourweb){
        */
       _updateElement: function(attr, value){
          Utils.executeDelayed("UPDATE_ELEMENT", 100, function(){
+            if(StringUtils.isEmpty(attr)){
+               return
+            }
             if(ArrayUtils.contains(["true", "false"], value)){
                value = (new Boolean(value)).valueOf()
             }

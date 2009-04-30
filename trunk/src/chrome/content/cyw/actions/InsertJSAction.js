@@ -23,6 +23,7 @@
          sandbox.document = win.document
          sandbox.__proto__=sandbox.window
          Components.utils.evalInSandbox("(function(){" + this.jsCode + "})()", sandbox)
+         return true
       }     
 
    }

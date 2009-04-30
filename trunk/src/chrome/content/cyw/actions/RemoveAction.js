@@ -8,11 +8,13 @@ with(customizeyourweb){
       constructor: RemoveAction,
       doActionInternal: function(cywContext){
          if(!this.isTargetInPage(cywContext.getTargetWindow())){
-            return
+            return false
          }
          var target = this.getTarget(cywContext)
          if(target.parentNode)
             target.parentNode.removeChild(target)
+         
+         return true
       }
       
    }

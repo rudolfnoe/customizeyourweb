@@ -29,12 +29,13 @@ with(customizeyourweb){
       constructor: PasteAction,
       doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var refElement = this.getTarget(cywContext)
          var clipboard = cywContext.getClipboard()
          Assert.notNull(clipboard,  "Nothing to paste in clipboard")
          PasteAction.paste(clipboard, refElement, this.where)
+         return true
       }     
    }
    

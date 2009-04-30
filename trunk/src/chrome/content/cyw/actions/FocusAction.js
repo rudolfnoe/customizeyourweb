@@ -8,7 +8,7 @@
       constructor: FocusAction,
       doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var target = this.getTarget(cywContext)
          this.focusTarget(target)
@@ -23,10 +23,11 @@
 //            }, this)
 //            win.addEventListener("pageshow", onpageshowFunc, false)
 //         }
+         return true
       },
       
       doActionForCachedPageInternal: function(cywContext){
-         this.doActionInternal(cywContext)
+         return this.doActionInternal(cywContext)
       },
       
       focusTarget: function(target){

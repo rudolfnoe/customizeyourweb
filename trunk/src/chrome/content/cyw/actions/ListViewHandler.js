@@ -64,12 +64,17 @@ with(customizeyourweb){
          this.focusListView()
       },
       handleClick: function(event){
-         var element = DomUtils.getAncestorBy(event.originalTarget, Utils.bind(function(parentNode){
+         var targetElement = event.target
+         var element = DomUtils.getAncestorBy(targetElement, Utils.bind(function(parentNode){
             return (parentNode==this.rootElement || this.listItems.indexOf(parentNode)!=-1)?true:false
          }, this))
          if(element==null || element==this.rootElement)
             return
          this.updateHighlighting(this.listItems.indexOf(element))
+         if(DomUtils.isEditableElement(targetElement)){
+            //As focus will be on row change focus back to element 
+            targetElement.focus()
+         }
       },
       highlight: function(item){
          this.currentItemWrapper = new ElementWrapper(item)

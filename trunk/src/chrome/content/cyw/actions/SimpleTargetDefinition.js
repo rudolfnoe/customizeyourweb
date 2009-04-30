@@ -5,6 +5,7 @@ with(customizeyourweb){
    const WORD_REG_EXP = /\w+/
    
    function SimpleTargetDefinition(tagName){
+      this.AbstractTargetDefinition()
       //Map with attribute / value pairs
       this.attributeDefinitions = new Object()
       this.position = null
@@ -70,7 +71,7 @@ with(customizeyourweb){
          var xPathExp = "//" + this.tagName.toUpperCase()
          var attrCounter = 0
          for(var attrName in this.attributeDefinitions){
-            if(ATTRITBUTES_FOR_XPATH.indexOf(attrName)==-1 && attrName!="text")
+            if(!ArrayUtils.contains(ATTRITBUTES_FOR_XPATH, attrName) && attrName!="text")
                continue
             if(attrCounter==0)
                xPathExp += "["
@@ -127,17 +128,19 @@ with(customizeyourweb){
             var potTarget = targetPreSet[i]
             var attrMatches = true
             for (var attrName in this.attributeDefinitions) {
-               var attrValueDef = this.attributeDefinitions[attrName]
-               if(ATTRITBUTES_FOR_XPATH.indexOf(attrName)!=-1)
+               if(ArrayUtils.contains(ATTRITBUTES_FOR_XPATH, attrName))
                   continue
+
+               var attrValueDef = this.attributeDefinitions[attrName]
                var currentAttrValue = SimpleTargetDefinition.getAttributeValue(potTarget, attrName) 
-               if(this.isAttrValuePrefixDef(attrValueDef)){
-                  if(StringUtils.startsWith(currentAttrValue, this.getAttributeValueDefPrefix(attrValueDef))){
+
+               if(this.isAttrValuePrefixDef(attrValueDef) && 
+                  StringUtils.startsWith(currentAttrValue, this.getAttributeValueDefPrefix(attrValueDef))){
                      continue
-                  }
                }else if(attrValueDef==currentAttrValue){
                   continue
                }
+               
                attrMatches = false
                break
             }

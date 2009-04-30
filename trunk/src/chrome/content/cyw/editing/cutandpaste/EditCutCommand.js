@@ -1,24 +1,23 @@
 with(customizeyourweb){
 (function(){
    function EditCutCommand(){
-      this.editRemoveCommmand = null
+      this.AbstractRemoveCommand()
    }
    
    EditCutCommand.prototype = {
-      doCreateAction: function(editContext){
-         this.editRemoveCommand = new EditRemoveCommand()
-         var removeAction = this.editRemoveCommand.doCreateAction(editContext)
-         this.setAction(new CutAction(removeAction.getTargetDefinition()))
+      afterSuccessfulActionEditing: function(editContext){
+         //To resuse it
          editContext.setClipboard(editContext.getTargetElement())
-         return this.getAction()
+         //call superclass method
+         this.AbstractRemoveCommand_afterSuccessfulActionEditing(editContext)
       },
       
-      undo: function(){
-        this.editRemoveCommand.undo() 
+      createAction: function(editContext) {
+         return new CutAction(editContext.getTargetDefinition())
       }
       
    }
-   ObjectUtils.extend(EditCutCommand, "AbstractEditCommand", customizeyourweb)
+   ObjectUtils.extend(EditCutCommand, "AbstractRemoveCommand", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "EditCutCommand", EditCutCommand)
 })()
