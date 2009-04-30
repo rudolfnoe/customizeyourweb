@@ -5,14 +5,18 @@ with(customizeyourweb){
       this.targetElement = targetElement
       this.targetWin = targetWin
       this.autocompleteHandler = null
-      this.initAutocompleteHandler()
+      if(this.targetElement!=null){
+         this.initAutocompleteHandler()
+      }
    }
    
    SimpleTargetDefinitionXblHandler.prototype = {
       constructor: SimpleTargetDefinitionXblHandler,
       
       cleanUp: function(){
-         this.autocompleteHandler.destroy()
+         if(this.autocompleteHandler){
+            this.autocompleteHandler.destroy()
+         }
       },
       
       createAutocompleteItem: function(name, value){

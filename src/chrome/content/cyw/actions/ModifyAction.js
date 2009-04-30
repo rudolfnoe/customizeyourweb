@@ -26,12 +26,12 @@
       },
 
       doActionForCachedPageInternal: function(cywContext){
-         this.doActionInternal(cywContext)   
+         return this.doActionInternal(cywContext)   
       },
       
       doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var target = this.getTarget(cywContext)
          for(var attr in this.attributes){
@@ -45,6 +45,7 @@
             else
                styleObj.setProperty(style, this.styles[style], "important")
          }
+         return true
       }
       
 

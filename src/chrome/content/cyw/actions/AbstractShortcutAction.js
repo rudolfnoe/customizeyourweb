@@ -8,6 +8,7 @@ with(customizeyourweb){
       this.AbstractAction()
       this.combinedKeyCode = null
       this.shortString = null
+      this.t_shortcutManagerClientId = null
    }
    
    //Static methods
@@ -87,11 +88,10 @@ with(customizeyourweb){
 
       clearAllShortcutManager: function(targetWin){
          var contentWin = targetWin.top
-         var shortcutCliendId = targetWin.location.href
          for (var i = 0; i < CONTEXT_IDS.length; i++) {
             var scm = TabContextManager.getContext(contentWin, CONTEXT_IDS[i])
             if(scm != null){
-               scm.clearAllShortcuts(shortcutCliendId)
+               scm.clearAllShortcuts(this.getShortcutManagerClientId(targetWin))
             }
          }
       },
@@ -108,7 +108,7 @@ with(customizeyourweb){
       },
       
       doActionForCachedPageInternal: function(cywContext){
-         this.doActionInternal(cywContext)
+         return this.doActionInternal(cywContext)
       },
       
       superCleanUp: function(cywContext){
@@ -134,6 +134,13 @@ with(customizeyourweb){
          }
       },
       
+      getShortcutManagerClientId: function(targetWin){
+         if(!this.t_shortcutManagerClientId){
+            this.t_shortcutManagerClientId = targetWin.location.href + "_" + (new Date()).getTime()
+         }
+         return this.t_shortcutManagerClientId
+      },
+      
       performShortcut: function(){
          throw new Error('must be implemented')
       },
@@ -142,7 +149,7 @@ with(customizeyourweb){
          if(this.combinedKeyCode==null && this.shortString==null)
             throw new Error('either combinedKeyCode or shortString must be set')
          var targetWin = cywContext.getTargetWindow()
-         var shortcutCliendId = targetWin.location.href
+         var shortcutCliendId = this.getShortcutManagerClientId(targetWin)
          if(this.combinedKeyCode){
             var scm = AbstractShortcutAction.getShortcutManager(targetWin)
             scm.addShortcut(this.combinedKeyCode, function(keyboardEvent){return this.abstractPerformShortcut(cywContext, keyboardEvent)}, 

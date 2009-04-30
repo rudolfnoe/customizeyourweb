@@ -15,6 +15,10 @@ with(customizeyourweb){
       return Dialog.getNamedArgument('targetElement')
    }
    
+   EditDialog.getTargetWindow = function(){
+      return Dialog.getNamedArgument('targetWindow')
+   }
+   
    EditDialog.prototype = {
       constructor: EditDialog   
    }

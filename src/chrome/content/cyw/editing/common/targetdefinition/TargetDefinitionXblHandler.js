@@ -15,6 +15,7 @@ with(customizeyourweb){
       this.targetElement = null 
       this.targetIsOptionalCB = DomUtils.getElementByAnonId(targetDefinitionField, "targetIsOptionalCB")
       this.targetNameTB = DomUtils.getElementByAnonId(targetDefinitionField, "targetNameTB")
+      this.targetWindow = null
       
       //Manually add load listener for further initialization
       //Must be done after onload as there are dependencies to other bindings which must be fully constructed beforehand
@@ -62,13 +63,19 @@ with(customizeyourweb){
        * Used for autoinitialization for all edit dialogs except retargeting
        */
       autoInitByDialogArgument: function(){
+         //Set targetwin first
+         this.targetWindow = Dialog.getNamedArgument('targetWindow')
          var action = Dialog.getNamedArgument('action', true)
-         this.targetElement = Dialog.getNamedArgument('targetElement')
          if(action.getTargetDefinition()){
             this.setTargetDefinition(action.getTargetDefinition())
-            this.createTargetDefinitions()
-         }else{
-            this.createDefaultTargetDefinitions()
+         }
+         this.targetElement = Dialog.getNamedArgument('targetElement')
+         if(this.targetElement){
+            if(action.getTargetDefinition()){
+               this.createTargetDefinitions()
+            }else{
+               this.createDefaultTargetDefinitions()
+            }
          }
       },
       
@@ -76,6 +83,7 @@ with(customizeyourweb){
        * Creates default targetDefinitions for retargeting
        */
       createDefaultTargetDefinitions: function(){
+         Assert.notNull(this.targetElement, "targetElement is null")
          //Must be called first to initialize targetDefinitionMLHandler
          this.setTargetDefinition(AbstractTargetDefinitionFactory.createDefaultDefinition(this.targetElement))
          this.createTargetDefinitions()
@@ -85,6 +93,7 @@ with(customizeyourweb){
        * fills targetdefinition ML with possible target definitions
        */
       createTargetDefinitions: function(){
+         Assert.notNull(this.targetElement, "targetElement is null")
          this.targetDefinitionML.removeAllItems()
          var targetDefinitions = this.targetDefinitionMLHandler.createDefinitions(this.targetElement)
          for (var i = 0; i < targetDefinitions.length; i++) {
@@ -94,10 +103,8 @@ with(customizeyourweb){
       },
       
       getTargetWin: function(){
-         if(this.targetElement==null){
-            throw new Error('target element must be set first')
-         }
-         return this.targetElement.ownerDocument.defaultView
+         Assert.isTrue(this.targetWindow!=null, 'target win must be set first')
+         return this.targetWindow
       },
       
       handleCursorPositionChange: function(event){
@@ -115,6 +122,10 @@ with(customizeyourweb){
          if(this.targetDefinitionMLHandler){
             this.targetDefinitionMLHandler.cleanUp()
          }
+      },
+      
+      handleOptionalFlagChanged: function(){
+         this.notifyValueChangedListener()   
       },
       
       handleTargetDefinitionInput: function(){
@@ -221,6 +232,10 @@ with(customizeyourweb){
                new SimpleTargetDefinitionXblHandler(this.targetDefinitionML, this.getTargetWin(), this.targetElement)
          else 
             throw new Error('unknown style')
+      },
+      
+      setTargetWindow: function(targetWindow){
+         this.targetWindow = targetWindow
       }
       
    }

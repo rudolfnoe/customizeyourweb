@@ -10,12 +10,17 @@ with(customizeyourweb){
 
    ResizeHighlighter.prototype = {
       
-      addOrRemoveEventListeners: function(addOrRemove){
+      addOrRemoveEventListeners: function(addOrRemove, targetElement){
          var funcName = addOrRemove + "EventListener"
          var targetWin = this.targetElement.ownerDocument.defaultView
          targetWin[funcName]("mouseup", this, true)
          targetWin[funcName]("mousemove", this, true)
          targetWin[funcName]("mouseover", this, true)
+         if(targetElement.tagName=="IFRAME"){
+            var iframeWin = targetElement.contentWindow
+            iframeWin[funcName]("mouseup", this, true)
+            iframeWin[funcName]("mouseover", this, true)
+         }
       },
       
       createNodes : function() {
@@ -105,7 +110,7 @@ with(customizeyourweb){
             this.resizeDirection = "h"
          else
             throw new Error ("wrong resize direction")
-         this.addOrRemoveEventListeners("add")
+         this.addOrRemoveEventListeners("add", this.getTargetElement())
          var sizeInfoSpan = this.getNodes().sizeInfoSpan
          sizeInfoSpan.style.display = "inline"
          with(this.originalBounds){
@@ -121,7 +126,7 @@ with(customizeyourweb){
       },
 
       handleMouseup: function(event){
-         this.addOrRemoveEventListeners("remove")
+         this.addOrRemoveEventListeners("remove", this.targetElement)
          this.removeSelection(event)
          Utils.stopEvent(event)
          this.getNodes().sizeInfoSpan.style.display = "none"

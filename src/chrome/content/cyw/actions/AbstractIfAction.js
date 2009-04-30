@@ -16,7 +16,7 @@ with(customizeyourweb){
       },
       
       doActionForCachedPageInternal: function(cywContext){
-         this.doActionInternal(cywContext)
+         return this.doActionInternal(cywContext)
       },
       
       isTrue: function(cywContext){

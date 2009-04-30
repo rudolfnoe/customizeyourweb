@@ -20,7 +20,7 @@ with(customizeyourweb){
       doCreateAction : function(editContext) {
          var action = this.createAction(editContext)
          //Define target definition
-         action = this.editCommonActionAttributes(action, editContext.getTargetElement())
+         action = this.editCommonActionAttributes(action, editContext)
          if(action){
             this.setAction(action)
             this.afterSuccessfulActionEditing(editContext)
@@ -31,7 +31,7 @@ with(customizeyourweb){
       },
       
       doEditAction: function(editContext){
-         action = this.editCommonActionAttributes(editContext.getAction(), editContext.getTargetElement())
+         action = this.editCommonActionAttributes(editContext.getAction(), editContext)
          if(action){
             this.setAction(action)
             return this.getAction()
@@ -40,8 +40,8 @@ with(customizeyourweb){
          }
       },
 
-      editCommonActionAttributes: function(action, targetElement){
-         var dialog = new CommonAttributesEditDialog(action, targetElement) 
+      editCommonActionAttributes: function(action, editContext){
+         var dialog = new CommonAttributesEditDialog(action, editContext.getTargetWindow(), editContext.getTargetElement()) 
          dialog.show()
          if(dialog.isCancel()){
             return null

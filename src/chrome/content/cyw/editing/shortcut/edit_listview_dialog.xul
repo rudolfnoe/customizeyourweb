@@ -35,7 +35,7 @@
                </row>
                <row align="center">
                   <label value="List items tag name"/>
-                  <textbox id="listItemsTagNameTB"/>
+                  <textbox id="listItemsTagNameTB" oninput="customizeyourweb.EditListViewDialogHandler.updateHighlighting()"/>
                </row>
                <row align="center">
                   <label value="Highlight background-color"/>
@@ -47,7 +47,7 @@
                </row>
                <row align="center">
                   <label value="Ommit every Xth item"/>
-                  <menulist id="ommitEveryXthItemTB" maxwidth="60px">
+                  <menulist id="ommitEveryXthItemTB" maxwidth="60px" >
                      <menupopup>
                         <menuitem label="None" value="0"/>
                         <menuitem label="2nd" value="2"/>

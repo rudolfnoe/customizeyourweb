@@ -68,7 +68,7 @@
 			<tabpanel>
 				<vbox flex="1">
                <hbox>
-                  <groupbox flex="1" style="min-width:200px">
+                  <groupbox flex="1" style="width:200px; min-width:200px">
                      <caption label="General options"></caption>
                      <grid flex="1">
                         <columns>
@@ -89,7 +89,7 @@
                         <textbox type="number" prefid="customizeyourweb.shortcut.executionDelay" width="100px"/>
                      </hbox>
                   </groupbox>
-                  <groupbox flex="1" style="min-width:200px">
+                  <groupbox flex="1" style="width:200px; min-width:200px">
                      <caption label="Layout Options"/>
                      <grid flex="1">
                         <columns>
@@ -120,22 +120,26 @@
                      <listheader label="Action" />
                      <listheader label="Key Combination" />
                   </listhead>
-                  <listitem prefid="customizeyourweb.keys.blockKeyboardInputForEnteringShortString">
-                     <listcell label="Block keyboard input for entering shortstring"/>
+                  <listitem prefid="customizeyourweb.keys.toggleEditMode">
+                     <listcell label="Toggle Editing"/>
                      <listcell />
                   </listitem>
                   <listitem prefid="customizeyourweb.keys.openConfiguration">
                      <listcell label="Open Configuration"/>
                      <listcell />
                   </listitem>
-                  <listitem prefid="customizeyourweb.keys.toggleEditMode">
-                     <listcell label="Toggle Editing"/>
+                  <listitem prefid="customizeyourweb.keys.blockKeyboardInputForEnteringShortString">
+                     <listcell label="Block keyboard input for entering shortstring"/>
+                     <listcell />
+                  </listitem>
+                  <listitem prefid="customizeyourweb.keys.blurActiveElement">
+                     <listcell label="Remove keyboard focus from active element"/>
                      <listcell />
                   </listitem>
                </listbox>
-               <hbox align="center" style="margin-top:5px">
+               <hbox align="center" pack="end" style="margin-top:5px">
                   <label value="Key Combination"/>
-                  <keyinputbox id="keyInputBox" maxlength="1" allowmodifiers="true" flex="1" context="keyboxKeysPU" namespaceObj="customizeyourweb"/>
+                  <keyinputbox id="keyInputBox" maxlength="1" allowmodifiers="true" context="keyboxKeysPU" namespaceObj="customizeyourweb"/>
                   <button label="&keys.assignBU.label;" accesskey="&keys.assignBU.accesskey;" oncommand="customizeyourweb.onCommandAssignShortcut('keyListBox', 'keyInputBox')" observes="keyListboxBC"></button>
                   <button label="&keys.removeBU.label;" accesskey="&keys.removeBU.accesskey;" oncommand="customizeyourweb.onCommandRemoveShortcut('keyListBox')" observes="keyListboxBC"></button>
                   <button label="&keys.restore_defaultBU.label;" accesskey="&keys.restore_defaultBU.accesskey;" oncommand="customizeyourweb.onCommandRestoreDefault('keyListBox')" observes="keyListboxBC"></button>

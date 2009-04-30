@@ -2,6 +2,8 @@
    
    function ListViewAction (targetDefinition){
       this.AbstractTargetedAction(targetDefinition)
+      //Do this second as default repetition behavior will be overridden
+      this.AbstractShortcutAction()
       this.focusOnLoad = true
       this.highlightCss = null
       this.listItemsTagName = null
@@ -85,7 +87,7 @@
 
       doActionInternal: function(cywContext){//Todo change
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var rootElement = this.getTarget(cywContext)
          var listItems = this.determineListItems(rootElement)
@@ -94,6 +96,7 @@
          if(this.focusOnLoad){
             (new FocusAction(this.getTargetDefinition())).doAction(cywContext)
          }
+         return true
       },
       
       cleanUp: function(cywContext){

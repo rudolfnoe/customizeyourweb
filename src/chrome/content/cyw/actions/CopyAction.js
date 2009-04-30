@@ -9,11 +9,12 @@ with(customizeyourweb){
       constructor: CopyAction,
       doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var target = this.getTarget(cywContext)
          //throw error or log
          cywContext.setClipboard(target.cloneNode(true))
+         return true
       }     
    }
    

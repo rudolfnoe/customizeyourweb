@@ -8,7 +8,7 @@
     buttons="accept,cancel"
     id="select-script-dialog" 
     ondialogaccept="return customizeyourweb.SelectScriptDialogHandler.doOk()" 
-    title="Select Script xx"
+    title="Select Script"
     persist="screenX screenY width height"
     flex="1">
    

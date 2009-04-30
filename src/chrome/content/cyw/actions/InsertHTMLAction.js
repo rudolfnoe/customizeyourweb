@@ -28,9 +28,10 @@
 
       doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          InsertHTMLAction.insertHTML(this.getTarget(cywContext), this)
+         return true
       }
 
    }

@@ -2,7 +2,7 @@
 	
    function AbstractAction (){
    	this.id = null
-      this.repetitionBehavior = RepetitionBehavior.RUN_ALWAYS
+      this.repetitionBehavior = RepetitionBehavior.RUN_ONCE_SUCCESSFULLY
       this.t_actionPerformedCount = 0
    }
    
@@ -42,8 +42,10 @@
          if(this.isMaxRepetitionAchieved()){
             return
          }
-         actionMethod.apply(this, [cywContext])
-         this.t_actionPerformedCount++
+         var successful = actionMethod.apply(this, [cywContext])
+         if(successful){
+            this.t_actionPerformedCount++
+         }
       },
 
       doActionInternal: function(cywContext){

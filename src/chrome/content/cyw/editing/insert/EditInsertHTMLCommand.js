@@ -13,22 +13,24 @@ with(customizeyourweb){
 
       doCreateAction: function(editContext){
          var insertHTMLAction = new InsertHTMLAction(editContext.getTargetDefinition())
-         return this.editAction(insertHTMLAction, editContext.getTargetElement())
+         return this.editAction(insertHTMLAction, editContext)
       },
       
       doEditAction: function(editContext){
          var action = editContext.getAction()
          var targetElement = editContext.getTargetElement()
-         var result = this.editAction(action, targetElement)
-         if(result==null)
+         var result = this.editAction(action, editContext)
+         //TODO check if correct
+         if(result!=null){
             InsertHTMLAction.insertHTML(targetElement, action, this.htmlMarkerId)
+         }
          return result
       },
       
-      editAction: function(action, targetElement){
-         this.targetElement = targetElement
+      editAction: function(action, editContext){
+         this.targetElement = editContext.getTargetElement()
          var editDialog = new EditDialog(EDIT_INSERT_HTML_DIALOG_URL, "EditInsertJS", true, window, null, 
-               {action: action, targetElement: targetElement, htmlMarkerId: this.htmlMarkerId})
+               {action: action, targetElement: this.targetElement, targetWindow:editContext.getTargetWindow(), htmlMarkerId: this.htmlMarkerId})
          var centerScreen = WindowUtils.getCenterScreen(window.opener)
          editDialog.show(new Point(0, (centerScreen.getY()-DIALOG_HEIGHT/2)+"px"))
          if(editDialog.getResult()==DialogResult.OK){

@@ -9,7 +9,7 @@ with(customizeyourweb){
       constructor: CutAction,
       doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
-            return
+            return false
          }
          var target = this.getTarget(cywContext)
          //throw error or log
@@ -17,6 +17,7 @@ with(customizeyourweb){
             cywContext.setClipboard(target)
             target.parentNode.removeChild(target)
          }
+         return true
       }     
    }
    

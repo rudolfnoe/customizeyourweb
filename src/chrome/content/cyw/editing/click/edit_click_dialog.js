@@ -13,7 +13,7 @@ with(customizeyourweb){
          byId('altCB').checked = (modifierMask & Event.ALT_MASK)?true:false
          byId('shiftCB').checked = (modifierMask & Event.SHIFT_MASK)?true:false
          byId('metaCB').checked = (modifierMask & Event.META_MASK)?true:false
-         this.initValidators(EditDialog.getTargetElement())
+         this.initValidators(EditDialog.getTargetWindow())
       },
       
       doOk: function(){
@@ -36,8 +36,8 @@ with(customizeyourweb){
          byId('metaCB').checked = event.metaKey
       },
       
-      initValidators: function(targetElement){
-         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement))
+      initValidators: function(targetWindow){
+         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow)
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
      }
