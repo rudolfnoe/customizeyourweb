@@ -26,7 +26,7 @@ with(customizeyourweb){
       deleteScript: function(scriptId){
       	var found=false
          for (var i = 0; i < this.scripts.size(); i++) {
-         	if(this.scripts.get(i).id==scriptId){
+         	if(this.scripts.get(i).getId()==scriptId){
          		this.scripts.removeAtIndex(i)
          		found = true
          		break;
@@ -34,7 +34,7 @@ with(customizeyourweb){
          }	
       	if(!found)
       	   throw new Error('Script with provided id not existent')
-      	this.saveEgConfig()
+      	this.saveConfig()
       },
       
       init: function (){
@@ -91,6 +91,17 @@ with(customizeyourweb){
          return result
       },
       
+      getNextScriptId: function(){
+         var nextScriptId = 0
+         for (var i = 0; i < this.scripts.size(); i++) {
+            var script = this.scripts.get(i)
+            if(script.getId() > nextScriptId){
+               nextScriptId = script.getId() 
+            }
+         }
+         return nextScriptId + 1
+      },
+      
       /*Returns array of cloned scripts which matches at least one url of 
        * the target win and it frames
        */
@@ -128,17 +139,17 @@ with(customizeyourweb){
          var newScript = true
          for (var i = 0; i < this.scripts.size(); i++) {
             var script = this.scripts.get(i)
-            if(script.id == aScript.id){
+            if(script.equals(aScript)){
                this.scripts.set(i, aScript)
                newScript = false
             }
          }
          if(newScript)
             this.scripts.add(aScript)
-         this.saveEgConfig()
+         this.saveConfig()
       },
       
-      saveEgConfig: function(){
+      saveConfig: function(){
          for (var i = 0; i < this.scripts.size(); i++) {
             this.scripts.get(i).setPersisted(true)
          }

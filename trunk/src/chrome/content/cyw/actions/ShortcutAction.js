@@ -45,7 +45,7 @@ with(customizeyourweb){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return
          }
-         //This construct enables to log different errors why the fetching of the elements fails
+         //This construct enables to log different errors if the fetching of the elements fails
          var element = this.getTargetWithoutError(cywContext)
          if(!element)
             return

@@ -5,6 +5,7 @@ with(customizeyourweb){
       this.AbstractTargetedAction(targetDefinition)
       //Do this second as default repetition behavior will be overridden
       this.AbstractShortcutAction()
+      this.defaultLinkTarget = LinkTarget.CURRENT
       this.focusOnLoad = true
       this.highlightCss = null
       this.listItemsTagName = null
@@ -16,6 +17,14 @@ with(customizeyourweb){
    ListViewAction.prototype = {
       constructor: ListViewAction,
       
+      getDefaultLinkTarget: function(){
+         return this.defaultLinkTarget
+      },
+
+      setDefaultLinkTarget: function(defaultLinkTarget){
+         this.defaultLinkTarget = defaultLinkTarget
+      },
+
       isFocusOnLoad: function(){
          return this.focusOnLoad
       },
@@ -92,7 +101,7 @@ with(customizeyourweb){
          }
          var rootElement = this.getTarget(cywContext)
          var listItems = this.determineListItems(rootElement)
-         this.t_listViewHandler = new ListViewHandler(rootElement, listItems, this.highlightCss) 
+         this.t_listViewHandler = new ListViewHandler(rootElement, listItems, this.highlightCss, this.defaultLinkTarget) 
          this.registerShortcut(cywContext)
          if(this.focusOnLoad){
             (new FocusAction(this.getTargetDefinition())).doAction(cywContext)

@@ -69,7 +69,7 @@ with (customizeyourweb) {
 	},
 
 	ScriptErrorHandler.logError = function(error, message) {
-		Utils.logError(error, message)
+		CywUtils.logError(error, message)
 	},
 
    //Member mthods

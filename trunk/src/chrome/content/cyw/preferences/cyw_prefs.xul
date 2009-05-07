@@ -55,60 +55,97 @@
 			<tab label="Keys" />
 		</tabs>
 		<tabpanels>
+         <!-- Scripts Tab-->
 			<tabpanel>
 				<vbox flex="1">
                <scriptstree id="scriptsTree" flex="1" editable="true" persist="colOrdinals" colOrdinals=""/>
 					<hbox style="margin-top:7px">
 						<spacer flex="1"/>
-						<button label="Edit" accesskey="e"></button>
 						<button label="Delete" accesskey="d" oncommand="customizeyourweb.CywPrefsDialogHandler.removeScript()"></button>
 					</hbox>
 				</vbox>
 			</tabpanel>
+         
+         <!-- Options Tab-->
 			<tabpanel>
 				<vbox flex="1">
-               <hbox>
-                  <groupbox flex="1" style="width:200px; min-width:200px">
-                     <caption label="General options"></caption>
-                     <grid flex="1">
-                        <columns>
-                           <column></column>
-                           <column></column>
-                        </columns>
-                        <rows>
-                           <row align="center">
-                              <checkbox label="Disable Customize Your Web" prefid="customizeyourweb.disabled"/>
-                           </row>
-                           <row align="center">
-                              <checkbox label="Automatically update page after saving script" prefid="customizeyourweb.autoUpatePageOnSave"/>
-                           </row>
-                        </rows>
-                     </grid>
-                     <hbox align="center">
-                        <label value="Shortstring execution delay"/>
-                        <textbox type="number" prefid="customizeyourweb.shortcut.executionDelay" width="100px"/>
-                     </hbox>
-                  </groupbox>
-                  <groupbox flex="1" style="width:200px; min-width:200px">
-                     <caption label="Layout Options"/>
-                     <grid flex="1">
-                        <columns>
-                           <column></column>
-                           <column></column>
-                        </columns>
-                        <rows>
-                           <row align="center">
-                              <checkbox label="Hide statusbar icon" prefid="customizeyourweb.ui.hideStatusbarIcon"/>
-                           </row>
-                           <row align="center">
-                              <checkbox label="Hide tools menuitem" prefid="customizeyourweb.ui.hideToolsMenu"/>
-                           </row>
-                        </rows>
-                     </grid>
-                  </groupbox>
-               </hbox>
+               <grid flex="1">
+                  <columns>
+                     <column flex="1"></column>
+                     <column flex="1"></column>
+                  </columns>
+                  <rows>
+                     <row>
+                        <groupbox flex="1" style="width:200px; min-width:200px">
+                           <caption label="General options"></caption>
+                           <grid flex="1">
+                              <columns>
+                                 <column></column>
+                                 <column></column>
+                              </columns>
+                              <rows>
+                                 <row align="center">
+                                    <checkbox label="Disable Customize Your Web" prefid="customizeyourweb.disabled"/>
+                                 </row>
+                                 <row align="center">
+                                    <checkbox label="Automatically update page after saving script" prefid="customizeyourweb.autoUpatePageOnSave"/>
+                                 </row>
+                              </rows>
+                           </grid>
+                           <hbox align="center">
+                              <label value="Shortstring execution delay"/>
+                              <textbox type="number" prefid="customizeyourweb.shortcut.executionDelay" width="100px"/>
+                           </hbox>
+                        </groupbox>
+                        <groupbox flex="1" style="width:200px; min-width:200px">
+                           <caption label="Layout Options"/>
+                           <grid flex="1">
+                              <columns>
+                                 <column></column>
+                                 <column></column>
+                              </columns>
+                              <rows>
+                                 <row align="center">
+                                    <checkbox label="Hide statusbar icon" prefid="customizeyourweb.ui.hideStatusbarIcon"/>
+                                 </row>
+                                 <row align="center">
+                                    <checkbox label="Hide tools menuitem" prefid="customizeyourweb.ui.hideToolsMenu"/>
+                                 </row>
+                              </rows>
+                           </grid>
+                        </groupbox>                        
+                     </row>
+                     <row>
+                        <groupbox flex="1">
+                           <caption label="Miscellaneous"/>
+                           <grid>
+                              <columns>
+                                 <column></column>
+                                 <column flex="1"></column>
+                              </columns>
+                              <rows>
+                                 <row align="center">
+                                    <label value="Log level"/>
+                                    <menulist prefid="customizeyourweb.logging.level">
+                                       <menupopup>
+                                          <menuitem label="Debug" value="1"/>
+                                          <menuitem label="Info" value="2"/>
+                                          <menuitem label="Error" value="4"/>
+                                          <menuitem label="None" value="6"/>
+                                       </menupopup>
+                                    </menulist>
+                                 </row>
+                              </rows>
+                           </grid>
+                        </groupbox>
+                        <spacer/>
+                     </row>
+                  </rows>
+               </grid>
 				</vbox>
 			</tabpanel>
+         
+         <!-- Keys Tab-->
          <tabpanel>
             <vbox flex="1">
                <listbox id="keyListBox" prefLoadFunction="customizeyourweb.loadKeyListbox('keyListBox')" prefSaveFunction="customizeyourweb.saveKeyListbox('keyListBox')" onselect="byId('keyListboxBC').setAttribute('disabled', false)" height="290px">

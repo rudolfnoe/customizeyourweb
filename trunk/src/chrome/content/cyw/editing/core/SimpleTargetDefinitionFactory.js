@@ -4,7 +4,7 @@ with(customizeyourweb){
    const TARGET_DEF_TOKEN_WITH_QUOTES_REG_EXP = /(\w*)[ ]*=[ ]*(".*?")/g;
    
    const UNIQUE_ATTRIBUTES = ["id", "href"];
-   const NONE_UNIQUE_ATTRIBUTES = ["type", "name", "form"];
+   const NONE_UNIQUE_ATTRIBUTES = ["type", "name", "form", "src"];
 
    function SimpleTargetDefinitionFactory(){
    }
@@ -91,10 +91,12 @@ with(customizeyourweb){
       },
       
       createTextContentDefinition: function(element, resultArray){
-         if(StringUtils.isEmpty(element.textContent))
+         var textContent = SimpleTargetDefinition.getTextContent(element)
+         if(StringUtils.isEmpty(textContent)){
             return
+         }
          var simpleTargetDef = new SimpleTargetDefinition(element.tagName)
-         simpleTargetDef.addAttributeDefinition("text", SimpleTargetDefinition.getTextContent(element))
+         simpleTargetDef.addAttributeDefinition("text", textContent)
          this.determinePosition(element, simpleTargetDef)
          resultArray.push(simpleTargetDef)
       },

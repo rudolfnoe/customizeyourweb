@@ -9,9 +9,18 @@ with(customizeyourweb){
    var CywUtils = {
       
       logDebugMessage: function(messageString){
-         Log.logDebug("customizeyourweb: " + messageString)
+         Log.logDebug("CYW: " + messageString)
       },
       
+      logError: function(error, messageString){
+         Log.logError(error, "CYW: " + messageString)
+      },
+
+      logInfoMessage: function(messageString){
+         Log.logInfo("CYW: " + messageString)
+      },
+      
+
       isMlbActive: function(){
          return Utils.isExtensionInstalledAndEnabled("{c0bcf963-624b-47fe-aa78-8cc02434cf32}")  
       }

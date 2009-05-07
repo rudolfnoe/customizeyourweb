@@ -56,6 +56,8 @@ with(customizeyourweb){
       },
 		
 		init: function(event){
+         //Load configuration first
+			CywConfig.init()
          this.intializedOnce()
          this.disableAll()
          var disabled = Prefs.getBoolPref("customizeyourweb.disabled")
@@ -64,7 +66,6 @@ with(customizeyourweb){
          }
          this.initPermantentShortCuts()
          this.initUI()
-			CywConfig.init()
          StatusbarManager.init()
 		},
       
@@ -82,6 +83,9 @@ with(customizeyourweb){
 			if(!this.intializedOnceDone){
    		   this.registerObservers()
             this.assureAIOSCompatibility()
+            if(CywVersionManager.addonHasToBeMigrated()){
+               CywVersionManager.doMigration()
+            }
    		   this.intializedOnceDone = true
 			}
       },

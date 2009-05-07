@@ -23,6 +23,7 @@ with(customizeyourweb){
          byId("listItemsTagNameTB").value = this.action.getListItemsTagName()
          var higlightCssObj = CssUtils.parseCssText(this.action.getHighlightCss())
          byId('highlightBackgroundCF').value = higlightCssObj["background-color"]
+         byId('defaultLinkTargetML').value = this.action.getDefaultLinkTarget()
          byId('noOfHeaderRowsTB').value = this.action.getNoOfHeaderRows()
          byId('ommitEveryXthItemTB').value = this.action.getOmmitEveryXthItem()
          byId('focusOnLoadCB').checked = this.action.isFocusOnLoad()
@@ -36,6 +37,7 @@ with(customizeyourweb){
          this.action.setShortString(byId("shortstringinputbox").value) 
          this.action.setListItemsTagName(byId("listItemsTagNameTB").value)
          this.action.setHighlightCss(this.getHighlightCss())
+         this.action.setDefaultLinkTarget(byId('defaultLinkTargetML').value)
          this.action.setNoOfHeaderRows(byId('noOfHeaderRowsTB').value) 
          this.action.setOmmitEveryXthItem(byId('ommitEveryXthItemTB').value) 
          this.action.setFocusOnLoad(byId('focusOnLoadCB').checked)

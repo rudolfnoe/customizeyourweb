@@ -104,10 +104,11 @@ with(customizeyourweb){
    //Single method called by every edit command
    EditScriptHandler.doCreateAction = function(event){
       try{
-         this.getEditHandler().doCreateAction(event.target.id)
+         var command = event.target
+         this.getEditHandler().doCreateAction(command.id)
       }catch(e){
          //As commands executed via the CommandWrapper are not logged this is a workaround
-         Log.logError(e)
+         CywUtils.logError(e)
       }
    }
    
@@ -354,7 +355,7 @@ with(customizeyourweb){
          //Find scripts
          var scripts = CywConfig.getScriptsForTargetWin(this.targetWin)
          //Add new script
-         scripts.add(Script.createNewScript(this.targetWin.location.href))
+         scripts.add(Script.createNewScript(CywConfig.getNextScriptId(), this.targetWin.location.href))
          
          //init sidebar stuff
          if(isSidebarWinOpen()){
@@ -728,11 +729,11 @@ with(customizeyourweb){
             this.reloadPage(this.targetWin, script)
       },
       
-      shadowFrames: function(script){
+      shadowFrames: function(targetWinDefinition){
          this.unshadowFrames()
          var shadowers = new Array()
          DomUtils.iterateWindows(this.targetWin, function(win){
-            if(!script.matchUrl(win.location.href)){
+            if(!targetWinDefinition.matchUrl(win.location.href)){
                var body = DomUtils.getBody(win.document)
                if(body){
                   var newShadower = new FrameShadower(win)
