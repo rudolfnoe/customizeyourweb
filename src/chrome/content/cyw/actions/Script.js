@@ -1,9 +1,9 @@
 with(customizeyourweb){
 (function(){   
    
-   function Script (){
-      
-   	this.id = (new Date()).getTime().toString()
+   function Script (id){
+      Assert.paramsNotNull(arguments)
+   	this.id = id
       this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
       this.disabled = false
@@ -19,8 +19,10 @@ with(customizeyourweb){
    //static methods
    
    //creates new script for editing
-   Script.createNewScript = function(contentUrl){
-      var newScript = new Script()
+   Script.createNewScript = function(id, contentUrl){
+      Assert.paramsNotNull(arguments)
+      Assert.isTrue(typeof id == "number", "Id must be of type number, instead ")
+      var newScript = new Script(id)
       newScript.setIncludeUrlPatterns([contentUrl])
       newScript.setPersisted(false)
       return newScript
@@ -64,6 +66,10 @@ with(customizeyourweb){
       getId: function(){
          return this.id
       },
+      
+      getIdAsString: function(){
+         return this.id + ""
+      },
 
    	getLoadEventType: function(){
    		return this.loadEventType
@@ -77,6 +83,13 @@ with(customizeyourweb){
          return this.targetWinDefinition.getExcludeUrlPatternStrings()
    	},
       
+      equals: function(otherScript){
+         if(otherScript.constructor!=Script){
+            return false
+         }
+         return this.getId()==otherScript.getId()
+      },
+      
       getNextActionId: function(){
          if(this.t_actionIdCounter==-1){
             this.t_actionIdCounter = 0
@@ -89,6 +102,16 @@ with(customizeyourweb){
          }
          this.t_actionIdCounter++
          return this.t_actionIdCounter
+      },
+      
+      getScriptLoggingName: function(){
+         var logName = this.name
+         if(!StringUtils.isEmpty(logName)){
+            logName += " (id=%s)"
+         }else{
+            logName += "id=%s"
+         }
+         return logName.replace("%s", this.id)
       },
       
       getUrlPatternDescription: function(){
@@ -125,10 +148,9 @@ with(customizeyourweb){
                ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.CLEAN_UP_FAILED, 
                                                  [action.getId(), e.message], action, 
                                                  cywContext.getTargetWindow())
-               Log.logError(e)
             }
          }
-         Log.logDebug("Script " + this.getId() + " cleaned up on " + cywContext.getPageEventType())
+         CywUtils.logDebugMessage("Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
             
       },
    	
@@ -146,7 +168,7 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         Log.logDebug("Script " + this.id + " runs on " + cywContext.getPageEventType())
+         CywUtils.logInfoMessage("Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
          cywContext.setScriptId(this.getId())
          ScriptErrorHandler.clearScriptErrors(this.getId())
          var cachedPage = cywContext.isCachedPage()
@@ -158,7 +180,9 @@ with(customizeyourweb){
                else
    			      action.doAction(cywContext)
             }catch(e){
-               Utils.logError(e)
+               if(Log.isDebug()){
+                  CywUtils.logError(e)
+               }
                ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.ACTION_FAILED, 
                                                    [action.getId(), e.message], action,
                                                    cywContext.getTargetWindow())

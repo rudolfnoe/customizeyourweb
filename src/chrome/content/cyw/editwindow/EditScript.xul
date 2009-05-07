@@ -51,7 +51,7 @@
    <tabpanels flex="1">
       <tabpanel flex="1">
          <vbox flex="1">
-            <label value="Scripts" accesskey="p"/>
+            <label value="Matching Scripts" accesskey="p"/>
             <hbox>
                <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
                          crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Ctrl+Shift+P)'>
@@ -62,11 +62,26 @@
                   Se<html:u>l</html:u>ect
                </button>
             </hbox>
-            
-            <label value="Name (optional)" />
-            <hbox>
-               <textbox id="name" flex="1" tooltiptext="Name of the script"/>
-               <checkbox id="scriptDisabled" label="Disabled" tooltiptext="Disables script"/>
+            <hbox style="margin-top:10px">
+               <grid flex="1">
+                  <columns>
+                     <column ></column>
+                     <column flex="1"></column>
+                     <column></column>
+                  </columns>
+                  <rows>
+                     <row align="center">
+                        <label value="Id" />
+                        <textbox id="scriptId" readonly="true" width="100" tooltiptext="Id of the script" tabindex="-1"/>
+                        <spacer width="80"/>
+                     </row>
+                     <row align="center">
+                        <label value="Name (opt.)" />
+                        <textbox id="name" flex="1" tooltiptext="Name of the script"/>
+                        <checkbox id="scriptDisabled" label="Disabled" tooltiptext="Disables script"/>
+                     </row>
+                  </rows>
+               </grid>
             </hbox>
             <!-- editor for editable menulist-->
             <menulist id="urlPatternProposals" editable="true" flex="1" >
@@ -74,13 +89,13 @@
                </menupopup>
             </menulist>
 
-            <label value="Include URL Patterns (* = any string)" accesskey="U" />
+            <label value="Include URL Patterns (* = any string)" accesskey="U"  style="margin-top:7px"/>
             <richlistbox id="includePatterns" height="100px" flex="1" selType="single" 
                          tooltiptext="List of URL patterns for which the script will be applied (Ctrl+Shift+U)">
                <!-- will be dynamically filled -->
             </richlistbox>
 
-            <label value="Actions" accesskey="a"/>
+            <label value="Actions" accesskey="a" style="margin-top:7px"/>
             <tree id="actionsTreeView" flex="10" seltype="single" context="treeContextMPU" 
                   onselect="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
                   onclick="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"

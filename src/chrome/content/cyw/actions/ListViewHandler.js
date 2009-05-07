@@ -3,10 +3,11 @@ with(customizeyourweb){
    const EVENT_TYPES_FOR_ROOT = ["click", "focus", "blur"];
    const CURRENT_INDEX_ATTR = 'cyw_currentIndex';
    
-   function ListViewHandler(rootElement, listItems, highlightCss){
+   function ListViewHandler(rootElement, listItems, highlightCss, defaultLinkTarget){
       Assert.paramsNotNull(arguments)
       this.currentIndex = 0
       this.currentItemWrapper = null
+      this.defaultLinkTarget = defaultLinkTarget
       this.focused = false
       this.highlightCss = highlightCss
       this.listItems = listItems
@@ -98,8 +99,10 @@ with(customizeyourweb){
          this.scm.addShortcut("j", this.moveDown, this)
          this.scm.addShortcut("Home", this.moveFirst, this)
          this.scm.addShortcut("End", this.moveLast, this)
-         this.scm.addShortcut("Return", function(){this.openItemIn(LinkTarget.CURRENT)}, this)
-         this.scm.addShortcut("Ctrl+Return", function(){this.openItemIn(LinkTarget.TAB)}, this)
+         this.scm.addShortcut("Return", function(){this.openItemIn(this.defaultLinkTarget)}, this)
+         this.scm.addShortcut("Ctrl+Return", function(){
+            this.openItemIn(this.defaultLinkTarget==LinkTarget.CURRENT?LinkTarget.TAB:LinkTarget.CURRENT)
+         }, this)
          this.scm.addShortcut("Space", this.toggleFirstCheckbox, this)
       },
       isFirst: function(index){

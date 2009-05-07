@@ -24,7 +24,7 @@
                accesskey="d"/>
       <command id="customizeyourweb_focusCmd" label="Focus" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_giveFeedback" label="Give Feedback" oncommand="customizeyourweb.EventHandler.giveFeedback(event)"/>   	
-      <command id="customizeyourweb_hideStatusbar" label="Hide statusbar" oncommand="customizeyourweb.StatusbarManager.hideStatusbar()"/>   	
+      <command id="customizeyourweb_hideStatusbar" label="Hide Statusbar Icon" oncommand="customizeyourweb.StatusbarManager.hideStatusbar()"/>   	
       <command id="customizeyourweb_hideToolsMenu" label="Hide menu" oncommand="customizeyourweb.EventHandler.hideToolsMenu()"
                accesskey="h"/>   	
       <command id="customizeyourweb_ifElementExistsCmd" label="If Element exists" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	

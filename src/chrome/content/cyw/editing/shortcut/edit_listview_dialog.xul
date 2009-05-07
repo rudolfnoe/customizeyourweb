@@ -42,6 +42,15 @@
                   <colorfield id="highlightBackgroundCF" flex="1"/>
                </row>
                <row align="center">
+                  <label value="Pressing 'Enter' opens first link in"/>
+                  <menulist id="defaultLinkTargetML" persist="value">
+                     <menupopup>
+                        <menuitem label="Current tab" value="current"/>
+                        <menuitem label="New tab" value="tab"/>
+                     </menupopup>
+                  </menulist>
+               </row>
+               <row align="center">
                   <label value="Number of header rows"/>
                   <textbox id="noOfHeaderRowsTB" type="number" min="0" maxwidth="60px"/>
                </row>

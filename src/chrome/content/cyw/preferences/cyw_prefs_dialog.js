@@ -35,7 +35,7 @@
          }
          Prefs.savePrefs(document);
       	CywConfig.setScripts(this.getScriptsTree().getTreeView().getScripts())
-      	CywConfig.saveEgConfig()
+      	CywConfig.saveConfig()
          Utils.notifyObservers(CywCommon.PREF_OBSERVER);
       }
    }

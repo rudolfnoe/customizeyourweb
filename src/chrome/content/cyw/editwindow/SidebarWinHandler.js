@@ -50,7 +50,7 @@ with(customizeyourweb){
       },
       
       addScriptToML: function(script){
-         this.idToScriptMap.put(script.id, script)
+         this.idToScriptMap.put(script.getIdAsString(), script)
          var scriptLabel = ""
          if(script.isPersisted()){
             scriptLabel = script.getUrlPatternDescription()
@@ -59,7 +59,7 @@ with(customizeyourweb){
          }else{
             scriptLabel = "New Script" 
          }
-         byId('scripts').appendItem(scriptLabel, script.id, null)
+         byId('scripts').appendItem(scriptLabel, script.getIdAsString(), null)
       },
 
       addActionSelectionChangedListener: function(callbackFuncOrEventHandler, thisObj){
@@ -103,7 +103,14 @@ with(customizeyourweb){
          if(!targetFound){
             actionTreeViewItem.setMessage(
                ScriptErrorHandler.createWarning(ErrorConstants.TARGET_NOT_FOUND, [action.getTargetDefinition().getDefinitionAsString()]))
+         }else{
+            actionTreeViewItem.clearMessage()
          }
+      },
+      
+      clearIncludeAndExcludePatterns: function(){
+         this.includeUrlPatternsELB.setItems([], [])
+         this.excludeUrlPatternsELB.setItems([], [])
       },
       
       copyAction: function(){
@@ -127,12 +134,16 @@ with(customizeyourweb){
       	this.idToScriptMap.remove(scriptId) 
       	//First init win with script to set currentScriptId
       	var selIndex = scriptML.selectedIndex
-         var newSelItem = scriptML.getItemAtIndex(selIndex+1)
+         if(selIndex < scriptML.itemCount-1){
+            var newSelItem = scriptML.getItemAtIndex(selIndex+1)
+         }else{
+            var newSelItem = scriptML.getItemAtIndex(selIndex-1)
+         }
          this.initWinWithScript(newSelItem.value)
          //Then ajust ML 
       	scriptML.removeItemAt(selIndex)
-         //Select next in the list
-      	scriptML.selectedIndex = selIndex
+         //Select new item in the list
+      	scriptML.selectedItem = newSelItem
          
       },
       
@@ -166,24 +177,29 @@ with(customizeyourweb){
       getSidebarContextForSaving: function(){
          //Update idToScriptMap
       	var currentScript = this.getCurrentScript()
-      	this.idToScriptMap.put(currentScript.id, currentScript)
+      	this.idToScriptMap.put(currentScript.getIdAsString(), currentScript)
       	var scripts = new ArrayList(this.idToScriptMap.values())
       	this.sidebarContext.scripts = scripts
-      	this.sidebarContext.currentScriptId = currentScript.id
+      	this.sidebarContext.currentScriptId = currentScript.getIdAsString()
       	this.sidebarContext.currentScriptBackup = this.currentScriptBackup
       	return this.sidebarContext
       },
       
       getCurrentScript: function(){
-      	var currentScript = this.idToScriptMap.get(this.currentScriptId)
-         currentScript.setName(byId('name').value)
-         currentScript.setDisabled(byId('scriptDisabled').checked)
-         currentScript.setIncludeUrlPatterns(this.includeUrlPatternsELB.getValues())
-         currentScript.setExcludeUrlPatterns(this.excludeUrlPatternsELB.getValues())
-         currentScript.setActions(this.actionsTreeView.getActions())
-         currentScript.setLoadEventType(byId('loadEventType').value)
-         currentScript.setBehaviorOnMutationEvent(byId('behaviorOnMutationEvent').value)
-         return currentScript
+         try{
+         	var currentScript = this.idToScriptMap.get(this.currentScriptId)
+            currentScript.setName(byId('name').value)
+            currentScript.setDisabled(byId('scriptDisabled').checked)
+            currentScript.setIncludeUrlPatterns(this.includeUrlPatternsELB.getValues())
+            currentScript.setExcludeUrlPatterns(this.excludeUrlPatternsELB.getValues())
+            currentScript.setActions(this.actionsTreeView.getActions())
+            currentScript.setLoadEventType(byId('loadEventType').value)
+            currentScript.setBehaviorOnMutationEvent(byId('behaviorOnMutationEvent').value)
+            return currentScript
+         }catch(e){
+            CywUtils.logError(e)
+            throw e
+         }
       },
       
       getEditScriptHandler: function(){
@@ -253,7 +269,7 @@ with(customizeyourweb){
          if(this.includeUrlPatternsELB.getItemCount()==0)
             this.getEditScriptHandler().unshadowFrames()
          else
-            this.getEditScriptHandler().shadowFrames(this.getCurrentScript())
+            this.getEditScriptHandler().shadowFrames(new TargetWinDefinition(this.includeUrlPatternsELB.getValues(), this.excludeUrlPatternsELB.getValues()))
       },
             
       handleScriptSelect: function(event){
@@ -342,7 +358,7 @@ with(customizeyourweb){
          if(this.sidebarContext.currentScriptId!=null){
             selectedScriptId = this.sidebarContext.currentScriptId
          }else{
-            selectedScriptId = scripts.get(0).id
+            selectedScriptId = scripts.get(0).getIdAsString()
          }
          
          //First init win so that init is not done twice via selection of menulist
@@ -350,14 +366,16 @@ with(customizeyourweb){
          ControlUtils.selectMenulistByValue(scriptML, selectedScriptId)
       },
       
-      //TODO is called twice during on load, one time directly and one time via the script select handler 
+      //TODO is called twice during on load, one time directly and one time via the script select handler
+      //TODO check function as sequential dependencies
       initWinWithScript: function(scriptId, scriptBackup){
          this.currentScriptId = scriptId
          //get script by id
          var currentScript = this.idToScriptMap.get(scriptId)
          
-         //set name
+         //set name and id
          byId('name').value = StringUtils.defaultString(currentScript.getName())
+         byId('scriptId').value = StringUtils.defaultString(currentScript.getIdAsString())
          
          //set disabled flag
          byId('scriptDisabled').checked = currentScript.isDisabled()
@@ -366,7 +384,8 @@ with(customizeyourweb){
          byId('loadEventType').value = currentScript.getLoadEventType()
          byId('behaviorOnMutationEvent').value = currentScript.getBehaviorOnMutationEvent()
          
-         //set include pattern
+         //setting of include/exclude patterns
+         this.clearIncludeAndExcludePatterns()
          if(currentScript.isPersisted()){
             var includePatternStrings = currentScript.getIncludeUrlPatternStrings()
             this.includeUrlPatternsELB.setItems(includePatternStrings, includePatternStrings)
@@ -383,16 +402,14 @@ with(customizeyourweb){
          this.actionsTreeView.addListener("update", this.checkTargetDefinitionForAction, this)
          this.actionsTreeView.setActions(currentScript.getActions(), ScriptErrorHandler.getErrorsForScript(scriptId))
          
-         //After tree is fill trigger shadowing of frames
-         if(currentScript.isPersisted()){
-            this.handleUrlPatternsChanged()
-         }
+         //After actions tree is filled shadowing fo
 
          //Save backup for detecting changes
          if(scriptBackup!=null)
             this.currentScriptBackup = scriptBackup
          else
             this.currentScriptBackup = ObjectUtils.deepClone(this.getCurrentScript())
+            
       },
       
       isSaveScriptOnModification: function(){
@@ -461,12 +478,12 @@ with(customizeyourweb){
           if(!selectedScript)
             return
           this.addScriptToML(selectedScript)
-          ControlUtils.selectMenulistByValue(byId('scripts'), selectedScript.getId())
+          ControlUtils.selectMenulistByValue(byId('scripts'), selectedScript.getIdAsString())
       },
       
       setUrlPatternWithMostLikely: function(win){
          var mostLikelyPattern = UrlUtils.getMostLikelyPattern(win.location.href)
-         byId('includePatterns').appendItem(mostLikelyPattern, mostLikelyPattern)	
+         byId('includePatterns').appendItem(mostLikelyPattern, mostLikelyPattern)
       },
       
       setMessage: function(message, severity){

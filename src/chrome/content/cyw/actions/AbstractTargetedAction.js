@@ -37,7 +37,7 @@ with(customizeyourweb){
          return this.targetDefinition.getTarget(cywContextOrTargetWin)
       },
       
-      
+      //Could not be moved to AbstractTargerDefinition as ScriptErrorHandler needs information about action
       getTargetWithoutError : function(cywContext){
          try{
             return this.getTarget(cywContext)
