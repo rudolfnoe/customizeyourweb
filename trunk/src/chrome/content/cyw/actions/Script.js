@@ -84,9 +84,7 @@ with(customizeyourweb){
    	},
       
       equals: function(otherScript){
-         if(otherScript.constructor!=Script){
-            return false
-         }
+         //Do not test constructor as this is not if script was cloned
          return this.getId()==otherScript.getId()
       },
       
