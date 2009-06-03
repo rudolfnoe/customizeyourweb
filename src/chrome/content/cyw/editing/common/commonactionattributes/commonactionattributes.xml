@@ -4,7 +4,7 @@
 		<binding id="commonactionattributes">
 			<content>
             <xul:groupbox flex="1">
-               <xul:caption label="Common action attributes"/>
+               <xul:caption label="Common Action Attributes"/>
                <xul:grid flex="1">
                   <xul:columns>
                      <xul:column></xul:column>

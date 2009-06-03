@@ -128,6 +128,14 @@ with(customizeyourweb){
          return cywContext.isMutationEvent() && this.behaviorOnMutationEvent == RunBehaviorOnMutationEvent.RUN_NEVER
       },
       
+      matchDomain: function(url){
+         return this.targetWinDefinition.matchDomain(url)
+      },
+      
+      matchesWinOrSubwin: function(win){
+         return this.targetWinDefinition.matchesWinOrSubwin(win)
+      },
+      
       matchUrl: function(url){
          return this.targetWinDefinition.matchUrl(url)
       },

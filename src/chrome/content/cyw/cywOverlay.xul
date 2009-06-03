@@ -187,7 +187,6 @@
          <menupopup>
             <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
             <menuitem command="customizeyourweb_openConfiguration"/>
-            <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
             <menuseparator/>
             <menuitem command="customizeyourweb_openIssueList"/>
             <menuitem command="customizeyourweb_giveFeedback"/>

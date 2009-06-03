@@ -102,23 +102,26 @@ with(customizeyourweb){
          return nextScriptId + 1
       },
       
-      /*Returns array of cloned scripts which matches at least one url of 
-       * the target win and it frames
+      /*Returns array of cloned scripts which "matches" at least one url of 
+       * the target win and it frames. Matches includes both matching the URL pattern or having the same domain
        */
-      getScriptsForTargetWin: function(targetWin){
+      getScriptsForEditing: function(targetWin){
          //assemble all urls
-         var urls = new Array()
+         var urls = []
          DomUtils.iterateWindows(targetWin, function(subWin){urls.push(subWin.location.href)})
          
-         var matchingScripts = new ArrayList()
+         var matchingScripts = new Set()
          var containsCompareFct = function(objSearched, elementFromList){
             return objSearched.getId() == elementFromList.getId()
          }
          for (var scriptIndex = 0; scriptIndex < this.scripts.size(); scriptIndex++) {
             for (var urlIndex = 0; urlIndex < urls.length; urlIndex++) {
                var script = this.scripts.get(scriptIndex)
-               if(script.matchUrl(urls[urlIndex]) && !matchingScripts.contains(script, containsCompareFct)){
-                  matchingScripts.add(this.cloneScript(script))
+                
+               if((script.matchUrl(urls[urlIndex]) || script.matchDomain(urls[urlIndex]))&&
+                  //checking in condition only to avoid unneccessary cloning of scripts
+                  !matchingScripts.contains(script, containsCompareFct)){   
+                  matchingScripts.add(this.cloneScript(script)) 
                }
             }
          }

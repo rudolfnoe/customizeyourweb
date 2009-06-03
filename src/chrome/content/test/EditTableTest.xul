@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/skin/cyw.css" type="text/css"?>
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -13,12 +14,13 @@
    <script src="EditTableTest.js"/>
    
    <popupset>
-      <!--menupopup id="testpup">
+      <menupopup id="testpup">
+         <menuitem id="testicon" label="test" class="menuitem-iconic testclass"/>
          <menuitem label="Test" />
          <menuitem label="Test" selected="true"/>
          <menuitem label="Test"/>
-      </menupopup-->
-      <panel id="testpup">
+      </menupopup>
+      <panel id="">
          <listbox>
             <listitem label="test"></listitem>
             <listitem label="test" selected="true"></listitem>
@@ -29,9 +31,9 @@
    </popupset>
    <vbox >
       <label value="Input1"/>
-      <menulist id="myTextbox1" editable="true">
+      <menulist id="myTextbox1" context="testpup">
          <menupopup>
-            <menuitem label="test"/>
+            <menuitem id="testicon" label="test" image="chrome://customizeyourweb/skin/error.ico" class="menuitem-iconic testclass"/>
             <menuitem label="test"/>
             <menuitem label="test"/>
             <menuitem label="test"/>

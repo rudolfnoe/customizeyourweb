@@ -51,11 +51,12 @@
    <tabpanels flex="1">
       <tabpanel flex="1">
          <vbox flex="1">
-            <label value="Matching Scripts" accesskey="p"/>
+            <label value="Script Selection [+] =Applied, [--]=Not Applied" accesskey="p"/>
             <hbox>
                <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
-                         crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Ctrl+Shift+P)'>
-                  <menupopup>
+                         crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Ctrl+Shift+P)'
+                         >
+                  <menupopup width="300px" flex="1">
                   </menupopup>
                </menulist>
                <button command="selectScriptCmd" style="width:30px" tooltiptext="Opens dialog to select another script">
@@ -139,7 +140,7 @@
                <!-- will be dynamically filled -->
             </richlistbox>
             <label value="Time when script should run"/>
-            <menulist id="loadEventType" editable="false">
+            <menulist id="loadEventType" editable="false" >
                <menupopup>
                   <menuitem label="Before page is fully loaded (techn. on DOMContentLoaded)" value="DOMContentLoaded"/>
                   <menuitem label="After page is fully loaded (techn. on Pageshow)" value="pageshow"/>

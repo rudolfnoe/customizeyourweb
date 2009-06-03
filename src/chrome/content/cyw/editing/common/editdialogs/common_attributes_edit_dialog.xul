@@ -10,12 +10,12 @@
     buttons="accept,cancel"
     ondialogaccept="customizeyourweb.CommonAttributesEditDialogHandler.doOk()" 
     onload="customizeyourweb.CommonAttributesEditDialogHandler.doOnload()"
-    title="Edit common action attributes"
+    title="Edit Common Action Attributes"
     persist="screenX screenY width height">
    <script src="../../../CywCommon.js"/>
    <script src="common_edit_dialog_include.js"/>
    <script src="CommonAttributesEditDialogHandler.js"/>
-   <dialogheader title="Edit target definition" message="" rows="1"/>
+   <dialogheader title="Define the target defintion and the repetion behavior" message="" rows="1"/>
    <targetdefinition width="400px" autoInit="false"/>
    <commonactionattributes/>
 
