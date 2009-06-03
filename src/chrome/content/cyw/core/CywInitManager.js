@@ -116,7 +116,7 @@ with(customizeyourweb){
 			this.setShortcut(prefix+"blurActiveElement",  EventHandler.blurActiveElement, EventHandler)			
 			this.setShortcut(prefix+"toggleEditMode",  EditScriptHandler.toggleEditMode, EditScriptHandler)
          //TODO remove
-         this.shortcutManager.addShortcut("Alt+F2",  "openDialog('chrome://customizeyourweb/content/test/EditTableTest.xul', 'test', 'centerscreen=yes, modal=no')" )
+//         this.shortcutManager.addShortcut("Alt+F2",  "openDialog('chrome://customizeyourweb/content/test/EditTableTest.xul', 'test', 'centerscreen=yes, modal=no')" )
 		},
       
 		observe: function(){
