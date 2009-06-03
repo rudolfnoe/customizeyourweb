@@ -49,17 +49,23 @@ with(customizeyourweb){
          return true
       },
       
-      addScriptToML: function(script){
+      addScriptToML: function(script, isAppliedScript){
          this.idToScriptMap.put(script.getIdAsString(), script)
          var scriptLabel = ""
          if(script.isPersisted()){
-            scriptLabel = script.getUrlPatternDescription()
-            if(script.getName()!=null && script.getName().length>0)
-               scriptLabel = script.getName() + " - " + scriptLabel
+            if(isAppliedScript){
+               scriptLabel = "[+] "
+            }else{
+               scriptLabel = "[--] "
+            }
+            if(script.getName()!=null && script.getName().length>0){
+               scriptLabel += script.getName() + " - "
+            }
+            scriptLabel += script.getUrlPatternDescription()
          }else{
             scriptLabel = "New Script" 
          }
-         byId('scripts').appendItem(scriptLabel, script.getIdAsString(), null)
+         var newItem = byId('scripts').appendItem(scriptLabel, script.getIdAsString(), null)
       },
 
       addActionSelectionChangedListener: function(callbackFuncOrEventHandler, thisObj){
@@ -327,10 +333,16 @@ with(customizeyourweb){
          var scripts = this.sidebarContext.scripts
          var scriptML = byId('scripts')
          ControlUtils.clearMenulist(scriptML)
+         var firstMatchingScriptIndex = -1
          for (var i = 0; i < scripts.size(); i++) {
-            this.addScriptToML(scripts.get(i))
+            var script = scripts.get(i)
+            var isAppliedScript = script.matchesWinOrSubwin(this.getTargetWin())
+            if(firstMatchingScriptIndex == -1 && isAppliedScript){
+               firstMatchingScriptIndex = i
+            }
+            this.addScriptToML(script, isAppliedScript)
          }
-         
+                  
          //Fill proposals menulist
          var targetWin = this.sidebarContext.targetWin
          var urlPatternProposalsML = byId('urlPatternProposals')
@@ -357,8 +369,10 @@ with(customizeyourweb){
          var selectedScriptId = null
          if(this.sidebarContext.currentScriptId!=null){
             selectedScriptId = this.sidebarContext.currentScriptId
+         }else if(firstMatchingScriptIndex != -1){
+            selectedScriptId = scripts.get(firstMatchingScriptIndex).getIdAsString()
          }else{
-            selectedScriptId = scripts.get(0).getIdAsString()
+            selectedScriptId = scripts.get(scripts.size()-1).getIdAsString()
          }
          
          //First init win so that init is not done twice via selection of menulist

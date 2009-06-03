@@ -7,6 +7,18 @@ with(customizeyourweb){
    
    var StatusbarManager = {
       listenerActive: false,
+      scriptErrorListener: null,
+      pageHideListener: null,
+      tabSelectListener: null,
+      
+      createAndRegisterEventListener: function(){
+         this.scriptErrorListener = new EventHandlerAdapter(this.onScriptError, this)
+         ScriptErrorHandler.addScriptErrorListener(this.scriptErrorListener)
+         this.pageHideListener = new EventHandlerAdapter(this.onPagehide, this)
+         document.getElementById('content').addEventListener("pagehide", this.pageHideListener, true)
+         this.tabSelectListener = new EventHandlerAdapter(this.onTabSelect, this)
+         Application.activeWindow.events.addListener("TabSelect", this.tabSelectListener)
+      },
       
       getTabContext: function(contentWin){
          var tabContext = TabContextManager.getContext(contentWin, ERROR_ICON_STATE_TAB_CONTEXT)
@@ -24,11 +36,14 @@ with(customizeyourweb){
       
       init: function(){
          this.showHideStatusIcon()
-         this.setDisabledState()
+         var isCYWDisabled = CywConfig.getPref("disabled")
+         this.setDisabledState(isCYWDisabled)
          if(!this.listenerActive){
-            this.registerEventListener()
+            this.createAndRegisterEventListener()
             this.listenerActive = true
          }
+         var suspendOrResume = isCYWDisabled?"suspend":"resume"
+         this.suspendOrResumeEventListener(suspendOrResume)
       },
       
       onPagehide: function(event){
@@ -57,16 +72,9 @@ with(customizeyourweb){
          }
       },
       
-      registerEventListener: function(){
-         ScriptErrorHandler.addScriptErrorListener(new EventHandlerAdapter(this.onScriptError, this))
-         document.getElementById('content').addEventListener("pagehide", new EventHandlerAdapter(this.onPagehide, this), true)
-         Application.activeWindow.events.addListener("TabSelect", new EventHandlerAdapter(this.onTabSelect, this))
-      },
-      
-      setDisabledState: function(){
-         var isCYWDisabled = CywConfig.getPref("disabled")
+      setDisabledState: function(disabled){
          var statusbarIcon = byId('customizeyourweb-statusbarIcon')
-         if(isCYWDisabled){
+         if(disabled){
             statusbarIcon.src = SRC_PATH_STATUS_ICON_DISABLED
          }else{
             statusbarIcon.src = SRC_PATH_STATUS_ICON_NORMAL
@@ -90,6 +98,12 @@ with(customizeyourweb){
          }else{
             statusbarPanel.collapsed = false
          }
+      },
+
+      suspendOrResumeEventListener: function(suspendOrResume){
+         this.pageHideListener[suspendOrResume]()
+         this.scriptErrorListener[suspendOrResume]()
+         this.tabSelectListener[suspendOrResume]()
       }
       
    }

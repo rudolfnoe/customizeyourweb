@@ -353,7 +353,7 @@ with(customizeyourweb){
          this.initEditHandler()
 
          //Find scripts
-         var scripts = CywConfig.getScriptsForTargetWin(this.targetWin)
+         var scripts = CywConfig.getScriptsForEditing(this.targetWin)
          //Add new script
          scripts.add(Script.createNewScript(CywConfig.getNextScriptId(), this.targetWin.location.href))
          
@@ -554,7 +554,7 @@ with(customizeyourweb){
       
       initShortcuts: function(){
          var selectedBrowser = Firefox.getActiveBrowser()
-         this.shortcutManager = new ShortcutManager(selectedBrowser, "keydown", true)
+         this.shortcutManager = new ShortcutManager(selectedBrowser, "keydown", true, true)
          //Naviation
          this.shortcutManager.addShortcut("right", Utils.bind(function(){this.navigateWithKeys("nextSibling")}, this))
          this.shortcutManager.addShortcut("down", Utils.bind(function(){this.navigateWithKeys("nextSibling")}, this))
