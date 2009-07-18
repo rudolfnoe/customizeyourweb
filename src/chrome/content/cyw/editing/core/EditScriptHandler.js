@@ -204,10 +204,9 @@ with(customizeyourweb){
          this.disableEditHandler(isHideSidebar) 
       },
       
-      checkCurrentWinMatchesToCurrentScript: function(){
+      checkCurrentWinMatchesToCurrentScript: function(script){
          var targetWin = this.getActionTargetWin()
-         var currentScript = getSidebarWinHandler().getCurrentScript()
-         return currentScript.matchUrl(targetWin.location.href) || !currentScript.hasIncludePattern()
+         return script.matchUrl(targetWin.location.href) || !script.hasIncludePattern()
       },
       
       /*
@@ -320,8 +319,9 @@ with(customizeyourweb){
       doCreateAction: function(commandId){
          if(this.currentTarget==null && TARGETLESS_COMMANDS.indexOf(commandId)==-1)
            return
+         var currentScript = getSidebarWinHandler().getCurrentScript()
          if(this.currentTarget!=null){
-            var match = this.checkCurrentWinMatchesToCurrentScript()
+            var match = this.checkCurrentWinMatchesToCurrentScript(currentScript)
             if(!match){
                alert("Action could not be added because the URL of the target window \n" +
                      "doesn't match with the url patterns defined for the current script.")
@@ -331,7 +331,7 @@ with(customizeyourweb){
          DomUtils.blurActiveElement(this.targetWin)
          this.unhighlightAllHighlighters()
          var wrapperCommand = this.createWrapperCommandFromCommandId(commandId)
-         this.initEditContextForCreateAction(commandId)
+         this.initEditContextForCreateAction(commandId, currentScript)
          var newAction = wrapperCommand.doCreateAction(this.editContext)
          if(newAction){
             //If creation successfull
@@ -508,12 +508,34 @@ with(customizeyourweb){
          }, this) 
       },
       
+      initEditContextCommon: function(targetElement, targetWindow, scriptId){
+         this.editContext.setTargetElement(targetElement)
+         this.editContext.setTargetWindow(targetWindow)
+         this.editContext.setScriptId(scriptId)
+      },
+      
       /*
        * Inits the edit context
        */
       initEditContextForEditAction: function(action, script){
          var targetElement = null
          var targetWindow = null
+         
+         //Determine targetWindow
+         var targetWindows = new ArrayList();
+         DomUtils.iterateWindows(this.targetWin, function(subWin){
+            if(script.matchUrl(subWin.location.href)){
+               targetWindows.add(subWin)
+            }
+         })
+         //TODO check, could be more than 1
+         if(targetWindows.size()>0){
+            targetWindow = targetWindows.get(0) 
+         }else{
+            Assert.fail("Target window could not be determined!")
+         }
+
+         //Determine targetElement
          if(action.isTargeted()){
             //Determine the target element
             var targetDef = action.getTargetDefinition()
@@ -538,14 +560,12 @@ with(customizeyourweb){
             }
          }
          this.editContext.setAction(action)
-         this.editContext.setTargetElement(targetElement)
-         this.editContext.setTargetWindow(targetWindow)
+         this.initEditContextCommon(targetElement, targetWindow, script.getId())
       },
       
-      initEditContextForCreateAction: function(commandId){
+      initEditContextForCreateAction: function(commandId, script){
          this.editContext.setCommand(document.getElementById(commandId))
-         this.editContext.setTargetElement(this.currentTarget)
-         this.editContext.setTargetWindow(this.getActionTargetWin())
+         this.initEditContextCommon(this.currentTarget, this.getActionTargetWin(), script.getId())
          var targetDefinition = null
          if(this.currentTarget)
            targetDefinition = AbstractTargetDefinitionFactory.createDefaultDefinition(this.currentTarget)
@@ -570,6 +590,7 @@ with(customizeyourweb){
          this.shortcutManager.addShortcut("h", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertHTMLCmd")}, this))
          this.shortcutManager.addShortcut("i", new CommandWrapper('customizeyourweb_ifElementExistsCmd'))
          this.shortcutManager.addShortcut("j", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertJSCmd")}, this))
+         this.shortcutManager.addShortcut("y", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertStyleSheetCmd")}, this))
          this.shortcutManager.addShortcut("l", Utils.bind(function(){this.doCreateAction("customizeyourweb_listViewCmd")}, this))
          this.shortcutManager.addShortcut("m", Utils.bind(function(){this.doCreateAction("customizeyourweb_modifyCmd")}, this))
          this.shortcutManager.addShortcut("o", Utils.bind(function(){this.doCreateAction("customizeyourweb_macroShortcutCmd")}, this))

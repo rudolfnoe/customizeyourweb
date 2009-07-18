@@ -2,7 +2,7 @@
  * Contains constants and loading of common subscripts
  */
 (function(){
-	var CywCommon = { 
+   var CywCommon = { 
 		//Constants
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
@@ -40,7 +40,7 @@
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")
    			scriptLoader.loadScript(this.CYW_CHROME_URL+ "editing/core/SidebarContext.js")
-   
+            
    			// Init version
    			this.VERSION = customizeyourweb.Utils.getExtension(this.GUI_ID).version
             

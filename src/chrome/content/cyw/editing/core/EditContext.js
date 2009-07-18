@@ -5,7 +5,7 @@ with(customizeyourweb){
       this.clipboard = null
       this.command = null
       this.commandData = null,
-      this.script = null,
+      this.scriptId = null,
       this.targetDefinition = null
       this.targetElement = null
       this.targetWindow = null
@@ -43,6 +43,14 @@ with(customizeyourweb){
       setCommandData: function(commandData){
          this.commandData = commandData
       },
+      
+      getScriptId: function(){
+         return this.scriptId
+      },
+
+      setScriptId: function(scriptId){
+         this.scriptId = scriptId
+      },
 
       getTargetDefinition: function(){
          return this.targetDefinition
@@ -50,6 +58,10 @@ with(customizeyourweb){
 
       setTargetDefinition: function(targetDefinition){
          this.targetDefinition = targetDefinition
+      },
+      
+      getTargetDocument: function(){
+         return this.targetWindow.document
       },
 
       getTargetElement: function(){
