@@ -30,6 +30,7 @@
       <command id="customizeyourweb_ifElementExistsCmd" label="If Element exists" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertJSCmd" label="Insert JavaScript" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertHTMLCmd" label="Insert HTML" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_insertStyleSheetCmd" label="Insert Stylesheet" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_listViewCmd" label="List View" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_macroShortcutCmd" label="Macro Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_modifyCmd" label="Modify" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
@@ -67,6 +68,7 @@
             <menupopup>
             	<menuitem id="customizeyourweb_insertJSMI" command="customizeyourweb_insertJSCmd" acceltext="J"/>
             	<menuitem id="customizeyourweb_insertHTMLMI" command="customizeyourweb_insertHTMLCmd" acceltext="H"/>
+            	<menuitem id="customizeyourweb_insertStyleSheetMI" command="customizeyourweb_insertStyleSheetCmd" acceltext="Y"/>
             </menupopup>
          </menu>
          <menuseparator/>
@@ -122,28 +124,36 @@
                   <label value="Shortcut"/>
                </row>
                <row>
+                  <label value="J"/>
+                  <label value="Insert JavaScript"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="H"/>
+                  <label value="Insert HTML"/>
+               </row>
+               <row>
+                  <label value="Y"/>
+                  <label value="Insert Stylesheet"/>
+               </row>
+               <row class="shortcut-help-grey-row">
                   <label value="T"/>
                   <label value="Retarget Action"/>
                </row>
-               <row class="shortcut-help-grey-row">
+               <row>
                   <label value="Ctrl+c"/>
                   <label value="Copy"/>
                </row>
-               <row>
+               <row class="shortcut-help-grey-row">
                   <label value="Ctrl+x"/>
                   <label value="Cut"/>
                </row>
-               <row class="shortcut-help-grey-row">
+               <row>
                   <label value="Ctrl+v"/>
                   <label value="Paste after"/>
                </row>
-               <row>
+               <row class="shortcut-help-grey-row">
                   <label value="Ctrl+Shift+v"/>
                   <label value="Paste before"/>
-               </row>
-               <row class="shortcut-help-grey-row">
-                  <label value="Ctrl+z"/>
-                  <label value="Undo"/>
                </row>
                <row>
                   <label value="Ctrl+z"/>

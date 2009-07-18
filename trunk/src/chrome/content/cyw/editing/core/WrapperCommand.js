@@ -43,7 +43,7 @@ with(customizeyourweb){
          return null
       },
       
-      undo: function(editContext){
+      undo: function(editContext, actionBackup){
          this.editCommand.undo(editContext, this.actionBackup)
          if(this.commandType=="create"){
             this.sidebarWinHandler.removeAction(this.editCommand.getAction())
