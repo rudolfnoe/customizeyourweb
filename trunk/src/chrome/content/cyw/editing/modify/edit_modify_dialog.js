@@ -56,7 +56,9 @@ with(customizeyourweb){
        * Cancel event handler
        */
       doCancel: function(){
-         this.elementWrapper.restore()
+         if(this.elementWrapper){
+            this.elementWrapper.restore()
+         }
       },
       
       /*

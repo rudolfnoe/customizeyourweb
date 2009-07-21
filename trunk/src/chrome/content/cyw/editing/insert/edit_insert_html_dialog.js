@@ -6,7 +6,9 @@ with(customizeyourweb){
       targetElement: null,
       
       doCancel: function(){
-         InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         if(this.targetElement){
+            InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         }
       },
       
       doOk: function(){
