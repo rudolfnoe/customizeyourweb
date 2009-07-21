@@ -99,9 +99,9 @@ with(customizeyourweb){
          this.scm.addShortcut("j", this.moveDown, this)
          this.scm.addShortcut("Home", this.moveFirst, this)
          this.scm.addShortcut("End", this.moveLast, this)
-         this.scm.addShortcut("Return", function(){this.openItemIn(this.defaultLinkTarget)}, this)
-         this.scm.addShortcut("Ctrl+Return", function(){
-            this.openItemIn(this.defaultLinkTarget==LinkTarget.CURRENT?LinkTarget.TAB:LinkTarget.CURRENT)
+         this.scm.addShortcut("Return", function(event){return this.openItemIn(event, this.defaultLinkTarget)}, this)
+         this.scm.addShortcut("Ctrl+Return", function(event){
+            return this.openItemIn(event, this.defaultLinkTarget==LinkTarget.CURRENT?LinkTarget.TAB:LinkTarget.CURRENT)
          }, this)
          this.scm.addShortcut("Space", this.toggleFirstCheckbox, this)
       },
@@ -134,8 +134,11 @@ with(customizeyourweb){
             return
          this.updateHighlighting(this.currentIndex-1) 
       },
-      openItemIn: function(linkTarget){
+      openItemIn: function(event, linkTarget){
          var ci = this.getCurrentItem()
+         if(event.originalTarget != ci){//Focus is somewhere within the item
+            return ShortcutManager.DO_NOT_SUPPRESS_KEY
+         }
          var links = ci.getElementsByTagName('a')
          if(links.length==0){
             var mouseEvent = new MouseEvent("mousedown")
