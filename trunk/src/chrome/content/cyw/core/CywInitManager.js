@@ -83,7 +83,9 @@ with(customizeyourweb){
 			if(!this.intializedOnceDone){
    		   this.registerObservers()
             this.assureAIOSCompatibility()
-            if(CywVersionManager.addonHasToBeMigrated()){
+            if(CywVersionManager.isFirstStartupAfterInstallation()){
+               CywVersionManager.setUp()
+            }else if(CywVersionManager.addonHasToBeMigrated()){
                CywVersionManager.doMigration()
             }
    		   this.intializedOnceDone = true
@@ -100,8 +102,6 @@ with(customizeyourweb){
          var tabbrowser = document.getElementById("content"); // tabbrowser
          
          //load event listener
-//         tabbrowser[addOrRemoveListenerFunction]("DOMContentLoaded", initPageHandler, true);
-         //TODO change back
          tabbrowser[addOrRemoveListenerFunction]("DOMContentLoaded", initPageHandler, false);
          tabbrowser[addOrRemoveListenerFunction]("pageshow", initPageHandler, false);
 		},

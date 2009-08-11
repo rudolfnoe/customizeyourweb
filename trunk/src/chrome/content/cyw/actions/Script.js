@@ -1,5 +1,6 @@
 with(customizeyourweb){
-(function(){   
+(function(){
+   
    
    function Script (id){
       Assert.paramsNotNull(arguments)
@@ -7,6 +8,8 @@ with(customizeyourweb){
       this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
       this.disabled = false
+      this.fileName = null
+      this.guiId = Utils.createGUIId()
    	this.name = null
       this.targetWinDefinition = new TargetWinDefinition()
    	//Unique id of script to identify, timestamp is enough
@@ -59,6 +62,18 @@ with(customizeyourweb){
          this.disabled = disabled
       },
 
+      getFileName: function(){
+         return this.fileName
+      },
+
+      setFileName: function(fileName){
+         this.fileName = fileName
+      },
+
+      getGuiId: function(){
+         return this.guiId
+      },
+
       getName: function(){
    		return this.name
    	},
@@ -85,7 +100,9 @@ with(customizeyourweb){
       
       equals: function(otherScript){
          //Do not test constructor as this is not if script was cloned
-         return this.getId()==otherScript.getId()
+         if(otherScript==null)
+            return false
+         return this.getGuiId()==otherScript.getGuiId()
       },
       
       getNextActionId: function(){

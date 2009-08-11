@@ -9,6 +9,7 @@ with(customizeyourweb){
 (function(){
    
    const PREF_KEY_NOT_FOUND = "PREF_KEY_NOT_FOUND";
+   const FILENAME_INCOMPATIBLE_CHARS_REGEXP = /[^a-z0-9]{1,}/ig
    
    var CywConfig = {
       scripts: new ArrayList(),
@@ -22,24 +23,59 @@ with(customizeyourweb){
             key = "customizeyourweb." + key
          return key
       },
+      
+      createScriptFileName: function(script){
+         var fileName = this.createScriptPrefix(script)
+         if(!StringUtils.isEmpty(script.getName())){
+            fileName += "_" + script.getName()
+         }
+         var includePatternStrings = script.getIncludeUrlPatternStrings()
+         if(includePatternStrings.length>0){
+            fileName +=   "_" + includePatternStrings[0].replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_")
+         }
+         if(fileName.length>250){
+            fileName = fileName.substring(0, 250)
+         }
+         fileName += ".xml"
+         return fileName
+      },
+      
+      createScriptPrefix: function(script){
+         return "Script_" + script.getId()
+      },
+
+      deleteScriptFromDisk: function(script){
+         var scriptNsIFile = this.getConfigDir()
+         scriptNsIFile.append(script.getFileName())
+         var scriptFile = FileIO.open(scriptNsIFile.path)
+         if(scriptFile && scriptFile.exists()){
+            FileIO.remove(scriptFile)
+            CywUtils.logDebugMessage("Script " + script.getFileName() + " is deleted.")
+         }else if(script.isPersisted()){
+            throw new Error('Deletion of Script File "' + script.getFileName() + '" failed.')
+         }
+            
+      },
 
       deleteScript: function(scriptId){
       	var found=false
          for (var i = 0; i < this.scripts.size(); i++) {
-         	if(this.scripts.get(i).getId()==scriptId){
+            var script = this.scripts.get(i)
+         	if(script.getId()==scriptId){
          		this.scripts.removeAtIndex(i)
+               this.deleteScriptFromDisk(script)
          		found = true
          		break;
          	}
          }	
       	if(!found)
       	   throw new Error('Script with provided id not existent')
-      	this.saveConfig()
+      	
       },
       
       init: function (){
           try{
-             this.readEgConfig()
+             this.readConfig()
              this.updateUrlPatternRegEx()
           }catch(e){
              alert(e)
@@ -51,16 +87,20 @@ with(customizeyourweb){
          return this.getPref("autoUpatePageOnSave") 
       },
       
+      getConfigDir: function() {
+         var configDir = DirIO.getProfileDir()
+         configDir.append("customizeyourweb_config")
+         return configDir
+      },
+      
       getConfigFile: function(){
-         var configFile = DirIO.getProfileDir()
-         configFile.append("customizeyourweb_config")
+         var configFile = this.getConfigDir()
          configFile.append("customizeyourweb_config.xml")
          if(!configFile.exists()){
             FileIO.create(configFile)
          }
          return configFile;
       },
-      
       
       getPref: function(key){
          var key = this.completePrefKey(key)
@@ -70,6 +110,10 @@ with(customizeyourweb){
             throw new Error('Pref value for key "' + key + '" not found')
          }
          return value
+      },
+      
+      getScriptFiles: function(){
+         return DirIO.read(this.getConfigDir(), false)
       },
       
       getScripts: function(){
@@ -128,17 +172,40 @@ with(customizeyourweb){
          return matchingScripts
       },
       
-      readEgConfig: function(){
+      //TODO remove
+      readConfigOld: function(){
          var configFile = this.getConfigFile();
          var configContent =  FileIO.read(configFile)
          if(configContent.length==0)
             return
          this.scripts = JSerial.deserialize(configContent)
       },
+
+      //TODO include
+      readConfig: function(){
+         this.scripts = new ArrayList()
+         var scriptFiles = this.getScriptFiles()
+         var scriptsLoaded = 0
+         for (var i = 0; i < scriptFiles.length; i++) {
+            var scriptFile = scriptFiles[i]
+            if(!StringUtils.endsWith(scriptFile.leafName, ".xml") || 
+               scriptFile.leafName == "customizeyourweb_config.xml"){
+                  continue
+            }
+            var scriptContent =  FileIO.read(scriptFile)
+            this.scripts.add(JSerial.deserialize(scriptContent))
+            scriptsLoaded++
+         }
+         Log.logDebug(scriptsLoaded + " Scripts loaded successfully")
+         
+         //TODO remove this.
+         //this.readConfigOld()
+      },
       
       saveScript: function(aScript){
          if(aScript==null)
             throw new Error("Nullpointer: aScript is null")
+         aScript.updateUrlPatternRegExp()
          var newScript = true
          for (var i = 0; i < this.scripts.size(); i++) {
             var script = this.scripts.get(i)
@@ -147,18 +214,17 @@ with(customizeyourweb){
                newScript = false
             }
          }
-         if(newScript)
+         if(newScript){
             this.scripts.add(aScript)
-         this.saveConfig()
-      },
-      
-      saveConfig: function(){
-         for (var i = 0; i < this.scripts.size(); i++) {
-            this.scripts.get(i).setPersisted(true)
+         }else{
+            this.deleteScriptFromDisk(aScript)
          }
-         var configFile = this.getConfigFile();
-         var configContent = JSerial.serialize(this.scripts, "Scripts", "  ", true, "t_")
-         FileIO.write(configFile, configContent);
+         
+         aScript.setPersisted(true)
+         var scriptFileName = this.createScriptFileName(aScript)
+         aScript.setFileName(scriptFileName)
+         var scriptContent = JSerial.serialize(aScript, "Script", "  ", true, "t_")
+         this.writeScript(scriptFileName, scriptContent)
       },
       
       setPref: function(key, value){
@@ -167,15 +233,20 @@ with(customizeyourweb){
          return value
       },
 
-      setScripts: function(scripts){
-         this.scripts = scripts
-      },
-      
       updateUrlPatternRegEx: function(){
          for (var i = 0; i < this.scripts.size(); i++) {
             this.scripts.get(i).updateUrlPatternRegExp()
          }
+      },
+      
+      writeScript: function(fileName, scriptXML){
+         var scriptFile = this.getConfigDir()
+         scriptFile.append(fileName)
+         FileIO.create(scriptFile)
+         FileIO.write(scriptFile, scriptXML);
+         CywUtils.logDebugMessage("Script " + fileName + " is written to disk.")
       }
+
       
    } 
    
