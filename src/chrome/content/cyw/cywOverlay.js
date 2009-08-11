@@ -17,6 +17,7 @@ with(customizeyourweb){
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "editing/core/EditScriptHandler.js", "customizeyourweb")
       ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "core/", "customizeyourweb", null, ["CywInitManager.js"], true)
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/CywVersionManager.js", "customizeyourweb")
+      ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ConfigDataConverter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "core/CywInitManager.js", "customizeyourweb")
       ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "ui/", "customizeyourweb")
    }catch(e){

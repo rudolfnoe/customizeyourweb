@@ -1,9 +1,23 @@
 with(customizeyourweb){
 (function(){
    function ScriptTreeItem(script){
-      this.script = script 
+      //marker for changed item
+      this.dirty = false
+      this.script = script
    }
    ScriptTreeItem.prototype = {
+      isDirty: function(){
+         return this.dirty
+      },
+
+      setDirty: function(dirty){
+         this.dirty = dirty
+      },
+      
+      getScript: function(){
+         return this.script
+      },
+
       getCellText: function(column){
          if(column.id=="treeColName"){
             return this.script.getName()
@@ -25,14 +39,12 @@ with(customizeyourweb){
       setCellValue: function(column, value){
          if(column.id=="treeColDisabled"){
             this.script.setDisabled(value=="true")
+            this.dirty = true
             return
          }
          throw new Error('unknonw column for setCellValue')
       },
       
-      getScript: function(){
-         return this.script
-      }
    }
    ObjectUtils.extend(ScriptTreeItem, "AbstractLeafTreeItem", customizeyourweb)
 
