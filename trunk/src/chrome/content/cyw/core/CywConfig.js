@@ -45,9 +45,8 @@ with(customizeyourweb){
       },
 
       deleteScriptFromDisk: function(script){
-         var scriptNsIFile = this.getConfigDir()
-         scriptNsIFile.append(script.getFileName())
-         var scriptFile = FileIO.open(scriptNsIFile.path)
+         var scriptFile = this.getConfigDir()
+         scriptFile.append(script.getFileName())
          if(scriptFile && scriptFile.exists()){
             FileIO.remove(scriptFile)
             CywUtils.logDebugMessage("Script " + script.getFileName() + " is deleted.")
@@ -90,6 +89,9 @@ with(customizeyourweb){
       getConfigDir: function() {
          var configDir = DirIO.getProfileDir()
          configDir.append("customizeyourweb_config")
+         if(!configDir.exists()){
+            DirIO.create(configDir)
+         }
          return configDir
       },
       
@@ -172,16 +174,6 @@ with(customizeyourweb){
          return matchingScripts
       },
       
-      //TODO remove
-      readConfigOld: function(){
-         var configFile = this.getConfigFile();
-         var configContent =  FileIO.read(configFile)
-         if(configContent.length==0)
-            return
-         this.scripts = JSerial.deserialize(configContent)
-      },
-
-      //TODO include
       readConfig: function(){
          this.scripts = new ArrayList()
          var scriptFiles = this.getScriptFiles()
@@ -196,10 +188,8 @@ with(customizeyourweb){
             this.scripts.add(JSerial.deserialize(scriptContent))
             scriptsLoaded++
          }
-         Log.logDebug(scriptsLoaded + " Scripts loaded successfully")
+         Log.logDebug("CYW: " + scriptsLoaded + " Scripts loaded successfully")
          
-         //TODO remove this.
-         //this.readConfigOld()
       },
       
       saveScript: function(aScript){
@@ -221,8 +211,11 @@ with(customizeyourweb){
          }
          
          aScript.setPersisted(true)
+         //Set script file name
          var scriptFileName = this.createScriptFileName(aScript)
          aScript.setFileName(scriptFileName)
+         
+         //Create and write context
          var scriptContent = JSerial.serialize(aScript, "Script", "  ", true, "t_")
          this.writeScript(scriptFileName, scriptContent)
       },
