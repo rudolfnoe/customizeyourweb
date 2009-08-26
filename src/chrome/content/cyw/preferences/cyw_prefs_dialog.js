@@ -5,7 +5,6 @@
   Created by Rudolf Noé
 */
 //Imports
-//TODO put in closure
  with(customizeyourweb){
 (function(){
    const STRINGBUNDLE_ID = "jsStrings"
@@ -67,7 +66,6 @@
    
 })()
 }
-//TODO make it right
 //Helper function
 function byId(id){
    return document.getElementById(id)

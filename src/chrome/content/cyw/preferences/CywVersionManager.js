@@ -22,6 +22,11 @@
          }
       },
       
+      doCommonMigration: function(){
+         this.setVersionPref()
+         setTimeout(customizeyourweb.CywVersionManager.showVersionInfoPage, 1000)
+      },
+      
       doMigration: function(){
          var currentVersion = Prefs.getCharPref(this.VERSION_PREF)
          for (var i = 0; i < this.versionsToBeMigrated.length; i++) {
@@ -32,8 +37,7 @@
                CywUtils.logInfoMessage("Successfully migrated to version " + versionToBeMigrated)
             }
          }
-         this.setVersionPref()
-         setTimeout(customizeyourweb.CywVersionManager.showVersionInfoPage, 1000)
+         this.doCommonMigration()
       },
       
       isFirstStartupAfterInstallation: function(){
@@ -45,7 +49,7 @@
       },
       
       setUp: function(){
-         this.setVersionPref()
+         this.doCommonMigration()      
       },
       
       setVersionPref: function(){
