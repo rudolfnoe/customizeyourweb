@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<project name="easygreasy" default="createDistributionXPI">
+<project name="customizeyourweb" default="createDistributionXPI">
 
 	<!-- Project directories -->
 	<property name="src_dir" location="./src" />
 	<property name="build_dir" location="./build" />
 	<property name="dist_dir" location="./dist" />
 	<property name="backup_dir" location="../backup" />
-	<property name="version" value="0_1"/>
+	<property name="version" value="0_2_2Build20090828"/>
 	<property name="version_file_name" value="${ant.project.name}_${version}.xpi"/>
 
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" name="gcupload"/>
@@ -15,7 +15,8 @@
 		<delete>
 			<fileset dir="${dist_dir}" includes="*"/>
 		</delete>
-		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**"/>
+		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**" 
+		   excludes="chrome/content/lib/**, chrome/content/test/**, chrome/content/common/net/**"/>
 		<!-- Make backup-copy -->
 		<copy todir="${backup_dir}/src">
 			<fileset dir="${src_dir}"/>
@@ -33,7 +34,7 @@
 		</ftp>
 	</target>
 	<target name="googleUpload">
-		<gcupload username="Rudolf.Noe" password="KQ3pG9uu6cS7" projectname="easygreasy" filename="${dist_dir}/${version_file_name}" 
+		<gcupload username="Rudolf.Noe" password="KQ3pG9uu6cS7" projectname="customizeyourweb" filename="${dist_dir}/${version_file_name}" 
 			targetfilename="${version_file_name}" 
 			summary="Version ${version}" 
 			labels="Type-Installer, OpSys-All" />
