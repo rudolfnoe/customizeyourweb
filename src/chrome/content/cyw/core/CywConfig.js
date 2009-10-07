@@ -208,6 +208,7 @@ with(customizeyourweb){
             }
             script.updateUrlPatternRegExp()
             script.setFileName(fileName)
+            
             this.scripts.add(script)
             scriptsLoaded++
          }
@@ -237,6 +238,7 @@ with(customizeyourweb){
          //Set script file name
          var scriptFileName = this.createScriptFileName(aScript)
          aScript.setFileName(scriptFileName)
+         aScript.setVersion(CywUtils.getCywVersion())
          
          //Create and write context
          var scriptContent = this.serializeScript(aScript, "Script")

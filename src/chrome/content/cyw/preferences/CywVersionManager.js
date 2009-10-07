@@ -9,10 +9,10 @@
       versionComparator: Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                    .getService(Components.interfaces.nsIVersionComparator),
       
-      versionsToBeMigrated: ["0.2Build20090808"],
+      versionsToBeMigrated: ["0.2Build20090808", "0.3Build20091007"],
                    
       addonHasToBeMigrated: function(){
-         var newInstalledVersion = Utils.getExtension(CywCommon.GUI_ID).version
+         var newInstalledVersion = CywUtils.getCywVersion()
          var currentVersion = Prefs.getCharPref(this.VERSION_PREF)
          if(this.versionComparator.compare(newInstalledVersion, currentVersion)>0 &&
             !this.isFirstStartupAfterInstallation()){
@@ -44,8 +44,25 @@
          return Prefs.getCharPref(this.VERSION_PREF).length==0   
       },
       
+      /*
+       * Convert to seperate script config files 
+       */
       migrateToVersion_0_2Build20090808: function(){
          ConfigDataConverter.convertToSeperateConfigFiles()   
+      },
+      
+      /*
+       * 1. Write version id to script files
+       * 2. Delete persistent Script.fileName Member (is transient)
+       */
+      migrateToVersion_0_3Build20091007: function(){
+         var scriptList = CywConfig.getScripts()
+         for (var i = 0;i < scriptList.size(); i++) {
+            var script = scriptList.get(i)
+            script.fileName = null
+            //Version will be written on saving
+            CywConfig.saveScript(script)
+         }
       },
       
       setUp: function(){

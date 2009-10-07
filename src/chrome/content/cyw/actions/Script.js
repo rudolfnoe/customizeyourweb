@@ -12,6 +12,8 @@ with(customizeyourweb){
       this.guiId = Utils.createGUIId()
    	this.name = null
       this.targetWinDefinition = new TargetWinDefinition()
+      //Version of CYW with which is this script written the last time
+      this.version = null
    	//Unique id of script to identify, timestamp is enough
    	this.loadEventType = LoadEventTypes.DOM_CONTENT_LOADED
       this.behaviorOnMutationEvent = RunBehaviorOnMutationEvent.RUN_ALWAYS 
@@ -102,6 +104,14 @@ with(customizeyourweb){
       getExcludeUrlPatternStrings: function(){
          return this.targetWinDefinition.getExcludeUrlPatternStrings()
    	},
+      
+      getVersion: function(){
+         return this.version
+      },
+
+      setVersion: function(version){
+         this.version = version
+      },
       
       equals: function(otherScript){
          //Do not test constructor as this is not if script was cloned
