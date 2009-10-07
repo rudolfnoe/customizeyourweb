@@ -10,11 +10,21 @@
    const STRINGBUNDLE_ID = "jsStrings"
    
    var CywPrefsDialogHandler = {
-      deletedScripts: [],
+      //Shortcutmanager for ScriptsTree-Element
+      scriptsTreeScm: null,
       
       doOnload: function(){
       	Prefs.loadPrefs(document);
-         this.initEventListener()
+         this.initShortcuts()
+      },
+      
+      exportScripts: function(){
+         var selectedScripts = this.getScriptsTreeView().getSelectedScripts()
+         if(selectedScripts.length==0){
+            alert("Nothing selected!")
+            return
+         }
+         ScriptExporter.exportScriptsToDisk(selectedScripts)
       },
       
       getScriptsTree: function(){
@@ -25,18 +35,35 @@
          return this.getScriptsTree().getTreeView()
       },
       
-      initEventListener: function(){
-         this.getScriptsTreeView().addListener("remove", function(event){
-            this.deletedScripts.push(event.item.getScript())
-         }, this)
+      importScripts: function(){
+         var importedScripts = ScriptImporter.importScriptsFromDisk()
+         if(importedScripts){//Import was not aborted
+            for (var i = 0; i < importedScripts.length; i++) {
+               this.getScriptsTreeView().addOrReplaceScript(importedScripts[i])
+            }
+         }
       },
       
-      removeScript: function (){
+      initShortcuts: function(){
+         if(this.scriptsTreeScm==null){
+            this.scriptsTreeScm = new ShortcutManager(byId('scriptsTree').getTreeElement()),
+            this.scriptsTreeScm.addShortcut("DELETE", this.deleteScripts, this)
+         }
+      },
+      
+      deleteScripts: function (){
          var selectedIndex = this.getScriptsTree().currentIndex
          if(selectedIndex==-1){
             return
          }
-      	var removedItem = this.getScriptsTreeView().removeSelected(true)
+         var result = PromptService.confirmYesNo(window, "Delete Scripts", "Should the selected scripts be permanently deleted?")
+         if(result!=PromptReply.YES){
+            return
+         }
+      	var removedItems = this.getScriptsTreeView().removeSelected(true)
+         for (var i = 0; i < removedItems.length; i++) {
+            CywConfig.deleteScript(removedItems[i].getScript().getId())
+         }
          this.getScriptsTree().focusTree()
       },
       
@@ -54,10 +81,6 @@
                CywConfig.saveScript(item.getScript())
             }
          }, true)
-         //Remove deleted Scripts
-         for (var i = 0; i < this.deletedScripts.length; i++) {
-            CywConfig.deleteScript(this.deletedScripts[i].getId())
-         }
          Utils.notifyObservers(CywCommon.PREF_OBSERVER);
       }
    }

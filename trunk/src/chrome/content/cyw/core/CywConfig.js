@@ -45,13 +45,14 @@ with(customizeyourweb){
       },
 
       deleteScriptFromDisk: function(script){
+         var fileName = script.getFileName()
          var scriptFile = this.getConfigDir()
-         scriptFile.append(script.getFileName())
+         scriptFile.append(fileName)
          if(scriptFile && scriptFile.exists()){
             FileIO.remove(scriptFile)
-            CywUtils.logDebugMessage("Script " + script.getFileName() + " is deleted.")
+            CywUtils.logDebug("Script " + fileName + " has been deleted.")
          }else if(script.isPersisted()){
-            throw new Error('Deletion of Script File "' + script.getFileName() + '" failed.')
+            throw new Error('Deletion of Script File "' + fileName + '" failed.')
          }
             
       },
@@ -72,10 +73,13 @@ with(customizeyourweb){
       	
       },
       
+      parseScript: function(scriptContent){
+         return JSerial.deserialize(scriptContent) 
+      },
+      
       init: function (){
           try{
              this.readConfig()
-             this.updateUrlPatternRegEx()
           }catch(e){
              alert(e)
              throw e
@@ -148,6 +152,17 @@ with(customizeyourweb){
          return nextScriptId + 1
       },
       
+      //Checks wether script with given guiId already exists
+      getScriptByGuiId: function(guiId){
+         for (var i = 0; i < this.scripts.size(); i++) {
+            var script = this.scripts.get(i)
+            if(script.getGuiId()==guiId){
+               return script
+            }
+         }
+         return null
+      },
+      
       /*Returns array of cloned scripts which "matches" at least one url of 
        * the target win and it frames. Matches includes both matching the URL pattern or having the same domain
        */
@@ -180,15 +195,23 @@ with(customizeyourweb){
          var scriptsLoaded = 0
          for (var i = 0; i < scriptFiles.length; i++) {
             var scriptFile = scriptFiles[i]
-            if(!StringUtils.endsWith(scriptFile.leafName, ".xml") || 
-               scriptFile.leafName == "customizeyourweb_config.xml"){
+            var fileName = scriptFile.leafName
+            if(!StringUtils.endsWith(fileName, ".xml") || 
+               fileName == "customizeyourweb_config.xml"){
                   continue
             }
             var scriptContent =  FileIO.read(scriptFile)
-            this.scripts.add(JSerial.deserialize(scriptContent))
+            try{
+               var script = this.parseScript(scriptContent)
+            }catch(e){
+               CywUtils.logError(e, "Script could not be loaded due to parsing errors: " + scriptFile.path)
+            }
+            script.updateUrlPatternRegExp()
+            script.setFileName(fileName)
+            this.scripts.add(script)
             scriptsLoaded++
          }
-         Log.logDebug("CYW: " + scriptsLoaded + " Scripts loaded successfully")
+         CywUtils.logDebug("CYW: " + scriptsLoaded + " Scripts loaded successfully")
          
       },
       
@@ -216,8 +239,13 @@ with(customizeyourweb){
          aScript.setFileName(scriptFileName)
          
          //Create and write context
-         var scriptContent = JSerial.serialize(aScript, "Script", "  ", true, "t_")
+         var scriptContent = this.serializeScript(aScript, "Script")
          this.writeScript(scriptFileName, scriptContent)
+      },
+      
+      serializeScript: function(script, rootTag){
+         Assert.paramsNotNull(arguments)
+         return JSerial.serialize(script, rootTag, "  ", true, "t_")
       },
       
       setPref: function(key, value){
@@ -226,18 +254,12 @@ with(customizeyourweb){
          return value
       },
 
-      updateUrlPatternRegEx: function(){
-         for (var i = 0; i < this.scripts.size(); i++) {
-            this.scripts.get(i).updateUrlPatternRegExp()
-         }
-      },
-      
       writeScript: function(fileName, scriptXML){
          var scriptFile = this.getConfigDir()
          scriptFile.append(fileName)
          FileIO.create(scriptFile)
          FileIO.write(scriptFile, scriptXML);
-         CywUtils.logDebugMessage("Script " + fileName + " is written to disk.")
+         CywUtils.logDebug("Script " + fileName + " is written to disk.")
       }
 
       

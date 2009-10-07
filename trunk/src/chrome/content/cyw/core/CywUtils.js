@@ -8,7 +8,7 @@ with(customizeyourweb){
 
    var CywUtils = {
       
-      logDebugMessage: function(messageString){
+      logDebug: function(messageString){
          Log.logDebug("CYW: " + messageString)
       },
       
@@ -16,7 +16,7 @@ with(customizeyourweb){
          Log.logError(error, "CYW: " + messageString)
       },
 
-      logInfoMessage: function(messageString){
+      logInfo: function(messageString){
          Log.logInfo("CYW: " + messageString)
       },
       

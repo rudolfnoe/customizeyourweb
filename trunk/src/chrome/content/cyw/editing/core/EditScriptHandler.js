@@ -414,7 +414,7 @@ with(customizeyourweb){
          Utils.executeDelayed("HANDLE_MOUSEOVER", 50, function(){
 //            if(getEgMenuPopup().state=="open")
 //               getEgMenuPopup().hidePopup()
-            //CywUtils.logDebugMessage("Target: " + event.target.tagName)
+            //CywUtils.logDebug("Target: " + event.target.tagName)
             this.unhighlightActionTargets()
             var newTarget = event.target
             if(this.isContainedInEditableIframe(newTarget)){

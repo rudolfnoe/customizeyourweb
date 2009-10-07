@@ -33,7 +33,7 @@ with(customizeyourweb){
                try {
                   body.appendChild(this.nodes[node]);
                } catch (exc) {
-                  CywUtils.logDebugMessage('Appending highlighter nodes failed: ' + exc.message)
+                  CywUtils.logDebug('Appending highlighter nodes failed: ' + exc.message)
                }
             }
          }
