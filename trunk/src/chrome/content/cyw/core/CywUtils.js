@@ -8,6 +8,10 @@ with(customizeyourweb){
 
    var CywUtils = {
       
+      getCywVersion: function(){
+         return Utils.getExtension(CywCommon.GUI_ID).version   
+      },
+      
       logDebug: function(messageString){
          Log.logDebug("CYW: " + messageString)
       },

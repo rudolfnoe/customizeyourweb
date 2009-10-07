@@ -31,7 +31,7 @@ with(customizeyourweb){
       
       writeFileToDisk: function(scriptsArray, saveAsNsIFile){
          var scriptsList = new ArrayList(scriptsArray)
-         scriptsList.version = Utils.getExtension(CywCommon.GUI_ID).version
+         scriptsList.version = CywUtils.getCywVersion()
          var scriptContent = CywConfig.serializeScript(scriptsList, "CywScripts")
          if(!StringUtils.endsWith(saveAsNsIFile.path, ".xml")){
             saveAsNsIFile = FileIO.open(saveAsNsIFile.path+".xml")
