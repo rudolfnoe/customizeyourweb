@@ -91,7 +91,7 @@ with(customizeyourweb){
       
       handleDOMNodeInserted: function(event){
          this.nodesAdded++
-//         CywUtils.logDebugMessage("Node added: " + event.relatedNode.innerHTML)
+//         CywUtils.logDebug("Node added: " + event.relatedNode.innerHTML)
          this.handleMutationEvent(event)
       },
       
@@ -105,7 +105,7 @@ with(customizeyourweb){
             return
          }
          Utils.executeDelayed(this.timerId, this.reinitDelay, function(){
-//            CywUtils.logDebugMessage('delayed reinit total nodes added: ' + this.nodesAdded + ", total nodes removed: " + this.nodesRemoved)
+//            CywUtils.logDebug('delayed reinit total nodes added: ' + this.nodesAdded + ", total nodes removed: " + this.nodesRemoved)
             //var perfTimer = new PerfTimer()
             this.cleanUpScript(PageEvents.MUTATION_EVENT)
 //            if(perfTimer){
@@ -189,7 +189,7 @@ with(customizeyourweb){
          this.suspend()
          //var perfTimer = new PerfTimer()
          for (var i = 0; i < this.appliedScripts.length; i++) {
-//            CywUtils.logDebugMessage('Script ' + this.appliedScripts[i] + "applied on " +  eventType)
+//            CywUtils.logDebug('Script ' + this.appliedScripts[i] + "applied on " +  eventType)
             this.appliedScripts[i].runScript(new CywContext(this.targetWin, eventType, persisted))
          }
 //         if(perfTimer){

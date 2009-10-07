@@ -61,7 +61,7 @@ with(customizeyourweb){
          if(!selectedItem || selectedItem == this.getRootItem()){
             return
          }
-         this.clipboard = this.removeSelected(true)
+         this.clipboard = (this.removeSelected(true))[0]
       },
       
       _determineParentItem: function(){

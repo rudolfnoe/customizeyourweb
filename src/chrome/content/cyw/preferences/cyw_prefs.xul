@@ -32,6 +32,8 @@
 	<script type="application/x-javascript" src="../core/CywConfig.js"/>
    <script type="application/x-javascript" src="../core/CywUtils.js"/>
 	<script type="application/x-javascript" src="cyw_prefs_dialog.js"/>
+	<script type="application/x-javascript" src="ScriptExporter.js"/>
+	<script type="application/x-javascript" src="ScriptImporter.js"/>
    
    <stringbundleset>
    	<!--stringbundle id="jsStrings" src="chrome://mouselessbrowsing/locale/prefs.properties"/-->
@@ -59,10 +61,12 @@
          <!-- Scripts Tab-->
 			<tabpanel>
 				<vbox flex="1">
-               <scriptstree id="scriptsTree" flex="1" editable="true" persist="colOrdinals" colOrdinals=""/>
+               <scriptstree id="scriptsTree" flex="1" editable="true" persist="colOrdinals" colOrdinals="" seltype="multiple"/>
 					<hbox style="margin-top:7px">
 						<spacer flex="1"/>
-						<button label="Delete" accesskey="d" oncommand="customizeyourweb.CywPrefsDialogHandler.removeScript()"></button>
+						<button label="Import" accesskey="i" oncommand="customizeyourweb.CywPrefsDialogHandler.importScripts()"></button>
+						<button label="Export" accesskey="e" oncommand="customizeyourweb.CywPrefsDialogHandler.exportScripts()"></button>
+						<button label="Delete" accesskey="d" oncommand="customizeyourweb.CywPrefsDialogHandler.deleteScripts()"></button>
 					</hbox>
 				</vbox>
 			</tabpanel>

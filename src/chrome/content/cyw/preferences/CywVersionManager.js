@@ -34,7 +34,7 @@
             if(this.versionComparator.compare(versionToBeMigrated, currentVersion)>0){
                var mirgationFunctionName = "migrateToVersion_" + versionToBeMigrated.replace(/\./g,"_") 
                this[mirgationFunctionName]()
-               CywUtils.logInfoMessage("Successfully migrated to version " + versionToBeMigrated)
+               CywUtils.logInfo("Successfully migrated to version " + versionToBeMigrated)
             }
          }
          this.doCommonMigration()

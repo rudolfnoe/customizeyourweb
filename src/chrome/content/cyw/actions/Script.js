@@ -8,7 +8,7 @@ with(customizeyourweb){
       this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
       this.disabled = false
-      this.fileName = null
+      this.t_fileName = null
       this.guiId = Utils.createGUIId()
    	this.name = null
       this.targetWinDefinition = new TargetWinDefinition()
@@ -63,29 +63,34 @@ with(customizeyourweb){
       },
 
       getFileName: function(){
-         return this.fileName
+         return this.t_fileName
       },
 
       setFileName: function(fileName){
-         this.fileName = fileName
+         this.t_fileName = fileName
       },
 
       getGuiId: function(){
          return this.guiId
       },
 
-      getName: function(){
-   		return this.name
-   	},
-   	
       getId: function(){
          return this.id
+      },
+
+      setId: function(id){
+         Assert.isFalse(isNaN(id), "Programm error: Id must be a numeric value")
+         this.id = parseInt(id, 10)
       },
       
       getIdAsString: function(){
          return this.id + ""
       },
 
+      getName: function(){
+   		return this.name
+   	},
+   	
    	getLoadEventType: function(){
    		return this.loadEventType
    	},
@@ -173,7 +178,7 @@ with(customizeyourweb){
                                                  cywContext.getTargetWindow())
             }
          }
-         CywUtils.logDebugMessage("Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
+         CywUtils.logDebug("Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
             
       },
    	
@@ -191,7 +196,7 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         CywUtils.logInfoMessage("Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
+         CywUtils.logInfo("Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
          cywContext.setScriptId(this.getId())
          ScriptErrorHandler.clearScriptErrors(this.getId())
          var cachedPage = cywContext.isCachedPage()

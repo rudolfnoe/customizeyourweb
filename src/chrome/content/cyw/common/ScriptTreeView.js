@@ -16,6 +16,29 @@ with(customizeyourweb){
       this.initListener()
    }
    ScriptTreeView.prototype = {
+      addScript: function(script){
+         Assert.notNull(script)
+         this.addItem(new ScriptTreeItem(script))   
+      },
+      
+      /*
+       * According the scripts equals method a script is added if not already in the tree or overridden
+       */
+      addOrReplaceScript: function(newScript){
+         Assert.notNull(newScript)
+         var found = false
+         var newScriptItem = new ScriptTreeItem(newScript)
+         this.iterateTree(function(item){
+            if(item.getScript().equals(newScript)){
+               this.replaceItem(newScriptItem, item)
+               found = true
+            }
+         }, true)
+         if(!found){
+            this.addItem(newScriptItem)
+         }
+      },
+
       getBindingParent: function(){
          return document.getBindingParent(this.getTree())
       },
@@ -72,11 +95,17 @@ with(customizeyourweb){
       },
       
       getSelectedScript: function(){
-         var selectedItem = this.getSelectedItem()
-         if(!selectedItem)
-            return null
-         else
-            return selectedItem.getScript()
+         var selectedScripts = this.getSelectedScrips()
+         return selectedScripts.length>0?selectedScripts[0]:null
+      },
+      
+      getSelectedScripts: function(){
+         var selectedItems = this.getSelectedItems()
+         var selectedScripts = [];
+         for (var i = 0; i < selectedItems.length; i++) {
+            selectedScripts.push(selectedItems[i].getScript())
+         }
+         return selectedScripts
       },
       
       initListener: function(){
