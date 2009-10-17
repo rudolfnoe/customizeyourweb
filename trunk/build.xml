@@ -6,8 +6,11 @@
 	<property name="build_dir" location="./build" />
 	<property name="dist_dir" location="./dist" />
 	<property name="backup_dir" location="../backup" />
-	<property name="version" value="0_2_2Build20090828"/>
+	<property name="version" value="0_3"/>
 	<property name="version_file_name" value="${ant.project.name}_${version}.xpi"/>
+	<property name="standard_profile_dir" value="C:\Dokumente und Einstellungen\Rudolf\Anwendungsdaten\Mozilla\Firefox\Profiles\c3clocq0.Standard"/>
+	<property name="standard_extension_dir" value="${standard_profile_dir}\extensions"></property>
+	<property name="cyw_gui_id" value="customizeyourweb@mouseless.de"></property>
 
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" name="gcupload"/>
 	<target name="createDailyBuild"></target>
@@ -38,5 +41,9 @@
 			targetfilename="${version_file_name}" 
 			summary="Version ${version}" 
 			labels="Type-Installer, OpSys-All" />
+	</target>
+	<target name="setupLocalDevConfig">
+		<delete dir="${standard_extension_dir}\${cyw_gui_id}"></delete>
+		<copy file="customizeyourweb@mouseless.de" todir="${standard_extension_dir}"/>
 	</target>
 </project>
