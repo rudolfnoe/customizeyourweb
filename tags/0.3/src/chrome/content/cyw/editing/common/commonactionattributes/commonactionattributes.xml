@@ -1,0 +1,53 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		<binding id="commonactionattributes">
+			<content>
+            <xul:groupbox flex="1">
+               <xul:caption label="Common Action Attributes"/>
+               <xul:grid flex="1">
+                  <xul:columns>
+                     <xul:column></xul:column>
+                     <xul:column flex="1"></xul:column>
+                  </xul:columns>
+                  <xul:rows>
+                     <xul:row align="center">
+                        <xul:label value="Repetition behavior"/>
+                        <xul:menulist anonid="repetitionBehaviorML">
+                           <xul:menupopup>
+                              <xul:menuitem label="Run always" value="RUN_ALWAYS"/>
+                              <xul:menuitem label="Run only once successfully" value="RUN_ONCE_SUCCESSFULLY"/>
+                           </xul:menupopup>
+                        </xul:menulist>
+                     </xul:row>
+                  </xul:rows>
+               </xul:grid>
+            </xul:groupbox>
+			</content>
+			<implementation>
+            <constructor>
+               this.action = customizeyourweb.Dialog.getNamedArgument('action')
+               this.repetitionBehaviorML = customizeyourweb.DomUtils.getElementByAnonId(this, 'repetitionBehaviorML')
+               this.init()
+            </constructor>
+            
+            <method name="init">
+               <body>
+                  if(!this.hasAttribute('id')){
+                     this.setAttribute('id', "commonActionAttributes")
+                  }
+                  this.repetitionBehaviorML.value = this.action.getRepetitionBehavior()
+                  customizeyourweb.Dialog.addOkListener(customizeyourweb.Utils.bind(this.setCommonAttributesOnAction, this), true)
+               </body>
+            </method>
+            
+            <method name="setCommonAttributesOnAction">
+               <body>
+                  this.action.setRepetitionBehavior(this.repetitionBehaviorML.value)
+               </body>
+            </method>
+			</implementation>
+			<handlers>
+			</handlers>
+		</binding>
+</bindings>
