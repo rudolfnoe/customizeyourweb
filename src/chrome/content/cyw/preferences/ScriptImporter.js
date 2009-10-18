@@ -1,9 +1,22 @@
 with (customizeyourweb) {
 	(function() {
+      var WARNING_DIALOG_URL = "chrome://customizeyourweb/content/cyw/preferences/import_warning_dialog.xul"
+      
 		var ScriptImporter = {
          
          versionComparator: Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                    .getService(Components.interfaces.nsIVersionComparator),
+         
+         checkVersions: function(xmlDoc){
+            var versionElem = XPathUtils.getElement("CywScripts/version", xmlDoc)
+            var scriptsCywVersion = versionElem.textContent
+            //Deny import if imported version is greater than current version 
+            if(this.versionComparator.compare(scriptsCywVersion, CywUtils.getCywVersion())>0){
+               var message = 'The imported script not compatible with the current version of Customize Your Web. Please update to the newest version under www.customize-your-web.de'
+               alert(message)
+               throw new Error(message)
+            }
+         },
          
          deleteExsistingScripts: function(exsistingScripts){
             for (var i = 0; i < exsistingScripts.length; i++) {
@@ -46,19 +59,13 @@ with (customizeyourweb) {
 				}
 			},
          
-         /*
-          * For the format of the imported Script see ScriptExporter
-          */
-         importScriptsFromDisk: function(){
-            var scriptsContent = this.getScriptsContentFromDisk()
-            if(!scriptsContent){//Import was aborted
-               return
-            }
+         importScripts: function(scriptsContent){
+            var xmlDoc = XMLUtils.parseFromString(scriptsContent) 
+            this.checkVersions(xmlDoc)
             var confirmed = this.isConfirmedImport(scriptsContent)
             if(!confirmed){
                return
             }
-
             var importedScripts = this.parseScript(scriptsContent)
             
             var existingScripts = this.getExistingScripts(importedScripts)
@@ -71,11 +78,23 @@ with (customizeyourweb) {
                }
             }
             this.saveImportedScripts(importedScripts)
+            alert('Scripts successfully imported.')
             return importedScripts
+         },
+         
+         /*
+          * For the format of the imported Script see ScriptExporter
+          */
+         importScriptsFromDisk: function(){
+            var scriptsContent = this.getScriptsContentFromDisk()
+            if(!scriptsContent){//Import was aborted
+               return
+            }
+            return this.importScripts(scriptsContent)
          },         
 
          isConfirmedImport: function(scriptsContent){
-            var warningDialog = new Dialog("import_warning_dialog.xul", "warningDialog", true, window, null, {scriptsContent: scriptsContent})
+            var warningDialog = new Dialog(WARNING_DIALOG_URL, "warningDialog", true, window, null, {scriptsContent: scriptsContent})
             warningDialog.show()
             return warningDialog.isCancel()?false:true
          },
@@ -106,12 +125,6 @@ with (customizeyourweb) {
                alert(message)
                throw new Error(message)
             }
-            //Deny import if imported version is greater than current version 
-            if(this.versionComparator.compare(scripts.version, CywUtils.getCywVersion())>0){
-               var message = 'The imported script is incompatible with the current version of Customize Your Web. Please update to the newest version under www.customize-your-web.de'
-               alert(message)
-               throw new Error(message)
-            }
             return result
 			},
          
@@ -122,6 +135,7 @@ with (customizeyourweb) {
                CywConfig.saveScript(importedScript)
             }
          }
+         
 		}
 
 		Namespace.bindToNamespace("customizeyourweb", "ScriptImporter",

@@ -21,6 +21,8 @@ with(customizeyourweb){
       //TODO remove the following two items
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptExporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptImporter.js", "customizeyourweb")
+      ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/WebInstaller.js", "customizeyourweb")
+      ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/WebInstallListener.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "core/CywInitManager.js", "customizeyourweb")
       ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "ui/", "customizeyourweb")
    }catch(e){
