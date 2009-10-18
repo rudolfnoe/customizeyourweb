@@ -104,6 +104,11 @@ with(customizeyourweb){
          //load event listener
          tabbrowser[addOrRemoveListenerFunction]("DOMContentLoaded", initPageHandler, false);
          tabbrowser[addOrRemoveListenerFunction]("pageshow", initPageHandler, false);
+         if(StringUtils.startsWith(addOrRemoveListenerFunction, "add")){
+            WebInstallListener.enable()
+         }else{
+            WebInstallListener.disable()
+         }
 		},
       
       initPermantentShortCuts: function(){
