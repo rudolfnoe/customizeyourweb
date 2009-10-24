@@ -27,6 +27,7 @@
       <command id="customizeyourweb_hideStatusbar" label="Hide Statusbar Icon" oncommand="customizeyourweb.StatusbarManager.hideStatusbar()"/>   	
       <command id="customizeyourweb_hideToolsMenu" label="Hide menu" oncommand="customizeyourweb.EventHandler.hideToolsMenu()"
                accesskey="h"/>   	
+      <command id="customizeyourweb_installScriptCmd" label="Install CYW Script" oncommand="customizeyourweb.EventHandler.installScriptFromWeb(event)"/>   	
       <command id="customizeyourweb_ifElementExistsCmd" label="If Element exists" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertJSCmd" label="Insert JavaScript" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertHTMLCmd" label="Insert HTML" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
@@ -189,7 +190,13 @@
          <menuseparator/>
          <menuitem command="customizeyourweb_hideStatusbar"/>
       </menupopup>
+      
    </popupset>
+
+   <popup id="contentAreaContextMenu" >
+      <menuseparator id="customizeyourweb-separator"/>
+      <menuitem id="customizeyourweb_installScriptMI" command="customizeyourweb_installScriptCmd" hidden="true"/>
+   </popup>
    
    <!-- Tools menu overlay -->
    <menupopup id="menu_ToolsPopup">

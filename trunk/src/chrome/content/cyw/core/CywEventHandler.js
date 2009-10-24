@@ -28,6 +28,13 @@
          InitManager.initUI()
       },
       
+      installScriptFromWeb: function(event){
+         (new WebInstaller()).installScript(gContextMenu.target.href)   
+      },
+      
+      onContentContextShowing: function(event){
+      },
+      
       openConfiguration : function(event) {
 			openDialog(CywCommon.CYW_CHROME_URL + "/preferences/cyw_prefs.xul", "cyw_prefs", "all, chrome, centerscreen").focus()
 		},

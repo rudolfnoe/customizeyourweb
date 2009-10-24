@@ -13,6 +13,7 @@ with(customizeyourweb){
    
    WebInstallListener.disable = function(){
       this.getInstance().suspend()
+      this.getInstance().setInstallScriptMIVisibility(false)
    }
 
    WebInstallListener.enable = function(){
@@ -38,9 +39,23 @@ with(customizeyourweb){
          return
       },
       
+      handlePopupshowing: function(){
+         var showInstallScriptMI = true
+         if(!gContextMenu || !gContextMenu.onLink){ 
+            showInstallScriptMI = false
+         }
+         var href  =  gContextMenu.target.href
+         var textContent = gContextMenu.target.textContent
+         if(!StringUtils.endsWith(href, ".xml") && !StringUtils.contains(".xml", textContent)){
+            showInstallScriptMI = false
+         }
+         this.setInstallScriptMIVisibility(showInstallScriptMI)
+      },
+      
       init: function(){
          var browser = Firefox.getBrowser()
          browser.addEventListener("click", this, true)
+         document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", this, true)
       },
       
       ignoreClick: function(event){
@@ -49,7 +64,8 @@ with(customizeyourweb){
             return true
          }
          var href = event.target.href
-         if(!StringUtils.startsWith(href, "http://www.customize-your-web.de") || 
+         if(!(StringUtils.startsWith(href, "http://www.customize-your-web.de") || 
+              StringUtils.startsWith(href, "http://forum.customize-your-web.de")) || 
             !StringUtils.contains("/download/file.php?", href) ||
             event.target.className != "postlink"){
             return true
@@ -59,6 +75,14 @@ with(customizeyourweb){
             return true
          }
          return false
+      },
+      
+      /*
+       * @param boolean show
+       */
+      setInstallScriptMIVisibility: function(show){
+         document.getElementById("customizeyourweb_installScriptMI").setAttribute("hidden", !show)
+         document.getElementById("customizeyourweb-separator").setAttribute("hidden", !show)
       }
    }
    
