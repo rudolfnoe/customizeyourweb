@@ -11,6 +11,10 @@ with(customizeyourweb){
       return Dialog.getNamedArgument('action')
    }
    
+   EditDialog.getAllowMultiTargetDefinition = function(){
+      return Dialog.getNamedArgument('allowMultiTargetDefinition')
+   }
+   
    EditDialog.getTargetElement = function(){
       return Dialog.getNamedArgument('targetElement')
    }

@@ -1,7 +1,7 @@
 with (customizeyourweb) {
 (function() {
 	function EditRemoveCommand() {
-		this.AbstractRemoveCommand()
+		this.AbstractRemoveCommand(true)
 	}
 
 	EditRemoveCommand.prototype = {

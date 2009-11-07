@@ -24,7 +24,7 @@ with(customizeyourweb){
          return TargetDefinitionStyle.XPATH
       },
 
-      getTargets: function(targetWin){
+      getTargetsInternal: function(targetWin){
          return XPathUtils.getElements(this.xPath, targetWin.document)
       }         
 

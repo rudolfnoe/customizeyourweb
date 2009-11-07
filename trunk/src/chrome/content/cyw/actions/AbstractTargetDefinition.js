@@ -28,6 +28,11 @@ with(customizeyourweb){
       isTargetOptionalAndTargetMissing: function(targetWin){
          return this.isTargetOptional() && !this.isTargetInPage(targetWin)
       },
+      
+      getTargetWin: function(cywContextOrTargetWin){
+         return (cywContextOrTargetWin instanceof Components.interfaces.nsIDOMWindow)?
+               cywContextOrTargetWin:cywContextOrTargetWin.getTargetWindow()
+      },
 
       getDefinitionAsString: function(){
          throw new Error('not implemented')
@@ -38,9 +43,9 @@ with(customizeyourweb){
       },
       
       getTarget: function(cywContextOrTargetWin){
-         var targetWin = ObjectUtils.instanceOf(cywContextOrTargetWin, CywContext)?
-               cywContextOrTargetWin.getTargetWindow():cywContextOrTargetWin
-         var targets = this.getTargets(targetWin)
+         var targetWin = this.getTargetWin(cywContextOrTargetWin)
+         var targets = this.getTargetsInternal(targetWin)
+         //Should be moved to abstract targeted action?
          if(targets.length==0){
             throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getDefinitionAsString()])
          }else if(targets.length>1){
@@ -49,8 +54,12 @@ with(customizeyourweb){
          return targets[0]
       },
       
+      getTargets: function(cywContextOrTargetWin){
+         return this.getTargetsInternal(this.getTargetWin(cywContextOrTargetWin))
+      },
+      
       isTargetInPage: function(targetWin){
-         return this.getTargets(targetWin).length>=1
+         return this.getTargetsInternal(targetWin).length>=1
       }
       
    }

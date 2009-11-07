@@ -2,22 +2,23 @@ with(customizeyourweb){
 (function(){
    
    var CommonAttributesEditDialogHandler = {
-      targetDefinitionField: null,
+      targetDefinitionBinding: null,
       
       doOnload: function(){
          try{
-            this.targetDefinitionField = byId('targetdefinition')
+            this.targetDefinitionBinding = byId('targetdefinition')
             var targetWindow = EditDialog.getTargetWindow()
-            this.targetDefinitionField.setTargetWindow(targetWindow)
+            this.targetDefinitionBinding.setTargetWindow(targetWindow)
             var targetElement = EditDialog.getTargetElement(targetElement)
             if(targetElement){
-               this.targetDefinitionField.setTargetElement(targetElement)
-               this.targetDefinitionField.createDefaultTargetDefinitions()
+               this.targetDefinitionBinding.setTargetElement(targetElement)
+               this.targetDefinitionBinding.createDefaultTargetDefinitions()
             }
-            var action = Dialog.getNamedArgument('action') 
+            this.targetDefinitionBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
+            var action = EditDialog.getAction() 
             //Must be set at the end as createDefaultTargetDefinitions would override name and optional flag
-            this.targetDefinitionField.setOldTargetDefinition(action.getTargetDefinition())
-            this.initValidators(targetWindow)
+            this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
+            this.initValidators(targetWindow, EditDialog.getAllowMultiTargetDefinition())
          }catch(e){
             Utils.logError(e)
          }
@@ -25,13 +26,13 @@ with(customizeyourweb){
       
       doOk: function(){
          Dialog.setResult(DialogResult.OK)
-         var action = Dialog.getNamedArgument('action')
-         action.setTargetDefinition(this.targetDefinitionField.getTargetDefinition())
+         var action = EditDialog.getAction()
+         action.setTargetDefinition(this.targetDefinitionBinding.getTargetDefinition())
          Dialog.setNamedResult("action", action)
       },
       
-      initValidators: function(targetWindow){
-         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow)
+      initValidators: function(targetWindow, allowMultiTargetDef){
+         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow, allowMultiTargetDef)
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
       }
