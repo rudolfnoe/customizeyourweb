@@ -3,18 +3,20 @@ with(customizeyourweb){
    const CURSOR_CHANGE_KEY_CODES = [KeyEvent.DOM_VK_LEFT, KeyEvent.DOM_VK_RIGHT, KeyEvent.DOM_VK_HOME, KeyEvent.DOM_VK_END];
    const VALUE_CHANGED_EVENT_TYPE = "VALUE_CHANGED_EVENT_TYPE";
    
-   function TargetDefinitionXblHandler(targetDefinitionField){
+   function TargetDefinitionXblHandler(targetDefinitionBinding){
       this.GenericEventSource()
-      this.oldTargetDefinitionRow = DomUtils.getElementByAnonId(targetDefinitionField, "oldTargetDefinitionRow")
-      this.oldTargetDefinitionTB = DomUtils.getElementByAnonId(targetDefinitionField, "oldTargetDefinitionTB")
-      this.targetDefinitionField = targetDefinitionField
-      this.targetDefinitionML = DomUtils.getElementByAnonId(targetDefinitionField, "targetDefinitionML")
+      //Allows multi target defintions (true) or only single target definitions (false)
+      this.allowMultiTargetDefinition = false
+      this.oldTargetDefinitionRow = DomUtils.getElementByAnonId(targetDefinitionBinding, "oldTargetDefinitionRow")
+      this.oldTargetDefinitionTB = DomUtils.getElementByAnonId(targetDefinitionBinding, "oldTargetDefinitionTB")
+      this.targetDefinitionBinding = targetDefinitionBinding
+      this.targetDefinitionML = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetDefinitionML")
       this.targetDefinitionMLHandler = null,
-      this.targetElementsHighlighter = null
-      this.targetDefinitionStyleML = DomUtils.getElementByAnonId(targetDefinitionField, "targetDefinitionStyleML")
+      this.targetDefinitionStyleML = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetDefinitionStyleML")
       this.targetElement = null 
-      this.targetIsOptionalCB = DomUtils.getElementByAnonId(targetDefinitionField, "targetIsOptionalCB")
-      this.targetNameTB = DomUtils.getElementByAnonId(targetDefinitionField, "targetNameTB")
+      this.targetElementsHighlighter = null
+      this.targetIsOptionalCB = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetIsOptionalCB")
+      this.targetNameTB = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetNameTB")
       this.targetWindow = null
       
       //Manually add load listener for further initialization
@@ -160,7 +162,7 @@ with(customizeyourweb){
             this.setMessage(e.message, Severity.ERROR)
             return
          }
-         if(targetElems.length>1){
+         if(targetElems.length>1 && !this.allowMultiTargetDefinition){
             this.setMessage("Expression has non-unique result", Severity.ERROR)
          }else if (targetElems.length==0){
             this.setMessage("Expression has no result", Severity.ERROR)
@@ -180,7 +182,7 @@ with(customizeyourweb){
       
       initialize: function(){
          //default is true
-         var autoInit = DomUtils.getAttribute(this.targetDefinitionField, 'autoInit', "true")=="true"
+         var autoInit = DomUtils.getAttribute(this.targetDefinitionBinding, 'autoInit', "true")=="true"
          if(autoInit){
             this.autoInitByDialogArgument() 
          }
@@ -194,6 +196,10 @@ with(customizeyourweb){
       setMessage: function(message, severity){
          Dialog.setMessageInHeader(message, severity)
          //TODO maybe change background color of field
+      },
+      
+      setAllowMultiTargetDefinition: function(allowMultiTargetDef){
+         this.allowMultiTargetDefinition = allowMultiTargetDef 
       },
       
       setOldTargetDefinition: function(targetDefinition){

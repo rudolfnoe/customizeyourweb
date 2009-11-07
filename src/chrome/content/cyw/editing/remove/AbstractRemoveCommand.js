@@ -1,6 +1,8 @@
 with (customizeyourweb) {
 (function() {
-   function AbstractRemoveCommand() {
+   function AbstractRemoveCommand(allowMultiTargetDefinition) {
+      this.AbstractCommonAttributesEditCommand(allowMultiTargetDefinition)
+      this.removedElements = []
       this.parentNode = null
       this.removedElement = null
       this.nextSibling = null
@@ -11,11 +13,13 @@ with (customizeyourweb) {
       AbstractRemoveCommand: AbstractRemoveCommand,
 
       afterSuccessfulActionEditing: function(editContext){
-         var element = editContext.getTargetElement()
-         this.removedElement = element
-         this.parentNode = element.parentNode
-         this.nextSibling= element.nextSibling
-         this.parentNode.removeChild(element)
+         var targets = this.getAction().getTargets(editContext.getTargetWindow())
+         for (var i = 0; i < targets.length; i++) {
+            var targetElem = targets[i]
+            if(DomUtils.removeElement(targetElem)){
+               this.removedElements.push(new RemovedElement(targetElem))
+            }
+         }
       },
       
       createAction: function(editContext) {
@@ -23,10 +27,13 @@ with (customizeyourweb) {
       },
 
       undo : function() {
-         if(this.nextSibling){
-            this.parentNode.insertBefore(this.removedElement, this.nextSibling)
-         }else{
-            this.parentNode.appendChild(this.removedElement)
+         for (var i = 0; i < this.removedElements.length; i++) {
+            var removedElem = this.removedElements[i]
+            if(removedElem.nextSibling){
+               removedElem.parentNode.insertBefore(removedElem, removedElem.nextSibling)
+            }else{
+               removedElem.parentNode.appendChild(removedElem)
+            }
          }
       }
    }

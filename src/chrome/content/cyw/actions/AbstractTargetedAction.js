@@ -37,6 +37,14 @@ with(customizeyourweb){
          return this.targetDefinition.getTarget(cywContextOrTargetWin)
       },
       
+      getTargets: function(cywContextOrTargetWin){
+         var targets = this.targetDefinition.getTargets(cywContextOrTargetWin)
+         if(targets.length==0){
+            throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getDefinitionAsString()])
+         }
+         return targets
+      },
+      
       //Could not be moved to AbstractTargerDefinition as ScriptErrorHandler needs information about action
       getTargetWithoutError : function(cywContext){
          try{

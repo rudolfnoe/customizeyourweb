@@ -121,7 +121,7 @@ with(customizeyourweb){
          return XPathUtils.getElements(this.createXPathExp(), targetWin.document, XPathResult.ORDERED_NODE_ITERATOR_TYPE) 
       },
       
-      getTargets: function(targetWin){
+      getTargetsInternal: function(targetWin){
          var targetPreSet =  this.getTargetPreSetByXPath(targetWin)
          var resultSet = []
          for (var i = 0;i < targetPreSet.length; i++) {

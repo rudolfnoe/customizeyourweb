@@ -112,6 +112,10 @@
                   }
                </body>
             </method>
+            <method name="setAllowMultiTargetDefinition">
+               <parameter name="allowMultiTargetDef"/>
+               <body>this.handler.setAllowMultiTargetDefinition(allowMultiTargetDef)</body>
+            </method>
             <method name="setTargetElement">
                <parameter name="targetElement"/>
                <body>this.handler.setTargetElement(targetElement)</body>

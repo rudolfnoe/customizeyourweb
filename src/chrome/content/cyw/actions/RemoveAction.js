@@ -10,13 +10,15 @@ with(customizeyourweb){
          if(!this.isTargetInPage(cywContext.getTargetWindow())){
             return false
          }
-         var target = this.getTarget(cywContext)
-         if(target.parentNode)
-            target.parentNode.removeChild(target)
-         
+         var targets = this.getTargets(cywContext)
+         for (var i = 0; i < targets.length; i++) {
+            var target = targets[i]
+            if(target.parentNode){
+               target.parentNode.removeChild(target)
+            }
+         }         
          return true
       }
-      
    }
    ObjectUtils.extend(RemoveAction, "AbstractTargetedAction", customizeyourweb)
 
