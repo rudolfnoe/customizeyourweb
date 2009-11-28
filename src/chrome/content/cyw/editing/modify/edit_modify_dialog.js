@@ -40,7 +40,7 @@ with(customizeyourweb){
       },
       
       /*
-       * Event handler for add button on expert tab
+       * Event handler for add button
        */
       doAdd: function(){
          var attr = attributeML.value
@@ -53,7 +53,7 @@ with(customizeyourweb){
       },
       
       /*
-       * Event handler for cancel button
+       * Cancel event handler
        */
       doCancel: function(){
          if(this.elementWrapper){
@@ -125,7 +125,7 @@ with(customizeyourweb){
       },
       
       /*
-       * Fills attributes menulist on expert tab with all computed style 
+       * Fills attributes menulist on expert tag with all computed style 
        * values of the target element 
        */
       fillExpertAttributeMenulist: function(compTargetStyle){
@@ -160,18 +160,18 @@ with(customizeyourweb){
       getCurrentStyle: function(targetElement){
          var clonedTargetElem = targetElement.cloneNode(true)
          var targetWin = targetElement.ownerDocument.defaultView
-         var compTargetStyle = targetWin.getComputedStyle(clonedTargetElem, "")
+         var cssStyle = targetWin.getComputedStyle(clonedTargetElem, "")
          //store values for width and height
          var width = targetElement.offsetWidth + "px"
          var height = targetElement.offsetHeight + "px"
-         compTargetStyle.getPropertyValueExt = function(styleAttr){
+         cssStyle.getPropertyValueExt = function(styleAttr){
             switch (styleAttr){
                case "width": return width
                case "height": return height
-               default: return compTargetStyle.getPropertyValue(styleAttr)
+               default: return cssStyle.getPropertyValue(styleAttr)
             }
          }
-         return compTargetStyle
+         return cssStyle
       },
       
       /*
@@ -272,7 +272,7 @@ with(customizeyourweb){
                var control = controls[j]
                var attr = control.getAttribute('attr')
                this.htmlAttrToControlMap[attr] = control
-               if(control.id=="simpleValueML"){
+               if(control.id=="simpleValueTB"){
                   value = this.targetElement[attr]
                   ControlUtils.appendItemToMenulist(control, value, value)
                }
