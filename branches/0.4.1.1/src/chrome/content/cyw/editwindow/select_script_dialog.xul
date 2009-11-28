@@ -16,6 +16,7 @@
    <script type="application/x-javascript" src="../common/ScriptTreeView.js"/>
    <script type="application/x-javascript" src="../common/ScriptTreeItem.js"/>
    <script type="application/x-javascript" src="../core/CywConfig.js"/>
+   <script type="application/x-javascript" src="../core/CywUtils.js"/>
    <script type="application/x-javascript" src="select_script_dialog_handler.js"/>
    <vbox flex="1" style="min-height:300px; min-width:500px">
       <scriptstree id="scriptsTree" flex="1" editable="false"/>   
