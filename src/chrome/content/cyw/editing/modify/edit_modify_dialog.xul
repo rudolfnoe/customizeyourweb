@@ -42,7 +42,7 @@
                      <rows>
                         <row align="center" attrFor="text" collapsed="true" >
                            <label value="Text"/>
-                           <menulist id="simpleValueTB" editable="true" attr="value" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
+                           <menulist id="simpleValueML" editable="true" attr="value" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
                                  <menuitem label="&lt;Undefined&gt;" selected="true"/>
                               </menupopup>

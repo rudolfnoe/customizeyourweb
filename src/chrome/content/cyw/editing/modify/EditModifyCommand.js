@@ -3,6 +3,8 @@ with(customizeyourweb){
    const EDIT_MODIFY_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/modify/edit_modify_dialog.xul"
    
    function EditModifyCommand(){
+      //A change memento object of the MultiElementWrapper class acodring the memento pattern of 
+      //the Gang of Four
       this.changeMemento = null
       this.targetElement = null
    }
@@ -10,16 +12,8 @@ with(customizeyourweb){
    EditModifyCommand.prototype = {
       constructor: EditModifyCommand,
 
-      getChangeMemento: function(){
-         return this.changeMemento
-      },
-
       setChangeMemento: function(changeMemento){
-         this.changeMemento = changeMemento
-      },
-
-      getTargetElement: function(){
-         return this.targetElement
+         this.changeMemento = [changeMemento]
       },
 
       setTargetElement: function(targetElement){
@@ -41,7 +35,7 @@ with(customizeyourweb){
                                   {action: action, targetElement:this.targetElement, targetWindow:editContext.getTargetWindow()})
          editDialog.show()
          if(editDialog.getResult()==DialogResult.OK){
-            this.changeMemento = editDialog.getNamedResult("changeMemento")
+            this.changeMemento = [editDialog.getNamedResult("changeMemento")]
             this.setAction(editDialog.getNamedResult("action"))
             return this.getAction()
          }else{
@@ -51,7 +45,7 @@ with(customizeyourweb){
       
       undo: function(){
          if(this.targetElement){
-            var elementWrapper = new ElementWrapper(this.targetElement)
+            var elementWrapper = new MultiElementWrapper([this.targetElement])
             elementWrapper.setChangeMemento(this.changeMemento)
             elementWrapper.restore()
          }
