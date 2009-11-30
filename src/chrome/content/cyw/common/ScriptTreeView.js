@@ -95,7 +95,7 @@ with(customizeyourweb){
       },
       
       getSelectedScript: function(){
-         var selectedScripts = this.getSelectedScrips()
+         var selectedScripts = this.getSelectedScripts()
          return selectedScripts.length>0?selectedScripts[0]:null
       },
       
