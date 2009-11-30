@@ -1,0 +1,139 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		<binding id="targetdefinition" >
+			<content>
+            <xul:groupbox flex="1" style="margin-top:10px" inherits="collapsed">
+               <xul:caption label="Target Definition"/>
+               <xul:popupset>
+               </xul:popupset>
+               <xul:grid>
+                  <xul:columns>
+                     <xul:column></xul:column>
+                     <xul:column flex="1"></xul:column>
+                  </xul:columns>
+                  <xul:rows>
+                     <xul:row align="center">
+                        <xul:label value="Definition style"/>
+                        <xul:menulist anonid="targetDefinitionStyleML">
+                           <xul:menupopup>
+                              <xul:menuitem label="XPath" value="XPATH"/>
+                              <xul:menuitem label="Simple" value="SIMPLE"/>
+                           </xul:menupopup>
+                        </xul:menulist>
+                     </xul:row>
+                     <xul:row align="center">
+                        <xul:label value="Expression"/>
+                        <xul:hbox>
+                           <xul:menulist anonid="targetDefinitionML" flex="1" minwidth="300px" editable="true" 
+                                         onkeyup="document.getBindingParent(this).handler.handleCursorPositionChange(event)"
+                                         onselect="document.getBindingParent(this).handler.handleTargetDefinitionSelect(event)">
+                              <xul:menupopup></xul:menupopup>
+                           </xul:menulist>
+                           <!-- remove -->
+                           <!--xul:dropmarker tabindex="0" popup="_child" style="-moz-user-focus:normal" oncommand="document.getBindingParent(this).handler.showCreateXPathMenupopup(event)">
+                              <xul:menupopup anonid="createXPathMPU" position="after_end" onpopupshowing="document.getBindingParent(this).handler.onCreateXPathMenupopupShowing()">
+                                 <xul:menuitem label="Create full qualified XPath" oncommand="document.getBindingParent(this).handler.createXPath(PredicateStrategy.NONE)"/>
+                                 <xul:menuitem anonid="idXPathMI" label="Create XPath using id attribute" oncommand="document.getBindingParent(this).handler.createXPath(PredicateStrategy.ID)"/>
+                              </xul:menupopup>
+                           </xul:dropmarker-->
+                        </xul:hbox>
+                     </xul:row>
+                     <xul:row align="center" anonid="oldTargetDefinitionRow" collapsed="true" >
+                        <xul:label value="Old target definition"/>
+                        <xul:textbox anonid="oldTargetDefinitionTB" readonly="true" tabindex="-1"></xul:textbox>
+                     </xul:row>
+                     <!-- remove -->
+                     <!--xul:row align="center" collapsed="true" anonid="simpleTargetDefinitionRow" minwidth="200px" editable="true">
+                        <xul:label value="Simple Target Definition"/>
+                        <xul:menulist anonid="simpleTargetDefinitionML" flex="1">
+                           <xul:menupopup></xul:menupopup>
+                        </xul:menulist>
+                     </xul:row-->
+                     <xul:row align="center">
+                        <xul:label value="Target name"/>
+                        <xul:hbox>
+                           <xul:textbox anonid="targetNameTB" flex="1"/>
+                           <xul:checkbox label="Target is optional in page" anonid="targetIsOptionalCB" flex="1" 
+                                         oncommand="document.getBindingParent(this).handler.handleOptionalFlagChanged()"/>
+                        </xul:hbox>
+                     </xul:row>
+                  </xul:rows>
+               </xul:grid>
+               
+            </xul:groupbox>
+			</content>
+			<implementation>
+            <constructor>
+               //dynamically load scripts
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/core/CywUtils.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblHandler.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblValidator.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/XPathTargetDefinitionXblHandler.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/SimpleTargetDefinitionXblHandler.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractTargetDefinitionFactory.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/SimpleTargetDefinitionFactory.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/XPathTargetDefinitionFactory.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractHighlighter.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/FrameHighlighter.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/MultiElementHighlighter.js", customizeyourweb)
+               
+               if(!this.hasAttribute('id'))
+                  this.setAttribute('id', 'targetdefinition')
+               this.handler = new customizeyourweb.TargetDefinitionXblHandler(this)
+            </constructor>
+            <field name="handler"></field>
+            <property name="collapsed" onget="return this.getAttribute('collapsed')" onset="this.setAttribute('collapsed', val); return val"> </property>
+            <method name="addValueChangedListener">
+               <parameter name="eventHandler"/>
+               <body>
+                  this.handler.addValueChangedListener(eventHandler)
+               </body>
+            </method>
+            <method name="createDefaultTargetDefinitions">
+               <body>this.handler.createDefaultTargetDefinitions()</body>
+            </method>
+            <method name="createTargetDefinitions">
+               <body>this.handler.createTargetDefinitions()</body>
+            </method>
+            <method name="getTargetDefinition">
+               <body>return this.handler.getTargetDefinition()</body>
+            </method>
+            <method name="initTargetDefintionField">
+               <parameter name="targetWindow"/>
+               <parameter name="targetElement"/>
+               <parameter name="targetDefinition"/>
+               <body>
+                  this.setTargetElement(targetElement)
+                  this.setTargetWindow(targetWindow)
+                  this.setTargetDefinition(targetDefinition)
+                  if(targetElement!=null){
+                     this.createTargetDefinitions()
+                  }
+               </body>
+            </method>
+            <method name="setAllowMultiTargetDefinition">
+               <parameter name="allowMultiTargetDef"/>
+               <body>this.handler.setAllowMultiTargetDefinition(allowMultiTargetDef)</body>
+            </method>
+            <method name="setTargetElement">
+               <parameter name="targetElement"/>
+               <body>this.handler.setTargetElement(targetElement)</body>
+            </method>
+            <method name="setOldTargetDefinition">
+               <parameter name="targetDefinition"/>
+               <body>this.handler.setOldTargetDefinition(targetDefinition)</body>
+            </method>
+            <method name="setTargetDefinition">
+               <parameter name="targetDefinition"/>
+               <body>this.handler.setTargetDefinition(targetDefinition)</body>
+            </method>
+            <method name="setTargetWindow">
+               <parameter name="targetWindow"/>
+               <body>this.handler.setTargetWindow(targetWindow)</body>
+            </method>
+			</implementation>
+			<handlers>
+			</handlers>
+		</binding>
+</bindings>
