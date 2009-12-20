@@ -119,7 +119,17 @@ with(customizeyourweb){
       },
       
       getScriptFiles: function(){
-         return DirIO.read(this.getConfigDir(), false)
+         var scriptFiles = []
+         var allFiles = DirIO.read(this.getConfigDir(), false)
+         for (var i = 0; i < allFiles.length; i++) {
+            var file = allFiles[i]
+            var fileName = file.leafName            
+            if(StringUtils.endsWith(fileName, ".xml") && 
+               fileName != "customizeyourweb_config.xml"){
+                  scriptFiles.push(file)
+            }
+         }
+         return scriptFiles
       },
       
       getScripts: function(){
@@ -195,19 +205,14 @@ with(customizeyourweb){
          var scriptsLoaded = 0
          for (var i = 0; i < scriptFiles.length; i++) {
             var scriptFile = scriptFiles[i]
-            var fileName = scriptFile.leafName
-            if(!StringUtils.endsWith(fileName, ".xml") || 
-               fileName == "customizeyourweb_config.xml"){
-                  continue
-            }
-            var scriptContent =  FileIO.read(scriptFile)
+            var scriptContent =  FileIO.read(scriptFile, "UTF-8")
             try{
                var script = this.parseScript(scriptContent)
             }catch(e){
                CywUtils.logError(e, "Script could not be loaded due to parsing errors: " + scriptFile.path)
             }
             script.updateUrlPatternRegExp()
-            script.setFileName(fileName)
+            script.setFileName(scriptFile.leafName)
             
             this.scripts.add(script)
             scriptsLoaded++
@@ -242,6 +247,8 @@ with(customizeyourweb){
          
          //Create and write context
          var scriptContent = this.serializeScript(aScript, "Script")
+         //Add xml processing for encoding
+         scriptContent = '<?xml version="1.0" encoding="UTF-8"?>\n' + scriptContent 
          this.writeScript(scriptFileName, scriptContent)
       },
       
@@ -260,7 +267,7 @@ with(customizeyourweb){
          var scriptFile = this.getConfigDir()
          scriptFile.append(fileName)
          FileIO.create(scriptFile)
-         FileIO.write(scriptFile, scriptXML);
+         FileIO.write(scriptFile, scriptXML, null, "UTF-8");
          CywUtils.logDebug("Script " + fileName + " is written to disk.")
       }
 
