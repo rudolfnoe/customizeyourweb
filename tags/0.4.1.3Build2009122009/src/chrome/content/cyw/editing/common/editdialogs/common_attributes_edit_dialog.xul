@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/targetdefinition.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/commonactionattributes/commonactionattributes.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="editDialog"
+    buttons="accept,cancel"
+    ondialogaccept="customizeyourweb.CommonAttributesEditDialogHandler.doOk()" 
+    onload="customizeyourweb.CommonAttributesEditDialogHandler.doOnload()"
+    title="Edit Common Action Attributes"
+    persist="screenX screenY width height">
+   <script src="../../../CywCommon.js"/>
+   <script src="common_edit_dialog_include.js"/>
+   <script src="CommonAttributesEditDialogHandler.js"/>
+   <dialogheader title="Define the target defintion and the repetion behavior" message="" rows="1"/>
+   <targetdefinition width="400px" autoInit="false"/>
+   <commonactionattributes/>
+
+</dialog>
