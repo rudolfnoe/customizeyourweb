@@ -15,7 +15,7 @@
    <script src="../../../CywCommon.js"/>
    <script src="common_edit_dialog_include.js"/>
    <script src="CommonAttributesEditDialogHandler.js"/>
-   <dialogheader title="Define the target defintion and the repetion behavior" message="" rows="1"/>
+   <dialogheader title="Define the target definition and the repeition behavior" message="" rows="1"/>
    <targetdefinition width="400px" autoInit="false"/>
    <commonactionattributes/>
 
