@@ -11,6 +11,7 @@ with(customizeyourweb){
       this.listItemsTagName = null
       this.noOfHeaderRows = 0
       this.ommitEveryXthItem = 0
+      this.linkNoToOpen = 1
       this.t_listViewHandler = null
    }
    
@@ -65,6 +66,14 @@ with(customizeyourweb){
          this.ommitEveryXthItem = ommitEveryXthItem
       },
       
+      getLinkNoToOpen: function(){
+         return this.linkNoToOpen
+      },
+
+      setLinkNoToOpen: function(linkNoToOpen){
+         this.linkNoToOpen = linkNoToOpen
+      },
+
       determineListItems: function(rootElement){
          var potListItems = rootElement.getElementsByTagName(this.listItemsTagName)
          var listItemsFiltered1 = []
@@ -101,7 +110,7 @@ with(customizeyourweb){
          }
          var rootElement = this.getTarget(cywContext)
          var listItems = this.determineListItems(rootElement)
-         this.t_listViewHandler = new ListViewHandler(rootElement, listItems, this.highlightCss, this.defaultLinkTarget) 
+         this.t_listViewHandler = new ListViewHandler(rootElement, listItems, this.highlightCss, this.defaultLinkTarget, this.linkNoToOpen) 
          this.registerShortcut(cywContext)
          if(this.focusOnLoad){
             (new FocusAction(this.getTargetDefinition())).doAction(cywContext)
