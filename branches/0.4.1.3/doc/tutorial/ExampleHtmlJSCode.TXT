@@ -1,0 +1,12 @@
+<iframe id="previewFrame" style="position:fixed; width:500px; height:600px; z-level:1000" src="about:blank">
+</iframe>   
+
+var pf = document.getElementById('previewFrame')
+pf.style.left = (window.innerWidth-500) + "px"
+window.addEventListener('focus', function(event){
+   var target = event.target
+   if(target.tagName=="LI"){
+      var firstHref = target.getElementsByTagName('a')[0].href
+      pf.src=firstHref
+   }
+}, true)   
