@@ -3,11 +3,12 @@ with(customizeyourweb){
    const EVENT_TYPES_FOR_ROOT = ["click", "focus", "blur"];
    const CURRENT_INDEX_ATTR = 'cyw_currentIndex';
    
-   function ListViewHandler(rootElement, listItems, highlightCss, defaultLinkTarget){
+   function ListViewHandler(rootElement, listItems, highlightCss, defaultLinkTarget, linkNoToOpen){
       Assert.paramsNotNull(arguments)
       this.currentIndex = 0
       this.currentItemWrapper = null
       this.defaultLinkTarget = defaultLinkTarget
+      this.linkNoToOpen = linkNoToOpen
       this.focused = false
       this.highlightCss = highlightCss
       this.listItems = listItems
@@ -148,8 +149,11 @@ with(customizeyourweb){
             mouseEvent.setType("mouseup")
             mouseEvent.dispatch(ci)
             return
+         }else if((links.length+1) >= this.linkNoToOpen){
+            (new LinkWrapper(links[this.linkNoToOpen-1])).open(linkTarget)
+         }else{
+            throw new Error("Link number to open exceeds number of available links within the item. Please correct ListView configuration.")
          }
-         (new LinkWrapper(links[0])).open(linkTarget)
       },
       toggleFirstCheckbox: function(){
          var ci = this.getCurrentItem()
