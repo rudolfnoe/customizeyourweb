@@ -31,8 +31,9 @@ with(customizeyourweb){
          }
          var includePatternStrings = script.getIncludeUrlPatternStrings()
          if(includePatternStrings.length>0){
-            fileName +=   "_" + includePatternStrings[0].replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_")
+            fileName +=   "_" + includePatternStrings[0]
          }
+         fileName = fileName.replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_") 
          if(fileName.length>250){
             fileName = fileName.substring(0, 250)
          }
