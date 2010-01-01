@@ -14,6 +14,26 @@
 		PREF_OBSERVER: "CYW_PREF_OBSERVER",
 		VERSION: null,
 		
+      /*
+       * Implemented here to make sure it is working in every case
+       */
+      copyErrorLogToClipboard: function(){
+         var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+                                 .getService(Components.interfaces.nsIConsoleService);
+         var messages = {}
+         var count = {}
+         consoleService.getMessageArray(messages, count)
+         var consoleContent = ""
+         var messageArray = messages.value
+         for (var i = 0; i < messageArray.length; i++) {
+            consoleContent += messageArray[i].message + "\n"
+         } 
+         
+         //Copy to clipboard
+         const clipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].  
+                                       getService(Components.interfaces.nsIClipboardHelper);  
+         clipboardHelper.copyString(consoleContent);  
+      },
       
       createLogger: function(){
          var logger = new customizeyourweb.ConsoleLogger("customizeyourweb.logging.level", 5000)

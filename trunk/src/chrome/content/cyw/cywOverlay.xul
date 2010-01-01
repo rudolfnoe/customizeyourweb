@@ -19,6 +19,7 @@
    <commandset >
       <command id="customizeyourweb_clickCmd" label="Click" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_copyCmd" label="Copy" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_copyErrorLogToClipboardCmd" label="Copy Error Log to Clipboard" oncommand="customizeyourweb.CywCommon.copyErrorLogToClipboard()"/>   	
       <command id="customizeyourweb_cutCmd" label="Cut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
       <command id="customizeyourweb_disableCustomizeYourWeb" label="Disable Customize Your Web" oncommand="customizeyourweb.InitManager.toggleEnableDisableAll(event)"
                accesskey="d"/>
@@ -186,6 +187,7 @@
          <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
          <menuseparator/>
          <menuitem command="customizeyourweb_openIssueList"/>
+         <menuitem command="customizeyourweb_copyErrorLogToClipboardCmd"/>
          <menuitem command="customizeyourweb_giveFeedback"/>
          <menuseparator/>
          <menuitem command="customizeyourweb_hideStatusbar"/>
@@ -206,6 +208,7 @@
             <menuitem command="customizeyourweb_openConfiguration"/>
             <menuseparator/>
             <menuitem command="customizeyourweb_openIssueList"/>
+            <menuitem command="customizeyourweb_copyErrorLogToClipboardCmd"/>
             <menuitem command="customizeyourweb_giveFeedback"/>
             <menuseparator/>
             <menuitem command="customizeyourweb_hideToolsMenu"/>
@@ -221,4 +224,5 @@
            </hbox>
       </statusbarpanel>
    </statusbar>
+   
 </overlay>
