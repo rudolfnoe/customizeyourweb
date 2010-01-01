@@ -412,8 +412,8 @@ with(customizeyourweb){
 
       handleMouseover: function(event){
          Utils.executeDelayed("HANDLE_MOUSEOVER", 50, function(){
-//            if(getEgMenuPopup().state=="open")
-//               getEgMenuPopup().hidePopup()
+            if(getEgMenuPopup().state=="open")
+               return
             //CywUtils.logDebug("Target: " + event.target.tagName)
             this.unhighlightActionTargets()
             var newTarget = event.target
