@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+
+<overlay id="customizeyourweb" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/x-javascript" src="CywCommon.js"></script>
+    <script type="application/x-javascript" src="cywOverlay.js"></script>
+    
+    <broadcasterset id="mainBroadcasterSet"> 
+       <broadcaster id="viewCustomizeYourWebEditScriptSidebar" 
+                    label="Edit Script"
+                    autoCheck="false"
+                    type="checkbox"
+                    group="sidebar"
+                    sidebarurl="chrome://customizeyourweb/content/cyw/editwindow/EditScript.xul"
+                    sidebartitle="Edit Script"/>
+       <broadcaster id="customizeyourweb_pasteBC" disabled="true"/>
+   </broadcasterset>
+   
+   <commandset >
+      <command id="customizeyourweb_clickCmd" label="Click" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_copyCmd" label="Copy" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_copyErrorLogToClipboardCmd" label="Copy Error Log to Clipboard" oncommand="customizeyourweb.CywCommon.copyErrorLogToClipboard()"/>   	
+      <command id="customizeyourweb_cutCmd" label="Cut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
+      <command id="customizeyourweb_disableCustomizeYourWeb" label="Disable Customize Your Web" oncommand="customizeyourweb.InitManager.toggleEnableDisableAll(event)"
+               accesskey="d"/>
+      <command id="customizeyourweb_focusCmd" label="Focus" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_giveFeedback" label="Give Feedback" oncommand="customizeyourweb.EventHandler.giveFeedback(event)"/>   	
+      <command id="customizeyourweb_hideStatusbar" label="Hide Statusbar Icon" oncommand="customizeyourweb.StatusbarManager.hideStatusbar()"/>   	
+      <command id="customizeyourweb_hideToolsMenu" label="Hide menu" oncommand="customizeyourweb.EventHandler.hideToolsMenu()"
+               accesskey="h"/>   	
+      <command id="customizeyourweb_installScriptCmd" label="Install CYW Script" oncommand="customizeyourweb.EventHandler.installScriptFromWeb(event)"/>   	
+      <command id="customizeyourweb_ifElementExistsCmd" label="If Element exists" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_insertJSCmd" label="Insert JavaScript" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_insertHTMLCmd" label="Insert HTML" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_insertStyleSheetCmd" label="Insert Stylesheet" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_listViewCmd" label="List View" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_macroShortcutCmd" label="Macro Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_modifyCmd" label="Modify" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
+      <command id="customizeyourweb_openConfiguration" label="Open Configuration..." oncommand="customizeyourweb.EventHandler.openConfiguration(event)" 
+               accesskey="c"/>
+      <command id="customizeyourweb_openIssueList" label="Report Bug" oncommand="customizeyourweb.EventHandler.openIssueList()" 
+               accesskey="b"/>
+      <command id="customizeyourweb_pasteBeforeCmd" label="Paste before" where="before" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteAfterCmd" label="Paste after" where="after" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteFirstChildCmd" label="Paste as first child" where="firstChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteLastChildCmd" label="Paste as last child" where="lastChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_removeCmd" label="Remove" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_retargetActionCmd" label="Retarget Action" oncommand="customizeyourweb.EditScriptHandler.retargetAction()" disabled="true"/>   	
+      <command id="customizeyourweb_shortcutCmd" label="Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_toggleVisibilityShortcutCmd" label="Toggle Visibility" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
+      <command id="customizeyourweb_toggleEditMode" label="Toggle Editing" oncommand="customizeyourweb.EditScriptHandler.toggleEditMode()"/>   	
+   </commandset>
+   
+   <popupset>
+      <menupopup id="cywEditPopup" >
+      	<menuitem id="customizeyourweb_clickMI" command="customizeyourweb_clickCmd" acceltext="C"/>
+      	<menuitem id="customizeyourweb_focusMI" command="customizeyourweb_focusCmd" acceltext="F"/>
+      	<menuitem id="customizeyourweb_modifyMI" command="customizeyourweb_modifyCmd" acceltext="M"/>
+      	<menuitem id="customizeyourweb_removeMI" command="customizeyourweb_removeCmd" acceltext="R"/>
+      	<menuitem id="customizeyourweb_shortcutMI" command="customizeyourweb_shortcutCmd" acceltext="S"/>
+         <menu label="Other shortcuts">
+            <menupopup>
+            	<menuitem id="customizeyourweb_macroShortcutMI" command="customizeyourweb_macroShortcutCmd"  acceltext="O"/>
+            	<menuitem id="customizeyourweb_listViewMI" command="customizeyourweb_listViewCmd"  acceltext="L"/>
+            	<menuitem id="customizeyourweb_toggleVisibilityShortcutMI" command="customizeyourweb_toggleVisibilityShortcutCmd"/>
+            </menupopup>
+         </menu>
+         <menuseparator/>
+         <menu label="Insert">
+            <menupopup>
+            	<menuitem id="customizeyourweb_insertJSMI" command="customizeyourweb_insertJSCmd" acceltext="J"/>
+            	<menuitem id="customizeyourweb_insertHTMLMI" command="customizeyourweb_insertHTMLCmd" acceltext="H"/>
+            	<menuitem id="customizeyourweb_insertStyleSheetMI" command="customizeyourweb_insertStyleSheetCmd" acceltext="Y"/>
+            </menupopup>
+         </menu>
+         <menuseparator/>
+         	<menuitem id="customizeyourweb_ifElementExistsMI" command="customizeyourweb_ifElementExistsCmd" acceltext="I"/>
+         <menuseparator/>
+      	<menuitem id="customizeyourweb_copyMI" command="customizeyourweb_copyCmd"  acceltext="Ctrl+C"/>
+      	<menuitem id="customizeyourweb_cutMI" command="customizeyourweb_cutCmd" acceltext="Ctrl+X"/>
+         <menu label="Paste..." observes="customizeyourweb_pasteBC">
+            <menupopup>
+            	<menuitem id="customizeyourweb_pasteAfterMI" command="customizeyourweb_pasteAfterCmd" acceltext="Ctrl+V"/>
+            	<menuitem id="customizeyourweb_pasteBeforeMI" command="customizeyourweb_pasteBeforeCmd" acceltext="Ctrl+Shift+V"/>
+            	<menuitem id="customizeyourweb_pasteFirstChildMI" command="customizeyourweb_pasteFirstChildCmd" />
+            	<menuitem id="customizeyourweb_pasteLastChildMI" command="customizeyourweb_pasteLastChildCmd" />
+            </menupopup>
+         </menu>
+         <menuseparator/>
+      	<menuitem id="customizeyourweb_retargetActionMI" command="customizeyourweb_retargetActionCmd" acceltext="T"/>
+      </menupopup>
+
+      <panel id="customizeyourweb_shortcut_help_panel">
+         <grid>
+            <columns>
+               <column></column>
+               <column></column>
+            </columns>
+            <rows>
+               <row style="border-bottom:1px solid black">
+                  <label value="Shortcut" style="font-weight:bold"/>
+                  <label value="Action" style="font-weight:bold"/>
+               </row>
+               <row>
+                  <label value="C"/>
+                  <label value="Click"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="F"/>
+                  <label value="Focus"/>
+               </row>
+               <row>
+                  <label value="M"/>
+                  <label value="Modify"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="O"/>
+                  <label value="Macro Shortcut"/>
+               </row>
+               <row>
+                  <label value="R"/>
+                  <label value="Remove"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="S"/>
+                  <label value="Shortcut"/>
+               </row>
+               <row>
+                  <label value="J"/>
+                  <label value="Insert JavaScript"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="H"/>
+                  <label value="Insert HTML"/>
+               </row>
+               <row>
+                  <label value="Y"/>
+                  <label value="Insert Stylesheet"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="T"/>
+                  <label value="Retarget Action"/>
+               </row>
+               <row>
+                  <label value="Ctrl+c"/>
+                  <label value="Copy"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="Ctrl+x"/>
+                  <label value="Cut"/>
+               </row>
+               <row>
+                  <label value="Ctrl+v"/>
+                  <label value="Paste after"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="Ctrl+Shift+v"/>
+                  <label value="Paste before"/>
+               </row>
+               <row>
+                  <label value="Ctrl+z"/>
+                  <label value="Undo"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="Left/Up Arrow"/>
+                  <label value="Select previous sibling"/>
+               </row>
+               <row>
+                  <label value="Right/Down Arrow"/>
+                  <label value="Select next sibling"/>
+               </row>
+               <row class="shortcut-help-grey-row">
+                  <label value="Ctrl+Left/Up Arrow"/>
+                  <label value="Select parent"/>
+               </row>
+               <row>
+                  <label value="Ctrl+Right/Down Arrow"/>
+                  <label value="Select first child"/>
+               </row>
+            </rows>
+         </grid>
+      </panel>
+      
+      <menupopup id="customizeyourweb_statusbar_context">
+         <menuitem command="customizeyourweb_toggleEditMode"/>
+         <menuitem command="customizeyourweb_openConfiguration"/>
+         <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
+         <menuseparator/>
+         <menuitem command="customizeyourweb_openIssueList"/>
+         <menuitem command="customizeyourweb_copyErrorLogToClipboardCmd"/>
+         <menuitem command="customizeyourweb_giveFeedback"/>
+         <menuseparator/>
+         <menuitem command="customizeyourweb_hideStatusbar"/>
+      </menupopup>
+      
+   </popupset>
+
+   <popup id="contentAreaContextMenu" >
+      <menuseparator id="customizeyourweb-separator"/>
+      <menuitem id="customizeyourweb_installScriptMI" command="customizeyourweb_installScriptCmd" hidden="true"/>
+   </popup>
+   
+   <!-- Tools menu overlay -->
+   <menupopup id="menu_ToolsPopup">
+      <menu id="customizeyourweb_tools_menu" label="Customize Your Web" insertbefore="sanitizeSeparator" accesskey="c" >
+         <menupopup>
+            <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
+            <menuitem command="customizeyourweb_openConfiguration"/>
+            <menuseparator/>
+            <menuitem command="customizeyourweb_openIssueList"/>
+            <menuitem command="customizeyourweb_copyErrorLogToClipboardCmd"/>
+            <menuitem command="customizeyourweb_giveFeedback"/>
+            <menuseparator/>
+            <menuitem command="customizeyourweb_hideToolsMenu"/>
+         </menupopup>      
+      </menu>
+   </menupopup>
+
+   <statusbar id="status-bar">
+         <statusbarpanel id="customizeyourweb-status-panel" onclick="customizeyourweb.EventHandler.toggleEditModeOnStatusbarClick(event)" 
+                         context="customizeyourweb_statusbar_context">
+           <hbox crop="end">
+             <image id="customizeyourweb-statusbarIcon" src="chrome://customizeyourweb/skin/cyw.ico" style="width:16px"/>
+           </hbox>
+      </statusbarpanel>
+   </statusbar>
+   
+</overlay>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/bindings/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/commonactionattributes/commonactionattributes.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="editDialog"
+    buttons="accept,cancel"
+    ondialogaccept="customizeyourweb.EditInsertStyleSheetDialogHandler.doOk()" ondialogcancel="customizeyourweb.EditInsertStyleSheetDialogHandler.doCancel()"
+    onload="customizeyourweb.EditInsertStyleSheetDialogHandler.doOnload()"
+    persist="screenX screenY width height"
+    title="Edit Stylesheet">
+   <script src="../../CywCommon.js"/>
+   <script src="edit_insert_stylesheet_dialog.js"/>
+   <vbox flex="1">
+      <hbox align="center">
+         <label value="Exisiting Stylesheets"/>
+         <menulist id="exisitingStyleSheetsML">
+            <menupopup>
+            </menupopup>
+         </menulist>
+         <button label="Insert" oncommand="customizeyourweb.EditInsertStyleSheetDialogHandler.doInsertStyleSheetContent()"/>
+      </hbox>
+      <label value="Stylesheet Content"/>
+      <jseditor id="styleSheetCodeTB" namespaceObj="customizeyourweb" oninput="customizeyourweb.EditInsertStyleSheetDialogHandler.updatePage()" 
+                multiline="true" flex="1" style="height:300px; width: 500px; margin-bottom:7px"/>
+   </vbox>
+</dialog>
