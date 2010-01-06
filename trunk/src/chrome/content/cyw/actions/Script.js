@@ -10,6 +10,9 @@ with(customizeyourweb){
       this.disabled = false
       this.t_fileName = null
       this.guiId = Utils.createGUIId()
+      //Timestamp of last editing
+      //Used for selection on starting editing
+      this.lastEdited = (new Date(1970, 1, 1)).getTime()
    	this.name = null
       this.targetWinDefinition = new TargetWinDefinition()
       //Version of CYW with which is this script written the last time
@@ -87,6 +90,14 @@ with(customizeyourweb){
       
       getIdAsString: function(){
          return this.id + ""
+      },
+
+      getLastEdited: function(){
+         return this.lastEdited
+      },
+
+      setLastEdited: function(lastEdited){
+         this.lastEdited = lastEdited
       },
 
       getName: function(){

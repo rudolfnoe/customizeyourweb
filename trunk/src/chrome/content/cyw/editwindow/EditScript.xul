@@ -54,7 +54,7 @@
             <label value="Script Selection [+] =Applied, [--]=Not Applied" accesskey="p"/>
             <hbox>
                <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
-                         crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Ctrl+Shift+P)'
+                         crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Alt+Shift+P)'
                          >
                   <menupopup width="300px" flex="1">
                   </menupopup>
@@ -92,7 +92,7 @@
 
             <label value="Include URL Patterns (* = any string)" accesskey="U"  style="margin-top:7px"/>
             <richlistbox id="includePatterns" height="100px" flex="1" selType="single" 
-                         tooltiptext="List of URL patterns for which the script will be applied (Ctrl+Shift+U)">
+                         tooltiptext="List of URL patterns for which the script will be applied (Alt+Shift+U)">
                <!-- will be dynamically filled -->
             </richlistbox>
 
@@ -103,7 +103,7 @@
                   ondblclick="document.getElementById('editBU').click()"
                   hidecolumnpicker="true"
                   style="min-height:100px"
-                  tooltiptext="List of actions which will be executed after page load / page change (Ctrl+Shift+A)">
+                  tooltiptext="List of actions which will be executed after page load / page change (Alt+Shift+A)">
                <treecols>
                   <treecol id="actionCol" label="Action" flex="1" primary="true"/>
                </treecols>

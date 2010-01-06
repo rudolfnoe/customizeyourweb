@@ -334,6 +334,7 @@ with(customizeyourweb){
          var scriptML = byId('scripts')
          ControlUtils.clearMenulist(scriptML)
          var firstMatchingScriptIndex = -1
+         this.sortScripts(scripts)
          for (var i = 0; i < scripts.size(); i++) {
             var script = scripts.get(i)
             var isAppliedScript = script.matchesWinOrSubwin(this.getTargetWin())
@@ -502,6 +503,29 @@ with(customizeyourweb){
       
       setMessage: function(message, severity){
          byId('dialogheader').setMessage(StringUtils.defaultString(message), severity)
+      },
+      
+      /*
+       * Sort scripts according the following rules
+       * - Matching scripts before not matching scripts
+       * - Within group according last edited timestamp in decending order
+       * - "New Script" always at the end
+       */
+      sortScripts: function(scripts){
+         var targetWin = this.getTargetWin()
+         scripts.sort(function(scriptA, scriptB){
+            aIsApplied = scriptA.matchesWinOrSubwin(targetWin)      
+            bIsApplied = scriptB.matchesWinOrSubwin(targetWin)
+            if(!scriptA.isPersisted()){
+               return 1
+            }else if(!scriptB.isPersisted()){
+               return -1
+            }else if(aIsApplied!=bIsApplied){
+               return aIsApplied?-1:1
+            }else{
+               return scriptB.getLastEdited() - scriptA.getLastEdited()
+            }
+         })
       },
       
       updateAction: function(action){
