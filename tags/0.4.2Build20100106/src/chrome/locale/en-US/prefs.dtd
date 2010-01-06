@@ -1,0 +1,9 @@
+<!ENTITY description.label "Description">
+<!ENTITY keyboxKeys.menuitem.tab.label "Tab">
+<!ENTITY keyboxKeys.menuitem.shift_tab.label "Shift+Tab">
+<!ENTITY keys.assignBU.label "Assign">
+<!ENTITY keys.removeBU.label "Remove">
+<!ENTITY keys.restore_defaultBU.label "Restore Default">
+<!ENTITY keys.assignBU.accesskey "g">
+<!ENTITY keys.removeBU.accesskey "r">
+<!ENTITY keys.restore_defaultBU.accesskey "f">
