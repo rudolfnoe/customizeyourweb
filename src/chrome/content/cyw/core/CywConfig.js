@@ -239,7 +239,7 @@ with(customizeyourweb){
          }else{
             this.deleteScriptFromDisk(aScript)
          }
-         
+         aScript.setLastEdited((new Date()).getTime())
          aScript.setPersisted(true)
          //Set script file name
          var scriptFileName = this.createScriptFileName(aScript)
