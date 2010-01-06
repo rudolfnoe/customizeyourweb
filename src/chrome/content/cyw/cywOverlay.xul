@@ -2,6 +2,7 @@
 
 <overlay id="customizeyourweb" 
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/x-javascript" src="./common/error/ErrorLogHandler.js"></script>
     <script type="application/x-javascript" src="CywCommon.js"></script>
     <script type="application/x-javascript" src="cywOverlay.js"></script>
     
@@ -19,7 +20,6 @@
    <commandset >
       <command id="customizeyourweb_clickCmd" label="Click" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_copyCmd" label="Copy" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
-      <command id="customizeyourweb_copyErrorLogToClipboardCmd" label="Copy Error Log to Clipboard" oncommand="customizeyourweb.CywCommon.copyErrorLogToClipboard()"/>   	
       <command id="customizeyourweb_cutCmd" label="Cut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
       <command id="customizeyourweb_disableCustomizeYourWeb" label="Disable Customize Your Web" oncommand="customizeyourweb.InitManager.toggleEnableDisableAll(event)"
                accesskey="d"/>
@@ -46,6 +46,7 @@
       <command id="customizeyourweb_pasteLastChildCmd" label="Paste as last child" where="lastChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
       <command id="customizeyourweb_removeCmd" label="Remove" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_retargetActionCmd" label="Retarget Action" oncommand="customizeyourweb.EditScriptHandler.retargetAction()" disabled="true"/>   	
+      <command id="customizeyourweb_saveErrorLogToDisc" label="Save Log to Disc..." oncommand="customizeyourweb.ErrorLogHandler.saveErrorLogToDisc()"/>   	
       <command id="customizeyourweb_shortcutCmd" label="Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_toggleVisibilityShortcutCmd" label="Toggle Visibility" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_toggleEditMode" label="Toggle Editing" oncommand="customizeyourweb.EditScriptHandler.toggleEditMode()"/>   	
@@ -187,7 +188,7 @@
          <menuitem type="checkbox" command="customizeyourweb_disableCustomizeYourWeb"/>
          <menuseparator/>
          <menuitem command="customizeyourweb_openIssueList"/>
-         <menuitem command="customizeyourweb_copyErrorLogToClipboardCmd"/>
+         <menuitem command="customizeyourweb_saveErrorLogToDisc"/>
          <menuitem command="customizeyourweb_giveFeedback"/>
          <menuseparator/>
          <menuitem command="customizeyourweb_hideStatusbar"/>
@@ -208,7 +209,7 @@
             <menuitem command="customizeyourweb_openConfiguration"/>
             <menuseparator/>
             <menuitem command="customizeyourweb_openIssueList"/>
-            <menuitem command="customizeyourweb_copyErrorLogToClipboardCmd"/>
+            <menuitem command="customizeyourweb_saveErrorLogToDisc"/>
             <menuitem command="customizeyourweb_giveFeedback"/>
             <menuseparator/>
             <menuitem command="customizeyourweb_hideToolsMenu"/>
