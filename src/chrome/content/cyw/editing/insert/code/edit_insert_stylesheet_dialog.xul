@@ -11,7 +11,7 @@
     onload="customizeyourweb.EditInsertStyleSheetDialogHandler.doOnload()"
     persist="screenX screenY width height"
     title="Edit Stylesheet">
-   <script src="../../CywCommon.js"/>
+   <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
    <script src="edit_insert_stylesheet_dialog.js"/>
    <vbox flex="1">
       <hbox align="center">

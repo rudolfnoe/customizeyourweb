@@ -1,6 +1,6 @@
 with(customizeyourweb){
 (function(){
-   const EDIT_INSERT_HTML_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/edit_insert_html_dialog.xul"
+   const EDIT_INSERT_HTML_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/code/edit_insert_html_dialog.xul"
    const DIALOG_HEIGHT="544"
    
    function EditInsertHTMLCommand(){
