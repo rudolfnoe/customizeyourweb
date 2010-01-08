@@ -9,7 +9,6 @@ with(customizeyourweb){
    
    AbstractAction.prototype = {
       constructor: AbstractAction,
-   	AbstractAction: AbstractAction,
    	
    	getId: function(){
    		return this.id

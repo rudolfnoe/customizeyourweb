@@ -35,7 +35,6 @@ with(customizeyourweb){
    //Member methods
    AbstractShortcutAction.prototype = {
       constructor: AbstractShortcutAction,
-      AbstractShortcutAction: AbstractShortcutAction,
 
       getCombinedKeyCode: function(){
          return this.combinedKeyCode
