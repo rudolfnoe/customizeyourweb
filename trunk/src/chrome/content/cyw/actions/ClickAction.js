@@ -4,8 +4,9 @@ with(customizeyourweb){
       
    function ClickAction (targetDefinition){
       this.AbstractTargetedAction(targetDefinition)
-      this.modifierMask = 0 //No modifier pressing while clicking
       this.button = 0 //Default left click
+      this.doubleClick = false //flag indicating a double click
+      this.modifierMask = 0 //No modifier pressing while clicking
    }
    
    ClickAction.prototype = {
@@ -17,6 +18,14 @@ with(customizeyourweb){
 
       setButton: function(button){
          this.button = button
+      },
+
+      isDoubleClick: function(){
+         return this.doubleClick
+      },
+
+      setDoubleClick: function(doubleClick){
+         this.doubleClick = doubleClick
       },
 
       getModifierMask: function(){
@@ -38,7 +47,7 @@ with(customizeyourweb){
                                     true, //canBubble
                                     true, //cancelable
                                     cywContext.getTargetWindow(), //view
-                                    1, //click count
+                                    (this.doubleClick?2:1), //click count
                                     0, 0, 0, 0, //screenX, screenY, clientX, clientY,
                                     this.modifierMask & Event.CONTROL_MASK, 
                                     this.modifierMask & Event.ALT_MASK, 
@@ -50,7 +59,11 @@ with(customizeyourweb){
          }
          var result = performEvent.apply(this, ["mouseover"])
          result += performEvent.apply(this, ["mousedown"])
-         result += performEvent.apply(this, ["click"])
+         if(this.doubleClick){
+            result += performEvent.apply(this, ["dblclick"])
+         }else{
+            result += performEvent.apply(this, ["click"])
+         }
          result += performEvent.apply(this, ["mouseup"])
          
          if(result==0)

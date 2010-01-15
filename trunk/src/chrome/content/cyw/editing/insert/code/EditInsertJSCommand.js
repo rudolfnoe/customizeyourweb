@@ -29,7 +29,7 @@ with(customizeyourweb){
        },
       
       undo: function(){
-      },
+      }
       
    }
    ObjectUtils.extend(EditInsertJSCommand, "AbstractEditCommand", customizeyourweb)

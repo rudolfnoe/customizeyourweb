@@ -72,7 +72,7 @@ with(customizeyourweb){
       }     
 
    }
-   ObjectUtils.extend(InsertSubwindowAction, "AbstractAction", customizeyourweb)
+   ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertElementAction", customizeyourweb)
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertSubwindowAction", InsertSubwindowAction)
 
    SubwindowBehavior = {
