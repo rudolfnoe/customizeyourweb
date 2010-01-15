@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/bindings/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/targetdefinition.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/commonactionattributes/commonactionattributes.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="editDialog"
+    buttons="accept,cancel"
+    ondialogaccept="customizeyourweb.EditInsertSubwindowDialogHandler.doOk()" ondialogcancel="customizeyourweb.EditInsertSubwindowDialogHandler.doCancel()"
+    onload="customizeyourweb.EditInsertSubwindowDialogHandler.doOnload()"
+    title="Insert Subwindow"
+    persist="screenX screenY width height"
+    flex="1">
+   <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
+   <script src="chrome://customizeyourweb/content/cyw/common/WhereToInsertEnum.js"/>
+   <script src="chrome://customizeyourweb/content/cyw/editing/common/editdialogs/common_edit_dialog_include.js"/>
+   <script src="edit_insert_subwindow_dialog.js"/>
+   <dialogheader title="Define the subwindow preferences" rows="1"/>
+   
+   <vbox flex="1">
+      <groupbox>
+         <caption label="Type"/>
+         <radiogroup>
+            <grid>
+               <columns>
+                  <column></column>
+                  <column flex="1"></column>
+               </columns>
+               <rows>
+                  <row align="center">
+                     <radio label="Static URL"/>
+                     <textbox flex="1"/>
+                  </row>
+                  <row align="center">
+                     <radio label="Preview: Event Type"/>
+                     <menulist id="whereML">
+                        <menupopup>
+                           <menuitem label="Mouse over Link" value="ONMOUSEOVER" />
+                           <menuitem label="Listview Item selected" value="LISTVIEW_ITEM_SELECTED"/>
+                        </menupopup>
+                     </menulist>
+                  </row>
+               </rows>
+            </grid>
+         </radiogroup>
+      </groupbox>
+      <groupbox>
+         <caption label="Layout"/>
+         <radiogroup>
+            <grid>
+               <columns>
+                  <column></column>
+                  <column ></column>
+               </columns>
+               <rows>
+                  <row align="center">
+                     <label value="Style"/>
+                     <menulist id="whereML" >
+                        <menupopup>
+                           <menuitem label="Free floating / Overlayed" value="after" />
+                           <menuitem label="Fixed position" value="before"/>
+                        </menupopup>
+                     </menulist>
+                  </row>
+                  <row align="center">
+                     <label value="Position"/>
+                     <menulist id="whereML" >
+                        <menupopup>
+                           <menuitem label="After selected element" value="after" />
+                           <menuitem label="Before selected element" value="before"/>
+                           <menuitem label="As first child" value="firstChild"/>
+                           <menuitem label="As last child" value="lastChild"/>
+                        </menupopup>
+                     </menulist>
+                  </row>
+                  <row align="center" style="margin-top:5px">
+                     <label value="Height"/>
+                     <hbox align="center">
+                        <textbox maxwidth="60px"/>
+                        <label value="Width"/>
+                        <textbox maxwidth="60px"/>
+                     </hbox>
+                  </row>
+               </rows>
+            </grid>
+         </radiogroup>
+      </groupbox>
+      <targetdefinition id="targetdefinition"/>
+      <commonactionattributes/>
+   </vbox>
+</dialog>
