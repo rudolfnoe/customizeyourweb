@@ -8,7 +8,6 @@ with(customizeyourweb){
    
    AbstractCommonAttributesEditCommand.prototype = {
       constructor: AbstractCommonAttributesEditCommand,
-      AbstractCommonAttributesEditCommand: AbstractCommonAttributesEditCommand,
       
       afterSuccessfulActionEditing: function(editContext){
          //empty default implementation

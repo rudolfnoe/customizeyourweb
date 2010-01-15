@@ -13,7 +13,7 @@ with(customizeyourweb){
 
    }
    
-   ObjectUtils.extend(AbstractInsertElementAction, "AbstractAction", customizeyourweb)
+   ObjectUtils.extend(AbstractInsertElementAction, "AbstractTargetedAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractInsertElementAction", AbstractInsertElementAction)
 })()
