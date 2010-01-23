@@ -7,6 +7,7 @@ with(customizeyourweb){
    
    AbstractTargetDefinition.prototype = {
       constructor: AbstractTargetDefinition,   
+      AbstractTargetDefinition: AbstractTargetDefinition,
       
       getTargetName: function(){
          return this.targetName
