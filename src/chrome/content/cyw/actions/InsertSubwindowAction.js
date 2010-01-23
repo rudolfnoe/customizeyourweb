@@ -1,20 +1,20 @@
 with(customizeyourweb){
 (function(){
    
-   function InsertSubwindowAction(targetDefinition){
-      this.AbstractInsertElementAction(targetDefinition)
+   function InsertSubwindowAction(targetDefinition, position){
+      this.AbstractInsertElementAction(targetDefinition, position)
       /*See static url, preview*/
-      this.behavior = SubwindowBehavior.STATIC_URL
+      this.behavior = SubwindowBehavior.STATIC
       //Height of the subwindow
-      this.height = "500"
+      this.height = 500
       //Style of subwindow
-      this.style = SubwindowStyle.OVERLAYED
+      this.style = SubwindowStyle.FIXED_POSITION
       //Only in case of dynamic target
-      this.triggerEvent = SubwindowTriggerEvent.ON_MOUSE_OVER 
+      this.triggerEvent = SubwindowTriggerEvent.ONMOUSEOVER 
       //Only in case of static target
       this.url = null
       //Width of the subwindow
-      this.width = "400px"
+      this.width = 400
    }
    
    InsertSubwindowAction.prototype ={ 
@@ -76,20 +76,20 @@ with(customizeyourweb){
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertSubwindowAction", InsertSubwindowAction)
 
    SubwindowBehavior = {
-      STATIC_URL: "STATIC_URL",
+      STATIC: "STATIC",
       PREVIEW: "PREVIEW"
    }
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowBehavior", SubwindowBehavior)
    
    SubwindowTriggerEvent = {
-      ON_MOUSE_OVER: "ON_MOUSE_OVER",
+      ONMOUSEOVER: "ONMOUSEOVER",
       ON_LISTVIEW_ITEM_CHANGE: "ON_LISTVIEW_ITEM_CHANGE"
    }
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowTriggerEvent", SubwindowTriggerEvent)
    
    SubwindowStyle = {
       OVERLAYED: "OVERLAYED",
-      INTEGRATED: "INTEGRATED"
+      FIXED_POSITION : "FIXED_POSITION"
    }
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowStyle", SubwindowStyle)
 })()
