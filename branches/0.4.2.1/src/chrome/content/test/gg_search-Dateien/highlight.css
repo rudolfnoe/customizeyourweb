@@ -1,0 +1,37 @@
+.highlightFrame {
+    z-index: 2147483646;
+    position: absolute;
+    background-color: #3875d7;
+}
+
+.infoSpan{
+    z-index: 2147483646;
+    position: absolute;
+    background-color: rgb(223, 241, 255);
+    font-family:arial, sans-serif; 
+    font-size:xx-small; 
+    padding:1px 2px 0px 2px;
+    border: 1px solid black;
+    -moz-border-radius:2px;
+}
+
+.sizeInfoSpan{
+    z-index: 2147483647;
+    position: absolute;
+    background-color: rgb(223, 241, 255);
+    font-family:arial, sans-serif; 
+    font-size:xx-small; 
+    padding:1px 2px 0px 2px;
+    border: 1px solid black;
+    -moz-border-radius:2px;
+    display: none;
+}
+
+.resizeGrip{
+    z-index: 2147483647;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border: 1px solid black;
+    background-color: rgb(216, 216, 210);
+}
