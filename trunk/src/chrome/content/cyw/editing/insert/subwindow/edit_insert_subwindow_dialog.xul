@@ -8,7 +8,8 @@
     xmlns:html="http://www.w3.org/1999/xhtml"
     id="editDialog"
     buttons="accept,cancel"
-    ondialogaccept="customizeyourweb.EditInsertSubwindowDialogHandler.doOk()" ondialogcancel="customizeyourweb.EditInsertSubwindowDialogHandler.doCancel()"
+    ondialogaccept="customizeyourweb.EditInsertSubwindowDialogHandler.doOk()" 
+    ondialogcancel="customizeyourweb.EditInsertSubwindowDialogHandler.doCancel()"
     onload="customizeyourweb.EditInsertSubwindowDialogHandler.doOnload()"
     title="Insert Subwindow"
     persist="screenX screenY width height"
@@ -22,23 +23,26 @@
    <vbox flex="1">
       <groupbox>
          <caption label="Type"/>
-         <radiogroup>
+         <radiogroup id="behaviorRG" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.handleTypeChanged()"> 
             <grid>
                <columns>
+                  <column></column>
                   <column></column>
                   <column flex="1"></column>
                </columns>
                <rows>
                   <row align="center">
-                     <radio label="Static URL"/>
-                     <textbox flex="1"/>
+                     <radio id="staticRB" label="Static: " value="STATIC"/>
+                     <label value="URL"/>
+                     <textbox id="urlTB" flex="1"/>
                   </row>
                   <row align="center">
-                     <radio label="Preview: Event Type"/>
-                     <menulist id="whereML">
+                     <radio id="previewRB" label="Preview: " value="PREVIEW"/>
+                     <label value="Event Type"/>
+                     <menulist id="triggerEventML">
                         <menupopup>
                            <menuitem label="Mouse over Link" value="ONMOUSEOVER" />
-                           <menuitem label="Listview Item selected" value="LISTVIEW_ITEM_SELECTED"/>
+                           <menuitem label="Listview Item selected" value="ON_LISTVIEW_ITEM_CHANGE"/>
                         </menupopup>
                      </menulist>
                   </row>
@@ -48,44 +52,51 @@
       </groupbox>
       <groupbox>
          <caption label="Layout"/>
-         <radiogroup>
-            <grid>
-               <columns>
-                  <column></column>
-                  <column ></column>
-               </columns>
-               <rows>
-                  <row align="center">
-                     <label value="Style"/>
-                     <menulist id="whereML" >
-                        <menupopup>
-                           <menuitem label="Free floating / Overlayed" value="after" />
-                           <menuitem label="Fixed position" value="before"/>
-                        </menupopup>
-                     </menulist>
-                  </row>
-                  <row align="center">
-                     <label value="Position"/>
-                     <menulist id="whereML" >
-                        <menupopup>
-                           <menuitem label="After selected element" value="after" />
-                           <menuitem label="Before selected element" value="before"/>
-                           <menuitem label="As first child" value="firstChild"/>
-                           <menuitem label="As last child" value="lastChild"/>
-                        </menupopup>
-                     </menulist>
-                  </row>
-                  <row align="center" style="margin-top:5px">
-                     <label value="Height"/>
-                     <hbox align="center">
-                        <textbox maxwidth="60px"/>
-                        <label value="Width"/>
-                        <textbox maxwidth="60px"/>
-                     </hbox>
-                  </row>
-               </rows>
-            </grid>
-         </radiogroup>
+         <grid>
+            <columns>
+               <column></column>
+               <column ></column>
+            </columns>
+            <rows>
+               <row align="center">
+                  <label value="Style"/>
+                  <menulist id="styleML" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.handleStyleChanged()">
+                     <menupopup>
+                        <menuitem label="Free floating / Overlayed" value="OVERLAYED" />
+                        <menuitem label="Fixed position" value="FIXED_POSITION"/>
+                     </menupopup>
+                  </menulist>
+               </row>
+               <!--row align="center">
+                  <label value="Position"/>
+                  <menulist id="whereML" >
+                     <menupopup>
+                        <menuitem label="Right upper corner" value="RIGHT_TOP" />
+                        <menuitem label="Right bottom corner" value="RIGHT_BOTTOM"/>
+                     </menupopup>
+                  </menulist>
+               </row-->
+               <row align="center">
+                  <label value="Position"/>
+                  <menulist id="positionML" >
+                     <menupopup>
+                        <menuitem label="After selected element" value="after" />
+                        <menuitem label="Before selected element" value="before"/>
+                        <menuitem label="As first child" value="firstChild"/>
+                        <menuitem label="As last child" value="lastChild"/>
+                     </menupopup>
+                  </menulist>
+               </row>
+               <row align="center" style="margin-top:5px">
+                  <label value="Height (px)"/>
+                  <hbox align="center">
+                     <textbox id="heightTB" maxwidth="50px" type="number"/>
+                     <label value="Width (px)" style="margin-left:5px"/>
+                     <textbox id="widthTB" maxwidth="50px" type="number"/>
+                  </hbox>
+               </row>
+            </rows>
+         </grid>
       </groupbox>
       <targetdefinition id="targetdefinition"/>
       <commonactionattributes/>

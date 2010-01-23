@@ -75,11 +75,11 @@
             	<menuitem id="customizeyourweb_insertStyleSheetMI" command="customizeyourweb_insertStyleSheetCmd" acceltext="Y"/>
             </menupopup>
          </menu>
-         <!--menu label="Insert Element">
+         <menu label="Insert Element">
             <menupopup>
             	<menuitem id="customizeyourweb_insertSubwindowMI" command="customizeyourweb_insertSubwindowCmd" acceltext="W"/>
             </menupopup>
-         </menu-->
+         </menu>
          <menuseparator/>
          	<menuitem id="customizeyourweb_ifElementExistsMI" command="customizeyourweb_ifElementExistsCmd" acceltext="I"/>
          <menuseparator/>
