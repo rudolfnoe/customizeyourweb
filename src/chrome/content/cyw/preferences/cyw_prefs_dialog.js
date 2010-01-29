@@ -2,7 +2,7 @@
 
   customizeyourweb
   Version 0.1
-  Created by Rudolf Noé
+  Created by Rudolf Noe
 */
 //Imports
  with(customizeyourweb){
@@ -82,6 +82,14 @@
             }
          }, true)
          Utils.notifyObservers(CywCommon.PREF_OBSERVER);
+      },
+      
+      loadKeyListbox: function(){
+         loadKeyListbox('keyListBox')
+      },  
+      
+      saveKeyListbox: function(){
+         saveKeyListbox('keyListBox')
       }
    }
    
