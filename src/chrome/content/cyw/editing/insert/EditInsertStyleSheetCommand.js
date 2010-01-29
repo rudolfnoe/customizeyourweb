@@ -1,6 +1,6 @@
 with(customizeyourweb){
 (function(){
-   const EDIT_INSERT_STYLESHEET_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/code/edit_insert_stylesheet_dialog.xul"
+   const EDIT_INSERT_STYLESHEET_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/edit_insert_stylesheet_dialog.xul"
    
    function EditInsertStyleSheetCommand(){}
    

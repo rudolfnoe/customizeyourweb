@@ -8,6 +8,7 @@ with(customizeyourweb){
    
    AbstractTargetedAction.prototype = {
       constructor: AbstractTargetedAction,
+      AbstractTargetedAction: AbstractTargetedAction,
       /*
        * Sets the target identifier
        */

@@ -6,6 +6,7 @@ with(customizeyourweb){
    
    AbstractContainerAction.prototype = {
       constructor: AbstractContainerAction,
+      AbstractContainerAction: AbstractContainerAction,
       
       getActions: function(){
          return this.actions
