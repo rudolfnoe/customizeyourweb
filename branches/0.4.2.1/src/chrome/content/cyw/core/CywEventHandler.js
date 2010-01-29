@@ -36,7 +36,7 @@
       },
       
       openConfiguration : function(event) {
-			openDialog(CywCommon.CYW_CHROME_URL + "/preferences/cyw_prefs.xul", "cyw_prefs", "all, chrome, centerscreen").focus()
+			openDialog(CywCommon.CYW_CHROME_URL + "/preferences/cyw_prefs.xul", "cyw_prefs", "all, chrome, centerscreen")
 		},
       
       openIssueList: function(){

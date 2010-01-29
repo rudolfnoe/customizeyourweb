@@ -1,7 +1,7 @@
 /*
  * customizeyourweb
  * Version 0.1
- * Created by Rudolf Noé
+ * Created by Rudolf Noe
  * 25.09.2008
  */
 

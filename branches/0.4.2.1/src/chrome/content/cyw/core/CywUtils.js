@@ -1,6 +1,6 @@
 /*
  * Util-Functions of CYW
- * Rudolf Noé
+ * Rudolf Noe
  * 25.09.2008
  */
 with(customizeyourweb){
