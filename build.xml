@@ -19,7 +19,7 @@
 			<fileset dir="${dist_dir}" includes="*"/>
 		</delete>
 		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**" 
-		   excludes="chrome/content/lib/**, chrome/content/test/**"/>
+		   excludes="chrome/content/lib/**, chrome/content/test/**, **/Shortcutmanager.js"/>
 		<!-- Make backup-copy -->
 		<copy todir="${backup_dir}/src">
 			<fileset dir="${src_dir}"/>
