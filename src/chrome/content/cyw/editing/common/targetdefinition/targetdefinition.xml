@@ -17,8 +17,9 @@
                         <xul:label value="Definition style"/>
                         <xul:menulist anonid="targetDefinitionStyleML">
                            <xul:menupopup>
-                              <xul:menuitem label="XPath" value="XPATH"/>
                               <xul:menuitem label="Simple" value="SIMPLE"/>
+                              <xul:menuitem label="XPath" value="XPATH"/>
+                              <xul:menuitem label="jQuery" value="JQUERY"/>
                            </xul:menupopup>
                         </xul:menulist>
                      </xul:row>
@@ -69,11 +70,15 @@
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/core/CywUtils.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblValidator.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/AbstractTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/XPathTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/SimpleTargetDefinitionXblHandler.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/JQueryTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractTargetDefinitionFactory.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/SimpleTargetDefinitionFactory.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/XPathTargetDefinitionFactory.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/JQuerySelectorFactory.js", customizeyourweb)
+               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/JQueryTargetDefinitionFactory.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractHighlighter.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/FrameHighlighter.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/MultiElementHighlighter.js", customizeyourweb)

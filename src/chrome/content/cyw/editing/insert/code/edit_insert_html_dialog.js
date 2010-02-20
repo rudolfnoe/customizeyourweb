@@ -15,6 +15,7 @@ with(customizeyourweb){
          Dialog.setResult(DialogResult.OK)
          this.action.setWhereToInsert(byId('whereML').value)
          this.action.setHtmlCode(byId('htmlCodeTB').value)
+         this.action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
          Dialog.setNamedResult("action", this.action)
       },
 

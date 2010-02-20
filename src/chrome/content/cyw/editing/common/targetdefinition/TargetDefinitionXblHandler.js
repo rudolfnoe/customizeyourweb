@@ -170,7 +170,8 @@ with(customizeyourweb){
          }else{
             this.setMessage("")
          }
-         this.getTargetElementsHighlighter().highlight(targetElems)            
+         this.getTargetElementsHighlighter().highlight(targetElems)
+         targetElems[0].scrollIntoView()
       },
       
       initEventHandlers: function(){
@@ -181,12 +182,18 @@ with(customizeyourweb){
       },
       
       initialize: function(){
+         this.loadJQuery()
          //default is true
          var autoInit = DomUtils.getAttribute(this.targetDefinitionBinding, 'autoInit', "true")=="true"
          if(autoInit){
             this.autoInitByDialogArgument() 
          }
          this.initEventHandlers()
+      },
+      
+      loadJQuery: function(){
+         ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb")
+         ScriptLoader.loadScript(CywCommon.CHROME_CONTENT_URL + "jquery/jQueryViewport.js", "customizeyourweb")
       },
       
       notifyValueChangedListener: function(){
@@ -230,14 +237,18 @@ with(customizeyourweb){
          if(this.targetDefinitionMLHandler){
             this.targetDefinitionMLHandler.cleanUp()
          }
+         var constructor = null
          if(stlye==TargetDefinitionStyle.XPATH)
-            this.targetDefinitionMLHandler = 
-               new XPathTargetDefinitionXblHandler(this.targetDefinitionML, this.getTargetWin(), this.targetElement)
+            constructor = XPathTargetDefinitionXblHandler
          else if (stlye==TargetDefinitionStyle.SIMPLE)
-            this.targetDefinitionMLHandler = 
-               new SimpleTargetDefinitionXblHandler(this.targetDefinitionML, this.getTargetWin(), this.targetElement)
+            constructor = SimpleTargetDefinitionXblHandler
+         else if (stlye==TargetDefinitionStyle.JQUERY)
+            constructor = JQueryTargetDefinitionXblHandler
          else 
             throw new Error('unknown style')
+         
+         this.targetDefinitionMLHandler = 
+            new constructor(this.targetDefinitionML, this.getTargetWin(), this.targetElement)
       },
       
       setTargetWindow: function(targetWindow){
