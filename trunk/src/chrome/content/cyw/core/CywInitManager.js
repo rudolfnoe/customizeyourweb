@@ -58,7 +58,7 @@ with(customizeyourweb){
 		init: function(event){
          //Load configuration first
 			CywConfig.init()
-         this.intializedOnce()
+         this.intializeOnce()
          this.disableAll()
          var disabled = Prefs.getBoolPref("customizeyourweb.disabled")
          if(!disabled){
@@ -79,7 +79,7 @@ with(customizeyourweb){
          }
       },
       
-      intializedOnce: function(){
+      intializeOnce: function(){
 			if(!this.intializedOnceDone){
    		   this.registerObservers()
             this.assureAIOSCompatibility()

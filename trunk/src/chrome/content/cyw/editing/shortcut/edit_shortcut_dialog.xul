@@ -40,6 +40,7 @@
                      <menupopup>
                         <menuitem label="Same tab" value="current" selected="true"/>
                         <menuitem label="New tab" value="tab"/>
+                        <menuitem label="New tab in background" value="tabshifted"/>
                         <menuitem label="New window" value="window"/>
                      </menupopup>
                   </menulist>

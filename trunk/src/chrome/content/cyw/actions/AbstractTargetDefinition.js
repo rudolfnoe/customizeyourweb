@@ -66,6 +66,7 @@ with(customizeyourweb){
    Namespace.bindToNamespace("customizeyourweb", "AbstractTargetDefinition", AbstractTargetDefinition)
    
    var TargetDefinitionStyle = {
+      JQUERY: "JQUERY",
       SIMPLE: "SIMPLE",
       XPATH: "XPATH"
    }

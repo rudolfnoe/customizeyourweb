@@ -1,96 +1,149 @@
-with(customizeyourweb){
-(function(){
-   
-   function InsertSubwindowAction(targetDefinition, position){
-      this.AbstractInsertElementAction(targetDefinition, position)
-      /*See static url, preview*/
-      this.behavior = SubwindowBehavior.STATIC
-      //Height of the subwindow
-      this.height = 500
-      //Style of subwindow
-      this.style = SubwindowStyle.FIXED_POSITION
-      //Only in case of dynamic target
-      this.triggerEvent = SubwindowTriggerEvent.ONMOUSEOVER 
-      //Only in case of static target
-      this.url = null
-      //Width of the subwindow
-      this.width = 400
-   }
-   
-   InsertSubwindowAction.prototype ={ 
-      constructor: InsertSubwindowAction,
+with (customizeyourweb) {
+   (function() {
 
-      getBehavior: function(){
-         return this.behavior
-      },
+      function InsertSubwindowAction(targetDefinition, position) {
+         this.AbstractInsertElementAction(targetDefinition, position)
+         /* See static url, preview */
+         this.behavior = SubwindowBehavior.STATIC
+         // Height of the subwindow
+         this.height = 500
+         this.heightUnit = "px"
+         // Style of subwindow
+         this.style = SubwindowStyle.FIXED_POSITION
+         // Only in case of dynamic target
+         this.triggerEvent = SubwindowTriggerEvent.ONMOUSEOVER
+               | SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE
+         // Only in case of static target
+         this.url = null
+         // Width of the subwindow
+         this.width = 400
+         this.widthUnit = "px"
+      }
 
-      setBehavior: function(behavior){
-         this.behavior = behavior
-      },
+      InsertSubwindowAction.prototype = {
+         constructor : InsertSubwindowAction,
 
-      getHeight: function(){
-         return this.height
-      },
+         getBehavior : function() {
+            return this.behavior
+         },
 
-      setHeight: function(height){
-         this.height = height
-      },
+         setBehavior : function(behavior) {
+            this.behavior = behavior
+         },
 
-      getStyle: function(){
-         return this.style
-      },
+         getHeight : function() {
+            return this.height
+         },
 
-      setStyle: function(style){
-         this.style = style
-      },
+         setHeight : function(height) {
+            this.height = height
+         },
 
-      getTriggerEvent: function(){
-         return this.triggerEvent
-      },
+         getHeightUnit: function(){
+            return this.heightUnit
+         },
 
-      setTriggerEvent: function(triggerEvent){
-         this.triggerEvent = triggerEvent
-      },
+         setHeightUnit: function(heightUnit){
+            this.heightUnit = heightUnit
+         },
 
-      getUrl: function(){
-         return this.url
-      },
+         getStyle : function() {
+            return this.style
+         },
 
-      setUrl: function(url){
-         this.url = url
-      },
+         setStyle : function(style) {
+            this.style = style
+         },
 
-      getWidth: function(){
-         return this.width
-      },
+         getTriggerEvent : function() {
+            return this.triggerEvent
+         },
 
-      setWidth: function(width){
-         this.width = width
-      },
+         setTriggerEvent : function(triggerEvent) {
+            this.triggerEvent = triggerEvent
+         },
 
-      doActionInternal: function(cywContext){
-      }     
+         getUrl : function() {
+            return this.url
+         },
 
-   }
-   ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertElementAction", customizeyourweb)
-   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertSubwindowAction", InsertSubwindowAction)
+         setUrl : function(url) {
+            this.url = url
+         },
 
-   SubwindowBehavior = {
-      STATIC: "STATIC",
-      PREVIEW: "PREVIEW"
-   }
-   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowBehavior", SubwindowBehavior)
-   
-   SubwindowTriggerEvent = {
-      ONMOUSEOVER: "ONMOUSEOVER",
-      ON_LISTVIEW_ITEM_CHANGE: "ON_LISTVIEW_ITEM_CHANGE"
-   }
-   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowTriggerEvent", SubwindowTriggerEvent)
-   
-   SubwindowStyle = {
-      OVERLAYED: "OVERLAYED",
-      FIXED_POSITION : "FIXED_POSITION"
-   }
-   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowStyle", SubwindowStyle)
-})()
+         getWidth : function() {
+            return this.width
+         },
+
+         setWidth : function(width) {
+            this.width = width
+         },
+
+         getWidthUnit: function(){
+            return this.widthUnit
+         },
+
+         setWidthUnit: function(widthUnit){
+            this.widthUnit = widthUnit
+         },
+
+         doActionInternal : function(cywContext) {
+            if(this.style == SubwindowStyle.FIXED_POSITION) {
+               var iframe = this.insertFixedPositionedSubwindow(cywContext)
+            }else if(this.behavior == SubwindowStyle.OVERLAYED){
+               var iframe = this.insertOverlayedSubwindow(cywContext)
+            }else {
+               throw new Error('unknown style value')
+            }
+            
+            if(this.behavior == SubwindowBehavior.STATIC) {
+              iframe.src = this.url
+            }else if(this.behavior == SubwindowBehavior.PREVIEW) {
+               this.attachEventListener(iframe)
+            }else {
+               throw new Error('unknown behavior value')
+            }
+            return true
+         },
+
+         insertFixedPositionedSubwindow : function(cywContext) {
+            var html = "<iframe/>";
+            var iframe = $(this.insertElement(html, cywContext));
+            iframe.width(this.width+this.widthUnit)
+            iframe.height(this.height+this.heightUnit)
+            iframe.attr("id", "cyw_" + cywContext.getScript() + "_" + this.getId())
+            return iframe.get(0)
+         },
+         
+         insertOverlayedSubwindow: function(cywContext){
+            throw new Error('not yet implemented')
+         }
+
+      }
+      ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertElementAction",
+            customizeyourweb)
+      customizeyourweb.Namespace.bindToNamespace("customizeyourweb",
+            "InsertSubwindowAction", InsertSubwindowAction)
+
+      SubwindowBehavior = {
+         STATIC : "STATIC",
+         PREVIEW : "PREVIEW"
+      }
+      customizeyourweb.Namespace.bindToNamespace("customizeyourweb",
+            "SubwindowBehavior", SubwindowBehavior)
+
+      SubwindowTriggerEvent = {
+         ONMOUSEOVER : 1,
+         ON_LISTVIEW_ITEM_CHANGE : 2
+      }
+      customizeyourweb.Namespace.bindToNamespace("customizeyourweb",
+            "SubwindowTriggerEvent", SubwindowTriggerEvent)
+
+      SubwindowStyle = {
+         OVERLAYED : "OVERLAYED",
+         FIXED_POSITION : "FIXED_POSITION"
+      }
+      customizeyourweb.Namespace.bindToNamespace("customizeyourweb",
+            "SubwindowStyle", SubwindowStyle)
+   })()
 }

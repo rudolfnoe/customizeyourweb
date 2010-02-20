@@ -14,12 +14,23 @@ with(customizeyourweb){
       doOk: function(){
          Dialog.setResult(DialogResult.OK)
          this.action.setBehavior(byId("behaviorRG").selectedItem.value)
-         this.action.setUrl(byId("urlTB").value)
-         this.action.setTriggerEvent(byId("triggerEventML").value)
+         var url = byId("urlTB").value
+         if(!StringUtils.startsWith(url, "http://")){
+            url = "http://" + url
+         }
+         this.action.setUrl(url)
+//         alert(byId('mouseOverCB').checked)
+         var mouseOverEvent = byId('mouseOverCB').checked ? SubwindowTriggerEvent.ONMOUSEOVER : 0
+				var listViewEvent = byId('listViewCB').checked ? SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE : 0
+//         alert(mouseOverEvent | listViewEvent)
+         this.action.setTriggerEvent(mouseOverEvent | listViewEvent)
          this.action.setStyle(byId("styleML").value)
          this.action.setPosition(byId("positionML").value)
          this.action.setHeight(byId("heightTB").value)
+         this.action.setHeightUnit(byId("heightUnitCB").value)
          this.action.setWidth(byId("widthTB").value)
+         this.action.setWidthUnit(byId("widthUnitCB").value)
+         this.action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
          Dialog.setNamedResult("action", this.action)
       },
 
@@ -33,11 +44,15 @@ with(customizeyourweb){
          var behavior = this.action.getBehavior()
          byId("behaviorRG").selectedItem = byId(behavior.toLowerCase() + "RB")
          byId("urlTB").value = this.action.getUrl()
-         byId("triggerEventML").value = this.action.getTriggerEvent()
+         var triggerEvent = this.action.getTriggerEvent()
+         byId("mouseOverCB").checked = triggerEvent & SubwindowTriggerEvent.ONMOUSEOVER 
+         byId("listViewCB").checked = triggerEvent & SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE 
          byId("styleML").value = this.action.getStyle()
          byId("positionML").value = this.action.getPosition()
          byId("heightTB").value = this.action.getHeight()
+         byId("heightUnitCB").value = this.action.getHeightUnit()
          byId("widthTB").value = this.action.getWidth()
+         byId("widthUnitCB").value = this.action.getWidthUnit()
          
          this.initValidators(this.targetElement)
       },
@@ -45,10 +60,12 @@ with(customizeyourweb){
       handleTypeChanged: function(){
          if(byId('staticRB').selected){
             byId('urlTB').disabled = false
-            byId('triggerEventML').disabled = true
+            byId('mouseOverCB').disabled = true
+            byId('listViewCB').disabled = true
          }else{
             byId('urlTB').disabled = true
-            byId('triggerEventML').disabled = false
+            byId('mouseOverCB').disabled = false
+            byId('listViewCB').disabled = false
          }
       },
       
@@ -67,8 +84,8 @@ with(customizeyourweb){
 //         var radiogroupVal = ValidatorFactory.createTextboxNotEmptyValidator(byId('urlTB'))
          var okValidator = new AndValidator([targetDefValidator, radiogroupVal])
          
-         Dialog.addOkValidator(okValidator)
-         okValidator.validate()
+//         Dialog.addOkValidator(okValidator)
+//         okValidator.validate()
        },
 
       updatePage: function(){

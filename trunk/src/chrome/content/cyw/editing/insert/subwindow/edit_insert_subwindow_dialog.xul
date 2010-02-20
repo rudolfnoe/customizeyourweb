@@ -18,7 +18,7 @@
    <script src="chrome://customizeyourweb/content/cyw/common/WhereToInsertEnum.js"/>
    <script src="chrome://customizeyourweb/content/cyw/editing/common/editdialogs/common_edit_dialog_include.js"/>
    <script src="edit_insert_subwindow_dialog.js"/>
-   <dialogheader title="Define the subwindow preferences" rows="1"/>
+   <dialogheader title="Define subwindow preferences" rows="1"/>
    
    <vbox flex="1">
       <groupbox>
@@ -33,18 +33,25 @@
                <rows>
                   <row align="center">
                      <radio id="staticRB" label="Static: " value="STATIC"/>
-                     <label value="URL"/>
-                     <textbox id="urlTB" flex="1"/>
+                     <!-- hbox align="center" flex="1"-->
+                        <label value="URL"/>
+                        <textbox id="urlTB" flex="1"/>
+                     <!-- /hbox-->
                   </row>
-                  <row align="center">
+                  <row align="center"  style="margin-top:5px">
                      <radio id="previewRB" label="Preview: " value="PREVIEW"/>
                      <label value="Event Type"/>
-                     <menulist id="triggerEventML">
-                        <menupopup>
-                           <menuitem label="Mouse over Link" value="ONMOUSEOVER" />
-                           <menuitem label="Listview Item selected" value="ON_LISTVIEW_ITEM_CHANGE"/>
-                        </menupopup>
-                     </menulist>
+                     <checkbox id="mouseOverCB" label="Mouse over Link"/>
+                  </row>
+                  <row align="center">
+                     <spacer/>
+                     <spacer/>
+                     <checkbox id="listViewCB" label="Listview Item selected"/>
+                  </row>
+                  <row align="center">
+                     <hbox>
+                        <spacer width="20px"/>
+                     </hbox>
                   </row>
                </rows>
             </grid>
@@ -91,8 +98,20 @@
                   <label value="Height (px)"/>
                   <hbox align="center">
                      <textbox id="heightTB" maxwidth="50px" type="number"/>
+                     <menulist id="heightUnitCB" height="23px" maxwidth="40px">
+                        <menupopup>
+                           <menuitem label="px" value="px" />
+                           <menuitem label="%" value="%" />
+                        </menupopup>
+                     </menulist>
                      <label value="Width (px)" style="margin-left:5px"/>
                      <textbox id="widthTB" maxwidth="50px" type="number"/>
+                     <menulist id="widthUnitCB" height="23px" maxwidth="40px">
+                        <menupopup>
+                           <menuitem label="px" value="px" />
+                           <menuitem label="%" value="%" />
+                        </menupopup>
+                     </menulist>
                   </hbox>
                </row>
             </rows>

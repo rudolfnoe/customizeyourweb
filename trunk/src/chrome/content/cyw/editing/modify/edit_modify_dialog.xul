@@ -18,6 +18,7 @@
    <script src="../common/editdialogs/common_edit_dialog_include.js"/>
    <script src="../../core/CywUtils.js"/>
    <script src="edit_modify_dialog.js"/>
+   <!--script src="../../../jquery/jquery.js"/-->
    <dialogheader title="Define the details of modifying" rows="1"/>
       
    <commandset>

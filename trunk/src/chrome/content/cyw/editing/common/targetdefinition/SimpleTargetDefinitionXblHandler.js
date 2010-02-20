@@ -1,11 +1,9 @@
 with(customizeyourweb){
 (function(){
    function SimpleTargetDefinitionXblHandler(targetDefinitionML, targetWin, targetElement){
-      this.targetDefinitionML = targetDefinitionML
-      this.targetElement = targetElement
-      this.targetWin = targetWin
+      this.AbstractTargetDefinitionXblHandler(targetDefinitionML, targetWin, targetElement)
       this.autocompleteHandler = null
-      if(this.targetElement!=null){
+      if(this.getTargetElement()!=null){
          this.initAutocompleteHandler()
       }
    }
@@ -41,34 +39,35 @@ with(customizeyourweb){
       },
 
       getCurrentTargets: function(){
-         return this.getTargetDefinition().getTargets(this.targetWin)
+         return this.getTargetDefinition().getTargets(this.getTargetWin())
       },
       
       getTargetDefinition: function(){
-         return SimpleTargetDefinitionFactory.getInstance().parseTargetDefinition(this.targetDefinitionML.value)      
+         return SimpleTargetDefinitionFactory.getInstance().parseTargetDefinition(this.getTargetDefinitionML().value)      
       },
       
       handleCursorPositionChange: function(event){
       },
       
       initAutocompleteHandler: function(){
-         var attributes = this.targetElement.attributes
+         var attributes = this.getTargetElement().attributes
          var autocompleteItems = []
 
          //Add item for text
-         var textItem = this.createAutocompleteItem("text", SimpleTargetDefinition.getAttributeValue(this.targetElement, "text"))
+         var textItem = this.createAutocompleteItem("text", SimpleTargetDefinition.getAttributeValue(this.getTargetElement(), "text"))
          
          //Add attributes
          autocompleteItems.push(textItem)
          for (var i = 0; i < attributes.length; i++) {
             var attr = attributes.item(i)
             autocompleteItems.push(this.createAutocompleteItem(attr.name, 
-                                                               SimpleTargetDefinition.getAttributeValue(this.targetElement, attr.name)))
+                                                               SimpleTargetDefinition.getAttributeValue(this.getTargetElement(), attr.name)))
          }
-         this.autocompleteHandler = new Autocomplete(this.targetDefinitionML, new DefaultAutocompleteSearchHandler(autocompleteItems))
+         this.autocompleteHandler = new Autocomplete(this.getTargetDefinitionML(), new DefaultAutocompleteSearchHandler(autocompleteItems))
          
       }
    }
+   ObjectUtils.extend(SimpleTargetDefinitionXblHandler, "AbstractTargetDefinitionXblHandler", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "SimpleTargetDefinitionXblHandler", SimpleTargetDefinitionXblHandler)
 })()
