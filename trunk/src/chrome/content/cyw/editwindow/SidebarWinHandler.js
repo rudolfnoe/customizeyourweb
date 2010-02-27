@@ -201,6 +201,7 @@ with(customizeyourweb){
             currentScript.setActions(this.actionsTreeView.getActions())
             currentScript.setLoadEventType(byId('loadEventType').value)
             currentScript.setBehaviorOnMutationEvent(byId('behaviorOnMutationEvent').value)
+            currentScript.setApplyToTopWindowsOnly(byId('onlyToTopWindowCB').checked)
             return currentScript
          }catch(e){
             CywUtils.logError(e)
@@ -398,6 +399,7 @@ with(customizeyourweb){
          //set other options
          byId('loadEventType').value = currentScript.getLoadEventType()
          byId('behaviorOnMutationEvent').value = currentScript.getBehaviorOnMutationEvent()
+         byId('onlyToTopWindowCB').checked = currentScript.isApplyToTopWindowsOnly()
          
          //setting of include/exclude patterns
          this.clearIncludeAndExcludePatterns()

@@ -7,6 +7,7 @@ with(customizeyourweb){
    	this.id = id
       this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
+      this.applyToTopWindowsOnly = false
       this.disabled = false
       this.t_fileName = null
       this.guiId = Utils.createGUIId()
@@ -59,6 +60,14 @@ with(customizeyourweb){
       	return this.actions
       },
       
+      isApplyToTopWindowsOnly: function(){
+         return this.applyToTopWindowsOnly
+      },
+
+      setApplyToTopWindowsOnly: function(applyToTopWindowsOnly){
+         this.applyToTopWindowsOnly = applyToTopWindowsOnly
+      },
+
       isDisabled: function(){
          return this.disabled
       },

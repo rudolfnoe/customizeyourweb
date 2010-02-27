@@ -76,7 +76,7 @@
                </row>
                <!--row align="center">
                   <label value="Position"/>
-                  <menulist id="whereML" >
+                  <menulist id="whereML" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="Right upper corner" value="RIGHT_TOP" />
                         <menuitem label="Right bottom corner" value="RIGHT_BOTTOM"/>
@@ -85,7 +85,7 @@
                </row-->
                <row align="center">
                   <label value="Position"/>
-                  <menulist id="positionML" >
+                  <menulist id="positionML" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="After selected element" value="after" />
                         <menuitem label="Before selected element" value="before"/>
@@ -97,16 +97,16 @@
                <row align="center" style="margin-top:5px">
                   <label value="Height (px)"/>
                   <hbox align="center">
-                     <textbox id="heightTB" maxwidth="50px" type="number"/>
-                     <menulist id="heightUnitCB" height="23px" maxwidth="40px">
+                     <textbox id="heightTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                     <menulist id="heightUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                         <menupopup>
                            <menuitem label="px" value="px" />
                            <menuitem label="%" value="%" />
                         </menupopup>
                      </menulist>
                      <label value="Width (px)" style="margin-left:5px"/>
-                     <textbox id="widthTB" maxwidth="50px" type="number"/>
-                     <menulist id="widthUnitCB" height="23px" maxwidth="40px">
+                     <textbox id="widthTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                     <menulist id="widthUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                         <menupopup>
                            <menuitem label="px" value="px" />
                            <menuitem label="%" value="%" />

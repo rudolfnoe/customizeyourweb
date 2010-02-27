@@ -193,7 +193,7 @@ with(customizeyourweb){
       
       loadJQuery: function(){
          ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb")
-         ScriptLoader.loadScript(CywCommon.CHROME_CONTENT_URL + "jquery/jQueryViewport.js", "customizeyourweb")
+//         ScriptLoader.loadScript(CywCommon.CHROME_CONTENT_URL + "jquery/jQueryViewport.js", "customizeyourweb")
       },
       
       notifyValueChangedListener: function(){

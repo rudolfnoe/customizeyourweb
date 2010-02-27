@@ -2,7 +2,7 @@ with(customizeyourweb){
 (function(){
    
    function AbstractEditInsertHtmlCommand(){
-      this.htmlMarkerId = (new Date()).getTime()
+      this.htmlMarkerId = CywUtils.createSessionUniqueId()
    }
    
    AbstractEditInsertHtmlCommand.prototype = {
@@ -33,7 +33,7 @@ with(customizeyourweb){
        undo: function(editContext, actionBackup){
          InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
          if(actionBackup)
-            InsertHTMLAction.insertHTML(this.targetElement, actionBackup)
+            AbstractInsertHTMLAction.insertHTML(actionBackup.getHtmlCode(), this.targetElement, actionBackup.getPosition())
       }
       
    }

@@ -20,10 +20,6 @@ with(customizeyourweb){
          var action = editContext.getAction()
          var targetElement = editContext.getTargetElement()
          var result = this.editAction(action, editContext)
-         //TODO check if correct
-//         if(result!=null){
-//            InsertHTMLAction.insertHTML(targetElement, action, this.getHtmlMarkerId())
-//         }
          return result
       },
       
