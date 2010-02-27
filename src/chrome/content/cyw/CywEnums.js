@@ -5,6 +5,9 @@ with(customizeyourweb){
 		PAGE_SHOW: "pageshow"
 	}
 	Namespace.bindToNamespace("customizeyourweb", "LoadEventTypes", LoadEventTypes)
-   
+
+   UIEvents = {
+      PREVIEW_LINK: "previewlink"
+   }
 })()
 }

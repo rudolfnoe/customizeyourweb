@@ -19,6 +19,9 @@
          customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "Log", logger)
       },
       
+      /*
+       * Loads all scripts needed in every context
+       */
       init: function(){
 			
          try{
@@ -34,6 +37,8 @@
    			
    			//Load Customize Your Web Scripts
    			scriptLoader.loadScript(this.CYW_CHROME_URL+ "CywEnums.js")
+   			scriptLoader.loadScript(this.CYW_CHROME_URL+ "core/CywUtils.js")
+   			scriptLoader.loadScript(this.CYW_CHROME_URL+ "core/CywContext.js")
             scriptLoader.loadScripts(this.CYW_CHROME_URL + "actions/", null, null, true)
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")

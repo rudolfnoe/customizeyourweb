@@ -61,8 +61,10 @@ with(customizeyourweb){
          for (var i = 0; i < this.applicableScripts.length; i++) {
             var script = this.applicableScripts[i]
             var applyScript = false
-            if( (script.getLoadEventType()==event.type) || 
-                (this.isPageshowEvent(event) && !this.isDomContentLoadedFired())){
+            if( ((script.getLoadEventType()==event.type) || 
+                (this.isPageshowEvent(event) && !this.isDomContentLoadedFired())) &&
+                // respect flag that script should only be applied on top window
+                 !(script.isApplyToTopWindowsOnly() && (this.targetWin!=event.originalTarget.defaultView.top))){
                   applyScript=true
             }
                

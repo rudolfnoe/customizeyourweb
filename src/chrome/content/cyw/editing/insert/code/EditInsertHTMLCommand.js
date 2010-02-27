@@ -22,7 +22,7 @@ with(customizeyourweb){
          var result = this.editAction(action, editContext)
          //TODO check if correct
          if(result!=null){
-            InsertHTMLAction.insertHTML(targetElement, action, this.getHtmlMarkerId())
+            AbstractInsertHTMLAction.insertHTML(action.getHtmlCode(), targetElement, action.getPosition(), this.getHtmlMarkerId())
          }
          return result
       },

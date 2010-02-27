@@ -3,41 +3,30 @@ with(customizeyourweb){
    var EditInsertSubwindowDialogHandler = {
       action: null,
       htmlMarkerId: null,
+      iframe: null,
       targetElement: null,
       
       doCancel: function(){
-//         if(this.targetElement){
-//            InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
-//         }
+         if(this.iframe){
+            $(this.iframe).remove()
+         }
       },
       
       doOk: function(){
+         this.synchronizeActionWithForm()
          Dialog.setResult(DialogResult.OK)
-         this.action.setBehavior(byId("behaviorRG").selectedItem.value)
-         var url = byId("urlTB").value
-         if(!StringUtils.startsWith(url, "http://")){
-            url = "http://" + url
-         }
-         this.action.setUrl(url)
-//         alert(byId('mouseOverCB').checked)
-         var mouseOverEvent = byId('mouseOverCB').checked ? SubwindowTriggerEvent.ONMOUSEOVER : 0
-				var listViewEvent = byId('listViewCB').checked ? SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE : 0
-//         alert(mouseOverEvent | listViewEvent)
-         this.action.setTriggerEvent(mouseOverEvent | listViewEvent)
-         this.action.setStyle(byId("styleML").value)
-         this.action.setPosition(byId("positionML").value)
-         this.action.setHeight(byId("heightTB").value)
-         this.action.setHeightUnit(byId("heightUnitCB").value)
-         this.action.setWidth(byId("widthTB").value)
-         this.action.setWidthUnit(byId("widthUnitCB").value)
-         this.action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
          Dialog.setNamedResult("action", this.action)
       },
 
       doOnload: function(){
          //move to left
+         this.loadJQuery()
          this.action = EditDialog.getAction()
          this.targetElement = EditDialog.getTargetElement()
+         var targetElement$ = $(this.targetElement) 
+         if(targetElement$.find("iframe").length>0){
+            this.iframe = targetElement$.find("iframe").get(0)
+         }
          this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
          
          //init fields
@@ -55,6 +44,29 @@ with(customizeyourweb){
          byId("widthUnitCB").value = this.action.getWidthUnit()
          
          this.initValidators(this.targetElement)
+      },
+      
+      synchronizeActionWithForm: function(){
+         this.action.setBehavior(byId("behaviorRG").selectedItem.value)
+         var url = byId("urlTB").value
+         if(!StringUtils.startsWith(url, "http://")){
+            url = "http://" + url
+         }
+         this.action.setUrl(url)
+         var mouseOverEvent = byId('mouseOverCB').checked ? SubwindowTriggerEvent.ONMOUSEOVER : 0
+		   var listViewEvent = byId('listViewCB').checked ? SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE : 0
+         this.action.setTriggerEvent(mouseOverEvent | listViewEvent)
+         this.action.setStyle(byId("styleML").value)
+         this.action.setPosition(this.getPosition())
+         this.action.setHeight(byId("heightTB").value)
+         this.action.setHeightUnit(byId("heightUnitCB").value)
+         this.action.setWidth(byId("widthTB").value)
+         this.action.setWidthUnit(byId("widthUnitCB").value)
+         this.action.setTargetDefinition(this.getTargetDefinition())
+      },
+      
+      getPosition: function(){
+         return byId("positionML").value
       },
       
       handleTypeChanged: function(){
@@ -89,23 +101,22 @@ with(customizeyourweb){
        },
 
       updatePage: function(){
-         //Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._updatePage, this)         
+         Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._updatePage, this)         
       },
       
       _updatePage: function(){
-//         InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
-//         this.action.setHtmlCode(byId('htmlCodeTB').value)
-//         this.action.setWhereToInsert(byId('whereML').value)
-//         InsertHTMLAction.insertHTML(this.targetElement, this.action, this.htmlMarkerId)
+         if(this.iframe){
+            $(this.iframe).remove()
+         }
+         this.synchronizeActionWithForm()
+         var cywContext = new CywContext(this.getTargetWindow())
+         this.iframe = this.action.insertHtml(cywContext)
+         this.iframe.scrollIntoView()
       }
    }
-
+   ObjectUtils.injectFunctions(EditInsertSubwindowDialogHandler, AbstractEditDialogHandler)
+   
    Namespace.bindToNamespace("customizeyourweb", "EditInsertSubwindowDialogHandler", EditInsertSubwindowDialogHandler)
    
-   //helper
-   function byId(id){
-      return document.getElementById(id)
-   }
-
 })()
 }

@@ -2,12 +2,14 @@ with (customizeyourweb) {
    (function() {
 
       function InsertSubwindowAction(targetDefinition, position) {
-         this.AbstractInsertElementAction(targetDefinition, position)
+         this.AbstractInsertHtmlAction(targetDefinition, position)
          /* See static url, preview */
          this.behavior = SubwindowBehavior.STATIC
          // Height of the subwindow
          this.height = 500
-         this.heightUnit = "px"
+         this.heightUnit = "px";
+         //preview listener
+         this.previewListener = null;
          // Style of subwindow
          this.style = SubwindowStyle.FIXED_POSITION
          // Only in case of dynamic target
@@ -86,33 +88,48 @@ with (customizeyourweb) {
          setWidthUnit: function(widthUnit){
             this.widthUnit = widthUnit
          },
+         
+         attachEventListener: function(iframe){
+            
+         },
 
          doActionInternal : function(cywContext) {
+            var iframe = this.insertHtml(cywContext)
+            this.initIframe(iframe)
+            return true
+         },
+
+         insertFixedPositionedSubwindow : function(cywContext) {
+            var html = "<iframe/>";
+            var iframe = $(this.insertElement(html, cywContext, this.getElementId()));
+            iframe.width(this.width+this.widthUnit)
+            iframe.height(this.height+this.heightUnit)
+            return iframe.get(0)
+         },
+         
+         insertHtml: function(cywContext){
             if(this.style == SubwindowStyle.FIXED_POSITION) {
+               if(this.isTargetOptionalAndTargetMissing(cywContext)){
+                  return false
+               }
                var iframe = this.insertFixedPositionedSubwindow(cywContext)
             }else if(this.behavior == SubwindowStyle.OVERLAYED){
                var iframe = this.insertOverlayedSubwindow(cywContext)
             }else {
                throw new Error('unknown style value')
             }
-            
+            return iframe
+         },
+         
+         initIframe: function(iframe){
             if(this.behavior == SubwindowBehavior.STATIC) {
               iframe.src = this.url
             }else if(this.behavior == SubwindowBehavior.PREVIEW) {
-               this.attachEventListener(iframe)
+               this.previewListener = new PreviewListener(iframe, this.triggerEvent)
+               this.previewListener.init()
             }else {
                throw new Error('unknown behavior value')
             }
-            return true
-         },
-
-         insertFixedPositionedSubwindow : function(cywContext) {
-            var html = "<iframe/>";
-            var iframe = $(this.insertElement(html, cywContext));
-            iframe.width(this.width+this.widthUnit)
-            iframe.height(this.height+this.heightUnit)
-            iframe.attr("id", "cyw_" + cywContext.getScript() + "_" + this.getId())
-            return iframe.get(0)
          },
          
          insertOverlayedSubwindow: function(cywContext){
@@ -120,10 +137,8 @@ with (customizeyourweb) {
          }
 
       }
-      ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertElementAction",
-            customizeyourweb)
-      customizeyourweb.Namespace.bindToNamespace("customizeyourweb",
-            "InsertSubwindowAction", InsertSubwindowAction)
+      ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertHtmlAction", customizeyourweb)
+      customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertSubwindowAction", InsertSubwindowAction)
 
       SubwindowBehavior = {
          STATIC : "STATIC",

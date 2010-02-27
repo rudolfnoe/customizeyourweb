@@ -7,9 +7,18 @@ with(customizeyourweb){
 (function(){
 
    var CywUtils = {
+      idCounter: 0,
+      
+      createSessionUniqueId: function(){
+         return "customizeyourweb_" + this.idCounter++   
+      },
       
       getCywVersion: function(){
          return Utils.getExtension(CywCommon.GUI_ID).version   
+      },
+      
+      loadJQuery: function(){
+        ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb") 
       },
       
       logDebug: function(messageString){

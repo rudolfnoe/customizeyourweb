@@ -45,6 +45,17 @@ with(customizeyourweb){
          this.rootElement.setAttribute(CURRENT_INDEX_ATTR, this.currentIndex)
          this.updateHighlighting(-1)
       },
+      fireEvent: function(){
+         var linkToOpen = this.getLinkToOpen()
+         if(!linkToOpen){
+            return
+         }else{
+            var win = DomUtils.getOwnerWindow(linkToOpen)
+            var uiEvent = win.document.createEvent("UIEvents")
+            uiEvent.initEvent(UIEvents.PREVIEW_LINK, true, true, win, null)
+            linkToOpen.dispatchEvent(uiEvent)
+         }
+      },
       focusListView: function(){
          if(!this.focused){
             this.updateHighlighting(this.currentIndex)
@@ -58,6 +69,16 @@ with(customizeyourweb){
       },
       getLastIndex: function(){
          return this.listItems.length-1
+      },
+      getLinkToOpen: function(){
+         var links = this.getCurrentItem().getElementsByTagName('a')
+         if(links.length==0){
+            return null
+         }else if(links.length >= this.linkNoToOpen){
+            return links[this.linkNoToOpen-1]
+         }else{
+            throw new Error("Link number to open exceeds number of available links within the item. Please correct ListView configuration.")
+         }
       },
       handleBlur: function(event){
          Utils.executeDelayed((new Date()).getTime(), 100, this.checkBlur, this, [event])
@@ -140,8 +161,8 @@ with(customizeyourweb){
          if(event.originalTarget != ci){//Focus is somewhere within the item
             return ShortcutManager.DO_NOT_SUPPRESS_KEY
          }
-         var links = ci.getElementsByTagName('a')
-         if(links.length==0){
+         var linkToOpen = this.getLinkToOpen()
+         if(!linkToOpen){
             var mouseEvent = new MouseEvent("mousedown")
             mouseEvent.dispatch(ci)
             mouseEvent.setType("click")
@@ -149,10 +170,8 @@ with(customizeyourweb){
             mouseEvent.setType("mouseup")
             mouseEvent.dispatch(ci)
             return
-         }else if((links.length+1) >= this.linkNoToOpen){
-            (new LinkWrapper(links[this.linkNoToOpen-1])).open(linkTarget)
-         }else{
-            throw new Error("Link number to open exceeds number of available links within the item. Please correct ListView configuration.")
+         }else {
+            (new LinkWrapper(linkToOpen).open(linkTarget))
          }
       },
       toggleFirstCheckbox: function(){
@@ -178,11 +197,11 @@ with(customizeyourweb){
          if(newIndex==-1){
             this.focused = false
             return
-         }else{
-            this.focused = true
          }
+         this.focused = true
          this.currentIndex = newIndex
          this.highlight(this.listItems[newIndex])
+         this.fireEvent()
       }
    }
    
