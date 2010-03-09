@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://browser/skin/"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/xul/common.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:html="http://www.w3.org/1999/xhtml"
+   id="import-warning"
+   title="Customize Your Web"
+   centerWindowOnScreen="true"
+   modal="true"
+   buttonlabelaccept="Import"
+   buttonaccesskeyaccept="i"
+   buttonlabelcancel="Abort"
+   buttonaccesskeycancel="a"
+   onload="customizeyourweb.ImportWarningDialogHandler.doOnload()"
+   ondialogaccept="return customizeyourweb.ImportWarningDialogHandler.doOk()"
+   persist="screenX screenY width height">
+   
+   <script type="application/x-javascript" src="../CywCommon.js"/>
+   <script type="application/x-javascript" src="../core/CywConfig.js"/>
+   <script type="application/x-javascript" src="import_waring_dialog_handler.js"/>
+   
+   <hbox align="center" >
+      <image class="alert-icon"/>
+      <spacer width="15px"/>
+      <textbox height="30px" multiline="true" flex="1" class="plain" readonly="true" style="font-size:10pt" tabindex="-1" 
+         value="Your are about to import a CYW script from an unknown, untrusted third-party source. This script could contain malicious code which can potentially harm your computer or corrupt your data. If your are familiar with XML please check the XML carefully!"/>
+   </hbox>
+   <textbox id="scriptContentTB" multiline="true" cols="150" rows="30" flex="1" readonly="true" style="margin-top:7px" tabindex="-1"/>
+</dialog>
