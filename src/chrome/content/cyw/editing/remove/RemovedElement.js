@@ -2,7 +2,7 @@ with(customizeyourweb){
 (function(){
    function RemovedElement(element){
       this.element = element
-      this.parent = element.parentNode
+      this.parentNode = element.parentNode
       this.nextSibling = element.nextSibling
    }
    
