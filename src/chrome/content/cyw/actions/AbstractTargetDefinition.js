@@ -7,6 +7,7 @@ with(customizeyourweb){
    
    AbstractTargetDefinition.prototype = {
       constructor: AbstractTargetDefinition,   
+      AbstractTargetDefinition: AbstractTargetDefinition,
       
       getTargetName: function(){
          return this.targetName
@@ -66,7 +67,6 @@ with(customizeyourweb){
    Namespace.bindToNamespace("customizeyourweb", "AbstractTargetDefinition", AbstractTargetDefinition)
    
    var TargetDefinitionStyle = {
-      JQUERY: "JQUERY",
       SIMPLE: "SIMPLE",
       XPATH: "XPATH"
    }

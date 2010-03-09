@@ -1,11 +1,11 @@
 with(customizeyourweb){
 (function(){
-   const EDIT_INSERT_HTML_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/code/edit_insert_html_dialog.xul"
+   const EDIT_INSERT_HTML_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/edit_insert_html_dialog.xul"
    const DIALOG_HEIGHT="544"
    
    function EditInsertHTMLCommand(){
-      this.AbstractEditInsertHtmlCommand()
       this.targetElement = null
+      this.htmlMarkerId = (new Date()).getTime()
    }
    
    EditInsertHTMLCommand.prototype = {
@@ -22,7 +22,7 @@ with(customizeyourweb){
          var result = this.editAction(action, editContext)
          //TODO check if correct
          if(result!=null){
-            AbstractInsertHTMLAction.insertHTML(action.getHtmlCode(), targetElement, action.getPosition(), this.getHtmlMarkerId())
+            InsertHTMLAction.insertHTML(targetElement, action, this.htmlMarkerId)
          }
          return result
       },
@@ -30,7 +30,7 @@ with(customizeyourweb){
       editAction: function(action, editContext){
          this.targetElement = editContext.getTargetElement()
          var editDialog = new EditDialog(EDIT_INSERT_HTML_DIALOG_URL, "EditInsertJS", true, window, null, 
-               {action: action, targetElement: this.targetElement, targetWindow:editContext.getTargetWindow(), htmlMarkerId: this.getHtmlMarkerId()})
+               {action: action, targetElement: this.targetElement, targetWindow:editContext.getTargetWindow(), htmlMarkerId: this.htmlMarkerId})
          var centerScreen = WindowUtils.getCenterScreen(window.opener)
          editDialog.show(new Point(0, (centerScreen.getY()-DIALOG_HEIGHT/2)+"px"))
          if(editDialog.getResult()==DialogResult.OK){
@@ -40,10 +40,16 @@ with(customizeyourweb){
          }else{
             return null
          }
-       }
+       },
+      
+      undo: function(editContext, actionBackup){
+         InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         if(actionBackup)
+            InsertHTMLAction.insertHTML(this.targetElement, actionBackup)
+      }
       
    }
-   ObjectUtils.extend(EditInsertHTMLCommand, "AbstractEditInsertHtmlCommand", customizeyourweb)
+   ObjectUtils.extend(EditInsertHTMLCommand, "AbstractEditCommand", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "EditInsertHTMLCommand", EditInsertHTMLCommand)
 })()

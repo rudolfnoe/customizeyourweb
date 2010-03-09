@@ -32,11 +32,6 @@ with(customizeyourweb){
    }
 
    //Add window event listener for init
-	window.addEventListener('load',  {handleEvent: function(event){
-      //jQuery must be loaded after window is fully loaded
-      ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb")
-      ScriptLoader.loadScript(CywCommon.CHROME_CONTENT_URL + "jquery/jQueryViewport.js", "customizeyourweb")
-      InitManager.init(event)
-   }}, false);
+	window.addEventListener('load',  {handleEvent: function(event){customizeyourweb.InitManager.init(event)}}, false);
 })()
 }

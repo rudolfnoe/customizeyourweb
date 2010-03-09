@@ -16,8 +16,9 @@ with (customizeyourweb) {
          var targets = this.getAction().getTargets(editContext.getTargetWindow())
          for (var i = 0; i < targets.length; i++) {
             var targetElem = targets[i]
-            if(DomUtils.removeElement(targetElem)){
+            if(targetElem.parentNode){
                this.removedElements.push(new RemovedElement(targetElem))
+               DomUtils.removeElement(targetElem)
             }
          }
       },
@@ -30,9 +31,9 @@ with (customizeyourweb) {
          for (var i = 0; i < this.removedElements.length; i++) {
             var removedElem = this.removedElements[i]
             if(removedElem.nextSibling){
-               removedElem.parentNode.insertBefore(removedElem, removedElem.nextSibling)
+               removedElem.parentNode.insertBefore(removedElem.element, removedElem.nextSibling)
             }else{
-               removedElem.parentNode.appendChild(removedElem)
+               removedElem.parentNode.appendChild(removedElem.element)
             }
          }
       }
