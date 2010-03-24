@@ -5,6 +5,7 @@ with(customizeyourweb){
    	this.id = null
       this.repetitionBehavior = RepetitionBehavior.RUN_ONCE_SUCCESSFULLY
       this.t_actionPerformedCount = 0
+      this.t_undoMemento = null
    }
    
    AbstractAction.prototype = {
@@ -24,6 +25,13 @@ with(customizeyourweb){
 
       setRepetitionBehavior: function(repetitionBehavior){
          this.repetitionBehavior = repetitionBehavior
+      },
+
+      getUndoMemento: function(){
+         if(this.t_undoMemento == null){
+            this.t_undoMemento = {}
+         }
+         return this.t_undoMemento
       },
 
       cleanUp: function(cywContext){
@@ -89,7 +97,8 @@ with(customizeyourweb){
          return result
       },
    	
-   	undoAction: function(cywContext){
+   	undo: function(cywContext){
+         //empty default implementation
    	}
    }
    

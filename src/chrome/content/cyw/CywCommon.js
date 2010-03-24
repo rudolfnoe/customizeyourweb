@@ -6,6 +6,10 @@
 		//Constants
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
+      CYW_JQUERY_URL: "chrome://customizeyourweb/content/jquery/",
+      JQUERY_FILE_NAME: "jquery-1.4.1.js",
+      JQUERY_UI_FILE_NAME: "jquery-ui-1.7.2.custom.min.js",
+      JQUERY_CSS_SUBPATH: "css/redmond/jquery-ui-1.7.2.custom.css",
 		
 		DEBUG_PREF_ID: "customizeyourweb.debug",
 		//Id used to store the EditScriptHandler object in the Application storage

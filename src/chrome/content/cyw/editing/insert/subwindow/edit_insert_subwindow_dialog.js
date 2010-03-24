@@ -110,7 +110,7 @@ with(customizeyourweb){
          }
          this.synchronizeActionWithForm()
          var cywContext = new CywContext(this.getTargetWindow())
-         this.iframe = this.action.insertHtml(cywContext)
+         this.iframe = this.action.insertIframeHtml(cywContext)
          this.iframe.scrollIntoView()
       }
    }

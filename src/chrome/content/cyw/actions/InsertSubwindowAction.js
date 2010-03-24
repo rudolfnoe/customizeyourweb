@@ -94,7 +94,7 @@ with (customizeyourweb) {
          },
 
          doActionInternal : function(cywContext) {
-            var iframe = this.insertHtml(cywContext)
+            var iframe = this.insertIframeHtml(cywContext)
             this.initIframe(iframe)
             return true
          },
@@ -102,12 +102,15 @@ with (customizeyourweb) {
          insertFixedPositionedSubwindow : function(cywContext) {
             var html = "<iframe/>";
             var iframe = $(this.insertElement(html, cywContext, this.getElementId()));
+            if(!iframe){
+               throw new Error("Subwindow could not be inserted")
+            }
             iframe.width(this.width+this.widthUnit)
             iframe.height(this.height+this.heightUnit)
             return iframe.get(0)
          },
          
-         insertHtml: function(cywContext){
+         insertIframeHtml: function(cywContext){
             if(this.style == SubwindowStyle.FIXED_POSITION) {
                if(this.isTargetOptionalAndTargetMissing(cywContext)){
                   return false

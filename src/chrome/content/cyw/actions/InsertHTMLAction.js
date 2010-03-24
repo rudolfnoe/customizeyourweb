@@ -21,7 +21,7 @@ with(customizeyourweb){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return false
          }
-         AbstractInsertHTMLAction.insertHTML(this.getHtmlCode(), this.getTarget(cywContext), this.getPosition())
+         AbstractInsertHtmlAction.insertHtml(this.getHtmlCode(), this.getTarget(cywContext), this.getPosition())
          return true
       }
 

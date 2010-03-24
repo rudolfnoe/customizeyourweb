@@ -33,7 +33,7 @@ with(customizeyourweb){
        undo: function(editContext, actionBackup){
          InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
          if(actionBackup)
-            AbstractInsertHTMLAction.insertHTML(actionBackup.getHtmlCode(), this.targetElement, actionBackup.getPosition())
+            AbstractInsertHtmlAction.insertHtml(actionBackup.getHtmlCode(), this.targetElement, actionBackup.getPosition())
       }
       
    }

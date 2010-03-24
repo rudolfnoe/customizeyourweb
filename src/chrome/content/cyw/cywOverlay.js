@@ -34,8 +34,9 @@ with(customizeyourweb){
    //Add window event listener for init
 	window.addEventListener('load',  {handleEvent: function(event){
       //jQuery must be loaded after window is fully loaded
-      ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb")
-      ScriptLoader.loadScript(CywCommon.CHROME_CONTENT_URL + "jquery/jQueryViewport.js", "customizeyourweb")
+      var jQueryLoader = new JQueryLoader(CywCommon.CYW_JQUERY_URL)
+      jQueryLoader.loadJQuery(CywCommon.JQUERY_FILE_NAME, customizeyourweb)
+//      jQueryLoader.loadJQueryUI(CywCommon.JQUERY_UI_FILE_NAME, customizeyourweb)
       InitManager.init(event)
    }}, false);
 })()
