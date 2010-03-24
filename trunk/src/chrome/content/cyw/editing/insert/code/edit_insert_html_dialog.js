@@ -58,7 +58,7 @@ with(customizeyourweb){
       _updatePage: function(){
          InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
          this.synchronizeActionWithForm()
-         AbstractInsertHTMLAction.insertHTML(this.action.getHtmlCode(), this.targetElement, this.action.getPosition(), this.htmlMarkerId)
+         AbstractInsertHtmlAction.insertHtml(this.action.getHtmlCode(), this.targetElement, this.action.getPosition(), this.htmlMarkerId)
       }
    }
    ObjectUtils.injectFunctions(EditInsertHTMLDialogHandler, AbstractEditDialogHandler)

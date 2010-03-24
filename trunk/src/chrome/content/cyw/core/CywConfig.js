@@ -137,6 +137,10 @@ with(customizeyourweb){
          return this.scripts
       },
       
+      getScriptsAsArray: function(){
+         return this.scripts.toArray()
+      },
+      
       /* 
        * Return arraylist of scripts matching the provied url
        */

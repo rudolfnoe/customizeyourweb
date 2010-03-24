@@ -11,7 +11,7 @@ with(customizeyourweb){
    /*
     * Static members
     */
-   AbstractInsertHtmlAction.insertElement = function(html, targetElement, position, markerId){
+   AbstractInsertHtmlAction.insertHtml= function(html, targetElement, position, markerId){
       Assert.paramsNotNull([html, targetElement, position])
       var insertMode = null, referenceNode = null
       var parentNode = targetElement.tagName=="BODY"?targetElement:targetElement.parentNode
@@ -53,8 +53,8 @@ with(customizeyourweb){
             node = span
          }
          insertedNodes.push(node)
-         if(htmlMarkerId)
-            node.setAttribute('cyw_html_marker_id', htmlMarkerId)
+         if(markerId)
+            node.setAttribute('cyw_html_marker_id', markerId)
 
          if(insertMode=="append")
             parentNode.appendChild(node)
@@ -62,13 +62,7 @@ with(customizeyourweb){
             parentNode.insertBefore(node, referenceNode)
       }
       DomUtils.removeElement(appenderElement)
-      if(insertedNodes.length==0){
-         return null
-      }else if (insertedNodes.length==1){
-         return insertedNodes[0]
-      }else{
-         return insertedNodes
-      }
+      return insertedNodes
    }
    
    /*
@@ -85,6 +79,10 @@ with(customizeyourweb){
       },
 
       getPosition: function(){
+         if(this.whereToInsert!=null){
+            this.position = this.whereToInsert
+            delete this.whereToInsert
+         }
          return this.position
       },
 
@@ -95,11 +93,25 @@ with(customizeyourweb){
       /*
        * Inserts the element defined by the given html
        * @param String html: Element to insert
-       * @return DOMElement: the newly inserted element
+       * @return DOMElement: the newly inserted element or null if nonen could be inserted
        */
       insertElement: function(html, cywContext, markerId){
+         var insertedElements = this.insertHtml(html, cywContext, markerId)
+         if(insertedElements.length==0){
+            return null
+         }else{
+            return insertedElements[0]
+         }
+      },
+      
+      /*
+       * Inserts arbitray html
+       * @param String html: Element to insert
+       * @return Array of DOMElement: the newly inserted elements
+       */
+      insertHtml: function(html, cywContext, markerId){
          var targetElement = this.getTarget(cywContext)
-         return AbstractInsertHtmlAction.insertElement(html, targetElement, this.position, markerId)
+         return AbstractInsertHtmlAction.insertHtml(html, targetElement, this.getPosition(), markerId)
       }
    }
    

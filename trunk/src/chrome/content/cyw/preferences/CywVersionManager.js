@@ -9,7 +9,7 @@
       versionComparator: Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                    .getService(Components.interfaces.nsIVersionComparator),
       
-      versionsToBeMigrated: ["0.2Build20090808", "0.3Build20091007", "0.4.1.3Build20091220"],
+      versionsToBeMigrated: ["0.2Build20090808", "0.3Build20091007", "0.4.1.3Build20091220", "0.5Build20100228"],
                    
       addonHasToBeMigrated: function(){
          var newInstalledVersion = CywUtils.getCywVersion()
@@ -67,6 +67,11 @@
       
       migrateToVersion_0_4_1_3Build20091220: function(){
          Migrations.convertScriptsConfgToUTF8()   
+      },
+      
+      
+      migrateToVersion_0_5Build20100228: function(){
+         Migrations.convertInsertHtmlActionStructure()   
       },
       
       setUp: function(){
