@@ -21,9 +21,7 @@ with(customizeyourweb){
                {action: action, targetDocument:targetDocument, scriptId: scriptId})
          editDialog.show()
          if(editDialog.getResult()==DialogResult.OK){
-            action = editDialog.getNamedResult("action")
-            this.setAction(action)
-            return this.getAction()
+            return editDialog.getNamedResult("action")
          }else{
             return null
          }

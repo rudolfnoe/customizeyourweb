@@ -12,13 +12,22 @@ with(customizeyourweb){
          }
          var target = this.getTarget(cywContext)
          var memento = this.getUndoMemento()
-         memento.targetParent = target.parentNode
-         memento.target = target
+         memento.removedElementWrapper = new RemovedElement(target)
          var $body = $("body", cywContext.getTargetDocument())
          memento.bodyChildren = $body.contents().get()
          target = $(target).remove()
          $body.contents().remove()
          $body.append(target)
+      },
+      
+      undo: function(cywContext){
+         var targetDoc = cywContext.getTargetDocument()
+         $body = $("body", targetDoc)
+         $body.contents().remove()
+         var memento = this.getUndoMemento()
+         $body.append($(memento.bodyChildren))
+         memento.removedElementWrapper.undoRemoval()
+         
       }
    }
    ObjectUtils.extend(IsolateAction, "AbstractTargetedAction", customizeyourweb)

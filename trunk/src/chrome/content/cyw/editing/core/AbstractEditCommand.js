@@ -2,26 +2,26 @@ with(customizeyourweb){
 (function(){
    
 	function AbstractEditCommand(){
-      this.action = null
+      this.undoAction = null
    }
    
    AbstractEditCommand.prototype = {
       constructor: AbstractEditCommand,
       AbstractEditCommand: AbstractEditCommand,
       
+      getUndoAction: function(){
+         return this.undoAction
+      },
+
+      setUndoAction: function(undoAction){
+         this.undoAction = undoAction
+      },
+
       //TODO finish implementation
       disableMenuItem: function(commandId, targetElement){
          return false 
       },
       
-   	getAction: function(){
-   		return this.action
-   	},
-
-      setAction: function(action){
-   		this.action = action
-   	},
-   	
       doCreateAction: function(){
          throw new Error('Not yet implemented')
       },

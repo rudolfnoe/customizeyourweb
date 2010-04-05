@@ -61,8 +61,8 @@
          <caption label="Layout"/>
          <grid>
             <columns>
-               <column></column>
-               <column ></column>
+               <column width="50px"></column>
+               <column flex="1"></column>
             </columns>
             <rows>
                <row align="center">
@@ -94,25 +94,50 @@
                      </menupopup>
                   </menulist>
                </row>
-               <row align="center" style="margin-top:5px">
-                  <label value="Height (px)"/>
-                  <hbox align="center">
-                     <textbox id="heightTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                     <menulist id="heightUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
-                        <menupopup>
-                           <menuitem label="px" value="px" />
-                           <menuitem label="%" value="%" />
-                        </menupopup>
-                     </menulist>
-                     <label value="Width (px)" style="margin-left:5px"/>
-                     <textbox id="widthTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                     <menulist id="widthUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
-                        <menupopup>
-                           <menuitem label="px" value="px" />
-                           <menuitem label="%" value="%" />
-                        </menupopup>
-                     </menulist>
-                  </hbox>
+            </rows>
+         </grid>
+         <grid>
+            <columns>
+               <column width="50px"></column>
+               <column></column>
+               <column></column>
+            </columns>
+            <rows>
+               <row align="center">
+                  <label value="Height"/>
+                  <textbox id="heightTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="heightUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                     <menupopup>
+                        <menuitem label="px" value="px" />
+                        <menuitem label="%" value="%" />
+                     </menupopup>
+                  </menulist>
+                  <label value="Width" style="margin-left:5px"/>
+                  <textbox id="widthTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="widthUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                     <menupopup>
+                        <menuitem label="px" value="px" />
+                        <menuitem label="%" value="%" />
+                     </menupopup>
+                  </menulist>
+               </row>
+               <row align="center">
+                  <label value="Left"/>
+                  <textbox id="leftTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="leftUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                     <menupopup>
+                        <menuitem label="px" value="px" />
+                        <menuitem label="%" value="%" />
+                     </menupopup>
+                  </menulist>
+                  <label value="Top"/>
+                  <textbox id="topTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="topUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                     <menupopup>
+                        <menuitem label="px" value="px" />
+                        <menuitem label="%" value="%" />
+                     </menupopup>
+                  </menulist>
                </row>
             </rows>
          </grid>

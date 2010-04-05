@@ -66,7 +66,7 @@ with(customizeyourweb){
          },
          
          preview: function(link){
-            if(this.iframe.src != link.href){
+            if(this.iframe.src!= link.href){
                //Disable JavaScript to prohibit focus lost
                this.setAllowJavaScriptOnIframe(false)
                this.iframe.src = link.href

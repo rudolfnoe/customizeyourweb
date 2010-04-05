@@ -22,6 +22,8 @@ with(customizeyourweb){
             this.commandType="edit"
             this.createActionBackup(existingAction)
          }else{
+            //no backup! as actionbackup must be real reference to action for undo
+            this.actionBackup = action
             this.commandType="create"
          }
          return action
@@ -43,10 +45,10 @@ with(customizeyourweb){
          return null
       },
       
-      undo: function(editContext, actionBackup){
+      undo: function(editContext){
          this.editCommand.undo(editContext, this.actionBackup)
          if(this.commandType=="create"){
-            this.sidebarWinHandler.removeAction(this.editCommand.getAction())
+            this.sidebarWinHandler.removeAction(this.actionBackup)
          }else if(this.commandType=="edit"){
             this.sidebarWinHandler.updateAction(this.actionBackup)
          }else{

@@ -22,22 +22,15 @@ with(customizeyourweb){
          //Define target definition
          action = this.editCommonActionAttributes(action, editContext)
          if(action){
-            this.setAction(action)
-            this.afterSuccessfulActionEditing(editContext)
-            return this.getAction()
+            this.afterSuccessfulActionEditing(editContext, action)
+            return action
          }else{
             return null
          }
       },
       
       doEditAction: function(editContext){
-         action = this.editCommonActionAttributes(editContext.getAction(), editContext)
-         if(action){
-            this.setAction(action)
-            return this.getAction()
-         }else{
-            return null
-         }
+         return this.editCommonActionAttributes(editContext.getAction(), editContext)
       },
 
       editCommonActionAttributes: function(action, editContext){

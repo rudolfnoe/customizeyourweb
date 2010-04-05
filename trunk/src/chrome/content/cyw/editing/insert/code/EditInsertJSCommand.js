@@ -20,9 +20,7 @@ with(customizeyourweb){
          var editDialog = new EditDialog(EDIT_INSERT_JS_DIALOG_URL, "EditInsertJS", true, window, null, {action: action})
          editDialog.show()
          if(editDialog.getResult()==DialogResult.OK){
-            action = editDialog.getNamedResult("action")
-            this.setAction(action)
-            return this.getAction()
+            return editDialog.getNamedResult("action")
          }else{
             return null
          }

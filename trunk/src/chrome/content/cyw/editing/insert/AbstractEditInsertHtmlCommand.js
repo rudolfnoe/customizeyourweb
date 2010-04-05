@@ -22,9 +22,7 @@ with(customizeyourweb){
                {action: action, targetElement: this.targetElement, targetWindow:editContext.getTargetWindow(), htmlMarkerId: this.getHtmlMarkerId()})
          editDialog.show(position)
          if(editDialog.getResult()==DialogResult.OK){
-            action = editDialog.getNamedResult("action")
-            this.setAction(action)
-            return this.getAction()
+            return editDialog.getNamedResult("action")
          }else{
             return null
          }

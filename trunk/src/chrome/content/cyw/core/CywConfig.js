@@ -178,6 +178,17 @@ with(customizeyourweb){
          return null
       },
       
+      //Return script by id
+      getScriptById: function(scriptId){
+         for (var i = 0; i < this.scripts.size(); i++) {
+            var script = this.scripts.get(i)
+            if(script.getId()==scriptId){
+               return script
+            }
+         }
+         return null
+      },
+      
       /*Returns array of cloned scripts which "matches" at least one url of 
        * the target win and it frames. Matches includes both matching the URL pattern or having the same domain
        */
@@ -266,6 +277,25 @@ with(customizeyourweb){
          var key = this.completePrefKey(key)
          Application.prefs.setValue(key, value)
          return value
+      },
+      
+      /*
+       * Updates only one specific action and saves the changes to disk
+       * @param scriptId
+       * @param actionId
+       * @param changedPropertiesMap: Object containing the properties of the changed action
+       */
+      updateAction: function(scriptId, actionId, changedPropertiesMap){
+         Assert.paramsNotNull(arguments)
+         var script = this.getScriptById(scriptId)
+         if(!script){
+            throw new Error('Unkown script Id')
+         }
+         var action = script.getActionById(actionId)
+         for(var prop in changedPropertiesMap){
+            action[prop] = changedPropertiesMap[prop]
+         }
+         this.saveScript(script)
       },
 
       writeScript: function(fileName, scriptXML){

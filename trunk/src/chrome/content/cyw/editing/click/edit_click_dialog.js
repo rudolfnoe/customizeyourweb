@@ -18,6 +18,7 @@ with(customizeyourweb){
       },
       
       doOk: function(){
+         Dialog.setResult(DialogResult.OK)
          var action = Dialog.getNamedArgument("action")
          action.setButton(byId('buttonML').value)
          action.setDoubleClick(byId('doubleClickCB').checked) 

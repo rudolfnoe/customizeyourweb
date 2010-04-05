@@ -54,6 +54,7 @@ with(customizeyourweb){
       },
       
       doOk: function(){
+         Dialog.setResult(DialogResult.OK)
          var action = Dialog.getNamedArgument("action")
          
          if(byId("keyCombinationKIB").isSet()){
