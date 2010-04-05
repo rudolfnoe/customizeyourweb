@@ -1,4 +1,3 @@
-with(this){
 /*!
  * jQuery JavaScript Library v1.4.1
  * http://jquery.com/
@@ -6075,6 +6074,4 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 });
 // Expose jQuery to the global object
 window.jQuery = window.$ = jQuery;
-
 }).apply(this, [window]);
-}
