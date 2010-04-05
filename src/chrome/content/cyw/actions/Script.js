@@ -133,6 +133,21 @@ with(customizeyourweb){
          this.version = version
       },
       
+      /*
+       * Returns action by id
+       */
+      getActionById: function(actionId){
+         Assert.notNull(actionId)
+         var actionIter = new ActionIterator(this)
+         while(actionIter.hasNext){
+            var action = actionIter.next()
+            if(action.getId()==actionId){
+               return action
+            }
+         }
+         return null
+      },
+      
       equals: function(otherScript){
          //Do not test constructor as this is not if script was cloned
          if(otherScript==null)
@@ -198,6 +213,7 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
+         cywContext.setScriptId(this.getId())
          for (var i = 0;i < this.actions.size(); i++) {
             var action = this.actions.get(i)
             try{

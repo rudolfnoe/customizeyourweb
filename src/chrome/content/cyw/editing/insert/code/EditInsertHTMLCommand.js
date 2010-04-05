@@ -34,9 +34,7 @@ with(customizeyourweb){
          var centerScreen = WindowUtils.getCenterScreen(window.opener)
          editDialog.show(new Point(0, (centerScreen.getY()-DIALOG_HEIGHT/2)+"px"))
          if(editDialog.getResult()==DialogResult.OK){
-            action = editDialog.getNamedResult("action")
-            this.setAction(action)
-            return this.getAction()
+            return editDialog.getNamedResult("action")
          }else{
             return null
          }

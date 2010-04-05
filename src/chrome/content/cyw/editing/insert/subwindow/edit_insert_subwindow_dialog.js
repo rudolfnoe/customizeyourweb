@@ -42,6 +42,10 @@ with(customizeyourweb){
          byId("heightUnitCB").value = this.action.getHeightUnit()
          byId("widthTB").value = this.action.getWidth()
          byId("widthUnitCB").value = this.action.getWidthUnit()
+         byId("leftTB").value = this.action.getLeft()
+         byId("leftUnitCB").value = this.action.getLeftUnit()
+         byId("topTB").value = this.action.getTop()
+         byId("topUnitCB").value = this.action.getTopUnit()
          
          this.initValidators(this.targetElement)
       },
@@ -62,6 +66,10 @@ with(customizeyourweb){
          this.action.setHeightUnit(byId("heightUnitCB").value)
          this.action.setWidth(byId("widthTB").value)
          this.action.setWidthUnit(byId("widthUnitCB").value)
+         this.action.setLeft(byId("leftTB").value)
+         this.action.setLeftUnit(byId("leftUnitCB").value)
+         this.action.setTop(byId("topTB").value)
+         this.action.setTopUnit(byId("topUnitCB").value)
          this.action.setTargetDefinition(this.getTargetDefinition())
       },
       

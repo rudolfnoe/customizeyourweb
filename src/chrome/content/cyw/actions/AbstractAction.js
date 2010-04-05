@@ -33,7 +33,33 @@ with(customizeyourweb){
          }
          return this.t_undoMemento
       },
-
+      
+      /*
+       * Assures that JQuery is available in content page
+       */
+      assureJQuery: function(cywContext){
+         if(cywContext.isJQueryInjected()){
+            return
+         }
+         var $injected = JavaScriptInjecter.injectJQuery(cywContext.getTargetDocument())
+         cywContext.setJQuery($injected)
+         return $injected
+      },
+      
+      /*
+       * Assures injectition of jQuery UI
+       */
+      assureJQueryUI: function(cywContext){
+         var $injected = cywContext.getJQuery()
+         if($injected==null){
+            $injected = this.assureJQuery(cywContext)
+         }
+         if(!cywContext.isJQueryUIInjected()){
+            JavaScriptInjecter.injectJQueryUI(cywContext.getTargetDocument(), $injected)
+         }
+         return $injected
+      },
+      
       cleanUp: function(cywContext){
          //empty default implementation
       },

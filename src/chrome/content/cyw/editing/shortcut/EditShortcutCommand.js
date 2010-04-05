@@ -31,11 +31,11 @@ with(customizeyourweb){
          var editDialog = new EditDialog(EDIT_SHORTCUT_DIALOG_URL, "EditShortcut", true, window, null, 
                                 {action: action, targetElement:editContext.getTargetElement(), targetWindow:editContext.getTargetWindow()})
          editDialog.show()
-         action = editDialog.getNamedResult("action")
-         if(action==null)
-            return
-         this.setAction(action)
-         return this.getAction()
+         if(editDialog.getResult()==DialogResult.OK){
+            return editDialog.getNamedResult("action")
+         }else{
+            return null
+         }         
       }
       
    }

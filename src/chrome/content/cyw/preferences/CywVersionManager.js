@@ -71,7 +71,7 @@
       
       
       migrateToVersion_0_5Build20100228: function(){
-         Migrations.convertInsertHtmlActionStructure()   
+         Migrations.convertScriptStructureForV0_5()   
       },
       
       setUp: function(){

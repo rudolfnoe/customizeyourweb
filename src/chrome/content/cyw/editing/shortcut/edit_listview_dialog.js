@@ -15,12 +15,13 @@ with(customizeyourweb){
       },
       
       doOnload: function(){
+         this.loadJQuery()
          this.action = EditDialog.getAction()
          if(this.action.getCombinedKeyCode()!=null){
             byId("keyCombinationKIB").setCombinedValue(this.action.getCombinedKeyCode())
          }
          byId("shortstringinputbox").value = StringUtils.defaultString(this.action.getShortString())
-         byId("listItemsTagNameTB").value = this.action.getListItemsTagName()
+         byId("listItemsJQueryTB").value = this.action.getListItemsJQuery()
          var higlightCssObj = CssUtils.parseCssText(this.action.getHighlightCss())
          byId('highlightBackgroundCF').value = higlightCssObj["background-color"]
          byId('defaultLinkTargetML').value = this.action.getDefaultLinkTarget()
@@ -34,9 +35,10 @@ with(customizeyourweb){
       },
       
       doOk: function(){
+         Dialog.setResult(DialogResult.OK)
          this.action.setCombinedKeyCode(byId("keyCombinationKIB").getCombinedValue())
          this.action.setShortString(byId("shortstringinputbox").value) 
-         this.action.setListItemsTagName(byId("listItemsTagNameTB").value)
+         this.action.setListItemsJQuery(byId("listItemsJQueryTB").value)
          this.action.setHighlightCss(this.getHighlightCss())
          this.action.setDefaultLinkTarget(byId('defaultLinkTargetML').value)
          this.action.setNoOfHeaderRows(byId('noOfHeaderRowsTB').value) 
@@ -61,7 +63,8 @@ with(customizeyourweb){
          if(!this.rootElement){
             return
          }
-         var listItems = this.rootElement.getElementsByTagName(byId("listItemsTagNameTB").value)
+         //Todo give warning message if no items are selected
+         var listItems = $(byId("listItemsJQueryTB").value, this.rootItem).toArray()
          for (var i = 0; i < listItems.length; i++) {
             var itemWrapper = new ElementWrapper(listItems[i])
             this.listItemWrappers.push(itemWrapper)
@@ -72,7 +75,7 @@ with(customizeyourweb){
       initValidators: function(targetWindow){
          var okValidator = new AndValidator()
          okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow))
-         okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('listItemsTagNameTB')))
+         okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('listItemsJQueryTB')))
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
       },
@@ -84,6 +87,7 @@ with(customizeyourweb){
          this.listItemWrappers = []
       }
    }
+   ObjectUtils.injectFunctions(EditListViewDialogHandler, AbstractEditDialogHandler)
 
    Namespace.bindToNamespace("customizeyourweb", "EditListViewDialogHandler", EditListViewDialogHandler)
 })()

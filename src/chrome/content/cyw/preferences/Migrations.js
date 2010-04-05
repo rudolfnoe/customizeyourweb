@@ -31,7 +31,7 @@ with(customizeyourweb){
       /*
        * Converts the field name whereToInsert to position
        */
-      convertInsertHtmlActionStructure: function(){
+      convertScriptStructureForV0_5: function(){
          this.backupExistingScriptFiles("backup_for_mig_to_0_5")
          this.iterateAllActions(function(action){
             if(action.whereToInsert){
@@ -40,6 +40,13 @@ with(customizeyourweb){
                return true
             }
          }, InsertHTMLAction)
+         this.iterateAllActions(function(action){
+            if(action.listItemsTagName){
+               action.setListItemsJQuery(action.listItemsTagName)
+               delete action.listItemsTagName
+               return true
+            }
+         }, ListViewAction)
       },
       
       /*
