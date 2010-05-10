@@ -7,7 +7,6 @@ with(customizeyourweb){
    	this.id = id
       this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
-      this.applyToTopWindowsOnly = false
       this.disabled = false
       this.t_fileName = null
       this.guiId = Utils.createGUIId()
@@ -60,14 +59,6 @@ with(customizeyourweb){
       	return this.actions
       },
       
-      isApplyToTopWindowsOnly: function(){
-         return this.applyToTopWindowsOnly
-      },
-
-      setApplyToTopWindowsOnly: function(applyToTopWindowsOnly){
-         this.applyToTopWindowsOnly = applyToTopWindowsOnly
-      },
-
       isDisabled: function(){
          return this.disabled
       },
@@ -131,21 +122,6 @@ with(customizeyourweb){
 
       setVersion: function(version){
          this.version = version
-      },
-      
-      /*
-       * Returns action by id
-       */
-      getActionById: function(actionId){
-         Assert.notNull(actionId)
-         var actionIter = new ActionIterator(this)
-         while(actionIter.hasNext){
-            var action = actionIter.next()
-            if(action.getId()==actionId){
-               return action
-            }
-         }
-         return null
       },
       
       equals: function(otherScript){
@@ -213,7 +189,6 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         cywContext.setScriptId(this.getId())
          for (var i = 0;i < this.actions.size(); i++) {
             var action = this.actions.get(i)
             try{

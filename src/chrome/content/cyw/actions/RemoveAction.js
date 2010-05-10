@@ -10,7 +10,6 @@ with(customizeyourweb){
          if(!this.isTargetInPage(cywContext.getTargetWindow())){
             return false
          }
-//         $(this.getTargets(cywContext)).remove()
          var targets = this.getTargets(cywContext)
          for (var i = 0; i < targets.length; i++) {
             var target = targets[i]

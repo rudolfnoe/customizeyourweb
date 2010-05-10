@@ -10,7 +10,7 @@
     ondialogaccept="customizeyourweb.EditInsertJSDialogHandler.doOk()" ondialogcancel="customizeyourweb.EditInsertJSDialogHandler.doCancel()"
     onload="customizeyourweb.EditInsertJSDialogHandler.doOnload()"
     persist="screenX screenY width height">
-   <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
+   <script src="../../CywCommon.js"/>
    <script src="edit_insert_js_dialog.js"/>
    <vbox flex="1">
       <label value="JS Code"/>

@@ -32,12 +32,6 @@ with(customizeyourweb){
    }
 
    //Add window event listener for init
-	window.addEventListener('load',  {handleEvent: function(event){
-      //jQuery must be loaded after window is fully loaded
-      var jQueryLoader = new JQueryLoader(CywCommon.CYW_JQUERY_URL)
-      jQueryLoader.loadJQuery(CywCommon.JQUERY_FILE_NAME, customizeyourweb)
-//      jQueryLoader.loadJQueryUI(CywCommon.JQUERY_UI_FILE_NAME, customizeyourweb)
-      InitManager.init(event)
-   }}, false);
+	window.addEventListener('load',  {handleEvent: function(event){customizeyourweb.InitManager.init(event)}}, false);
 })()
 }

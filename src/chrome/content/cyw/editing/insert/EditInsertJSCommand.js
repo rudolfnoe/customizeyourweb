@@ -1,6 +1,6 @@
 with(customizeyourweb){
 (function(){
-   const EDIT_INSERT_JS_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/code/edit_insert_js_dialog.xul"
+   const EDIT_INSERT_JS_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/insert/edit_insert_js_dialog.xul"
    
    function EditInsertJSCommand(){}
    
@@ -20,14 +20,16 @@ with(customizeyourweb){
          var editDialog = new EditDialog(EDIT_INSERT_JS_DIALOG_URL, "EditInsertJS", true, window, null, {action: action})
          editDialog.show()
          if(editDialog.getResult()==DialogResult.OK){
-            return editDialog.getNamedResult("action")
+            action = editDialog.getNamedResult("action")
+            this.setAction(action)
+            return this.getAction()
          }else{
             return null
          }
        },
       
       undo: function(){
-      }
+      },
       
    }
    ObjectUtils.extend(EditInsertJSCommand, "AbstractEditCommand", customizeyourweb)

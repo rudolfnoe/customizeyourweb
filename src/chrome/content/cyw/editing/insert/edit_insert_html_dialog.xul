@@ -13,12 +13,11 @@
     title="Insert HTML"
     persist="screenX screenY width height"
     flex="1">
-   <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
-   <script src="chrome://customizeyourweb/content/cyw/common/WhereToInsertEnum.js"/>
-   <script src="chrome://customizeyourweb/content/cyw/editing/common/editdialogs/common_edit_dialog_include.js"/>
-   <script src="chrome://customizeyourweb/content/cyw/action"/>
+   <script src="../../CywCommon.js"/>
+   <script src="../common/editdialogs/common_edit_dialog_include.js"/>
+   <script src="../../common/WhereToInsertEnum.js"/>
    <script src="edit_insert_html_dialog.js"/>
-   <dialogheader title="Define the HTML to insert into the page" rows="1"/>
+   <dialogheader title="Define html to insert into the page" rows="1"/>
    <vbox flex="1">
       <grid>
          <columns>

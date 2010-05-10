@@ -153,7 +153,6 @@
                   <menuitem label="Run script only once on page load" value="RUN_NEVER"/>
                </menupopup>
             </menulist>
-            <checkbox id="onlyToTopWindowCB" label="Do not apply to subwindows (iframes)"/>
          </vbox>
       </tabpanel>
    </tabpanels>
