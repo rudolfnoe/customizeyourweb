@@ -7,6 +7,7 @@ with(customizeyourweb){
    
    AbstractIfAction.prototype = {
       constructor: AbstractIfAction,
+      AbstractIfAction: AbstractIfAction,
       
       doActionInternal: function(cywContext){
          if(this.isTrue(cywContext)){

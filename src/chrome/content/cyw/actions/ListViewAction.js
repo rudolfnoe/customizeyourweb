@@ -8,15 +8,11 @@ with(customizeyourweb){
       this.defaultLinkTarget = LinkTarget.CURRENT
       this.focusOnLoad = true
       this.highlightCss = null
-      this.listItemsJQuery = null
+      this.listItemsTagName = null
       this.noOfHeaderRows = 0
       this.ommitEveryXthItem = 0
       this.linkNoToOpen = 1
       this.t_listViewHandler = null
-      //Backup of all listitems to determine if the list was refreshed
-      //only in this case the focus if at all should take place
-      //See issue 51
-      this.t_listItemsBackup = null
    }
    
    ListViewAction.prototype = {
@@ -38,12 +34,12 @@ with(customizeyourweb){
          this.focusOnLoad = focusOnLoad
       },
 
-      getListItemsJQuery: function(){
-         return this.listItemsJQuery
+      getListItemsTagName: function(){
+         return this.listItemsTagName
       },
 
-      setListItemsJQuery: function(listItemsJQuery){
-         this.listItemsJQuery = listItemsJQuery
+      setListItemsTagName: function(listItemsTagName){
+         this.listItemsTagName = listItemsTagName
       },
 
       getHighlightCss: function(){
@@ -79,30 +75,21 @@ with(customizeyourweb){
       },
 
       determineListItems: function(rootElement){
-         var potListItems = $(this.listItemsJQuery, rootElement).toArray()
-         //For compatibility reasons to version prio the use of jQuery
-         //values of simple tags like div, td are filtered in a way
-         //that only to topmost decendant is taken for the list
-         if(ArrayUtils.contains(["div", "span", "td", "table", "tr"], this.listItemsJQuery)){
-            var listItemsFiltered1 = []
-            for (var i = 0; i < potListItems.length; i++) {
-               var listItem = node = potListItems[i]
-               while(node = node.parentNode){
-                  if(node == rootElement){
-                     listItemsFiltered1.push(listItem)
-                     break
-                  }
-                  if(node.localName == this.listItemsJQuery){
-                     break
-                  }
+         var potListItems = rootElement.getElementsByTagName(this.listItemsTagName)
+         var listItemsFiltered1 = []
+         for (var i = 0; i < potListItems.length; i++) {
+            var listItem = node = potListItems[i]
+            while(node = node.parentNode){
+               if(node == rootElement){
+                  listItemsFiltered1.push(listItem)
+                  break
+               }
+               if(node.localName == this.listItemsTagName){
+                  break
                }
             }
-         }else{
-            var listItemsFiltered1 = potListItems
          }
-         //Now filter the number of Header Rows
          var listItemsFiltered2 = listItemsFiltered1.slice(this.noOfHeaderRows)
-         //And in the case ommit some items
          var resultItems = []
          if(this.ommitEveryXthItem>=2){
             for (var i = 0; i < listItemsFiltered2.length; i++) {
@@ -125,11 +112,9 @@ with(customizeyourweb){
          var listItems = this.determineListItems(rootElement)
          this.t_listViewHandler = new ListViewHandler(rootElement, listItems, this.highlightCss, this.defaultLinkTarget, this.linkNoToOpen) 
          this.registerShortcut(cywContext)
-         
-         if(this.focusOnLoad && !ArrayUtils.equals(listItems, this.t_listItemsBackup)){
+         if(this.focusOnLoad){
             (new FocusAction(this.getTargetDefinition())).doAction(cywContext)
          }
-         this.t_listItemsBackup = listItems
          return true
       },
       

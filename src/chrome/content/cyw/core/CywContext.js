@@ -1,10 +1,6 @@
 (function(){   
    function CywContext(targetWindow, pageEventType, cachedPage){
-      //injected jQuery reference
-      this.$ = null
-      //flag indicating whether the page is cached
       this.cachedPage = cachedPage?cachedPage:false
-      //clipboard for copy / paste
       this.clipboard = null
       this.pageEventType = pageEventType
    	this.targetWindow = targetWindow
@@ -48,22 +44,6 @@
 
       isCachedPage: function(){
          return this.cachedPage
-      },
-      
-      isJQueryInjected: function(){
-         return this.$ != null 
-      },
-      
-      isJQueryUIInjected: function(){
-         return this.$.ui != null 
-      },
-      
-      getJQuery: function(){
-         return this.$
-      },
-      
-      setJQuery: function($){
-         this.$ = $
       },
       
       isDOMContentLoadedEvent: function(){

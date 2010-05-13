@@ -8,6 +8,7 @@ with(customizeyourweb){
    
    AbstractCommonAttributesEditCommand.prototype = {
       constructor: AbstractCommonAttributesEditCommand,
+      AbstractCommonAttributesEditCommand: AbstractCommonAttributesEditCommand,
       
       afterSuccessfulActionEditing: function(editContext){
          //empty default implementation
@@ -22,15 +23,22 @@ with(customizeyourweb){
          //Define target definition
          action = this.editCommonActionAttributes(action, editContext)
          if(action){
-            this.afterSuccessfulActionEditing(editContext, action)
-            return action
+            this.setAction(action)
+            this.afterSuccessfulActionEditing(editContext)
+            return this.getAction()
          }else{
             return null
          }
       },
       
       doEditAction: function(editContext){
-         return this.editCommonActionAttributes(editContext.getAction(), editContext)
+         action = this.editCommonActionAttributes(editContext.getAction(), editContext)
+         if(action){
+            this.setAction(action)
+            return this.getAction()
+         }else{
+            return null
+         }
       },
 
       editCommonActionAttributes: function(action, editContext){

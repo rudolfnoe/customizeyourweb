@@ -36,7 +36,8 @@ with(customizeyourweb){
          editDialog.show()
          if(editDialog.getResult()==DialogResult.OK){
             this.changeMemento = [editDialog.getNamedResult("changeMemento")]
-            return editDialog.getNamedResult("action")
+            this.setAction(editDialog.getNamedResult("action"))
+            return this.getAction()
          }else{
             return null
          }

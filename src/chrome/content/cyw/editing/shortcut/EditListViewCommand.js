@@ -12,7 +12,7 @@ with(customizeyourweb){
          action = new ListViewAction(AbstractTargetDefinitionFactory.createDefaultDefinition(rootElement))
          action.setRepetitionBehavior(RepetitionBehavior.RUN_ALWAYS)
          action.setHighlightCss("background-color: " + Prefs.getPref("customizeyourweb.listview.bgcolor-focused"))
-         action.setListItemsJQuery(this.getListItemTagName(rootElement))   
+         action.setListItemsTagName(this.getListItemTagName(rootElement))   
          return this.editAction(action, rootElement, editContext.getTargetWindow())
       },
          
@@ -24,7 +24,11 @@ with(customizeyourweb){
          var editDialog = new EditDialog(EDIT_LISTVIEW_DIALOG_URL, "EditListView", true, window, null, 
                {action: action, targetElement:targetElement, targetWindow: targetWindow})
          editDialog.show()
-         return editDialog.getNamedResult("action")
+         action = editDialog.getNamedResult("action")
+         if(action==null)
+            return
+         this.setAction(action)
+         return this.getAction()
       },
       
       getListItemTagName: function(rootElement){

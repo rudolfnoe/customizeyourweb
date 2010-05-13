@@ -19,9 +19,10 @@ with(customizeyourweb){
          var actions = containerActionOrScript.getActions()
           for (var i = 0;i < actions.size(); i++) {
             var action = actions.get(i)
-            resultArr.push(action)
             if(action.isContainer()){
                this.assembleContainerActionItems(action, resultArr)
+            }else{
+               resultArr.push(action)
             }
          }
       },

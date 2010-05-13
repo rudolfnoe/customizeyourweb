@@ -1,11 +1,17 @@
 with(customizeyourweb){
 (function(){
    function XPathTargetDefinitionXblHandler(targetDefinitionML, targetWin){
-      this.AbstractTargetDefinitionXblHandler(targetDefinitionML, targetWin, null)
+      this.targetDefinitionML = targetDefinitionML
+      this.targetDefinitionPartHighlighter = new MultiElementHighlighter("#208F1A", true)
+      this.targetWin = targetWin
    }
    
    XPathTargetDefinitionXblHandler.prototype = {
       constructor: XPathTargetDefinitionXblHandler,
+      
+      cleanUp: function(){
+         this.targetDefinitionPartHighlighter.unhighlight()   
+      },
       
       createDefaultDefinition: function(targetElement){
          return XPathTargetDefinitionFactory.getInstance().createDefaultDefinition(targetElement)      
@@ -18,7 +24,7 @@ with(customizeyourweb){
       getCurrentTargets: function(){
          var targetElems = null
          try{
-            targetElems = XPathUtils.getElements(this.getTargetDefinitionValue(), this.getTargetDocument())
+            targetElems = XPathUtils.getElements(this.targetDefinitionML.value, this.targetWin.document)
          }catch(e){
             throw new Error('Invalid XPath Expression')
          }
@@ -26,32 +32,31 @@ with(customizeyourweb){
       },
       
       getTargetDefinition: function(){
-         return new XPathTargetDefinition(this.getTargetDefinitionML().value)      
+         return new XPathTargetDefinition(this.targetDefinitionML.value)      
       },
       
       handleCursorPositionChange: function(){
-         var selectionStart = this.getTargetDefinitionML().inputField.selectionStart
-         var xpath = this.getTargetDefinitionML().value
+         var selectionStart = this.targetDefinitionML.inputField.selectionStart
+         var xpath = this.targetDefinitionML.value
          var nextSlashIndex = xpath.indexOf("/", selectionStart) 
          if(nextSlashIndex!=-1){//If cursor in last part do noting
             var xpathPart = xpath.substring(0, nextSlashIndex)
             if(xpathPart=="")
                return //TODO make it right
             try{
-               var elems = XPathUtils.getElements(xpathPart, this.getTargetWin().document)
+               var elems = XPathUtils.getElements(xpathPart, this.targetWin.document)
             }catch(e){
                return
             }
             if(elems.length>=1){
-               this.getTargetDefinitionHighlighter().updateHighlighting(elems)
+               this.targetDefinitionPartHighlighter.updateHighlighting(elems)
                return
             }
          }
-         this.getTargetDefinitionHighlighter().unhighlight()
+         this.targetDefinitionPartHighlighter.unhighlight()
       }
       
    }
-   ObjectUtils.extend(XPathTargetDefinitionXblHandler, "AbstractTargetDefinitionXblHandler", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "XPathTargetDefinitionXblHandler", XPathTargetDefinitionXblHandler)
 })()
