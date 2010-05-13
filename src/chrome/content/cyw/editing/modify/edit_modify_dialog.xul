@@ -18,12 +18,14 @@
    <script src="../common/editdialogs/common_edit_dialog_include.js"/>
    <script src="../../core/CywUtils.js"/>
    <script src="edit_modify_dialog.js"/>
-   <dialogheader title="Define the details of modifying" rows="1"/>
-      
    <commandset>
       <command id="addCmd" label="Add" accesskey="a" oncommand="customizeyourweb.EditModifyDialogHandler.doAdd()" disabled="true"/>
       <command id="removeCmd" label="Remove" accesskey="r" oncommand="customizeyourweb.EditModifyDialogHandler.doRemove()" disabled="true"/>
    </commandset>
+
+   <dialogheader title="Define the details of modifying" rows="1"/>
+   <vbox flex="1" style="overflow:auto">
+
    <tabbox id="tabbox" persist="selectedIndex" >
       <tabs>
          <tab label="Simple" />
@@ -240,4 +242,5 @@
    </tabbox>
    <targetdefinition/>
    <commonactionattributes/>
+   </vbox>
 </dialog>

@@ -23,7 +23,7 @@
    <vbox flex="1">
       <groupbox>
          <caption label="Type"/>
-         <radiogroup id="behaviorRG" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.handleTypeChanged()"> 
+         <radiogroup id="behaviorRG" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.handleTypeChanged()" model="behavior"> 
             <grid>
                <columns>
                   <column></column>
@@ -35,7 +35,7 @@
                      <radio id="staticRB" label="Static: " value="STATIC"/>
                      <!-- hbox align="center" flex="1"-->
                         <label value="URL"/>
-                        <textbox id="urlTB" flex="1"/>
+                        <textbox id="urlTB" flex="1" model="url"/>
                      <!-- /hbox-->
                   </row>
                   <row align="center"  style="margin-top:5px">
@@ -67,25 +67,16 @@
             <rows>
                <row align="center">
                   <label value="Style"/>
-                  <menulist id="styleML" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.handleStyleChanged()">
+                  <menulist id="styleML" model="style" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.handleStyleChanged()">
                      <menupopup>
                         <menuitem label="Free floating / Overlayed" value="OVERLAYED" />
                         <menuitem label="Fixed position" value="FIXED_POSITION"/>
                      </menupopup>
                   </menulist>
                </row>
-               <!--row align="center">
-                  <label value="Position"/>
-                  <menulist id="whereML" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
-                     <menupopup>
-                        <menuitem label="Right upper corner" value="RIGHT_TOP" />
-                        <menuitem label="Right bottom corner" value="RIGHT_BOTTOM"/>
-                     </menupopup>
-                  </menulist>
-               </row-->
                <row align="center">
                   <label value="Position"/>
-                  <menulist id="positionML" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <menulist id="positionML" model="postion" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="After selected element" value="after" />
                         <menuitem label="Before selected element" value="before"/>
@@ -105,16 +96,16 @@
             <rows>
                <row align="center">
                   <label value="Height"/>
-                  <textbox id="heightTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="heightUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="heightTB" model="height" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="heightUnitCB" model="heightUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />
                      </menupopup>
                   </menulist>
                   <label value="Width" style="margin-left:5px"/>
-                  <textbox id="widthTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="widthUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="widthTB" model="width" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="widthUnitCB" model="widthUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />
@@ -123,16 +114,16 @@
                </row>
                <row align="center">
                   <label value="Left"/>
-                  <textbox id="leftTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="leftUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="leftTB" model="left" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="leftUnitCB" model="leftUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />
                      </menupopup>
                   </menulist>
                   <label value="Top"/>
-                  <textbox id="topTB" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="topUnitCB" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="topTB" model="top" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
+                  <menulist id="topUnitCB" model="topUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />

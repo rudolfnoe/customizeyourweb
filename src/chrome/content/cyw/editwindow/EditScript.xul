@@ -6,7 +6,7 @@
 <page id="cywEditScriptSidebar" title="Edit Script"
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
    xmlns:html="http://www.w3.org/1999/xhtml"
-   onload="customizeyourweb.CywSidebarWinHandler.doOnload(event)" >
+   onload="customizeyourweb.CywSidebarWinHandler.doOnload(event)">
    <script src="../CywCommon.js"/>
    <script src="../core/CywConfig.js"/>
    <script src="../core/CywContext.js"/>
@@ -42,6 +42,7 @@
       </menupopup>
    </popupset>
    
+   <vbox flex="1" style="overflow:auto">
    <dialogheader title="Edit Script Properties" style="margin-top:0px" rows="2"/>
    <tabbox flex="1">
       <tabs>
@@ -91,8 +92,8 @@
             </menulist>
 
             <label value="Include URL Patterns (* = any string)" accesskey="U"  style="margin-top:7px"/>
-            <richlistbox id="includePatterns" height="100px" flex="1" selType="single" 
-                         tooltiptext="List of URL patterns for which the script will be applied (Alt+Shift+U)">
+            <richlistbox id="includePatterns" minheight="30px" height="100px" flex="1" selType="single" 
+                         tooltiptext="List of URL patterns for which the script will be applied (Alt+Shift+U)" style="overflow:auto">
                <!-- will be dynamically filled -->
             </richlistbox>
 
@@ -180,4 +181,5 @@
          </row>
       </rows>
    </grid>
+   </vbox>
 </page>

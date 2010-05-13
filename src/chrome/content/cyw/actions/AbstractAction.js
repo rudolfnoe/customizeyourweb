@@ -82,6 +82,11 @@ with(customizeyourweb){
          }
       },
 
+      /*
+       * Template method which must be overridden by subclasses
+       * @param cywContext
+       * @return boolean successful: Subclasse must indicate whether the action was successfully performed or not 
+       */
       doActionInternal: function(cywContext){
    		Assert.fail('Not implemented')
    	},

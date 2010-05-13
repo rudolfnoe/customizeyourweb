@@ -28,7 +28,7 @@
          <rows>
             <row align="center">
                <label value="Where to insert"/>
-               <menulist id="whereML">
+               <menulist id="whereML" model="position">
                   <menupopup>
                      <menuitem label="After selected element" value="after" />
                      <menuitem label="Before selected element" value="before"/>
@@ -40,7 +40,7 @@
          </rows>
       </grid>
       <label value="HTML Code"/>
-      <xmleditor flex="1" id="htmlCodeTB" oninput="customizeyourweb.EditInsertHTMLDialogHandler.updatePage()" 
+      <xmleditor flex="1" id="htmlCodeTB" model="htmlCode" oninput="customizeyourweb.EditInsertHTMLDialogHandler.updatePage()" 
                style="height:300px; width: 500px; margin-bottom:7px" namespaceObj="customizeyourweb"/>
       <targetdefinition id="targetdefinition"/>
       <commonactionattributes/>

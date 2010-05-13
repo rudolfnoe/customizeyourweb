@@ -30,8 +30,12 @@ with(customizeyourweb){
          },
          
          handleLoad: function(event){
-            //reenable JS after iframe is loaded
-            this.setAllowJavaScriptOnIframe(true)
+            if(this.iframe.src=="about:blank"){
+               this.insertNoPdfPreview(this.iframe.contentDocument)
+            }else{
+               //reenable JS after iframe is loaded
+               this.setAllowJavaScriptOnIframe(true)
+            }
          },
          
          handleMouseover: function(event) {
@@ -54,6 +58,12 @@ with(customizeyourweb){
             Utils.executeDelayed(this.timerId, 200, this.preview, this, [event.target])
          },
          
+         insertNoPdfPreview: function(document){
+            var html = '<div style="width:100%; font-family:arial; padding:10px; vertical-align:middle; text-align:center; border:1px solid black">' +
+                  '<img src="chrome://customizeyourweb/content/common/ui/resources/warning.ico"/>Preview of PDF-Files is not supported!</div>'
+            $("body", document).append(html)
+         },
+         
          isPreviewTarget: function(event){
             var target = event.target
             if(!target || target.tagName!="A" ||
@@ -67,9 +77,14 @@ with(customizeyourweb){
          
          preview: function(link){
             if(this.iframe.src!= link.href){
-               //Disable JavaScript to prohibit focus lost
-               this.setAllowJavaScriptOnIframe(false)
-               this.iframe.src = link.href
+               if(StringUtils.endsWith(link.href, ".pdf")){
+                  //No preview of PDF Files possible
+                  this.iframe.src = "about:blank"
+               }else{
+                  //Disable JavaScript to prohibit focus lost
+                  this.setAllowJavaScriptOnIframe(false)
+                  this.iframe.src = link.href
+               }
             }
          }
    }
