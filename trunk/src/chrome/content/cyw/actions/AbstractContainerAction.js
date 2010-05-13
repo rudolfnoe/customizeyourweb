@@ -19,6 +19,12 @@ with(customizeyourweb){
          this.actions.add(action)
       },
       
+      cleanUp: function(cywContext){
+          for (var i = 0;i < this.getActions().size(); i++) {
+            this.getActions().get(i).cleanUp(cywContext)
+         }
+      },
+      
       doChildActions: function(cywContext){
           for (var i = 0;i < this.getActions().size(); i++) {
             var action= this.getActions().get(i)

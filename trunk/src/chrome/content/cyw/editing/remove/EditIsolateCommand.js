@@ -6,18 +6,12 @@ with(customizeyourweb){
    EditIsolateCommand.prototype = {
 
       afterSuccessfulActionEditing: function(editContext, action){
-         var undoAction = ObjectUtils.deepClone(action)
-         this.setUndoAction(undoAction)
-         var cywContext = new CywContext(editContext.getTargetWindow())
-         undoAction.doAction(cywContext)
+         var previewAction = ObjectUtils.deepClone(action)
+         this.setUndoMemento(previewAction.preview(editContext.getTargetWindow()))
       },
       
       createAction: function(editContext) {
          return new IsolateAction(editContext.getTargetDefinition())
-      },
-      
-      undo: function(editContext){
-         this.getUndoAction().undo(new CywContext(editContext.getTargetWindow()))
       }
       
    }

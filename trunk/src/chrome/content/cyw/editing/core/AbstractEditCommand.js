@@ -2,19 +2,19 @@ with(customizeyourweb){
 (function(){
    
 	function AbstractEditCommand(){
-      this.undoAction = null
+      this.undoMemento = null
    }
    
    AbstractEditCommand.prototype = {
       constructor: AbstractEditCommand,
       AbstractEditCommand: AbstractEditCommand,
       
-      getUndoAction: function(){
-         return this.undoAction
+      getUndoMemento: function(){
+         return this.undoMemento
       },
 
-      setUndoAction: function(undoAction){
-         this.undoAction = undoAction
+      setUndoMemento: function(undoMemento){
+         this.undoMemento = undoMemento
       },
 
       //TODO finish implementation
@@ -23,7 +23,11 @@ with(customizeyourweb){
       },
       
       doCreateAction: function(){
-         throw new Error('Not yet implemented')
+         throw new Error('Must be implemented')
+      },
+
+      doEditAction: function(){
+         throw new Error('Must be implemented')
       },
       
       /*
@@ -41,7 +45,13 @@ with(customizeyourweb){
          }
       },
       
-      undo: function(){
+      /*
+       * Default Implementation
+       */
+      undo: function(editContext, actionBackup){
+         if(ObjectUtils.instanceOf(actionBackup, IPreviewableAction) && this.undoMemento){
+            actionBackup.undo(editContext.getTargetWindow(), this.undoMemento)
+         }
          //Empty default implementation
       }
    }

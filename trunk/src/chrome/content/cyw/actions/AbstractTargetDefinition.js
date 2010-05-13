@@ -34,11 +34,11 @@ with(customizeyourweb){
       },
 
       getDefinitionAsString: function(){
-         throw new Error('not implemented')
+         throw new Error('must be implemented')
       },
       
       getDefinitionStyle: function(){
-         throw new Error('not implemented')
+         throw new Error('must be implemented')
       },
       
       getTarget: function(cywContextOrTargetWin){
@@ -55,6 +55,10 @@ with(customizeyourweb){
       
       getTargets: function(cywContextOrTargetWin){
          return this.getTargetsInternal(this.getTargetWin(cywContextOrTargetWin))
+      },
+      
+      getTargetsInternal: function(targetWin){
+         throw new Error('must be implemented')   
       },
       
       isTargetInPage: function(targetWin){

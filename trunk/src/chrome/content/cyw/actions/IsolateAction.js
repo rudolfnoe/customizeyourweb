@@ -11,26 +11,42 @@ with(customizeyourweb){
             return false
          }
          var target = this.getTarget(cywContext)
-         var memento = this.getUndoMemento()
-         memento.removedElementWrapper = new RemovedElement(target)
-         var $body = $("body", cywContext.getTargetDocument())
-         memento.bodyChildren = $body.contents().get()
-         target = $(target).remove()
+         this.isolateTarget(target, cywContext.getTargetDocument())
+      },
+      
+      isolateTarget: function(target, targetDoc){
+         var target = $(target).remove()
+         var $body = $("body", targetDoc)
          $body.contents().remove()
          $body.append(target)
       },
       
-      undo: function(cywContext){
-         var targetDoc = cywContext.getTargetDocument()
+      preview: function(targetWindow){
+         if(!this.isTargetInPage(targetWindow)){
+            return null
+         }
+         var memento = new UndoMemento()   
+         var target = this.getTarget(targetWindow)
+         if(target.parentNode.tagName != "BODY"){
+            memento.setData("removedElementWrapper", new RemovedElement(target))
+         }
+         var $body = $("body", targetWindow.document)
+         memento.setData("bodyChildren", $body.contents().get())
+         this.isolateTarget(target, targetWindow.document)
+         return memento
+      },
+      
+      undo: function(targetWindow, undoMemento){
+         var targetDoc = targetWindow.document
          $body = $("body", targetDoc)
          $body.contents().remove()
-         var memento = this.getUndoMemento()
-         $body.append($(memento.bodyChildren))
-         memento.removedElementWrapper.undoRemoval()
-         
+         $body.append($(undoMemento.getData("bodyChildren")))
+         undoMemento.getData("removedElementWrapper").undoRemoval()
       }
    }
    ObjectUtils.extend(IsolateAction, "AbstractTargetedAction", customizeyourweb)
+   ObjectUtils.extend(IsolateAction, "IPreviewableAction", customizeyourweb)
+   
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "IsolateAction", IsolateAction)
 })()

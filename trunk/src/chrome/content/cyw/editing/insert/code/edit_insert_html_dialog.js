@@ -24,10 +24,11 @@ with(customizeyourweb){
          this.action = EditDialog.getAction()
          this.targetElement = EditDialog.getTargetElement()
          this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
-         if(this.action.getPosition()!=null){
-            byId('whereML').value = StringUtils.defaultString(this.action.getPosition())
-         }
-         byId('htmlCodeTB').value = StringUtils.defaultString(this.action.getHtmlCode())
+//         if(this.action.getPosition()!=null){
+//            byId('whereML').value = StringUtils.defaultString(this.action.getPosition())
+//         }
+//         byId('htmlCodeTB').value = StringUtils.defaultString(this.action.getHtmlCode())
+         PresentationMapper.mapModel2Presentation(this.action, document, "value")
          byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
          this.initValidators(this.targetElement)
       },
@@ -46,8 +47,7 @@ with(customizeyourweb){
       },
       
       synchronizeActionWithForm: function(){
-         this.action.setPosition(byId('whereML').value)
-         this.action.setHtmlCode(byId('htmlCodeTB').value)
+         PresentationMapper.mapPresentation2Model(document, this.action, "value")
          this.action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
       },
 
