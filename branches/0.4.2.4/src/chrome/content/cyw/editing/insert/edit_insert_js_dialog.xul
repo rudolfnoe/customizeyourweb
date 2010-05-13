@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/common/ui/bindings/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://customizeyourweb/content/cyw/editing/common/commonactionattributes/commonactionattributes.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="editDialog"
+    buttons="accept,cancel"
+    ondialogaccept="customizeyourweb.EditInsertJSDialogHandler.doOk()" ondialogcancel="customizeyourweb.EditInsertJSDialogHandler.doCancel()"
+    onload="customizeyourweb.EditInsertJSDialogHandler.doOnload()"
+    persist="screenX screenY width height">
+   <script src="../../CywCommon.js"/>
+   <script src="edit_insert_js_dialog.js"/>
+   <vbox flex="1">
+      <label value="JS Code"/>
+      <jseditor id="jsCodeTB" namespaceObj="customizeyourweb" multiline="true" flex="1" style="height:300px; width: 500px; margin-bottom:7px"/>
+      <commonactionattributes/>
+   </vbox>
+</dialog>
