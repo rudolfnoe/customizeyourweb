@@ -4,6 +4,11 @@ with(customizeyourweb){
       backupExistingScriptFiles: function(backupDirName){
          var scriptDir = CywConfig.getConfigDir()
          scriptDir.append(backupDirName)
+         var i = 1
+         while(scriptDir.exists()){
+            scriptDir = CywConfig.getConfigDir()
+            scriptDir.append(backupDirName + "_v" + i++)
+         }
          DirIO.create(scriptDir)
          var scriptFiles = CywConfig.getScriptFiles()
          for (var i = 0; i < scriptFiles.length; i++) {
