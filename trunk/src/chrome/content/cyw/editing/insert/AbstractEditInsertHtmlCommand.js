@@ -3,6 +3,7 @@ with(customizeyourweb){
    
    function AbstractEditInsertHtmlCommand(){
       this.htmlMarkerId = CywUtils.createSessionUniqueId()
+		this.targetElement = null
    }
    
    AbstractEditInsertHtmlCommand.prototype = {
@@ -17,15 +18,11 @@ with(customizeyourweb){
       },
 
       editAction: function(action, editContext, dialogUrl, dialogHeight, position){
-         this.targetElement = editContext.getTargetElement()
-         var editDialog = new EditDialog(dialogUrl, "EditInsertHtmlCommand", true, window, null, 
-               {action: action, targetElement: this.targetElement, targetWindow:editContext.getTargetWindow(), htmlMarkerId: this.getHtmlMarkerId()})
+			//TODO Target element can change in edit dialog
+			this.targetElement = editContext.getTargetElement()
+         var editDialog = new EditDialog(dialogUrl, "EditInsertHtmlCommand", action, editContext, {htmlMarkerId: this.getHtmlMarkerId()})
          editDialog.show(position)
-         if(editDialog.getResult()==DialogResult.OK){
-            return editDialog.getNamedResult("action")
-         }else{
-            return null
-         }
+			return editDialog.getActionResult()
        },
 
        undo: function(editContext, actionBackup){

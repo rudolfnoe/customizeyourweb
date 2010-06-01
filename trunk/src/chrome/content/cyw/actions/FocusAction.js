@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function FocusAction (targetDefinition){
-   	this.AbstractTargetedAction(targetDefinition)
+   function FocusAction (id, targetDefinition){
+   	this.AbstractTargetedAction(id, targetDefinition)
    }
    
    FocusAction.prototype ={ 

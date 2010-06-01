@@ -1,17 +1,15 @@
 with(customizeyourweb){
 (function(){
    function EditContext(){
-      this.action = null
-      this.clipboard = null
       this.command = null
       this.commandData = null,
-      this.scriptId = null,
       this.targetDefinition = null
       this.targetElement = null
-      this.targetWindow = null
    }
    
    EditContext.prototype = {
+		constructor: EditContext,
+		
       getAction: function(){
          return this.action
       },
@@ -20,14 +18,6 @@ with(customizeyourweb){
          this.action = action
       },
 
-      getClipboard: function(){
-         return this.clipboard
-      },
-
-      setClipboard: function(clipboard){
-         this.clipboard = clipboard
-      },
-      
       getCommand: function(){
          return this.command
       },
@@ -44,14 +34,6 @@ with(customizeyourweb){
          this.commandData = commandData
       },
       
-      getScriptId: function(){
-         return this.scriptId
-      },
-
-      setScriptId: function(scriptId){
-         this.scriptId = scriptId
-      },
-
       getTargetDefinition: function(){
          return this.targetDefinition
       },
@@ -59,29 +41,17 @@ with(customizeyourweb){
       setTargetDefinition: function(targetDefinition){
          this.targetDefinition = targetDefinition
       },
-      
-      getTargetDocument: function(){
-         return this.targetWindow.document
-      },
-
+ 
       getTargetElement: function(){
          return this.targetElement
       },
 
       setTargetElement: function(targetElement){
          this.targetElement = targetElement
-      },
-      
-      getTargetWindow: function(){
-         return this.targetWindow
-      },
-
-      setTargetWindow: function(targetWindow){
-         this.targetWindow = targetWindow
       }
-      
+     
    }
-
+   ObjectUtils.extend(EditContext, "AbstractContext", customizeyourweb)
    Namespace.bindToNamespace("customizeyourweb", "EditContext", EditContext)
 })()
 }

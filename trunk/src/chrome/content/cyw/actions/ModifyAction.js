@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function ModifyAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function ModifyAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
       this.attributes = {}
       this.styles = {}
    }

@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){   
    
-   function ListViewAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function ListViewAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
       //Do this second as default repetition behavior will be overridden
       this.AbstractShortcutAction()
       this.defaultLinkTarget = LinkTarget.CURRENT
@@ -127,7 +127,7 @@ with(customizeyourweb){
          this.registerShortcut(cywContext)
          
          if(this.focusOnLoad && !ArrayUtils.equals(listItems, this.t_listItemsBackup)){
-            (new FocusAction(this.getTargetDefinition())).doAction(cywContext)
+            (new FocusAction(null, this.getTargetDefinition())).doAction(cywContext)
          }
          this.t_listItemsBackup = listItems
          return true

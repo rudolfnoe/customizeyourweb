@@ -2,8 +2,8 @@ with(customizeyourweb){
 (function(){   
    var AbstractTargetedAction = customizeyourweb.AbstractTargetedAction
       
-   function ClickAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function ClickAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
       this.button = 0 //Default left click
       this.doubleClick = false //flag indicating a double click
       this.modifierMask = 0 //No modifier pressing while clicking

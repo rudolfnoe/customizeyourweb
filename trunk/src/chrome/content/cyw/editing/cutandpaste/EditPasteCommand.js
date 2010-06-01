@@ -15,7 +15,7 @@ with(customizeyourweb){
          Assert.notNull(clipboard,  "Nothing to paste in clipboard")
          
          //create paste action
-         return new PasteAction(editContext.getTargetDefinition(), this.determineWhere(editContext))
+         return new PasteAction(editContext.getNextActionId(), editContext.getTargetDefinition(), this.determineWhere(editContext))
       },
       
       determineWhere: function(editContext){

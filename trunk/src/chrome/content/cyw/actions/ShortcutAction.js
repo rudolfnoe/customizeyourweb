@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){   
    
-   function ShortcutAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function ShortcutAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
       //LinkTarget is defined in LinkWrapper
       this.linkTarget = LinkTarget.CURRENT
       this.selectText = true
@@ -63,7 +63,7 @@ with(customizeyourweb){
             (new LinkWrapper(element)).open(this.linkTarget)
             return
          }else{
-            var clickAction = new ClickAction(this.getTargetDefinition())
+            var clickAction = new ClickAction(null, this.getTargetDefinition())
             clickAction.doAction(cywContext)
          }
       }      

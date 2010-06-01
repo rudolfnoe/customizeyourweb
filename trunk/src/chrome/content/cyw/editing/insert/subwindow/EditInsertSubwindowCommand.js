@@ -5,22 +5,18 @@ with(customizeyourweb){
    
    function EditInsertSubwindowCommand(){
       this.AbstractEditInsertHtmlCommand()
-      this.targetElement = null
    }
    
    EditInsertSubwindowCommand.prototype = {
       constructor: EditInsertSubwindowCommand,
 
       doCreateAction: function(editContext){
-         var insertHTMLAction = new InsertSubwindowAction(editContext.getTargetDefinition())
+         var insertHTMLAction = new InsertSubwindowAction(editContext.getNextActionId(), editContext.getTargetDefinition())
          return this.editAction(insertHTMLAction, editContext)
       },
       
-      doEditAction: function(editContext){
-         var action = editContext.getAction()
-         var targetElement = editContext.getTargetElement()
-         var result = this.editAction(action, editContext)
-         return result
+      doEditAction: function(action, editContext){
+         return this.editAction(action, editContext)
       },
       
       editAction: function(action, editContext){

@@ -31,15 +31,8 @@
                   <column flex="1"></column>
                </columns>
                <rows>
-                  <row align="center">
-                     <radio id="staticRB" label="Static: " value="STATIC"/>
-                     <!-- hbox align="center" flex="1"-->
-                        <label value="URL"/>
-                        <textbox id="urlTB" flex="1" model="url"/>
-                     <!-- /hbox-->
-                  </row>
                   <row align="center"  style="margin-top:5px">
-                     <radio id="previewRB" label="Preview: " value="PREVIEW"/>
+                     <radio id="previewRB" label="Preview: " value="PREVIEW" checked="true"/>
                      <label value="Event Type"/>
                      <checkbox id="mouseOverCB" label="Mouse over Link"/>
                   </row>
@@ -52,6 +45,13 @@
                      <hbox>
                         <spacer width="20px"/>
                      </hbox>
+                  </row>
+                  <row align="center">
+                     <radio id="staticRB" label="Static: " value="STATIC"/>
+                     <!-- hbox align="center" flex="1"-->
+                        <label value="URL"/>
+                        <textbox id="urlTB" flex="1" model="url"/>
+                     <!-- /hbox-->
                   </row>
                </rows>
             </grid>
@@ -76,7 +76,7 @@
                </row>
                <row align="center">
                   <label value="Position"/>
-                  <menulist id="positionML" model="postion" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <menulist id="positionML" model="postion" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
                      <menupopup>
                         <menuitem label="After selected element" value="after" />
                         <menuitem label="Before selected element" value="before"/>
@@ -96,16 +96,16 @@
             <rows>
                <row align="center">
                   <label value="Height"/>
-                  <textbox id="heightTB" model="height" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="heightUnitCB" model="heightUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="heightTB" model="rectangle.height" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()"/>
+                  <menulist id="heightUnitCB" model="rectangle.heightUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />
                      </menupopup>
                   </menulist>
                   <label value="Width" style="margin-left:5px"/>
-                  <textbox id="widthTB" model="width" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="widthUnitCB" model="widthUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="widthTB" model="rectangle.width" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()"/>
+                  <menulist id="widthUnitCB" model="rectangle.widthUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />
@@ -114,16 +114,16 @@
                </row>
                <row align="center">
                   <label value="Left"/>
-                  <textbox id="leftTB" model="left" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="leftUnitCB" model="leftUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="leftTB" model="rectangle.x" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()"/>
+                  <menulist id="leftUnitCB" model="rectangle.xUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />
                      </menupopup>
                   </menulist>
                   <label value="Top"/>
-                  <textbox id="topTB" model="top" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()"/>
-                  <menulist id="topUnitCB" model="topUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.updatePage()">
+                  <textbox id="topTB" model="rectangle.y" maxwidth="50px" type="number" onchange="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()"/>
+                  <menulist id="topUnitCB" model="rectangle.yUnit" height="23px" maxwidth="60px" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
                      <menupopup>
                         <menuitem label="px" value="px" />
                         <menuitem label="%" value="%" />

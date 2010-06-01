@@ -34,6 +34,7 @@ with(customizeyourweb){
        * @retuns if add or update was successfull 
        */
       addOrUpdateAction: function(action, actionTargetWindow){
+         Assert.notNull(action.getId(), "Action id is null")
       	if(byId('includePatterns').itemCount==0){
       		this.setUrlPatternWithMostLikely(actionTargetWindow)
       	}
@@ -44,7 +45,6 @@ with(customizeyourweb){
       		return false
       	}
       	this.setMessage("")
-         currentScript.setActionId(action)
          this.actionsTreeView.addOrUpdateAction(action)
          return true
       },

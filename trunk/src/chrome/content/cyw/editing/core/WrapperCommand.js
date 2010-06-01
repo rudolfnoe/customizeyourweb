@@ -1,5 +1,4 @@
-with(customizeyourweb){
-(function(){
+(function(cyw){
    function WrapperCommand(editCommand, sidebarWinHandler){
       this.editCommand = editCommand
       this.sidebarWinHandler = sidebarWinHandler
@@ -9,7 +8,7 @@ with(customizeyourweb){
    
    WrapperCommand.prototype={
       createActionBackup: function(action){
-         this.actionBackup = ObjectUtils.deepClone(action)
+         this.actionBackup = cyw.ObjectUtils.deepClone(action)
       },
       
       doCreateAction: function(editContext){
@@ -29,10 +28,10 @@ with(customizeyourweb){
          return action
       },
       
-      doEditAction: function(editContext){
+      doEditAction: function(action, editContext){
          this.commandType="edit"
-         this.createActionBackup(editContext.getAction())
-         return this.editCommand.doEditAction(editContext)
+         this.createActionBackup(action)
+         return this.editCommand.doEditAction(action, editContext)
       },
       
       getExistingActionById: function(aAction){
@@ -57,6 +56,5 @@ with(customizeyourweb){
       }
    }
 
-   Namespace.bindToNamespace("customizeyourweb", "WrapperCommand", WrapperCommand)
-})()
-}
+   cyw.Namespace.bindToNamespace("customizeyourweb", "WrapperCommand", WrapperCommand)
+})(customizeyourweb)

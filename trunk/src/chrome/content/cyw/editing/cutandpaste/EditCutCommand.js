@@ -13,7 +13,7 @@ with(customizeyourweb){
       },
       
       createAction: function(editContext) {
-         return new CutAction(editContext.getTargetDefinition())
+         return new CutAction(editContext.getNextActionId(), editContext.getTargetDefinition())
       }
       
    }

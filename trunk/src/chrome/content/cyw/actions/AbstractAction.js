@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){   
 	
-   function AbstractAction (){
-   	this.id = null
+   function AbstractAction (id){
+   	this.id = id
       this.repetitionBehavior = RepetitionBehavior.RUN_ONCE_SUCCESSFULLY
       this.t_actionPerformedCount = 0
       this.t_undoMemento = null

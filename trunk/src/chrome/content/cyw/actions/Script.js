@@ -5,7 +5,6 @@ with(customizeyourweb){
    function Script (id){
       Assert.paramsNotNull(arguments)
    	this.id = id
-      this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
       this.applyToTopWindowsOnly = false
       this.disabled = false
@@ -18,7 +17,6 @@ with(customizeyourweb){
       this.targetWinDefinition = new TargetWinDefinition()
       //Version of CYW with which is this script written the last time
       this.version = null
-   	//Unique id of script to identify, timestamp is enough
    	this.loadEventType = LoadEventTypes.DOM_CONTENT_LOADED
       this.behaviorOnMutationEvent = RunBehaviorOnMutationEvent.RUN_ALWAYS 
       //Default is true as after reading config it should be true
@@ -156,17 +154,15 @@ with(customizeyourweb){
       },
       
       getNextActionId: function(){
-         if(this.t_actionIdCounter==-1){
-            this.t_actionIdCounter = 0
-            var actionIter = new ActionIterator(this)
-            while(actionIter.hasNext()){
-               var actionId = actionIter.next().getId()
-               if(this.t_actionIdCounter<actionId)
-                  this.t_actionIdCounter = actionId            
+         var maxActionId = 0
+         var actionIter = new ActionIterator(this)
+         while(actionIter.hasNext()){
+            var actionId = actionIter.next().getId()
+            if(maxActionId<actionId){
+               maxActionId = actionId
             }
          }
-         this.t_actionIdCounter++
-         return this.t_actionIdCounter
+         return maxActionId + 1
       },
       
       getScriptLoggingName: function(){
@@ -213,7 +209,7 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         cywContext.setScriptId(this.getId())
+         cywContext.setScript(this)
          for (var i = 0;i < this.actions.size(); i++) {
             var action = this.actions.get(i)
             try{
@@ -243,7 +239,7 @@ with(customizeyourweb){
             return
          }
          CywUtils.logInfo("Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
-         cywContext.setScriptId(this.getId())
+         cywContext.setScript(this)
          ScriptErrorHandler.clearScriptErrors(this.getId())
          var cachedPage = cywContext.isCachedPage()
    		for (var i = 0; i < this.actions.size(); i++) {

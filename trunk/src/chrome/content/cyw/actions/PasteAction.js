@@ -1,7 +1,7 @@
 with(customizeyourweb){
 (function(){
-   function PasteAction(targetDefinition, where){
-      this.AbstractTargetedAction(targetDefinition)
+   function PasteAction(id, targetDefinition, where){
+      this.AbstractTargetedAction(id, targetDefinition)
       //On of WhereToInsertEnum
       this.where = where
    }

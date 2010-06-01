@@ -1,9 +1,9 @@
 with(customizeyourweb){
 (function(){   
    
-   function ToggleVisibilityShortcutAction (targetDefinition){
+   function ToggleVisibilityShortcutAction (id, targetDefinition){
       this.AbstractShortcutAction()
-      this.AbstractTargetedAction(targetDefinition)
+      this.AbstractTargetedAction(id, targetDefinition)
       this.combinedKeyCode = null
       this.targetWrapper = null
       this.initStateHidden = true

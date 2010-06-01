@@ -12,18 +12,18 @@ with(customizeyourweb){
       /*
        * Initiates preview
        * @param targetWindow
-       * @return UndoMemento: containing all information needed for undoing the modifications
+       * @return Object: memento containing all information needed for undoing the modifications
        */
-       preview: function(targetWindow){
+       preview: function(editContext){
          throw new Error('IPreviewableAction.preview must be implemented')
        },
        
        /*
         * Undos the modifications done by calling preview
-        * @param targetWin
-        * @param undoMemento see preview
+        * @param EditContext
+        * @param Object undoMemento see preview
         */
-       undo: function(targetWindow, undoMemento){
+       undo: function(editContext, undoMemento){
          throw new Error('IPreviewableAction.undo must be implemented')
        }
    }

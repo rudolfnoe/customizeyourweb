@@ -34,9 +34,9 @@ with(customizeyourweb){
 
       doOnload: function(){
          this.initShortcuts()
-         this.action = Dialog.getNamedArgument("action")
-         this.scriptId = Dialog.getNamedArgument("scriptId") 
-         this.targetDocument = Dialog.getNamedArgument("targetDocument")
+         this.action = EditDialog.getAction()
+         this.scriptId = EditDialog.getScriptId() 
+         this.targetDocument = EditDialog.getTargetDocument()
          byId('styleSheetCodeTB').value = StringUtils.defaultString(this.action.getStyleSheetCode())
          this.fillExisitingStyleSheetsML()
          this.initValidators()

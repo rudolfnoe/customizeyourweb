@@ -2,38 +2,46 @@ with(customizeyourweb){
 (function(){
    var EditInsertSubwindowDialogHandler = {
       action: null,
-      htmlMarkerId: null,
-      iframe: null,
+      editContext: null,
       targetElement: null,
+		suspendPreview: false,
+      undoMemento: null,
+      
       
       doCancel: function(){
-         if(this.iframe){
-            $(this.iframe).remove()
+         if(this.undoMemento != null){
+            this.action.undo(this.editContext, this.undoMemento)
          }
       },
       
       doOk: function(){
          this.synchronizeActionWithForm()
+         if(this.action.getStyle()==SubwindowStyle.OVERLAYED){
+            this.action.setTargetDefinition(new XPathTargetDefinition("//body"))
+         }
          Dialog.setResult(DialogResult.OK)
          Dialog.setNamedResult("action", this.action)
       },
 
       doOnload: function(){
-         //move to left
-         this.loadJQuery()
-         this.action = EditDialog.getAction()
-         this.targetElement = EditDialog.getTargetElement()
-         var targetElement$ = $(this.targetElement) 
-         if(targetElement$.find("iframe").length>0){
-            this.iframe = targetElement$.find("iframe").get(0)
+         try{
+            this.action = EditDialog.getAction()
+            this.editContext = EditDialog.getEditContext()
+            //Remove existing preview window
+            this.action.undo(this.editContext)
+   			this.targetElement = EditDialog.getTargetElement()
+   			//Suspend preview
+            this.suspendPreview = true
+            PresentationMapper.mapModel2Presentation(this.action, document)
+            var triggerEvent = this.action.getTriggerEvent()
+            byId("mouseOverCB").checked = triggerEvent & SubwindowTriggerEvent.ONMOUSEOVER 
+            byId("listViewCB").checked = triggerEvent & SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE 
+            this.suspendPreview = false
+            this.triggerPreview()
+            this.initValidators(this.targetElement)
+         }catch(e){
+            Log.logError(e)
          }
-         this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
-         PresentationMapper.mapModel2Presentation(this.action, document)
-         var triggerEvent = this.action.getTriggerEvent()
-         byId("mouseOverCB").checked = triggerEvent & SubwindowTriggerEvent.ONMOUSEOVER 
-         byId("listViewCB").checked = triggerEvent & SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE 
-         
-         this.initValidators(this.targetElement)
       },
       
       synchronizeActionWithForm: function(){
@@ -71,6 +79,7 @@ with(customizeyourweb){
             byId('positionML').disabled = false
             
          }
+         this.triggerPreview()
       },
       
       initValidators: function(targetElement){
@@ -83,18 +92,23 @@ with(customizeyourweb){
 //         okValidator.validate()
        },
 
-      updatePage: function(){
-         Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._updatePage, this)         
+      triggerPreview: function(){
+         if(this.suspendPreview){
+            return
+         }
+         Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._triggerPreview, this)         
       },
       
-      _updatePage: function(){
-         if(this.iframe){
-            $(this.iframe).remove()
+      _triggerPreview: function(){
+         try{
+   			if(this.undoMemento != null){
+               this.action.undo(this.editContext, this.undoMemento)
+            }
+            this.synchronizeActionWithForm()
+            this.undoMemento = this.action.preview(this.editContext)
+         }catch(e){
+            Log.logError(e)
          }
-         this.synchronizeActionWithForm()
-         var cywContext = new CywContext(this.getTargetWindow())
-         this.iframe = this.action.insertIframeHtml(cywContext)
-         this.iframe.scrollIntoView()
       }
    }
    ObjectUtils.injectFunctions(EditInsertSubwindowDialogHandler, AbstractEditDialogHandler)

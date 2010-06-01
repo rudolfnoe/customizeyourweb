@@ -1,8 +1,8 @@
 with(customizeyourweb){   
 (function(){
    
-   function AbstractTargetedAction(targetDefinition) {
-         this.AbstractAction()
+   function AbstractTargetedAction(id, targetDefinition) {
+         this.AbstractAction(id)
          this.targetDefinition = targetDefinition
    }
    

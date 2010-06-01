@@ -11,7 +11,7 @@ with(customizeyourweb){
       },
       
       createAction: function(editContext) {
-         return new IsolateAction(editContext.getTargetDefinition())
+         return new IsolateAction(editContext.getNextActionId(), editContext.getTargetDefinition())
       }
       
    }

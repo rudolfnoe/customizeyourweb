@@ -5,6 +5,10 @@ with(customizeyourweb){
     * Is added to subclasses with ObjectUtils.injectFunctions
     */
    var AbstractEditDialogHandler = {
+		getScriptId: function(){
+			 return EditDialog.getTargetWindow()
+		},
+		
       getTargetDefinition: function(){
          return byId('targetdefinition').getTargetDefinition()
       },

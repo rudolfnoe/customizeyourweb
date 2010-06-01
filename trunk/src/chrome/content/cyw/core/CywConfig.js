@@ -293,7 +293,7 @@ with(customizeyourweb){
          }
          var action = script.getActionById(actionId)
          for(var prop in changedPropertiesMap){
-            action[prop] = changedPropertiesMap[prop]
+            PresentationMapper.setPropertyInModel(action, prop, changedPropertiesMap[prop])
          }
          this.saveScript(script)
       },
