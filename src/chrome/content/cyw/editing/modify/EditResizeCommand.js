@@ -16,7 +16,7 @@ with(customizeyourweb){
             modifyAction = existingAction
             styles = existingAction.getStyles()
          }else{
-            modifyAction = new ModifyAction(editContext.getTargetDefinition())
+            modifyAction = new ModifyAction(editContext.getNextActionId(), editContext.getTargetDefinition())
             styles = {}
          }
          var elementWrapper = new ElementWrapper(element)
@@ -34,8 +34,7 @@ with(customizeyourweb){
          if(!hasChanged)
             return null
          modifyAction.setStyles(styles)
-         this.setChangeMemento(elementWrapper.getChangeMemento())
-         this.setAction(modifyAction)
+         this.setUndoMemento([elementWrapper.getChangeMemento()])
          return modifyAction
       }
    }

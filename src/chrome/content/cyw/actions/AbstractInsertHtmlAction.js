@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function AbstractInsertHtmlAction(targetDefinition, position){
-      this.AbstractTargetedAction(targetDefinition)
+   function AbstractInsertHtmlAction(id, targetDefinition, position){
+      this.AbstractTargetedAction(id, targetDefinition)
       //Position where the element should be inserted relative to the target element
       this.position = position?position:WhereToInsertEnum.AFTER
       this.t_elementId = null
@@ -71,9 +71,9 @@ with(customizeyourweb){
    AbstractInsertHtmlAction.prototype ={ 
       constructor: AbstractInsertHtmlAction,
 
-      getElementId: function(){
+      getElementId: function(scriptId){
          if(!this.elementId){
-            this.elementId = CywUtils.createSessionUniqueId()
+            this.elementId = "cyw_id_" + scriptId + "_" + this.getId();
          }
          return this.elementId
       },
@@ -113,6 +113,7 @@ with(customizeyourweb){
          var targetElement = this.getTarget(cywContext)
          return AbstractInsertHtmlAction.insertHtml(html, targetElement, this.getPosition(), markerId)
       }
+		
    }
    
    ObjectUtils.extend(AbstractInsertHtmlAction, "AbstractTargetedAction", customizeyourweb)

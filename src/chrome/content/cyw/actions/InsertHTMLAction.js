@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function InsertHTMLAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function InsertHTMLAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
       this.htmlCode = null
    }
    

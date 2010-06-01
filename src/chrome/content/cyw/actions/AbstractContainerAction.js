@@ -41,8 +41,6 @@ with(customizeyourweb){
       }
       
    }
-   ObjectUtils.extend(AbstractContainerAction, "AbstractAction", customizeyourweb)
-   
    Namespace.bindToNamespace("customizeyourweb", "AbstractContainerAction", AbstractContainerAction)
 })()
 }

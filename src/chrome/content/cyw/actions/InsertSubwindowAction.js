@@ -1,32 +1,24 @@
 with (customizeyourweb) {
    (function() {
 
-      function InsertSubwindowAction(targetDefinition, position) {
-         this.AbstractInsertHtmlAction(targetDefinition, position)
+      function InsertSubwindowAction(id, targetDefinition, position) {
+         this.AbstractInsertHtmlAction(id, targetDefinition, position)
+         //Inherit from changeable action to handle saving of resizing and repositioning
          this.AbstractChangeableAction()
          /* See static url, preview */
-         this.behavior = SubwindowBehavior.STATIC
-         // Height of the subwindow
-         this.height = 500
-         this.heightUnit = "px";
-         //Left-position
-         this.left = 0
-         this.leftUnit = "px"
+         this.behavior = SubwindowBehavior.PREVIEW
          //preview listener
          this.previewListener = null;
-         // Style of subwindow
-         this.style = SubwindowStyle.FIXED_POSITION
-         //Top-position
-         this.top = 0
-         this.topUnit = "px"
+         //Rectangle defineds position and size
+			this.rectangle = new Rectangle(50, 0, 50, 100, "%")
+         
+			// Style of subwindow
+         this.style = SubwindowStyle.OVERLAYED
          // Only in case of dynamic target
          this.triggerEvent = SubwindowTriggerEvent.ONMOUSEOVER
                | SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE
          // Only in case of static target
          this.url = null
-         // Width of the subwindow
-         this.width = 400
-         this.widthUnit = "px"
       }
 
       InsertSubwindowAction.prototype = {
@@ -41,38 +33,6 @@ with (customizeyourweb) {
             this.behavior = behavior
          },
 
-         getHeight : function() {
-            return this.height
-         },
-
-         setHeight : function(height) {
-            this.height = height
-         },
-
-         getHeightUnit: function(){
-            return this.heightUnit
-         },
-
-         setHeightUnit: function(heightUnit){
-            this.heightUnit = heightUnit
-         },
-
-         getLeft: function(){
-            return this.left
-         },
-   
-         setLeft: function(left){
-            this.left = left
-         },
-
-         getLeftUnit: function(){
-            return this.leftUnit
-         },
-   
-         setLeftUnit: function(leftUnit){
-            this.leftUnit = leftUnit
-         },
-   
          getStyle : function() {
             return this.style
          },
@@ -96,41 +56,30 @@ with (customizeyourweb) {
          setUrl : function(url) {
             this.url = url
          },
-
-         getTop: function(){
-            return this.top
-         },
-   
-         setTop: function(top){
-            this.top = top
-         },
-   
-         getTopUnit: function(){
-            return this.topUnit
-         },
-   
-         setTopUnit: function(topUnit){
-            this.topUnit = topUnit
-         },
-   
-         getWidth : function() {
-            return this.width
-         },
-
-         setWidth : function(width) {
-            this.width = width
-         },
-
-         getWidthUnit: function(){
-            return this.widthUnit
-         },
-
-         setWidthUnit: function(widthUnit){
-            this.widthUnit = widthUnit
-         },
-         
          //Functionality
 
+         /*
+          * Binds listener for resizing and repositioning
+          */
+         registerChangeListener: function(dialogElement, $injected){
+            var $widget = $injected(dialogElement)
+            var $iframe = $widget.find("iframe") 
+            //Binding must apply to the widget element of the dialog (see $(dialog).dialog("widget"))!!! 
+            $widget.bind('resizestart', function(event, uiEvent) {
+               //Hide preview frame as it suppress mouse move events on resizing
+               $iframe.hide()
+            })
+            var self = this
+            $widget.bind('resizestop', function(event, uiEvent) {
+               $iframe.show()
+               $widget.css('position', 'fixed')
+               self.updateSize(event, uiEvent)
+            })
+            $widget.bind('dragstop', function(event, uiEvent) {
+               self.updatePosition(event, uiEvent)
+            })
+         },
+         
          /*
           * The cleanup call is used to save the new position
           */
@@ -140,6 +89,7 @@ with (customizeyourweb) {
          
          /*
           * Implements abstract method from superclass
+          * @override
           */
          doActionInternal : function(cywContext) {
             var iframe = this.insertIframeHtml(cywContext)
@@ -149,33 +99,42 @@ with (customizeyourweb) {
             this.initIframe(iframe)
             return true
          },
+			
+         /*
+          * Creates the Id for retrieving the jQuery dialog
+          * @retuns id 
+          */
 
          /*
           * Inserts an Iframe element which is fixed embedded within the page
           * @return DOMElement iframe
           */
-         insertFixedPositionedSubwindow : function(cywContext) {
-            var html = "<iframe/>";
-            var $iframe = $(this.insertElement(html, cywContext, this.getElementId()));
-            if(!$iframe){
+         insertFixedPositionedSubwindow : function(abstractContext) {
+            //Insert HTML
+            var id = this.getElementId(abstractContext.getScriptId())
+            var html = "<iframe id='" + id + "'/>";
+            var iframe = this.insertElement(html, abstractContext, id)
+            if(!iframe){
                throw new Error("Subwindow could not be inserted")
             }
-            $iframe.width(this.width+this.widthUnit)
-            $iframe.height(this.height+this.heightUnit)
-            return $iframe.get(0)
+            //Set dimension
+            var $iframe = $(iframe);
+            $iframe.width(this.rectangle.width+this.rectangle.widthUnit)
+            $iframe.height(this.rectangle.height+this.rectangle.heightUnit)
+            return iframe
          },
          
          /*
           * Inserts the HTML for the iframe depending on its style
           */
-         insertIframeHtml: function(cywContext){
+         insertIframeHtml: function(abstractContext){
             if(this.style == SubwindowStyle.FIXED_POSITION) {
-               if(this.isTargetOptionalAndTargetMissing(cywContext)){
+               if(this.isTargetOptionalAndTargetMissing(abstractContext)){
                   return false
                }
-               var iframe = this.insertFixedPositionedSubwindow(cywContext)
+               var iframe = this.insertFixedPositionedSubwindow(abstractContext)
             }else if(this.style == SubwindowStyle.OVERLAYED){
-               var iframe = this.insertOverlayedSubwindow(cywContext)
+               var iframe = this.insertOverlayedSubwindow(abstractContext)
             }else {
                throw new Error('unknown style value')
             }
@@ -195,74 +154,96 @@ with (customizeyourweb) {
                throw new Error('unknown behavior value')
             }
          },
+			
+         /*
+          * Inserts the jQery dialog and returns the DOM Element representing the dialog
+          * @params abstractContext
+          * @params jQuery $injected the injected jQuery object
+          * @returns DOMElement root element representing the dialog
+          */
+			insertJQueryUIDialog: function(abstractContext, $injected){
+            var targetWindow = abstractContext.getTargetWindow()
+
+            //Create dialog div which will be wrapped by jQuery
+            var dialogDivId = this.getElementId(abstractContext.getScriptId())
+            $iframeDialog = $injected('body').append('<div id="' + dialogDivId + '">' +
+                                       '<iframe style="width:100%; height:100%"/>' + 
+                                     '</div>').find('#' + dialogDivId)
+
+            $iframeDialog.dialog({title: "Preview"})
+
+            //Set size
+            $iframeDialog.dialog("option", "height", this.rectangle.height + this.rectangle.heightUnit)
+            $iframeDialog.dialog("option", "width", this.rectangle.width + this.rectangle.widthUnit)
+            
+            //Set position
+            var x = this.rectangle.x
+            var $targetWindow = $(targetWindow)
+            if(this.rectangle.xUnit=="%"){
+               x = Math.floor($targetWindow.width()*this.rectangle.x/100)
+            }
+            var y = this.rectangle.y
+            if(this.rectangle.yUnit=="%"){
+               y = Math.floor($targetWindow.height()*this.rectangle.y/100)
+            }
+            //Workaround to create array as otherwise we have an security issue
+            var position = $injected.makeArray({})
+            position[0] = x
+            position[1] = y
+            $iframeDialog.dialog("option", "position", position)
+            //Make sure iframe spans the entire dialog
+            $iframeDialog.css('height', "100%")
+            $iframeDialog.css('width', "100%")
+            
+            //jQuery dialogs scrolls by default which is not as it should be ;-)
+				var $dialogElement = $injected("div.ui-dialog").has("div#" + dialogDivId)
+            $dialogElement.css('position', 'fixed')
+				return $dialogElement.get(0)
+			},
          
          /*
           * Inserts HTML for free-floating Iframe
           * Implemented with jQuery UI dialog
           * @return DOMElement iframe 
           */
-         insertOverlayedSubwindow: function(cywContext){
-            //Redefinition of this for usage in callback functions of eventhandlers
-            var self = this
-            var tw = cywContext.getTargetWindow()
+         insertOverlayedSubwindow: function(abstractContext){
             //Assure that jQueryUI is injected in page
-            var $injected = this.assureJQueryUI(cywContext)
+            var $injected = this.assureJQueryUI(abstractContext)
             
-            var dialogDivDomId = "cyw_iframe_" + cywContext.getScriptId() + "_" + this.getId()
-            //Create dialog div
-            $injected('body').append('<div id="' + dialogDivDomId + '">' +
-                                       '<iframe style="width:100%; height:100%"/>' + 
-                                     '</div>')
-            var $iframeDialog = $injected('div#' + dialogDivDomId)
-
-            //Set size
-            $iframeDialog.dialog({title: "Preview"})
-            $iframeDialog.dialog("option", "height", this.height + this.heightUnit)
-            $iframeDialog.dialog("option", "width", this.width + this.widthUnit)
+				//Insert jQuery dialog
+            var dialogElement = this.insertJQueryUIDialog(abstractContext, $injected)
             
-            //Set position
-            //Workaround as otherwise we have an security issue
-            var left = this.left
-            var $tw = $(tw)
-            if(this.leftUnit=="%"){
-               left = Math.floor($tw.width()*this.left/100)
-            }
-            var top = this.top
-            if(this.topUnit=="%"){
-               top = Math.floor($tw.height()*this.left/100)
-            }
-            var position = $injected.makeArray({})
-            position[0] = left
-            position[1] = top
-            $iframeDialog.dialog("option", "position", position)
-            $iframeDialog.css('height', "100%")
-            $iframeDialog.css('width', "100%")
+            //Bind listener 
+            this.registerChangeListener(dialogElement, $injected)
             
-            var $dialogDiv = $injected('div.ui-dialog')
-            //jQuery dialogs scrolls by default which is not as it should be ;-)
-            $dialogDiv.css('position', 'fixed')
-            //Add eventhandler to dialog div iframe
-            $dialogDiv.bind('resizestart', function(event, uiEvent) {
-               //Hide preview frame as it suppress mouse move events on resizing
-               $iframeDialog.hide()
-            })
-            $dialogDiv.bind('resizestop', function(event, uiEvent) {
-               $iframeDialog.show()
-               $dialogDiv.css('position', 'fixed')
-               self.updateSize(event, uiEvent)
-            })
-            $dialogDiv.bind('dragstop', function(event, uiEvent) {
-               self.updatePosition(event, uiEvent)
-            })
             //Iframe reference must be fetched with the global $ otherwise PreviewListener 
             //has security exceptions when accessing doc shell
-            var iframe = $("div#" + dialogDivDomId+">iframe", cywContext.getTargetDocument()).get(0) 
+            var iframe = $("div#" + this.getElementId(abstractContext.getScriptId()) +">iframe", abstractContext.getTargetDocument()).get(0) 
             if(iframe){
                return iframe
             }else{
                throw new Error('insertion preview iframe failed')
             }
          },
+			
+			//@see IPreviewableAction.preview
+			preview: function(editContext){
+				var iframe = this.insertIframeHtml(editContext)
+				return {}
+			},
+			
+			undo: function(editContext, undoMemento){
+            var targetDoc = editContext.getTargetDocument()
+            if(this.style == SubwindowStyle.FIXED_POSITION) {
+               $("#" + this.getElementId(editContext.getScriptId()), targetDoc).remove()
+            }else if(this.style == SubwindowStyle.OVERLAYED){
+   			   var $injected = this.assureJQueryUI(editContext)
+               var dialog = $injected("div#" + this.getElementId(editContext.getScriptId())).dialog("destroy")
+            }else {
+               throw new Error('unknown style value')
+            }
+
+			},
          
          /*
           * Updates the position of the subwindow after dragging
@@ -270,19 +251,19 @@ with (customizeyourweb) {
          updatePosition: function(event, uiEvent){
             var $win = $(event.view)
             
-            var left = uiEvent.position.left
-            if(this.leftUnit=="%"){
-               left = Math.round(left/$win.width()*100)
+            var x = uiEvent.position.left
+            if(this.rectangle.xUnit=="%"){
+               x = Math.round(x/$win.width()*100)
             }
-            this.left = left 
-            this.setPropertyChange("left", this.left)
+            this.rectangle.x = x 
+            this.setPropertyChange("rectangle.x", this.rectangle.x)
 
-            var top = uiEvent.position.top
-            if(this.topUnit=="%"){
-               top = Math.round(top/$win.height()*100)
+            var y = uiEvent.position.top
+            if(this.rectangle.yUnit=="%"){
+               y = Math.round(y/$win.height()*100)
             }
-            this.top = top
-            this.setPropertyChange("top", this.top)
+            this.rectangle.y = y
+            this.setPropertyChange("rectangle.y", this.rectangle.y)
          },
          
          /*
@@ -294,23 +275,24 @@ with (customizeyourweb) {
             var $win = $(event.view)
             
             var width = uiEvent.size.width
-            if(this.widthUnit=="%"){
+            if(this.rectangle.widthUnit=="%"){
                width= Math.round(width/$win.width()*100)
             }
-            this.width = width 
-            this.setPropertyChange("width", this.width)
+            this.rectangle.width = width 
+            this.setPropertyChange("rectangle.width", this.rectangle.width)
 
             var height = uiEvent.size.height
-            if(this.heightUnit=="%"){
+            if(this.rectangle.heightUnit=="%"){
                height= Math.round(height/$win.height()*100)
             }
-            this.height = height 
-            this.setPropertyChange("height", this.height)
+            this.rectangle.height = height 
+            this.setPropertyChange("rectangle.height", this.rectangle.height)
          }
 
       }
       ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertHtmlAction", customizeyourweb)
       ObjectUtils.extend(InsertSubwindowAction, "AbstractChangeableAction", customizeyourweb)
+      ObjectUtils.extend(InsertSubwindowAction, "IPreviewableAction", customizeyourweb)
       customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertSubwindowAction", InsertSubwindowAction)
 
       SubwindowBehavior = {
@@ -331,7 +313,6 @@ with (customizeyourweb) {
          OVERLAYED : "OVERLAYED",
          FIXED_POSITION : "FIXED_POSITION"
       }
-      customizeyourweb.Namespace.bindToNamespace("customizeyourweb",
-            "SubwindowStyle", SubwindowStyle)
+      customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "SubwindowStyle", SubwindowStyle)
    })()
 }

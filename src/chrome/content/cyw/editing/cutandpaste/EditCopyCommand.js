@@ -11,7 +11,7 @@ with(customizeyourweb){
       },
       
       createAction: function(editContext) {
-         return new CopyAction(editContext.getTargetDefinition())
+         return new CopyAction(editContext.getNextActionId(), editContext.getTargetDefinition())
       }
    }
    ObjectUtils.extend(EditCopyCommand, "AbstractCommonAttributesEditCommand", customizeyourweb)

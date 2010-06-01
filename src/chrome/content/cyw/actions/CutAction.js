@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
 
-   function CutAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function CutAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
    }
    
    CutAction.prototype ={ 

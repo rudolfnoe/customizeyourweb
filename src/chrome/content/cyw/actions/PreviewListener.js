@@ -29,6 +29,9 @@ with(customizeyourweb){
             this.iframe.addEventListener("load", this, true)
          },
          
+         /*
+          * Handles Load event on iframe to reenable JS
+          */
          handleLoad: function(event){
             if(this.iframe.src=="about:blank"){
                this.insertNoPdfPreview(this.iframe.contentDocument)
@@ -38,8 +41,12 @@ with(customizeyourweb){
             }
          },
          
+         /*
+          * Handles mouseover events
+          */
          handleMouseover: function(event) {
             if(!this.isPreviewTarget(event)){
+               this.currentTarget = null
                return
             }
             this.currentTarget = event.target
@@ -48,12 +55,17 @@ with(customizeyourweb){
          },
          
          handleMouseout: function(event){
+            this.currentTarget = null
             event.target.removeEventListener("mouseout", this, true)
             if(!$.contains(event.target, event.relatedTarget)){
                Utils.clearExecuteDelayedTimer(this.timerId)
             }
          },
          
+         /*
+          * Handles custom UIEvent "Previewlink"
+          * see UIEvent.PREVIEW_LINK
+          */
          handlePreviewlink: function(event){
             Utils.executeDelayed(this.timerId, 200, this.preview, this, [event.target])
          },
@@ -64,6 +76,10 @@ with(customizeyourweb){
             $("body", document).append(html)
          },
          
+         /*
+          * Checks whether target is previewable
+          * Only simple links could be previewed
+          */
          isPreviewTarget: function(event){
             var target = event.target
             if(!target || target.tagName!="A" ||

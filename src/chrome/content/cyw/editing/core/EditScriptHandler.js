@@ -294,28 +294,10 @@ with(customizeyourweb){
             hideSidebar()
          }
       },
-      
-      /*
-       * Edits a selected action
+      /**
+       * Creates new action
+       * @param {String} commandId
        */
-      doEditAction: function(action, script){
-         if(action.isTargeted()){
-            //if targeted action highlighing is done by the dialog
-            this.unhighlightAllHighlighters()
-         }
-         var wrapperCommand = this.createWrapperCommandFromAction(action)
-         var actionTargetWin = this.getActionTargetWin()
-         this.initEditContextForEditAction(action, script)
-         var modifiedAction = wrapperCommand.doEditAction(this.editContext)
-         if(modifiedAction!=null){
-            //Editing ended sucessful
-            this.editCommandHistory.push(wrapperCommand)
-            this.updateCurrentTarget(modifiedAction, actionTargetWin)
-         }
-         this.highlightCurrentTarget()
-         return modifiedAction
-      },
-      
       doCreateAction: function(commandId){
          if(this.currentTarget==null && TARGETLESS_COMMANDS.indexOf(commandId)==-1)
            return
@@ -344,6 +326,27 @@ with(customizeyourweb){
             }
          }
          this.highlightCurrentTarget()
+      },
+      
+      /*
+       * Edits a selected action
+       */
+      doEditAction: function(action, script){
+         if(action.isTargeted()){
+            //if targeted action highlighing is done by the dialog
+            this.unhighlightAllHighlighters()
+         }
+         var wrapperCommand = this.createWrapperCommandFromAction(action)
+         var actionTargetWin = this.getActionTargetWin()
+         this.initEditContextForEditAction(action, script)
+         var modifiedAction = wrapperCommand.doEditAction(action, this.editContext)
+         if(modifiedAction!=null){
+            //Editing ended sucessful
+            this.editCommandHistory.push(wrapperCommand)
+            this.updateCurrentTarget(modifiedAction, actionTargetWin)
+         }
+         this.highlightCurrentTarget()
+         return modifiedAction
       },
       
       enableEditHandler: function(){
@@ -508,10 +511,10 @@ with(customizeyourweb){
          }, this) 
       },
       
-      initEditContextCommon: function(targetElement, targetWindow, scriptId){
+      initEditContextCommon: function(targetElement, targetWindow, script){
          this.editContext.setTargetElement(targetElement)
          this.editContext.setTargetWindow(targetWindow)
-         this.editContext.setScriptId(scriptId)
+         this.editContext.setScript(script)
       },
       
       /*
@@ -559,13 +562,12 @@ with(customizeyourweb){
                Assert.fail("Target window could not be determined!")
             }
          }
-         this.editContext.setAction(action)
-         this.initEditContextCommon(targetElement, targetWindow, script.getId())
+         this.initEditContextCommon(targetElement, targetWindow, script)
       },
       
       initEditContextForCreateAction: function(commandId, script){
          this.editContext.setCommand(document.getElementById(commandId))
-         this.initEditContextCommon(this.currentTarget, this.getActionTargetWin(), script.getId())
+         this.initEditContextCommon(this.currentTarget, this.getActionTargetWin(), script)
          var targetDefinition = null
          if(this.currentTarget)
            targetDefinition = AbstractTargetDefinitionFactory.createDefaultDefinition(this.currentTarget)
@@ -711,8 +713,10 @@ with(customizeyourweb){
             getSidebarWinHandler().setMessage(errorMessage, Severity.ERROR)
             return
          }
+			var currentScript = getSidebarWinHandler().getCurrentScript()
+			this.initEditContextCommon(newTarget, newTargetWindow, currentScript)
          this.unhighlightMouseOverHighlighter()   
-         var dialog = new CommonAttributesEditDialog(selectedAction, newTargetWindow, newTarget) 
+         var dialog = new CommonAttributesEditDialog(selectedAction, this.editContext) 
          dialog.show()
          if(dialog.isOk()){
             var updatedAction = dialog.getAction()

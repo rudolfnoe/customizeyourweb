@@ -8,29 +8,24 @@ with(customizeyourweb){
       constructor: EditInsertStyleSheetCommand,
 
       doCreateAction: function(editContext){
-         var insertStyleSheetAction = new InsertStyleSheetAction()
-         return this.editAction(insertStyleSheetAction, editContext.getTargetDocument(), editContext.getScriptId())
+         var insertStyleSheetAction = new InsertStyleSheetAction(editContext.getNextActionId())
+         return this.editAction(insertStyleSheetAction, editContext)
       },
       
-      doEditAction: function(editContext){
-         return this.editAction(editContext.getAction(), editContext.getTargetDocument(), editContext.getScriptId())
+      doEditAction: function(action, editContext){
+         return this.editAction(action, editContext)
       },
       
-      editAction: function(action, targetDocument, scriptId){
-         var editDialog = new EditDialog(EDIT_INSERT_STYLESHEET_DIALOG_URL, "EditInsertStyleShhet", true, window, null, 
-               {action: action, targetDocument:targetDocument, scriptId: scriptId})
+      editAction: function(action, editContext){
+         var editDialog = new EditDialog(EDIT_INSERT_STYLESHEET_DIALOG_URL, "EditInsertStyleShhet", action, editContext)
          editDialog.show()
-         if(editDialog.getResult()==DialogResult.OK){
-            return editDialog.getNamedResult("action")
-         }else{
-            return null
-         }
-       },
+         return editDialog.getActionResult()
+      },
       
       undo: function(editContext, actionBackup){
-         if(actionsBackup){
+         if(actionBackup){
             InsertStyleSheetAction.setStyleSheet(actionBackup.getStyleSheetCode(), editContext.getTargetDocument(), 
-                  editContext.getScriptId(), actionsBackup.getId())
+                  editContext.getScriptId(), actionBackup.getId())
          }else{
             var styleElemId = InsertStyleSheetAction.getStyleSheetElementId(editContext.getScriptId(), this.getAction().getId())
             DomUtils.removeElement(editContext.getTargetDocument().getElementById(styleElemId))

@@ -50,7 +50,7 @@ with(customizeyourweb){
        */
       undo: function(editContext, actionBackup){
          if(ObjectUtils.instanceOf(actionBackup, IPreviewableAction) && this.undoMemento){
-            actionBackup.undo(editContext.getTargetWindow(), this.undoMemento)
+            actionBackup.undo(editContext, this.undoMemento)
          }
          //Empty default implementation
       }

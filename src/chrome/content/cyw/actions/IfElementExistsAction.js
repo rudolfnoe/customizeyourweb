@@ -1,8 +1,8 @@
  with(customizeyourweb){
 (function(){
-   function IfElementExistsAction(targetDefinition){
+   function IfElementExistsAction(id, targetDefinition){
       this.AbstractIfAction()
-      this.AbstractTargetedAction(targetDefinition)
+      this.AbstractTargetedAction(id, targetDefinition)
    }
    
    IfElementExistsAction.prototype = {

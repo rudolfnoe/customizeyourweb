@@ -1,7 +1,7 @@
 with(customizeyourweb){
 (function(){
-   function RemoveAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function RemoveAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
    }
 
    RemoveAction.prototype = {

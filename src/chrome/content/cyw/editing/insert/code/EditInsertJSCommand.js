@@ -8,22 +8,18 @@ with(customizeyourweb){
       constructor: EditInsertJSCommand,
 
       doCreateAction: function(editContext){
-         var insertJSAction = new InsertJSAction()
+         var insertJSAction = new InsertJSAction(editContext.getNextActionId())
          return this.editAction(insertJSAction)
       },
       
-      doEditAction: function(editContext){
-         return this.editAction(editContext.getAction())
+      doEditAction: function(action, editContext){
+         return this.editAction(action)
       },
       
       editAction: function(action){
-         var editDialog = new EditDialog(EDIT_INSERT_JS_DIALOG_URL, "EditInsertJS", true, window, null, {action: action})
+         var editDialog = new EditDialog(EDIT_INSERT_JS_DIALOG_URL, "EditInsertJS", action)
          editDialog.show()
-         if(editDialog.getResult()==DialogResult.OK){
-            return editDialog.getNamedResult("action")
-         }else{
-            return null
-         }
+         return editDialog.getActionResult()
        },
       
       undo: function(){

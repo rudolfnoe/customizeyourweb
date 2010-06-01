@@ -1,7 +1,7 @@
 with(customizeyourweb){
 (function(){
-   function IsolateAction (targetDefinition){
-      this.AbstractTargetedAction(targetDefinition)
+   function IsolateAction (id, targetDefinition){
+      this.AbstractTargetedAction(id, targetDefinition)
    }
 
    IsolateAction.prototype = {
@@ -25,23 +25,23 @@ with(customizeyourweb){
          if(!this.isTargetInPage(targetWindow)){
             return null
          }
-         var memento = new UndoMemento()   
+         var memento = {}   
          var target = this.getTarget(targetWindow)
          if(target.parentNode.tagName != "BODY"){
-            memento.setData("removedElementWrapper", new RemovedElement(target))
+            memento.removedElementWrapper = new RemovedElement(target)
          }
          var $body = $("body", targetWindow.document)
-         memento.setData("bodyChildren", $body.contents().get())
+         memento.bodyChildren = $body.contents().get()
          this.isolateTarget(target, targetWindow.document)
          return memento
       },
       
-      undo: function(targetWindow, undoMemento){
-         var targetDoc = targetWindow.document
+      undo: function(editContext, undoMemento){
+         var targetDoc = editContext.getTargetWindow()
          $body = $("body", targetDoc)
          $body.contents().remove()
-         $body.append($(undoMemento.getData("bodyChildren")))
-         undoMemento.getData("removedElementWrapper").undoRemoval()
+         $body.append($(undoMemento.bodyChildren))
+         undoMemento.removedElementWrapper.undoRemoval()
       }
    }
    ObjectUtils.extend(IsolateAction, "AbstractTargetedAction", customizeyourweb)

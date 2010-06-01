@@ -1,6 +1,6 @@
 with(customizeyourweb){
 (function(){
-   function AbstractIfAction(targetDefinition){
+   function AbstractIfAction(){
       this.AbstractContainerAction()
    }
    

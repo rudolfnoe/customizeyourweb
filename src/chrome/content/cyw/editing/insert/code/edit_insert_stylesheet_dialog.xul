@@ -12,11 +12,12 @@
     persist="screenX screenY width height"
     title="Edit Stylesheet">
    <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
+   <script src="../../common/editdialogs/common_edit_dialog_include.js"/>
    <script src="edit_insert_stylesheet_dialog.js"/>
    <vbox flex="1">
-      <hbox align="center">
+      <hbox align="center" flex="1">
          <label value="Exisiting Stylesheets"/>
-         <menulist id="exisitingStyleSheetsML">
+         <menulist id="exisitingStyleSheetsML" flex="1">
             <menupopup>
             </menupopup>
          </menulist>

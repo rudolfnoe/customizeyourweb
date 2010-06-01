@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function InsertJSAction (){
-      this.AbstractAction()
+   function InsertJSAction (id){
+      this.AbstractAction(id)
       this.jsCode = null
    }
    

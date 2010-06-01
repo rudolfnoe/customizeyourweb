@@ -29,13 +29,12 @@ with(customizeyourweb){
          }
       },
       
-      doEditAction: function(editContext){
-         return this.editCommonActionAttributes(editContext.getAction(), editContext)
+      doEditAction: function(action, editContext){
+         return this.editCommonActionAttributes(action, editContext)
       },
 
       editCommonActionAttributes: function(action, editContext){
-         var dialog = new CommonAttributesEditDialog(action, editContext.getTargetWindow(), editContext.getTargetElement(), 
-                                                      this.allowMultiTargetDefinition) 
+         var dialog = new CommonAttributesEditDialog(action, editContext, this.allowMultiTargetDefinition) 
          dialog.show()
          if(dialog.isCancel()){
             return null
