@@ -13,8 +13,8 @@ with (customizeyourweb) {
 	}
 
 	//Static methods
-	ScriptErrorHandler.addScriptError = function(scriptId, errorOrId, replaceParamArray, action, targetWin) {
-		this.getInstance().addScriptError(scriptId, errorOrId, replaceParamArray, action, targetWin)
+	ScriptErrorHandler.addScriptError = function(messageId, replaceParamArray, cause, scriptId, actionId, targetWin) {
+		this.getInstance().addScriptError(messageId, replaceParamArray, cause, scriptId, actionId, targetWin)
 	}
    
    ScriptErrorHandler.addScriptErrorListener = function(eventHandler){
@@ -68,23 +68,20 @@ with (customizeyourweb) {
 		return instance
 	},
 
-	ScriptErrorHandler.logError = function(error, message) {
-		CywUtils.logError(error, message)
-	},
-
    //Member mthods
 	ScriptErrorHandler.prototype = {
 		constructor : ScriptErrorHandler,
 
-		addScriptError : function(scriptId, errorOrId, replaceParamArray, action, targetWin) {
-			var err = ObjectUtils.instanceOf(errorOrId, String) ? 
-               ScriptErrorHandler.createError(errorOrId, replaceParamArray) : errorOrId
-			if (action)
-				err.actionId = action.getId()
+		addScriptError : function(messageId, replaceParamArray, cause, scriptId, actionId, targetWin) {
+			var err = ScriptErrorHandler.createError(messageId, replaceParamArray)
+         err.cause = cause.stack
+         err.scriptId = scriptId
+			if (actionId)
+				err.actionId = actionId
          err.severity = Severity.ERROR
 			this.getErrorsForScript(scriptId).push(err)
-			// Make this configurable
-			ScriptErrorHandler.logError(err)
+			CywUtils.logError(err, null, cause==null)
+
          //Notify Listeners
          this.eventSource.notifyListeners({type:EVENT_TYPE_SCRIPT_ERROR, targetWin: targetWin})
 		},

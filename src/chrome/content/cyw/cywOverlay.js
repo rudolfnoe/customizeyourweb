@@ -20,7 +20,6 @@ with(customizeyourweb){
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/CywVersionManager.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ConfigDataConverter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/Migrations.js", "customizeyourweb")
-      //TODO remove the following two items
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptExporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptImporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/WebInstaller.js", "customizeyourweb")

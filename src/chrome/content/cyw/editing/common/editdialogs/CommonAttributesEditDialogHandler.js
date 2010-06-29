@@ -20,7 +20,7 @@ with(customizeyourweb){
             this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
             this.initValidators(targetWindow, EditDialog.getAllowMultiTargetDefinition())
          }catch(e){
-            Utils.logError(e)
+            CywUtils.logError(e)
          }
       },
       

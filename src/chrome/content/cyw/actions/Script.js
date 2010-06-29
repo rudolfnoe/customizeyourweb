@@ -215,12 +215,11 @@ with(customizeyourweb){
             try{
                action.cleanUp(cywContext)
             }catch(e){
-               ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.CLEAN_UP_FAILED, 
-                                                 [action.getId(), e.message], action, 
-                                                 cywContext.getTargetWindow())
+               ScriptErrorHandler.addScriptError(ErrorConstants.CLEAN_UP_FAILED, [action.getId(), e.message], 
+                                                e, this.getId(), action.getId(), cywContext.getTargetWindow())
             }
          }
-         CywUtils.logDebug("Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
+         CywUtils.logDebug("Script.cleanUp: Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
             
       },
    	
@@ -238,7 +237,7 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         CywUtils.logInfo("Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
+         CywUtils.logInfo("Script.runScript: Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
          cywContext.setScript(this)
          ScriptErrorHandler.clearScriptErrors(this.getId())
          var cachedPage = cywContext.isCachedPage()
@@ -250,12 +249,8 @@ with(customizeyourweb){
                else
    			      action.doAction(cywContext)
             }catch(e){
-               if(Log.isDebug()){
-                  CywUtils.logError(e)
-               }
-               ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.ACTION_FAILED, 
-                                                   [action.getId(), e.message], action,
-                                                   cywContext.getTargetWindow())
+               ScriptErrorHandler.addScriptError(ErrorConstants.ACTION_FAILED, [action.getId(), e.message], 
+                                                e, this.getId(), action.getId(), cywContext.getTargetWindow())
             }
    		}
    	},

@@ -7,9 +7,6 @@
    }
    
    WrapperCommand.prototype={
-      createActionBackup: function(action){
-         this.actionBackup = cyw.ObjectUtils.deepClone(action)
-      },
       
       doCreateAction: function(editContext){
          var action = this.editCommand.doCreateAction(editContext)
@@ -19,7 +16,7 @@
          var existingAction = this.getExistingActionById(action)
          if(existingAction){
             this.commandType="edit"
-            this.createActionBackup(existingAction)
+            this.actionBackup = cyw.ObjectUtils.deepClone(action)
          }else{
             //no backup! as actionbackup must be real reference to action for undo
             this.actionBackup = action
@@ -30,8 +27,9 @@
       
       doEditAction: function(action, editContext){
          this.commandType="edit"
-         this.createActionBackup(action)
-         return this.editCommand.doEditAction(action, editContext)
+         this.actionBackup = action
+         var clonedAction = cyw.ObjectUtils.deepClone(action)
+         return this.editCommand.doEditAction(clonedAction, editContext)
       },
       
       getExistingActionById: function(aAction){

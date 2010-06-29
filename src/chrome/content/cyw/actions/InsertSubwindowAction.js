@@ -75,17 +75,31 @@ with (customizeyourweb) {
                $widget.css('position', 'fixed')
                self.updateSize(event, uiEvent)
             })
+            $widget.bind('dragstart', function(event, uiEvent) {
+               $iframe.hide()
+            })
             $widget.bind('dragstop', function(event, uiEvent) {
+               $iframe.show()
                self.updatePosition(event, uiEvent)
             })
          },
          
          /*
           * The cleanup call is used to save the new position
+          * @override
           */
-         cleanUp: function(cywContext){
-            this.savePropertyChanges(cywContext.getScriptId(), this.id)   
+         cleanUpInternal: function(cywContext){
+            this.savePropertyChanges(cywContext.getScriptId(), this.id)
+            //Explicit destroy is neccessary otherwise listeners keep alive and causes errors
+            this.previewListener.destroy()
+            this.removeSubwindow(cywContext);
          },
+         
+         destroyJQueryDialog: function(abstractContext){
+            var $injected = this.assureJQueryUI(abstractContext)
+            $injected("div#" + this.getElementId(abstractContext.getScriptId())).dialog( "destroy" )
+         },
+         
          
          /*
           * Implements abstract method from superclass
@@ -99,12 +113,7 @@ with (customizeyourweb) {
             this.initIframe(iframe)
             return true
          },
-			
-         /*
-          * Creates the Id for retrieving the jQuery dialog
-          * @retuns id 
-          */
-
+         
          /*
           * Inserts an Iframe element which is fixed embedded within the page
           * @return DOMElement iframe
@@ -164,10 +173,10 @@ with (customizeyourweb) {
 			insertJQueryUIDialog: function(abstractContext, $injected){
             var targetWindow = abstractContext.getTargetWindow()
 
-            //Create dialog div which will be wrapped by jQuery
+            //Create dialog div for content which will be wrapped by jQuery
             var dialogDivId = this.getElementId(abstractContext.getScriptId())
             $iframeDialog = $injected('body').append('<div id="' + dialogDivId + '">' +
-                                       '<iframe style="width:100%; height:100%"/>' + 
+                                       '<iframe style="height:100%; width:100%"/>' + 
                                      '</div>').find('#' + dialogDivId)
 
             $iframeDialog.dialog({title: "Preview"})
@@ -176,7 +185,7 @@ with (customizeyourweb) {
             $iframeDialog.dialog("option", "height", this.rectangle.height + this.rectangle.heightUnit)
             $iframeDialog.dialog("option", "width", this.rectangle.width + this.rectangle.widthUnit)
             
-            //Set position
+            //Set position of dialog
             var x = this.rectangle.x
             var $targetWindow = $(targetWindow)
             if(this.rectangle.xUnit=="%"){
@@ -186,18 +195,19 @@ with (customizeyourweb) {
             if(this.rectangle.yUnit=="%"){
                y = Math.floor($targetWindow.height()*this.rectangle.y/100)
             }
-            //Workaround to create array as otherwise we have an security issue
-            var position = $injected.makeArray({})
-            position[0] = x
-            position[1] = y
-            $iframeDialog.dialog("option", "position", position)
-            //Make sure iframe spans the entire dialog
-            $iframeDialog.css('height', "100%")
-            $iframeDialog.css('width', "100%")
             
-            //jQuery dialogs scrolls by default which is not as it should be ;-)
 				var $dialogElement = $injected("div.ui-dialog").has("div#" + dialogDivId)
+            //jQuery dialogs scrolls by default which is not as it should be ;-)
             $dialogElement.css('position', 'fixed')
+            //As the position option of dialog assumes relative positioning this has to workaround
+            $dialogElement.css('left', x)
+            $dialogElement.css('top', y)
+            
+            //Set height on iframe div of assuring that iframe spans the entire dialog
+            //TODO Why do I have to substract 40?
+            var iframeHeight = $dialogElement.height() - $dialogElement.find("div.ui-dialog-titlebar").height() - 40  
+            $iframeDialog.css('height', iframeHeight + "px")
+            
 				return $dialogElement.get(0)
 			},
          
@@ -231,18 +241,16 @@ with (customizeyourweb) {
 				var iframe = this.insertIframeHtml(editContext)
 				return {}
 			},
-			
-			undo: function(editContext, undoMemento){
-            var targetDoc = editContext.getTargetDocument()
-            if(this.style == SubwindowStyle.FIXED_POSITION) {
-               $("#" + this.getElementId(editContext.getScriptId()), targetDoc).remove()
-            }else if(this.style == SubwindowStyle.OVERLAYED){
-   			   var $injected = this.assureJQueryUI(editContext)
-               var dialog = $injected("div#" + this.getElementId(editContext.getScriptId())).dialog("destroy")
-            }else {
-               throw new Error('unknown style value')
+         
+         removeSubwindow: function(abstractContext){
+            if(this.style == SubwindowStyle.OVERLAYED) {
+   			   this.destroyJQueryDialog(abstractContext)
             }
-
+            $("#" + this.getElementId(abstractContext.getScriptId()), abstractContext.getTargetDocument()).remove()
+         },
+			
+			undo: function(abstractContext){
+            this.removeSubwindow(abstractContext)
 			},
          
          /*
@@ -251,14 +259,16 @@ with (customizeyourweb) {
          updatePosition: function(event, uiEvent){
             var $win = $(event.view)
             
-            var x = uiEvent.position.left
+            //Determine pos values for fixed positing
+            var offsetToViewport = DomUtils.getOffsetToBody(event.currentTarget)
+            var x = offsetToViewport.x
             if(this.rectangle.xUnit=="%"){
                x = Math.round(x/$win.width()*100)
             }
             this.rectangle.x = x 
             this.setPropertyChange("rectangle.x", this.rectangle.x)
 
-            var y = uiEvent.position.top
+            var y = offsetToViewport.y
             if(this.rectangle.yUnit=="%"){
                y = Math.round(y/$win.height()*100)
             }
@@ -271,7 +281,12 @@ with (customizeyourweb) {
           * @params uiEvent from jQuery
           */
          updateSize: function(event, uiEvent){
+            //Set correct postion as we use fixed position of dialog
+            var offsetToViewport = DomUtils.getOffsetToViewport(event.currentTarget)
+            uiEvent.helper.css("top", offsetToViewport.y)
+            uiEvent.helper.css("left", offsetToViewport.x)
             this.updatePosition(event, uiEvent)
+            
             var $win = $(event.view)
             
             var width = uiEvent.size.width

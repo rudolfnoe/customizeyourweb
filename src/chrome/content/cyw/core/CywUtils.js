@@ -25,8 +25,8 @@ with(customizeyourweb){
          Log.logDebug("CYW: " + messageString)
       },
       
-      logError: function(error, messageString){
-         Log.logError(error, "CYW: " + messageString)
+      logError: function(error, messageString, printStackTrace){
+         Log.logError(error, "CYW: " + (messageString?messageString:""), arguments.length>=3?printStackTrace:true)
       },
 
       logInfo: function(messageString){

@@ -25,7 +25,7 @@ with(customizeyourweb){
    //Statics 
    PageEventHandler.initPage = function(event){
 		var targetWin = event.originalTarget.defaultView
-      Log.logDebug(event.type + " " + targetWin.location.href)
+      CywUtils.logDebug("PageEventHandler.initPage: " + event.type + " " + targetWin.location.href + "  Top Win? " + (targetWin==targetWin.top))
       if(EditScriptHandler.isEditing(targetWin)){
          return
       }
@@ -144,7 +144,8 @@ with(customizeyourweb){
       },
       
       handlePagehide: function(event){
-//         Log.logDebug(event.type + " " + event.target.location.href)
+         var targetWin = event.originalTarget.defaultView
+         CywUtils.logDebug("PageEventHandler.handlePageHide: " + event.target.location.href + "  Top Win? " + (targetWin==targetWin.top))
          this.commonCleanUp(event.type)
          this.unregisterAllEventListener()
       },

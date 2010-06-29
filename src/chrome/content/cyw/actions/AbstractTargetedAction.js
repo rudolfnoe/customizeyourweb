@@ -49,7 +49,8 @@ with(customizeyourweb){
          try{
             return this.getTarget(cywContext)
          }catch(e){
-            ScriptErrorHandler.addScriptError(cywContext.getScriptId(), e, null, this, cywContext.getTargetWindow())
+            ScriptErrorHandler.addScriptError(ErrorConstants.TARGET_NOT_FOUND, [this.getTargetDefinition().getDefinitionAsString()], 
+                                                e, cywContext.getScriptId(), this.getId(), cywContext.getTargetWindow())
             return null
          }
       }
