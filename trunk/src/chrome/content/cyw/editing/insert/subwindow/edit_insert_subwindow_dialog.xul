@@ -7,9 +7,12 @@
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     xmlns:html="http://www.w3.org/1999/xhtml"
     id="editDialog"
-    buttons="accept,cancel"
+    buttons="accept,cancel, extra1"
     ondialogaccept="customizeyourweb.EditInsertSubwindowDialogHandler.doOk()" 
     ondialogcancel="customizeyourweb.EditInsertSubwindowDialogHandler.doCancel()"
+    ondialogextra1="customizeyourweb.EditInsertSubwindowDialogHandler._triggerPreview()"
+    buttonlabelextra1="Preview"
+    buttonaccesskeyextra1="Preview"
     onload="customizeyourweb.EditInsertSubwindowDialogHandler.doOnload()"
     title="Insert Subwindow"
     persist="screenX screenY width height"
@@ -133,7 +136,7 @@
             </rows>
          </grid>
       </groupbox>
-      <targetdefinition id="targetdefinition"/>
+      <targetdefinition id="targetdefinition" autoInit="false"/>
       <commonactionattributes/>
    </vbox>
 </dialog>

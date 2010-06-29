@@ -209,6 +209,13 @@ with(customizeyourweb){
          this.allowMultiTargetDefinition = allowMultiTargetDef 
       },
       
+      setDisabled: function(disabled){
+         this.targetDefinitionML.disabled = disabled
+         this.targetDefinitionStyleML.disabled = disabled
+         this.targetNameTB.disabled = disabled
+         this.targetIsOptionalCB.disabled = disabled
+      },
+      
       setOldTargetDefinition: function(targetDefinition){
          this.oldTargetDefinitionRow.collapsed = false
          this.oldTargetDefinitionTB.value = targetDefinition.getDefinitionAsString()

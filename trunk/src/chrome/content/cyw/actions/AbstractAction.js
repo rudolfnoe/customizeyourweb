@@ -37,30 +37,41 @@ with(customizeyourweb){
       /*
        * Assures that JQuery is available in content page
        */
-      assureJQuery: function(cywContext){
-         if(cywContext.isJQueryInjected()){
-            return
+      assureJQuery: function(abstractContext){
+         var targetWindow = abstractContext.getTargetWindow()
+         if(ObjectWindowStorage.hasObject(targetWindow, "customizeyourweb", "jQuery")){
+            return ObjectWindowStorage.getObject(targetWindow, "customizeyourweb", "jQuery")
          }
-         var $injected = JavaScriptInjecter.injectJQuery(cywContext.getTargetDocument())
-         cywContext.setJQuery($injected)
+         var $injected = JavaScriptInjecter.injectJQuery(abstractContext.getTargetDocument())
+         ObjectWindowStorage.setObject(targetWindow, "customizeyourweb", "jQuery", $injected)
+         CywUtils.logDebug('AbstractAction.assureJQuery: JQuery injected')
          return $injected
       },
       
       /*
        * Assures injectition of jQuery UI
        */
-      assureJQueryUI: function(cywContext){
-         var $injected = cywContext.getJQuery()
-         if($injected==null){
-            $injected = this.assureJQuery(cywContext)
-         }
-         if(!cywContext.isJQueryUIInjected()){
-            JavaScriptInjecter.injectJQueryUI(cywContext.getTargetDocument(), $injected)
+      assureJQueryUI: function(abstractContext){
+         $injected = this.assureJQuery(abstractContext)
+         if(!$injected.ui){
+            JavaScriptInjecter.injectJQueryUI(abstractContext.getTargetDocument(), $injected)
+            CywUtils.logDebug('AbstractAction.assureJQuery: JQuery UI injected')
          }
          return $injected
       },
       
+      /*
+       * Default implemenation calls template method cleanUpInternal according
+       * RepetionBehavior 
+       */
       cleanUp: function(cywContext){
+         if(this.repetitionBehavior == RepetitionBehavior.RUN_ALWAYS ||
+            cywContext.isPageHideEvent()){
+            this.cleanUpInternal(cywContext)
+         }
+      },
+      
+      cleanUpInternal: function(cywContext){
          //empty default implementation
       },
 

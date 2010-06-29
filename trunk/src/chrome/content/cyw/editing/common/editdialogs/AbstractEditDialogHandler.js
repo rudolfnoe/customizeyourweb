@@ -13,6 +13,10 @@ with(customizeyourweb){
          return byId('targetdefinition').getTargetDefinition()
       },
       
+      getTargetDefinitionBinding: function(){
+         return byId('targetdefinition')
+      },
+      
       getTargetWindow: function(){
          return EditDialog.getTargetWindow()
       },

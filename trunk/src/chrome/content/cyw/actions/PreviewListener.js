@@ -1,5 +1,9 @@
 with(customizeyourweb){
 (function(){
+   /*
+    * @param DOMElement iframe
+    * @param UIEvents triggerEvent
+    */
    function PreviewListener(iframe, triggerEvent){
       this.iframe = iframe; 
       this.topWin = DomUtils.getOwnerWindow(iframe).top
@@ -10,11 +14,11 @@ with(customizeyourweb){
    PreviewListener.prototype = {
          constructor: PreviewListener,
          
-         setAllowJavaScriptOnIframe: function(allowJS){
-            var docShell = this.iframe.contentWindow.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                              .getInterface(Components.interfaces.nsIWebNavigation)
-                              .QueryInterface(Components.interfaces.nsIDocShell)
-            docShell.allowJavascript = allowJS
+         destroy: function(){
+//            CywUtils.logDebug("PreviewListener.destroy")
+            this.topWin.removeEventListener("mouseover", this, true)
+            this.topWin.removeEventListener(UIEvents.PREVIEW_LINK, this, true)
+            this.iframe.removeEventListener("load", this, true)
          },
          
          init: function(){
@@ -27,6 +31,7 @@ with(customizeyourweb){
             }
             
             this.iframe.addEventListener("load", this, true)
+            CywUtils.logDebug("PreviewListener.init")
          },
          
          /*
@@ -102,8 +107,16 @@ with(customizeyourweb){
                   this.iframe.src = link.href
                }
             }
-         }
-   }
+         },
+
+         setAllowJavaScriptOnIframe: function(allowJS){
+            var docShell = this.iframe.contentWindow.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                              .getInterface(Components.interfaces.nsIWebNavigation)
+                              .QueryInterface(Components.interfaces.nsIDocShell)
+            docShell.allowJavascript = allowJS
+         },
+         
+  }
    ObjectUtils.extend(PreviewListener, "AbstractGenericEventHandler", customizeyourweb)
    
    Namespace.bindToNamespace("customizeyourweb", "PreviewListener", PreviewListener)

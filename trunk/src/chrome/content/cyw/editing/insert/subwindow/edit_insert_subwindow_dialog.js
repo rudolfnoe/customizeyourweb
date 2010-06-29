@@ -3,8 +3,12 @@ with(customizeyourweb){
    var EditInsertSubwindowDialogHandler = {
       action: null,
       editContext: null,
+		//Used for eventhandlers that they are not triggered until view is initialized
+      initialized: false,
+      //Storage of temp targetdefinition when Overlayed style is selected 
+      targetDefinitionBackup: null,
       targetElement: null,
-		suspendPreview: false,
+      
       undoMemento: null,
       
       
@@ -16,9 +20,6 @@ with(customizeyourweb){
       
       doOk: function(){
          this.synchronizeActionWithForm()
-         if(this.action.getStyle()==SubwindowStyle.OVERLAYED){
-            this.action.setTargetDefinition(new XPathTargetDefinition("//body"))
-         }
          Dialog.setResult(DialogResult.OK)
          Dialog.setNamedResult("action", this.action)
       },
@@ -30,14 +31,16 @@ with(customizeyourweb){
             //Remove existing preview window
             this.action.undo(this.editContext)
    			this.targetElement = EditDialog.getTargetElement()
-   			//Suspend preview
-            this.suspendPreview = true
+            //First init targetdef, no autoinit as it has to be set before style select event handler is triggered by initialization
+            this.getTargetDefinitionBinding().initTargetDefintionField(this.editContext.getTargetWindow(), 
+                                                                        this.targetElement, this.action.getTargetDefinition()) 
             PresentationMapper.mapModel2Presentation(this.action, document)
             var triggerEvent = this.action.getTriggerEvent()
             byId("mouseOverCB").checked = triggerEvent & SubwindowTriggerEvent.ONMOUSEOVER 
             byId("listViewCB").checked = triggerEvent & SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE 
-            this.suspendPreview = false
-            this.triggerPreview()
+            this.initialized = true
+            //Trigger eventhandlers indirectly
+            this.handleStyleChanged()
             this.initValidators(this.targetElement)
          }catch(e){
             Log.logError(e)
@@ -73,13 +76,27 @@ with(customizeyourweb){
       },
       
       handleStyleChanged: function(){
-         if(byId('styleML').value==SubwindowStyle.OVERLAYED){
-            byId('positionML').disabled = true
-         }else{
-            byId('positionML').disabled = false
-            
+         if(!this.initialized){
+            return
          }
-         this.triggerPreview()
+         var targetDefBinding = this.getTargetDefinitionBinding()
+         try{
+            if(byId('styleML').value==SubwindowStyle.OVERLAYED){
+               byId('positionML').disabled = true
+               this.targetDefinitionBackup = this.getTargetDefinition()
+               targetDefBinding.setTargetDefinition(new XPathTargetDefinition("//body"))
+               targetDefBinding.setDisabled(true)
+            }else{
+               byId('positionML').disabled = false
+               if(this.targetDefinitionBackup){
+                  targetDefBinding.setTargetDefinition(this.targetDefinitionBackup)
+               }
+               this.getTargetDefinitionBinding().setDisabled(false)
+            }
+            this.triggerPreview()
+         }catch(e){
+            Log.logError(e)
+         }
       },
       
       initValidators: function(targetElement){
@@ -93,7 +110,7 @@ with(customizeyourweb){
        },
 
       triggerPreview: function(){
-         if(this.suspendPreview){
+         if(!this.initialized){
             return
          }
          Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._triggerPreview, this)         
