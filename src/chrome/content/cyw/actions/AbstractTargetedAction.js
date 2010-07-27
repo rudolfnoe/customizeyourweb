@@ -39,7 +39,7 @@ with(customizeyourweb){
       getTargets: function(cywContextOrTargetWin){
          var targets = this.targetDefinition.getTargets(cywContextOrTargetWin)
          if(targets.length==0){
-            throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getDefinitionAsString()])
+            throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getTargetDefinition().getDefinitionAsString()])
          }
          return targets
       },

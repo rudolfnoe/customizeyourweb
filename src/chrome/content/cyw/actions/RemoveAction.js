@@ -10,16 +10,32 @@ with(customizeyourweb){
          if(!this.isTargetInPage(cywContext.getTargetWindow())){
             return false
          }
-//         $(this.getTargets(cywContext)).remove()
-         var targets = this.getTargets(cywContext)
-         for (var i = 0; i < targets.length; i++) {
-            var target = targets[i]
-            if(target.parentNode){
-               target.parentNode.removeChild(target)
-            }
-         }         
+         var undoMemento = this.removeElements(cywContext);
+         cywContext.setActionChangeMemento(this.getId(), undoMemento)
          return true
+      },
+      
+      preview: function(editContext){
+         return this.removeElements(editContext)
+      },
+      
+      removeElements:function(abstractContext){
+         var targets = this.getTargets(abstractContext)
+         var undoMemento = []
+         for(key in targets){
+            undoMemento.push(new RemovedElement(targets[key]))
+         }
+         $(targets, abstractContext.getTargetDocument()).remove()
+         return undoMemento
+      },
+      
+      undo: function(editContext, undoMemento){
+         var removedElements = undoMemento
+         for(key in removedElements){
+            removedElements[key].undoRemoval()
+         }
       }
+      
    }
    ObjectUtils.extend(RemoveAction, "AbstractTargetedAction", customizeyourweb)
 

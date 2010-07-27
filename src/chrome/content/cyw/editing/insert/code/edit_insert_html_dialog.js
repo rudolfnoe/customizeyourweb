@@ -2,12 +2,14 @@ with(customizeyourweb){
 (function(){
    var EditInsertHTMLDialogHandler = {
       action: null,
+      editContext: null,
       htmlMarkerId: null,
       targetElement: null,
       
+      
       doCancel: function(){
          if(this.targetElement){
-            InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+            AbstractInsertHtmlAction.removeHtml(this.htmlMarkerId, this.targetElement.ownerDocument)
          }
       },
       
@@ -21,13 +23,11 @@ with(customizeyourweb){
          this.loadJQuery()
          //move to left
          this.initShortcuts()
-         this.action = EditDialog.getAction()
+         //Get clone of action
+         this.action = EditDialog.getAction(true)
+         this.editContext = EditDialog.getEditContext()
          this.targetElement = EditDialog.getTargetElement()
          this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
-//         if(this.action.getPosition()!=null){
-//            byId('whereML').value = StringUtils.defaultString(this.action.getPosition())
-//         }
-//         byId('htmlCodeTB').value = StringUtils.defaultString(this.action.getHtmlCode())
          PresentationMapper.mapModel2Presentation(this.action, document, "value")
          byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
          this.initValidators(this.targetElement)
@@ -56,9 +56,9 @@ with(customizeyourweb){
       },
       
       _updatePage: function(){
-         InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         this.action.undo(this.editContext)
          this.synchronizeActionWithForm()
-         AbstractInsertHtmlAction.insertHtml(this.action.getHtmlCode(), this.targetElement, this.action.getPosition(), this.htmlMarkerId)
+         this.action.preview(this.editContext)
       }
    }
    ObjectUtils.injectFunctions(EditInsertHTMLDialogHandler, AbstractEditDialogHandler)

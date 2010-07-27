@@ -6,7 +6,7 @@ with(customizeyourweb){
    
    EditPasteCommand.prototype = {
 
-      afterSuccessfulActionEditing: function(editContext){
+      afterSuccessfulActionEditing: function(action, editContext){
          PasteAction.paste(editContext.getClipboard(), editContext.getTargetElement(), this.determineWhere(editContext))
       },
       
@@ -15,7 +15,7 @@ with(customizeyourweb){
          Assert.notNull(clipboard,  "Nothing to paste in clipboard")
          
          //create paste action
-         return new PasteAction(editContext.getNextActionId(), editContext.getTargetDefinition(), this.determineWhere(editContext))
+         return new PasteAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition(), this.determineWhere(editContext))
       },
       
       determineWhere: function(editContext){

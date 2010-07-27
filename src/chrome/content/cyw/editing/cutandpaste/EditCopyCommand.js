@@ -6,12 +6,12 @@ with(customizeyourweb){
    
    EditCopyCommand.prototype = {
 
-      afterSuccessfulActionEditing: function(editContext){
-         editContext.setClipboard(editContext.getTargetElement().cloneNode(true))
+      afterSuccessfulActionEditing: function(action, editContext){
+         editContext.setClipboard(action.getTarget(editContext.getTargetWindow()).cloneNode(true))
       },
-      
+
       createAction: function(editContext) {
-         return new CopyAction(editContext.getNextActionId(), editContext.getTargetDefinition())
+         return new CopyAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
       }
    }
    ObjectUtils.extend(EditCopyCommand, "AbstractCommonAttributesEditCommand", customizeyourweb)

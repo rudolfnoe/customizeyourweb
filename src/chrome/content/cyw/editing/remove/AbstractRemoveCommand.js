@@ -9,14 +9,23 @@ with (customizeyourweb) {
       constructor: AbstractRemoveCommand,
       AbstractRemoveCommand: AbstractRemoveCommand,
 
-      afterSuccessfulActionEditing: function(editContext, action){
-         var targets = action.getTargets(editContext.getTargetWindow())
-         for (var i = 0; i < targets.length; i++) {
-            var targetElem = targets[i]
-            if(targetElem.parentNode){
-               this.removedElements.push(new RemovedElement(targetElem))
-               DomUtils.removeElement(targetElem)
-            }
+      afterCancelActionEditing: function(unmodifiedAction, editContext){
+         this.previewAction(unmodifiedAction, editContext)
+      },
+      
+      afterSuccessfulActionEditing: function(action, editContext){
+         this.previewAction(action, editContext)
+      },
+      
+      previewAction:function(action, editContext){
+         var undoMemento = action.preview(editContext)
+         editContext.setActionChangeMemento(action.getId(), undoMemento)
+      },
+      
+      beforeActionEditing: function(action, editContext){
+         var changeMemento = editContext.getActionChangeMemento(action.getId())
+         if(changeMemento){
+            this.undo(editContext, action)   
          }
       },
       
@@ -24,9 +33,10 @@ with (customizeyourweb) {
          Assert.fail('must be implemented')
       },
 
-      undo : function() {
-         for (var i = 0; i < this.removedElements.length; i++) {
-            this.removedElements[i].undoRemoval()
+      undo : function(editContext, action, actionBackup) {
+         action.undo(editContext, editContext.getActionChangeMemento(action.getId()));
+         if(actionBackup){
+            this.previewAction(actionBackup, editContext)
          }
       }
    }

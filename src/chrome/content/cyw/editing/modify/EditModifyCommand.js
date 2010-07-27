@@ -14,7 +14,7 @@ with(customizeyourweb){
       },
 
       doCreateAction: function(editContext){
-         var action = new ModifyAction(editContext.getNextActionId(), editContext.getTargetDefinition()) 
+         var action = new ModifyAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition()) 
          return this.editAction(action, editContext)
       },
       

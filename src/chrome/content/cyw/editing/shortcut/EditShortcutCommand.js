@@ -11,12 +11,12 @@ with(customizeyourweb){
          var commandId = editContext.getCommand().id
          var actionId = editContext.getNextActionId()
          if(commandId=="customizeyourweb_shortcutCmd"){
-            action = new ShortcutAction(actionId, editContext.getTargetDefinition())
+            action = new ShortcutAction(actionId, editContext.getDefaultTargetDefinition())
          }else if(commandId=="customizeyourweb_macroShortcutCmd"){
             action = new MacroShortcutAction(actionId)
             targetElement = null
          }else if(commandId=="customizeyourweb_toggleVisibilityShortcutCmd"){
-            action = new ToggleVisibilityShortcutAction(actionId, editContext.getTargetDefinition())
+            action = new ToggleVisibilityShortcutAction(actionId, editContext.getDefaultTargetDefinition())
          }else{
             throw new Error ('unkown shortcut command id')
          }

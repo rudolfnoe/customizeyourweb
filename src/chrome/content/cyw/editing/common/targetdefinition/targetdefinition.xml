@@ -101,6 +101,13 @@
             <method name="createTargetDefinitions">
                <body>this.handler.createTargetDefinitions()</body>
             </method>
+            <method name="initialize">
+               <parameter name="targetWindow"/>
+               <parameter name="targetElement"/>
+               <parameter name="targetDefinition"/>
+               <body>this.handler.initialize(targetWindow, targetElement, targetDefinition)</body>
+            </method>
+            
             <method name="getTargetDefinition">
                <body>return this.handler.getTargetDefinition()</body>
             </method>
@@ -130,8 +137,8 @@
                <body>this.handler.setTargetElement(targetElement)</body>
             </method>
             <method name="setOldTargetDefinition">
-               <parameter name="targetDefinition"/>
-               <body>this.handler.setOldTargetDefinition(targetDefinition)</body>
+               <parameter name="targetDefinitionAsString"/>
+               <body>this.handler.setOldTargetDefinition(targetDefinitionAsString)</body>
             </method>
             <method name="setTargetDefinition">
                <parameter name="targetDefinition"/>

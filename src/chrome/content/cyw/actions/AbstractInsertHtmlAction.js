@@ -5,11 +5,14 @@ with(customizeyourweb){
       this.AbstractTargetedAction(id, targetDefinition)
       //Position where the element should be inserted relative to the target element
       this.position = position?position:WhereToInsertEnum.AFTER
-      this.t_elementId = null
    }
    
    /*
     * Static members
+    * @param String html: the html to insert
+    * @param DOMELement targetElement: the target element to which the html is inserted relativly (see param position
+    * @param WhereToInsertEnum position
+    * @param String markerId: Unique id by which the inserted html could be removed afterwards
     */
    AbstractInsertHtmlAction.insertHtml= function(html, targetElement, position, markerId){
       Assert.paramsNotNull([html, targetElement, position])
@@ -66,6 +69,15 @@ with(customizeyourweb){
    }
    
    /*
+    * Method for removing the inserted HTML (see AbstractInsertHtmlAction.insertHtml)
+    * @param String markerId: The id provided on AbstractInsertHtmlAction.insertHtml
+    * @param DOMDocument targetDocument: the document from which the HTML should be removed
+    */
+   AbstractInsertHtmlAction.removeHtml = function(markerId, targetDocument){
+      $('[cyw_html_marker_id=' + markerId + ']', targetDocument).remove()
+   };
+   
+   /*
     * Instance members
     */
    AbstractInsertHtmlAction.prototype ={ 
@@ -106,17 +118,37 @@ with(customizeyourweb){
       
       /*
        * Inserts arbitray html
-       * @param String html: Element to insert
+       * @param String html: html to insert
+       * @param AbstractContext abstractContext
        * @return Array of DOMElement: the newly inserted elements
        */
-      insertHtml: function(html, cywContext, markerId){
-         var targetElement = this.getTarget(cywContext)
-         return AbstractInsertHtmlAction.insertHtml(html, targetElement, this.getPosition(), markerId)
-      }
-		
+      insertHtml: function(html, abstractContext){
+         var targetElement = this.getTarget(abstractContext)
+         return AbstractInsertHtmlAction.insertHtml(html, targetElement, this.getPosition(), 
+                                                      this.getElementId(abstractContext.getScriptId()))
+      },
+      
+      /*
+       * Initiates preview
+       * @param targetWindow
+       * @return Object: memento containing all information needed for undoing the modifications
+       */
+       preview: function(editContext){
+         throw new Error('IPreviewableAction.preview must be implemented')
+       },
+       
+       /*
+        * Undos the modifications done by calling preview
+        * @param EditContext
+        * @param Object undoMemento see preview
+        */
+       undo: function(editContext, undoMemento){
+         AbstractInsertHtmlAction.removeHtml(this.getElementId(editContext.getScriptId()), editContext.getTargetDocument())
+       }
    }
    
    ObjectUtils.extend(AbstractInsertHtmlAction, "AbstractTargetedAction", customizeyourweb)
+   ObjectUtils.extend(AbstractInsertHtmlAction, "IPreviewableAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractInsertHtmlAction", AbstractInsertHtmlAction)
 })()

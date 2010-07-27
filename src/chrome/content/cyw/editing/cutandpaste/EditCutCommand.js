@@ -5,15 +5,14 @@ with(customizeyourweb){
    }
    
    EditCutCommand.prototype = {
-      afterSuccessfulActionEditing: function(editContext){
-         //To resuse it
-         editContext.setClipboard(editContext.getTargetElement())
-         //call superclass method
-         this.AbstractRemoveCommand_afterSuccessfulActionEditing(editContext)
+      
+      afterSuccessfulActionEditing: function(action, editContext){
+         editContext.setClipboard(action.getTarget(editContext.getTargetWindow()))
+         this.AbstractRemoveCommand_afterSuccessfulActionEditing(action, editContext)
       },
       
       createAction: function(editContext) {
-         return new CutAction(editContext.getNextActionId(), editContext.getTargetDefinition())
+         return new CutAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
       }
       
    }

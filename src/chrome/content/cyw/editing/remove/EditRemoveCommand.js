@@ -7,7 +7,7 @@ with (customizeyourweb) {
 	EditRemoveCommand.prototype = {
 
       createAction: function(editContext) {
-         var action = new RemoveAction(editContext.getNextActionId(), editContext.getTargetDefinition())
+         var action = new RemoveAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
          action.setRepetitionBehavior(RepetitionBehavior.RUN_ALWAYS)
          return action
       }

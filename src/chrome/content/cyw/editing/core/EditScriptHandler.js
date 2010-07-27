@@ -162,6 +162,12 @@ with(customizeyourweb){
    
    //Instance methods
    EditScriptHandler.prototype = {
+      
+      addToCommandHistory: function(undoableCommand){
+         Assert.isTrue(typeof undoableCommand.undo == "function", "Assertion faild at EditScriptHandler.addCommandHistory: Command must be undoable")
+         this.editCommandHistory.push(undoableCommand)   
+      },
+      
       //De/Register the edithandler for all relevant events
       addRemoveEventHandlers: function(addOrRemove){
          var isAdd = addOrRemove=="add"
@@ -568,10 +574,6 @@ with(customizeyourweb){
       initEditContextForCreateAction: function(commandId, script){
          this.editContext.setCommand(document.getElementById(commandId))
          this.initEditContextCommon(this.currentTarget, this.getActionTargetWin(), script)
-         var targetDefinition = null
-         if(this.currentTarget)
-           targetDefinition = AbstractTargetDefinitionFactory.createDefaultDefinition(this.currentTarget)
-         this.editContext.setTargetDefinition(targetDefinition)
       },
       
       initShortcuts: function(){
@@ -716,13 +718,13 @@ with(customizeyourweb){
 			var currentScript = getSidebarWinHandler().getCurrentScript()
 			this.initEditContextCommon(newTarget, newTargetWindow, currentScript)
          this.unhighlightMouseOverHighlighter()   
-         var dialog = new CommonAttributesEditDialog(selectedAction, this.editContext) 
-         dialog.show()
-         if(dialog.isOk()){
-            var updatedAction = dialog.getAction()
-            this.currentTarget = updatedAction.getTargetDefinition().getTarget(newTargetWindow)
+         var wrapperCommand = new WrapperCommand(new EditRetargetCommand(), getSidebarWinHandler())
+         var retargetedAction = wrapperCommand.doEditAction(selectedAction, this.editContext)
+         if(retargetedAction){
+            this.currentTarget = retargetedAction.getTargetDefinition().getTarget(newTargetWindow)
             this.highlightCurrentTarget()
-            getSidebarWinHandler().updateAction(updatedAction)
+            getSidebarWinHandler().updateAction(retargetedAction)
+            this.editCommandHistory.push(wrapperCommand)
          }
       },
       

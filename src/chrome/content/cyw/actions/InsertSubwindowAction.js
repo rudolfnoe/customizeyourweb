@@ -1,8 +1,8 @@
 with (customizeyourweb) {
    (function() {
 
-      function InsertSubwindowAction(id, targetDefinition, position) {
-         this.AbstractInsertHtmlAction(id, targetDefinition, position)
+      function InsertSubwindowAction(id, targetDefinition) {
+         this.AbstractInsertHtmlAction(id, targetDefinition)
          //Inherit from changeable action to handle saving of resizing and repositioning
          this.AbstractChangeableAction()
          /* See static url, preview */

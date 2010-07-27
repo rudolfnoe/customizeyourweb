@@ -9,8 +9,28 @@ with(customizeyourweb){
    AbstractCommonAttributesEditCommand.prototype = {
       constructor: AbstractCommonAttributesEditCommand,
       
-      afterSuccessfulActionEditing: function(editContext){
+      afterCancelActionCreation: function(editContext){
          //empty default implementation
+      },
+
+      afterSuccessfulActionCreation: function(action, editContext){
+         this.afterSuccessfulActionEditing(action, editContext)
+      },
+
+      afterCancelActionEditing: function(unmodifiedAction, editContext){
+         //empty default implementation
+      },
+
+      afterSuccessfulActionEditing: function(action, editContext){
+         //empty default implementation
+      },
+      
+      beforeActionCreation: function(action, editContext){
+         //empty default implementation      
+      },
+
+      beforeActionEditing: function(action, editContext){
+         //empty default implementation      
       },
       
       createAction: function(editContext) {
@@ -19,29 +39,33 @@ with(customizeyourweb){
       
       doCreateAction : function(editContext) {
          var action = this.createAction(editContext)
-         //Define target definition
-         action = this.editCommonActionAttributes(action, editContext)
-         if(action){
-            this.afterSuccessfulActionEditing(editContext, action)
-            return action
+         this.beforeActionCreation(action, editContext)
+         var action = this.editCommonActionAttributes(action, editContext)
+         if(action!=null){
+            this.afterSuccessfulActionCreation(action, editContext)
          }else{
-            return null
+            this.afterCancelActionCreation(editContext)
          }
+         return action
       },
       
       doEditAction: function(action, editContext){
-         return this.editCommonActionAttributes(action, editContext)
+         this.beforeActionEditing(action, editContext)
+         var modifiedAction = this.editCommonActionAttributes(action, editContext)
+         if(modifiedAction !=null){
+            this.afterSuccessfulActionEditing(modifiedAction, editContext)
+         }else{
+            this.afterCancelActionEditing(action, editContext)
+         }
+         return modifiedAction
       },
 
       editCommonActionAttributes: function(action, editContext){
          var dialog = new CommonAttributesEditDialog(action, editContext, this.allowMultiTargetDefinition) 
          dialog.show()
-         if(dialog.isCancel()){
-            return null
-         }else{
-            return dialog.getAction()
-         }
+         return dialog.getActionResult();
       }
+      
    }
    
    ObjectUtils.extend(AbstractCommonAttributesEditCommand, "AbstractEditCommand", customizeyourweb)

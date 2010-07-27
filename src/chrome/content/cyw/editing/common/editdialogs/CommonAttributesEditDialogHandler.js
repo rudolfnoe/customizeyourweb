@@ -8,16 +8,16 @@ with(customizeyourweb){
          try{
             this.targetDefinitionBinding = byId('targetdefinition')
             var targetWindow = EditDialog.getTargetWindow()
-            this.targetDefinitionBinding.setTargetWindow(targetWindow)
             var targetElement = EditDialog.getTargetElement(targetElement)
-            if(targetElement){
-               this.targetDefinitionBinding.setTargetElement(targetElement)
-               this.targetDefinitionBinding.createDefaultTargetDefinitions()
-            }
-            this.targetDefinitionBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
             var action = EditDialog.getAction() 
-            //Must be set at the end as createDefaultTargetDefinitions would override name and optional flag
-            this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
+            this.targetDefinitionBinding.initialize(targetWindow, targetElement, action.getTargetDefinition())
+            var oldTargetDefinition = Dialog.getNamedArgument('oldTargetDefinition')
+            if(oldTargetDefinition){
+               this.targetDefinitionBinding.setOldTargetDefinition(oldTargetDefinition)
+            }
+            
+            //this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
+            this.targetDefinitionBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
             this.initValidators(targetWindow, EditDialog.getAllowMultiTargetDefinition())
          }catch(e){
             CywUtils.logError(e)

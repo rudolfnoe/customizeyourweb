@@ -15,6 +15,7 @@
    <script src="ActionLeafTreeItem.js"/>
    <script src="ActionContainerTreeItem.js"/>
    <script src="ActionsTreeView.js"/>
+   <script src="DeleteActionCommand.js"/>
    <script src="SidebarWinHandler.js"/>
 
    <commandset>
