@@ -2,6 +2,8 @@ with(customizeyourweb){
 (function(){
    
 	function AbstractEditCommand(){
+      //Memento object storing undo data (GoF Pattern)
+      //This memento is used for previewable actions (see IPreviewableAction)
       this.undoMemento = null
    }
    
@@ -17,11 +19,6 @@ with(customizeyourweb){
          this.undoMemento = undoMemento
       },
 
-      //TODO finish implementation
-      disableMenuItem: function(commandId, targetElement){
-         return false 
-      },
-      
       doCreateAction: function(){
          throw new Error('Must be implemented')
       },
@@ -31,28 +28,35 @@ with(customizeyourweb){
       },
       
       /*
+       * Returns already exisiting action based on the action type and the target defintion
        * @param function actionType: Constructor Function
+       * @param AbstractTargetDefinition targetdefinition: The target definition of the action 
+       * @returns AbstractAction: The action according the provided action type and target definition
        */
       getExistingAction: function(actionType, targetDefinition){
-         if(!actionType || !targetDefinition)
-            throw new Error ('NullPointerException')
-         //TODO maybe consider first and second level actions
+         Assert.paramsNotNull(arguments)
          var actions = EditScriptHandler.getSidebarWinHandler().getActions()
-         for (var i = actions.size()-1; i >= 0; i--) {
-            var action = actions.get(i)
-            if(action.constructor==actionType && ObjectUtils.deepEquals(action.getTargetDefinition(), targetDefinition))
-               return action
+         var actionIter = new ActionIterator(actions)
+         var exisitingAction = null
+         while(actionIter.hasNext()){
+            var action = actionIter.next()
+            if(action.constructor==actionType && ObjectUtils.deepEquals(action.getTargetDefinition(), targetDefinition)){
+               exisitingAction = action
+            }
          }
+         return exisitingAction
       },
       
       /*
        * Default Implementation
+       * Use the new undo mechanism of IPreviableAction
+       * @param EditContext editContext
+       * @param AbstractAction action: The action which was create/edited be the step which should be undone
        */
-      undo: function(editContext, actionBackup){
-         if(ObjectUtils.instanceOf(actionBackup, IPreviewableAction) && this.undoMemento){
+      undo: function(editContext, action){
+         if(ObjectUtils.instanceOf(action, IPreviewableAction) && this.undoMemento){
             actionBackup.undo(editContext, this.undoMemento)
          }
-         //Empty default implementation
       }
    }
    

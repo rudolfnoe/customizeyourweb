@@ -10,13 +10,13 @@ with(customizeyourweb){
          var element = editContext.getTargetElement()
          this.setTargetElement(element)
          var commandData = editContext.getCommandData()
-         var existingAction = this.getExistingAction(ModifyAction, editContext.getTargetDefinition())
+         var existingAction = this.getExistingAction(ModifyAction, editContext.getDefaultTargetDefinition())
          var modifyAction = null, styles = null
          if(existingAction){
             modifyAction = existingAction
             styles = existingAction.getStyles()
          }else{
-            modifyAction = new ModifyAction(editContext.getNextActionId(), editContext.getTargetDefinition())
+            modifyAction = new ModifyAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
             styles = {}
          }
          var elementWrapper = new ElementWrapper(element)

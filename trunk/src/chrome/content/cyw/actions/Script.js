@@ -136,7 +136,7 @@ with(customizeyourweb){
        */
       getActionById: function(actionId){
          Assert.notNull(actionId)
-         var actionIter = new ActionIterator(this)
+         var actionIter = new ActionIterator(this.getActions())
          while(actionIter.hasNext){
             var action = actionIter.next()
             if(action.getId()==actionId){
@@ -155,7 +155,7 @@ with(customizeyourweb){
       
       getNextActionId: function(){
          var maxActionId = 0
-         var actionIter = new ActionIterator(this)
+         var actionIter = new ActionIterator(this.getActions())
          while(actionIter.hasNext()){
             var actionId = actionIter.next().getId()
             if(maxActionId<actionId){

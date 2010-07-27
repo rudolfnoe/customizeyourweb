@@ -6,7 +6,7 @@ with(customizeyourweb){
    
    EditClickCommand.prototype = {
       doCreateAction: function(editContext){
-         var action = new ClickAction(editContext.getNextActionId(), editContext.getTargetDefinition())
+         var action = new ClickAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
          return this.editAction(action, editContext)
       },
       

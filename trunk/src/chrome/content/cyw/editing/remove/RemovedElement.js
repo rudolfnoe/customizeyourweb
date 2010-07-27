@@ -10,7 +10,8 @@ with (customizeyourweb) {
 			constructor : RemovedElement,
 
 			undoRemoval: function() {
-				if (this.nextSibling) {
+            //Check for next sibling is in document (and not also removed)
+				if (this.nextSibling && this.nextSibling.parentNode) {
 					this.parentNode.insertBefore(this.element, this.nextSibling)
 				} else {
 					this.parentNode.appendChild(this.element)

@@ -2,6 +2,7 @@ with(customizeyourweb){
 (function(){
    
    function AbstractEditInsertHtmlCommand(){
+      //Marker Id which is used to mark added content for later undo
       this.htmlMarkerId = CywUtils.createSessionUniqueId()
 		this.targetElement = null
    }
@@ -17,16 +18,22 @@ with(customizeyourweb){
          this.htmlMarkerId = htmlMarkerId
       },
 
-      editAction: function(action, editContext, dialogUrl, dialogHeight, position){
+      /*
+       * Common edit method
+       */
+      editAction: function(action, editContext, dialogUrl, position){
 			//TODO Target element can change in edit dialog
 			this.targetElement = editContext.getTargetElement()
          var editDialog = new EditDialog(dialogUrl, "EditInsertHtmlCommand", action, editContext, {htmlMarkerId: this.getHtmlMarkerId()})
          editDialog.show(position)
 			return editDialog.getActionResult()
        },
-
+       
+       /*
+        * @override
+        */
        undo: function(editContext, actionBackup){
-         InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         AbstractInsertHtmlAction.removeHtml(this.htmlMarkerId, this.targetElement.ownerDocument)
          if(actionBackup)
             AbstractInsertHtmlAction.insertHtml(actionBackup.getHtmlCode(), this.targetElement, actionBackup.getPosition())
       }

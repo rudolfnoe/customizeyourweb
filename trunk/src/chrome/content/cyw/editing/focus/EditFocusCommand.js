@@ -6,7 +6,7 @@ with(customizeyourweb){
    EditFocusCommand.prototype = {
 
       createAction: function(editContext) {
-         return new FocusAction(editContext.getNextActionId(), editContext.getTargetDefinition()) 
+         return new FocusAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition()) 
       }
       
    }

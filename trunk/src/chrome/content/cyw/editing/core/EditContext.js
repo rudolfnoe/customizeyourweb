@@ -1,9 +1,12 @@
 with(customizeyourweb){
 (function(){
    function EditContext(){
+      //Reference to the xul command element which was triggered
       this.command = null
+      //Arbitrary Data which could be with addiontial information for the editing command
+      //Currently only used for the resize command
       this.commandData = null,
-      this.targetDefinition = null
+      //Reference to the element which was selected by the user
       this.targetElement = null
    }
    
@@ -34,14 +37,18 @@ with(customizeyourweb){
          this.commandData = commandData
       },
       
-      getTargetDefinition: function(){
-         return this.targetDefinition
+      getNextActionId: function(){
+         return this.getScript().getNextActionId() 
       },
 
-      setTargetDefinition: function(targetDefinition){
-         this.targetDefinition = targetDefinition
+      getDefaultTargetDefinition: function(){
+         if(this.targetElement){
+            return AbstractTargetDefinitionFactory.createDefaultDefinition(this.targetElement)
+         }else{
+            return null
+         }
       },
- 
+
       getTargetElement: function(){
          return this.targetElement
       },

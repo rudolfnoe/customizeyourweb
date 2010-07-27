@@ -21,18 +21,22 @@ with(customizeyourweb){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return false
          }
-         AbstractInsertHtmlAction.insertHtml(this.getHtmlCode(), this.getTarget(cywContext), this.getPosition())
+         this.insertHtml(this.htmlCode, editContext)
          return true
-      }
-
+      },
+      
+      /*
+       * Initiates preview
+       * @param targetWindow
+       * @return Object: memento containing all information needed for undoing the modifications
+       */
+       preview: function(editContext){
+          this.insertHtml(this.htmlCode, editContext)
+          return null
+       }
    }
-   
-   InsertHTMLAction.removeInsertedHtml = function(targetElement, htmlMarkerId){
-      $('[cyw_html_marker_id=' + htmlMarkerId + ']', targetElement.ownerDocument).remove()
-   }
-   
    ObjectUtils.extend(InsertHTMLAction, "AbstractInsertHtmlAction", customizeyourweb)
-   
+   ObjectUtils.extend(InsertHTMLAction, "IPreviewableAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertHTMLAction", InsertHTMLAction)
 })()

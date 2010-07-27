@@ -62,7 +62,7 @@ with(customizeyourweb){
          for (var i = 0; i < scripts.length; i++) {
             var persist = false
             var script = scripts[i]
-            var scriptIterator = new ActionIterator(script)
+            var scriptIterator = new ActionIterator(script.getActions())
             while(scriptIterator.hasNext()){
                var action = scriptIterator.next()
                if(filter && !(action instanceof filter)){

@@ -2,6 +2,9 @@
    function WrapperCommand(editCommand, sidebarWinHandler){
       this.editCommand = editCommand
       this.sidebarWinHandler = sidebarWinHandler
+      //Reference to created or edited/modified action
+      this.action = null
+      //Clone of edited action before it was modified (for undoing)
       this.actionBackup = null
       this.commandType = null
    }
@@ -13,13 +16,15 @@
          if(action==null){
             return null
          }
+         //This is extra handling for the resize action
          var existingAction = this.getExistingActionById(action)
          if(existingAction){
+            //In truth it was an editing of an existing action
             this.commandType="edit"
-            this.actionBackup = cyw.ObjectUtils.deepClone(action)
+            this.actionBackup = existingAction
          }else{
             //no backup! as actionbackup must be real reference to action for undo
-            this.actionBackup = action
+            this.action = action
             this.commandType="create"
          }
          return action
@@ -27,9 +32,12 @@
       
       doEditAction: function(action, editContext){
          this.commandType="edit"
+         //Current action instance is used as backup
          this.actionBackup = action
-         var clonedAction = cyw.ObjectUtils.deepClone(action)
-         return this.editCommand.doEditAction(clonedAction, editContext)
+         
+         //Editing gets clone of original action so in case of canceling the action in the action tree stays unmodifed 
+         this.action = cyw.ObjectUtils.deepClone(action)
+         return this.editCommand.doEditAction(this.action, editContext)
       },
       
       getExistingActionById: function(aAction){
@@ -43,9 +51,9 @@
       },
       
       undo: function(editContext){
-         this.editCommand.undo(editContext, this.actionBackup)
+         this.editCommand.undo(editContext, this.action, this.actionBackup)
          if(this.commandType=="create"){
-            this.sidebarWinHandler.removeAction(this.actionBackup)
+            this.sidebarWinHandler.removeAction(this.action)
          }else if(this.commandType=="edit"){
             this.sidebarWinHandler.updateAction(this.actionBackup)
          }else{

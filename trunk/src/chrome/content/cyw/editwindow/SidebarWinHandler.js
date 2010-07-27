@@ -319,6 +319,7 @@ with(customizeyourweb){
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+down", new CommandShortcut(byId('moveDownCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+v", new CommandShortcut(byId('pasteActionTreeClipboardCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "Delete", new CommandShortcut(byId('removeActionCmd')))
+         this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+z", Utils.bind(function(){this.undoLastCommand()}, this))
       },
       
       initWindow: function(){
@@ -469,10 +470,14 @@ with(customizeyourweb){
       },
       
       removeAction: function(action){
-         if(action)
+         if(action){
             this.actionsTreeView.removeAction(action)
-         else
-            this.actionsTreeView.removeSelected(true)
+         }else{
+            var deleteActionCmd = new DeleteActionCommand(this.actionsTreeView.getSelectedAction(), this.actionsTreeView)
+            deleteActionCmd.deleteFromTree()
+            this.getEditScriptHandler().addToCommandHistory(deleteActionCmd)
+            //this.actionsTreeView.removeSelected(true)
+         }
       },
       
       retargetSelectedAction: function(newTargetDefinition){
@@ -528,6 +533,10 @@ with(customizeyourweb){
                return scriptB.getLastEdited() - scriptA.getLastEdited()
             }
          })
+      },
+      
+      undoLastCommand: function(){
+         this.getEditScriptHandler().undoLastCommand()
       },
       
       updateAction: function(action){

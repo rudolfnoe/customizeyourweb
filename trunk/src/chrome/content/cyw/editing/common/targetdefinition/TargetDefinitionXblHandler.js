@@ -7,22 +7,25 @@ with(customizeyourweb){
       this.GenericEventSource()
       //Allows multi target defintions (true) or only single target definitions (false)
       this.allowMultiTargetDefinition = false
+      this.autoInit = DomUtils.getAttribute(targetDefinitionBinding, 'autoInit', "true")=="true"
+      //Get references to widgets
       this.oldTargetDefinitionRow = DomUtils.getElementByAnonId(targetDefinitionBinding, "oldTargetDefinitionRow")
       this.oldTargetDefinitionTB = DomUtils.getElementByAnonId(targetDefinitionBinding, "oldTargetDefinitionTB")
-      this.targetDefinitionBinding = targetDefinitionBinding
       this.targetDefinitionML = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetDefinitionML")
+      //AbstractTargetDefintionHandler
       this.targetDefinitionMLHandler = null,
       this.targetDefinitionStyleML = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetDefinitionStyleML")
       this.targetElement = null 
       this.targetElementsHighlighter = null
       this.targetIsOptionalCB = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetIsOptionalCB")
       this.targetNameTB = DomUtils.getElementByAnonId(targetDefinitionBinding, "targetNameTB")
+      
       this.targetWindow = null
       
       //Manually add load listener for further initialization
       //Must be done after onload as there are dependencies to other bindings which must be fully constructed beforehand
       //Using "handler" tag in xbl didn't worked as it was called twice why whosoever
-      window.addEventListener('load', Utils.bind(this.initialize, this), true)
+      window.addEventListener('load', Utils.bind(this.initializeAfterLoad, this), true)
    }
    
    TargetDefinitionXblHandler.prototype = {
@@ -66,37 +69,34 @@ with(customizeyourweb){
        */
       autoInitByDialogArgument: function(){
          //Set targetwin first
-         this.targetWindow = Dialog.getNamedArgument('targetWindow')
+         var targetWindow = Dialog.getNamedArgument('targetWindow')
+         var targetElement = Dialog.getNamedArgument('targetElement')
          var action = Dialog.getNamedArgument('action', true)
-         if(action.getTargetDefinition()){
-            this.setTargetDefinition(action.getTargetDefinition())
-         }
-         this.targetElement = Dialog.getNamedArgument('targetElement')
-         if(this.targetElement){
-            if(action.getTargetDefinition()){
-               this.createTargetDefinitions()
-            }else{
-               this.createDefaultTargetDefinitions()
-            }
-         }
+         Assert.paramsNotNull([targetWindow, action.getTargetDefinition()], "targetWindow or targetdefinition must not be null")
+         var targetDefinition = action.getTargetDefinition()
+         this.initialize(targetWindow, targetElement, targetDefinition)
       },
       
       /*
        * Creates default targetDefinitions for retargeting
+       * Couuld be probably deleted
        */
-      createDefaultTargetDefinitions: function(){
-         Assert.notNull(this.targetElement, "targetElement is null")
-         //Must be called first to initialize targetDefinitionMLHandler
-         this.setTargetDefinition(AbstractTargetDefinitionFactory.createDefaultDefinition(this.targetElement))
-         this.createTargetDefinitions()
-      },
+//      createDefaultTargetDefinitions: function(){
+//         Assert.notNull(this.targetElement, "targetElement is null")
+//         //Must be called first to initialize targetDefinitionMLHandler
+//         this.setTargetDefinition(AbstractTargetDefinitionFactory.createDefaultDefinition(this.targetElement))
+//         this.createTargetDefinitions()
+//      },
       
       /*
-       * fills targetdefinition ML with possible target definitions
+       * Fills targetdefinition ML with possible target definitions
        */
       createTargetDefinitions: function(){
-         Assert.notNull(this.targetElement, "targetElement is null")
          this.targetDefinitionML.removeAllItems()
+         if(!this.targetElement){
+            return
+         }
+         Assert.notNull(this.targetDefinitionMLHandler, "setTargetDefinition must be called first")
          var targetDefinitions = this.targetDefinitionMLHandler.createDefinitions(this.targetElement)
          for (var i = 0; i < targetDefinitions.length; i++) {
             var defString = targetDefinitions[i].getDefinitionAsString()
@@ -181,19 +181,26 @@ with(customizeyourweb){
          window.addEventListener('unload', Utils.bind(this.handleDialogClose, this), true)   
       },
       
-      initialize: function(){
+      initialize: function(targetWindow, targetElement, targetDefinition){
+         Assert.paramsNotNull([targetWindow, targetDefinition], "targetWindow, targetDefinition must not be null")
+         this.targetWindow = targetWindow
+         this.targetElement = targetElement
+         this.setTargetDefinition(targetDefinition)
+         this.createTargetDefinitions()
+      },
+      
+      initializeAfterLoad: function(){
          this.loadJQuery()
-         //default is true
-         var autoInit = DomUtils.getAttribute(this.targetDefinitionBinding, 'autoInit', "true")=="true"
-         if(autoInit){
+         
+         if(this.autoInit){
             this.autoInitByDialogArgument() 
          }
+         
          this.initEventHandlers()
       },
       
       loadJQuery: function(){
          ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb")
-//         ScriptLoader.loadScript(CywCommon.CHROME_CONTENT_URL + "jquery/jQueryViewport.js", "customizeyourweb")
       },
       
       notifyValueChangedListener: function(){
@@ -216,15 +223,16 @@ with(customizeyourweb){
          this.targetIsOptionalCB.disabled = disabled
       },
       
-      setOldTargetDefinition: function(targetDefinition){
+      setOldTargetDefinition: function(targetDefinitionAsString){
          this.oldTargetDefinitionRow.collapsed = false
-         this.oldTargetDefinitionTB.value = targetDefinition.getDefinitionAsString()
-         this.setTargetNameAndOptionalFlag(targetDefinition)
+         this.oldTargetDefinitionTB.value = targetDefinitionAsString
       },
       
       setTargetDefinition: function(targetDefinition){
          this.targetDefinitionML.value = targetDefinition.getDefinitionAsString()
-         this.setTargetDefinitionStyle(targetDefinition.getDefinitionStyle())
+         var style = targetDefinition.getDefinitionStyle()
+         this.targetDefinitionStyleML.value = style
+         this.setTargetDefinitionMLHandler(style)
          this.setTargetNameAndOptionalFlag(targetDefinition)
          this.highlightCurrentTargets()
          this.notifyValueChangedListener()
@@ -233,11 +241,6 @@ with(customizeyourweb){
       setTargetNameAndOptionalFlag: function(targetDefinition){
          this.targetNameTB.value = StringUtils.defaultString(targetDefinition.getTargetName())
          this.targetIsOptionalCB.checked = targetDefinition.isTargetOptional()
-      },
-      
-      setTargetDefinitionStyle: function(style){
-         this.targetDefinitionStyleML.value = style
-         this.setTargetDefinitionMLHandler(style)
       },
       
       setTargetDefinitionMLHandler: function(stlye){
@@ -252,7 +255,7 @@ with(customizeyourweb){
          else if (stlye==TargetDefinitionStyle.JQUERY)
             constructor = JQueryTargetDefinitionXblHandler
          else 
-            throw new Error('unknown style')
+            throw new Error('unknown style: ' + style)
          
          this.targetDefinitionMLHandler = 
             new constructor(this.targetDefinitionML, this.getTargetWin(), this.targetElement)
