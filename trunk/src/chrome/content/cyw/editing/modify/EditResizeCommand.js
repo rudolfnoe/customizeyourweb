@@ -8,7 +8,6 @@ with(customizeyourweb){
       
       doCreateAction: function(editContext){
          var element = editContext.getTargetElement()
-         this.setTargetElement(element)
          var commandData = editContext.getCommandData()
          var existingAction = this.getExistingAction(ModifyAction, editContext.getDefaultTargetDefinition())
          var modifyAction = null, styles = null

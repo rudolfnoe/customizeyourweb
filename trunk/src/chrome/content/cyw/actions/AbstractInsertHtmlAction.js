@@ -1,5 +1,8 @@
 with(customizeyourweb){
 (function(){
+   
+   //Attr to identify the inserted HTML
+   const MARKER_ATTR = 'cyw_html_marker_id'
       
    function AbstractInsertHtmlAction(id, targetDefinition, position){
       this.AbstractTargetedAction(id, targetDefinition)
@@ -57,7 +60,7 @@ with(customizeyourweb){
          }
          insertedNodes.push(node)
          if(markerId)
-            node.setAttribute('cyw_html_marker_id', markerId)
+            node.setAttribute(MARKER_ATTR, markerId)
 
          if(insertMode=="append")
             parentNode.appendChild(node)
@@ -67,15 +70,6 @@ with(customizeyourweb){
       DomUtils.removeElement(appenderElement)
       return insertedNodes
    }
-   
-   /*
-    * Method for removing the inserted HTML (see AbstractInsertHtmlAction.insertHtml)
-    * @param String markerId: The id provided on AbstractInsertHtmlAction.insertHtml
-    * @param DOMDocument targetDocument: the document from which the HTML should be removed
-    */
-   AbstractInsertHtmlAction.removeHtml = function(markerId, targetDocument){
-      $('[cyw_html_marker_id=' + markerId + ']', targetDocument).remove()
-   };
    
    /*
     * Instance members
@@ -143,7 +137,7 @@ with(customizeyourweb){
         * @param Object undoMemento see preview
         */
        undo: function(editContext, undoMemento){
-         AbstractInsertHtmlAction.removeHtml(this.getElementId(editContext.getScriptId()), editContext.getTargetDocument())
+         $('[' + MARKER_ATTR + '=' + this.getElementId() + ']', editContext.getTargetDocument()).remove()
        }
    }
    

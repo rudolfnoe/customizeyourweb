@@ -3,14 +3,11 @@ with(customizeyourweb){
    var EditInsertHTMLDialogHandler = {
       action: null,
       editContext: null,
-      htmlMarkerId: null,
       targetElement: null,
       
       
       doCancel: function(){
-         if(this.targetElement){
-            AbstractInsertHtmlAction.removeHtml(this.htmlMarkerId, this.targetElement.ownerDocument)
-         }
+         this.action.undo(this.editContext)
       },
       
       doOk: function(){
@@ -21,13 +18,11 @@ with(customizeyourweb){
 
       doOnload: function(){
          this.loadJQuery()
-         //move to left
          this.initShortcuts()
          //Get clone of action
          this.action = EditDialog.getAction(true)
          this.editContext = EditDialog.getEditContext()
          this.targetElement = EditDialog.getTargetElement()
-         this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
          PresentationMapper.mapModel2Presentation(this.action, document, "value")
          byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
          this.initValidators(this.targetElement)

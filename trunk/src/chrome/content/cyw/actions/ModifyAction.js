@@ -3,6 +3,7 @@ with(customizeyourweb){
       
    function ModifyAction (id, targetDefinition){
       this.AbstractTargetedAction(id, targetDefinition)
+      this.setAllowMultiTargets(true)
       this.attributes = {}
       this.styles = {}
    }
@@ -34,25 +35,37 @@ with(customizeyourweb){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return false
          }
-         var target = this.getTarget(cywContext)
-         for(var attr in this.attributes){
-            target[attr] = this.attributes[attr]
-         }
-         var styleObj = target.style
-         for(var style in this.styles){
-            var styleVal = this.styles[style]
-            if(StringUtils.isEmpty(styleVal))
-               styleObj.removeProperty(style)
-            else
-               styleObj.setProperty(style, this.styles[style], "important")
-         }
+         this.modifyElements(cywContext, false)
          return true
-      }
+      },
       
-
+      modifyElements: function(abstractContext, /*boolean*/ suppressErrors){
+         var targets = this.getTargets(abstractContext, suppressErrors)
+         var multiElementWrapper = new MultiElementWrapper(targets)
+         for(var attr in this.attributes){
+            multiElementWrapper.setProperty(attr, this.attributes[attr])
+         }
+         for(var style in this.styles){
+            multiElementWrapper.setStyle(style, this.styles[style], "important")
+         }
+         var changeMemento = multiElementWrapper.getChangeMemento()
+         abstractContext.setActionChangeMemento(this.getId(), changeMemento)
+         return changeMemento
+      },
+      
+      preview: function(editContext){
+         return this.modifyElements(editContext, true)
+      },
+      
+      undo: function(editContext, undoMemento){
+         var multiElementWrapper = new MultiElementWrapper(this.getTargets(editContext, true))
+         multiElementWrapper.setChangeMemento(undoMemento)
+         multiElementWrapper.restore()
+      }
    }
    
    ObjectUtils.extend(ModifyAction, "AbstractTargetedAction", customizeyourweb)
+   ObjectUtils.extend(ModifyAction, "IPreviewableAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ModifyAction", ModifyAction)
 })()

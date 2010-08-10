@@ -11,6 +11,10 @@
    
    WrapperCommand.prototype={
       
+      getAction: function(){
+         return this.action
+      },
+
       doCreateAction: function(editContext){
          var action = this.editCommand.doCreateAction(editContext)
          if(action==null){
@@ -51,10 +55,11 @@
       },
       
       undo: function(editContext){
-         this.editCommand.undo(editContext, this.action, this.actionBackup)
          if(this.commandType=="create"){
+            this.editCommand.undo(editContext, this.action, null)
             this.sidebarWinHandler.removeAction(this.action)
          }else if(this.commandType=="edit"){
+            this.editCommand.undo(editContext, this.action, this.actionBackup)
             this.sidebarWinHandler.updateAction(this.actionBackup)
          }else{
             throw new Error('Unknown action type')

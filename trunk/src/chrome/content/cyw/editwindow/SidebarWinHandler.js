@@ -473,10 +473,12 @@ with(customizeyourweb){
          if(action){
             this.actionsTreeView.removeAction(action)
          }else{
-            var deleteActionCmd = new DeleteActionCommand(this.actionsTreeView.getSelectedAction(), this.actionsTreeView)
+            var action = this.actionsTreeView.getSelectedAction()
+            var currentScript = this.getCurrentScript();
+            var deleteActionCmd = new DeleteActionCommand(action, this.actionsTreeView, this.getTargetWin(), currentScript)
             deleteActionCmd.deleteFromTree()
             this.getEditScriptHandler().addToCommandHistory(deleteActionCmd)
-            //this.actionsTreeView.removeSelected(true)
+            this.getEditScriptHandler().actionDeleted(action, currentScript)
          }
       },
       

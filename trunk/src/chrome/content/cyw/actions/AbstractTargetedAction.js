@@ -4,6 +4,7 @@ with(customizeyourweb){
    function AbstractTargetedAction(id, targetDefinition) {
          this.AbstractAction(id)
          this.targetDefinition = targetDefinition
+         this.allowMultiTargets = false
    }
    
    AbstractTargetedAction.prototype = {
@@ -20,6 +21,14 @@ with(customizeyourweb){
          this.targetDefinition = targetDefinition
       },
       
+      allowsMultiTargets: function(){
+         return this.allowMultiTargets
+      },
+
+      setAllowMultiTargets: function(allowMultiTargets){
+         this.allowMultiTargets = allowMultiTargets
+      },
+
       isTargetOptionalAndTargetMissing: function(cywContext){
          return this.targetDefinition.isTargetOptionalAndTargetMissing(cywContext.getTargetWindow())  
       },
@@ -35,10 +44,10 @@ with(customizeyourweb){
       getTarget : function(cywContextOrTargetWin) {
          return this.targetDefinition.getTarget(cywContextOrTargetWin)
       },
-      
-      getTargets: function(cywContextOrTargetWin){
+
+      getTargets: function(/*DOMWindow | CywContext*/ cywContextOrTargetWin, /*Boolean*/ withoutError){
          var targets = this.targetDefinition.getTargets(cywContextOrTargetWin)
-         if(targets.length==0){
+         if(targets.length==0 && !withoutError){
             throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getTargetDefinition().getDefinitionAsString()])
          }
          return targets
