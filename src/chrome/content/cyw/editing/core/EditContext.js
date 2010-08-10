@@ -1,6 +1,7 @@
 with(customizeyourweb){
 (function(){
-   function EditContext(){
+   function EditContext(targetWin){
+      this.AbstractContext(targetWin)
       //Reference to the xul command element which was triggered
       this.command = null
       //Arbitrary Data which could be with addiontial information for the editing command

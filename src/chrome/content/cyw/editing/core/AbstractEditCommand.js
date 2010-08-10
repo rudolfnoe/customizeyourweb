@@ -51,11 +51,15 @@ with(customizeyourweb){
        * Default Implementation
        * Use the new undo mechanism of IPreviableAction
        * @param EditContext editContext
-       * @param AbstractAction action: The action which was create/edited be the step which should be undone
+       * @param AbstractAction action: The action which was create/edited by the step which should be undone
+       * @param AbstractAction actionBackup: Only provided for undoing editing. This is the action in the state before it was modified
        */
-      undo: function(editContext, action){
-         if(ObjectUtils.instanceOf(action, IPreviewableAction) && this.undoMemento){
-            actionBackup.undo(editContext, this.undoMemento)
+      undo: function(editContext, action, actionBackup){
+         if(ObjectUtils.instanceOf(action, IPreviewableAction)){
+            action.undo(editContext, this.undoMemento)
+            if(actionBackup){
+               actionBackup.preview(editContext)
+            }
          }
       }
    }

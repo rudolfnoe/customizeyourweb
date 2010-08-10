@@ -162,15 +162,22 @@ with(customizeyourweb){
             this.setMessage(e.message, Severity.ERROR)
             return
          }
+         var messageSet = false
          if(targetElems.length>1 && !this.allowMultiTargetDefinition){
             this.setMessage("Expression has non-unique result", Severity.ERROR)
+            messageSet = true
          }else if (targetElems.length==0){
             this.setMessage("Expression has no result", Severity.ERROR)
+            messageSet = true
             return
          }else{
             this.setMessage("")
          }
-         this.getTargetElementsHighlighter().highlight(targetElems)
+         this.getTargetElementsHighlighter().highlight(targetElems, 99)
+         if(targetElems.length>100){
+            var appendMessage = messageSet
+            this.setMessage("Too many target elements. Only the first 100 are highlighted.", null, appendMessage)
+         }
          targetElems[0].scrollIntoView()
       },
       
@@ -207,8 +214,8 @@ with(customizeyourweb){
          this.notifyListeners({type:VALUE_CHANGED_EVENT_TYPE, value: this.getTargetDefinition()})   
       },
       
-      setMessage: function(message, severity){
-         Dialog.setMessageInHeader(message, severity)
+      setMessage: function(message, severity, append){
+         Dialog.setMessageInHeader(message, severity, append)
          //TODO maybe change background color of field
       },
       
@@ -234,8 +241,8 @@ with(customizeyourweb){
          this.targetDefinitionStyleML.value = style
          this.setTargetDefinitionMLHandler(style)
          this.setTargetNameAndOptionalFlag(targetDefinition)
-         this.highlightCurrentTargets()
          this.notifyValueChangedListener()
+         this.highlightCurrentTargets()
       },
       
       setTargetNameAndOptionalFlag: function(targetDefinition){

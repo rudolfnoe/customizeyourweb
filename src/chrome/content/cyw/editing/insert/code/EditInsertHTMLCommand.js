@@ -4,7 +4,6 @@ with(customizeyourweb){
    
    function EditInsertHTMLCommand(){
       this.AbstractEditInsertHtmlCommand()
-      this.targetElement = null
    }
    
    EditInsertHTMLCommand.prototype = {
@@ -16,12 +15,13 @@ with(customizeyourweb){
       },
       
       doEditAction: function(action, editContext){
-         var targetElement = editContext.getTargetElement()
-         var modifiedAction = this.editAction(action, editContext, EDIT_INSERT_HTML_DIALOG_URL)
-         if(modifiedAction!=null){
-            AbstractInsertHtmlAction.insertHtml(modifiedAction.getHtmlCode(), targetElement, modifiedAction.getPosition(), this.getHtmlMarkerId())
+         var result = this.editAction(action, editContext, EDIT_INSERT_HTML_DIALOG_URL)
+         //result is null if editing was cancelled
+         //old state must be recreated
+         if(!result){
+            action.preview(editContext)
          }
-         return modifiedAction
+         return result
       }
       
    }

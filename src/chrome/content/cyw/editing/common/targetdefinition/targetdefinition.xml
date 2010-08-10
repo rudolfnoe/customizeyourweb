@@ -24,9 +24,9 @@
                         </xul:menulist>
                      </xul:row>
                      <xul:row align="center">
-                        <xul:label value="Expression"/>
+                        <xul:label value="Expression" accesskey="x" control="targetDefinitionML"/>
                         <xul:hbox>
-                           <xul:menulist anonid="targetDefinitionML" flex="1" minwidth="300px" editable="true" 
+                           <xul:menulist id="targetDefinitionML" anonid="targetDefinitionML" flex="1" minwidth="300px" editable="true" 
                                          onkeyup="document.getBindingParent(this).handler.handleCursorPositionChange(event)"
                                          onselect="document.getBindingParent(this).handler.handleTargetDefinitionSelect(event)">
                               <xul:menupopup></xul:menupopup>

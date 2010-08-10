@@ -54,7 +54,12 @@ with(customizeyourweb){
       },
       
       getTargets: function(cywContextOrTargetWin){
-         return this.getTargetsInternal(this.getTargetWin(cywContextOrTargetWin))
+			var targets = this.getTargetsInternal(this.getTargetWin(cywContextOrTargetWin))
+			if(!targets){
+				return []
+			} else{
+	         return targets 
+			}
       },
       
       getTargetsInternal: function(targetWin){

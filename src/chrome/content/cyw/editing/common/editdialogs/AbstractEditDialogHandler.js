@@ -5,10 +5,22 @@ with(customizeyourweb){
     * Is added to subclasses with ObjectUtils.injectFunctions
     */
    var AbstractEditDialogHandler = {
-		getScriptId: function(){
-			 return EditDialog.getTargetWindow()
-		},
-		
+      getAction: function(clone){
+         return EditDialog.getAction(clone)
+      },
+      
+      getCurrentTargets: function(){
+         return this.getTargetDefinition().getTargets(this.getTargetWindow())   
+      },
+      
+      getEditContext: function(){
+         return EditDialog.getEditContext()
+      },
+      
+      getScriptId: function(){
+          return EditDialog.getTargetWindow()
+      },
+      
       getTargetDefinition: function(){
          return byId('targetdefinition').getTargetDefinition()
       },
@@ -21,9 +33,23 @@ with(customizeyourweb){
          return EditDialog.getTargetWindow()
       },
       
+      initTargetDefinitionBinding: function(){
+         var action = this.getAction(true)
+         var targets = action.getTargets(this.getTargetWindow(), true)
+         var targetElement = null
+         if(targets.length==1){
+            targetElement = targets[0]
+         }
+         this.getTargetDefinitionBinding().initialize(this.getTargetWindow(), targetElement, action.getTargetDefinition() ) 
+      },
+      
+      hasMultipleTargets: function(){
+         return this.getCurrentTargets().length>1  
+      },
+      
       loadJQuery: function(){
          CywUtils.loadJQuery()
-      }
+      },
       
    }
 

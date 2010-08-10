@@ -21,7 +21,7 @@ with(customizeyourweb){
       }     
    }
    
-   ObjectUtils.extend(CutAction, "AbstractTargetedAction", customizeyourweb)
+   ObjectUtils.extend(CutAction, "RemoveAction", customizeyourweb)
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CutAction", CutAction)
 })()

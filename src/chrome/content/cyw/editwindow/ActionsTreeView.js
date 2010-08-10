@@ -189,7 +189,7 @@ with(customizeyourweb){
       },
       
       removeAction: function(action){
-         this.removeItem(this.getItemForAction(action))
+         return this.removeItem(this.getItemForAction(action))
       },
       
       setActions: function(actions, scriptErrorArray){

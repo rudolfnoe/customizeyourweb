@@ -21,7 +21,7 @@ with(customizeyourweb){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return false
          }
-         this.insertHtml(this.htmlCode, editContext)
+         this.insertHtml(this.htmlCode, cywContext)
          return true
       },
       

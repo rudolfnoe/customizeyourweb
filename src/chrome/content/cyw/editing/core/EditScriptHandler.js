@@ -163,6 +163,33 @@ with(customizeyourweb){
    //Instance methods
    EditScriptHandler.prototype = {
       
+      /*
+       * Called by the sidebar handler after the provided action was deleted
+       * for undoing the action modifications
+       */
+      actionDeleted: function(action, script){
+         //Undo action
+         if(ObjectUtils.instanceOf(action, IPreviewableAction)){
+            this.initEditContextCommon(null, this.targetWin, script)
+            var undoMemento = this.editContext.getActionChangeMemento(action.getId())
+            try{
+               action.undo(this.editContext, undoMemento)
+            }catch(e){
+               CywUtils.logError(e, "EditScriptHandler.actionDeleted: Undo failed", true)
+            }
+         }
+         //Remove all undos from command history
+         var newHistory = []
+         for(var i=0; i < this.editCommandHistory.length; i++){
+            var command = this.editCommandHistory[i]
+            if(!ObjectUtils.instanceOf(command, WrapperCommand) ||
+               !command.getAction().equals(action)){
+                  newHistory.push(command)
+            }
+         }
+         this.editCommandHistory = newHistory
+      },
+      
       addToCommandHistory: function(undoableCommand){
          Assert.isTrue(typeof undoableCommand.undo == "function", "Assertion faild at EditScriptHandler.addCommandHistory: Command must be undoable")
          this.editCommandHistory.push(undoableCommand)   
@@ -207,6 +234,7 @@ with(customizeyourweb){
        * @param (Boolean) isHideSidebar: Flag indicating whether the sidebar should be closed or not  
        */
       cancelEditing: function(isHideSidebar){
+         this.undoEditing()
          this.disableEditHandler(isHideSidebar) 
       },
       
@@ -473,11 +501,11 @@ with(customizeyourweb){
                return
             }
             found = true
-            var targetElement = targetDefinition.getTarget(subWin)
-            var highlighter = new FrameHighlighter()
-            highlighter.highlight(targetElement)
+            var targetElements = targetDefinition.getTargets(subWin)
+            var highlighter = new MultiElementHighlighter(null, false)
+            highlighter.highlight(targetElements)
             if(first){
-               targetElement.scrollIntoView()
+               targetElements[0].scrollIntoView()
                first = false
             }
             newHighlighters.push(highlighter)
@@ -793,10 +821,22 @@ with(customizeyourweb){
          }
       },
       
+      undoEditing: function(){
+         while(this.editCommandHistory.length>0){
+            try{
+               this.undoLastCommand()
+            }catch(e){
+               CywUtils.logError (e, "Undo failed", true)
+            }
+         }
+      },
+      
       undoLastCommand: function(){
          var lastCommand = this.editCommandHistory.pop() 
-         if(lastCommand==null)
+         if(lastCommand==null){
+            Statusbar.setError('No undo available')
             return
+         }
          lastCommand.undo(this.editContext)
       },
       
@@ -830,7 +870,7 @@ with(customizeyourweb){
      
       updateCurrentTarget: function(action, actionTargetWin){
          if(action.isTargeted() && action.isTargetInPage(actionTargetWin)){
-            this.currentTarget = action.getTargetDefinition().getTarget(actionTargetWin)
+            this.currentTarget = action.getTargetDefinition().getTargets(actionTargetWin)[0]
          }else{
             this.currentTarget = null
          }

@@ -2,6 +2,7 @@ with(customizeyourweb){
 (function(){
    function RemoveAction (id, targetDefinition){
       this.AbstractTargetedAction(id, targetDefinition)
+      this.setAllowMultiTargets(true)
    }
 
    RemoveAction.prototype = {
@@ -38,7 +39,8 @@ with(customizeyourweb){
       
    }
    ObjectUtils.extend(RemoveAction, "AbstractTargetedAction", customizeyourweb)
-
+   ObjectUtils.extend(RemoveAction, "IPreviewableAction", customizeyourweb)
+   
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "RemoveAction", RemoveAction)
 })()
 }

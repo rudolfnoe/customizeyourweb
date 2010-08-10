@@ -7,6 +7,12 @@ with(customizeyourweb){
    AbstractIfAction.prototype = {
       constructor: AbstractIfAction,
       
+      cleanUp: function(cywContext){
+         if(this.isTrue(cywContext)){
+            this.AbstractContainerAction_cleanUp(cywContext)
+         }
+      },
+
       doActionInternal: function(cywContext){
          if(this.isTrue(cywContext)){
             this.doChildActions(cywContext)
