@@ -84,7 +84,7 @@ with(customizeyourweb){
                   listItemsFiltered1.push(listItem)
                   break
                }
-               if(node.localName == this.listItemsTagName){
+               if(node.localName.toLowerCase() == this.listItemsTagName.toLowerCase()){
                   break
                }
             }

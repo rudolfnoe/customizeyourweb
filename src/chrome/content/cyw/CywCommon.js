@@ -2,8 +2,11 @@
  * Contains constants and loading of common subscripts
  */
 (function(){
-   var CywCommon = { 
+   var CywCommon = {
+      
 		//Constants
+      CYW_VERSION: "0.4.3Build201010192200",
+      
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
 		
@@ -17,6 +20,10 @@
       createLogger: function(){
          var logger = new customizeyourweb.ConsoleLogger("customizeyourweb.logging.level", 5000)
          customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "Log", logger)
+      },
+      
+      getCywVersion: function(){
+         return  this.CYW_VERSION;  
       },
       
       init: function(){
@@ -39,9 +46,6 @@
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")
    			scriptLoader.loadScript(this.CYW_CHROME_URL+ "editing/core/SidebarContext.js")
-            
-   			// Init version
-   			this.VERSION = customizeyourweb.Utils.getExtension(this.GUI_ID).version
             
             //Create common Logger instance
             this.createLogger()
