@@ -221,7 +221,7 @@
                      <row align="center">
                         <label value="Attribute/Style" accesskey="t" control="attributeML"/>
                         <menulist id="attributeML" editable="true" oninput="customizeyourweb.ControlUtils.filterMenulist(this)" 
-                                  onblur="customizeyourweb.EditModifyDialogHandler.initValueField()">
+                                  onblur="customizeyourweb.EditModifyDialogHandler.handleBlurAttributeField()">
                            <menupopup maxheight="258px">
                               
                            </menupopup>

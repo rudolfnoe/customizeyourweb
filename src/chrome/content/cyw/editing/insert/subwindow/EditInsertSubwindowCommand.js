@@ -15,12 +15,12 @@ with(customizeyourweb){
       },
       
       doEditAction: function(action, editContext){
-         return this.editAction(action, editContext, EDIT_INSERT_SUBWINDOW_DIALOG_URL)
+         return this.editAction(action, editContext, EDIT_INSERT_SUBWINDOW_DIALOG_URL);
       }
       
    }
-   ObjectUtils.extend(EditInsertSubwindowCommand, "AbstractEditInsertHtmlCommand", customizeyourweb)
+   ObjectUtils.extend(EditInsertSubwindowCommand, "AbstractEditInsertHtmlCommand", customizeyourweb);
 
-   Namespace.bindToNamespace("customizeyourweb", "EditInsertSubwindowCommand", EditInsertSubwindowCommand)
+   Namespace.bindToNamespace("customizeyourweb", "EditInsertSubwindowCommand", EditInsertSubwindowCommand);
 })()
 }

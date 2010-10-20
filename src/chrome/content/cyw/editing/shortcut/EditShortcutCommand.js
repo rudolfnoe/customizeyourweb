@@ -13,7 +13,7 @@ with(customizeyourweb){
          if(commandId=="customizeyourweb_shortcutCmd"){
             action = new ShortcutAction(actionId, editContext.getDefaultTargetDefinition())
          }else if(commandId=="customizeyourweb_macroShortcutCmd"){
-            action = new MacroShortcutAction(actionId)
+            action = new MacroShortcutAction(actionId);
             targetElement = null
          }else if(commandId=="customizeyourweb_toggleVisibilityShortcutCmd"){
             action = new ToggleVisibilityShortcutAction(actionId, editContext.getDefaultTargetDefinition())
@@ -31,7 +31,7 @@ with(customizeyourweb){
       editAction: function(action, editContext){
          var editDialog = new EditDialog(EDIT_SHORTCUT_DIALOG_URL, "EditShortcut", action, editContext)
          editDialog.show()
-         return editDialog.getActionResult()
+         return editDialog.getActionResult();
       }
       
    }

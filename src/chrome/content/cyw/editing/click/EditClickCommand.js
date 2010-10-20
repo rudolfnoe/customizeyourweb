@@ -17,7 +17,7 @@ with(customizeyourweb){
       editAction: function(action, editContext){
          var editDialog = new EditDialog(EDIT_CLICK_DIALOG_URL, "Edit Click", action, editContext)
          editDialog.show()
-			return editDialog.getActionResult()
+			return editDialog.getActionResult();
       }
       
    }

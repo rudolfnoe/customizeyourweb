@@ -59,16 +59,18 @@ with(customizeyourweb){
             node = span
          }
          insertedNodes.push(node)
-         if(markerId)
+         if(markerId){
             node.setAttribute(MARKER_ATTR, markerId)
+         }
 
-         if(insertMode=="append")
+         if(insertMode=="append"){
             parentNode.appendChild(node)
-         else
-            parentNode.insertBefore(node, referenceNode)
+         }else{
+            parentNode.insertBefore(node, referenceNode);
+         }
       }
-      DomUtils.removeElement(appenderElement)
-      return insertedNodes
+      DomUtils.removeElement(appenderElement);
+      return insertedNodes;
    }
    
    /*
@@ -86,7 +88,7 @@ with(customizeyourweb){
 
       getPosition: function(){
          if(this.whereToInsert!=null){
-            this.position = this.whereToInsert
+            this.position = this.whereToInsert;
             delete this.whereToInsert
          }
          return this.position
@@ -137,13 +139,13 @@ with(customizeyourweb){
         * @param Object undoMemento see preview
         */
        undo: function(editContext, undoMemento){
-         $('[' + MARKER_ATTR + '=' + this.getElementId() + ']', editContext.getTargetDocument()).remove()
+         $('[' + MARKER_ATTR + '=' + this.getElementId() + ']', editContext.getTargetDocument()).remove();
        }
    }
    
-   ObjectUtils.extend(AbstractInsertHtmlAction, "AbstractTargetedAction", customizeyourweb)
-   ObjectUtils.extend(AbstractInsertHtmlAction, "IPreviewableAction", customizeyourweb)
+   ObjectUtils.extend(AbstractInsertHtmlAction, "AbstractTargetedAction", customizeyourweb);
+   ObjectUtils.extend(AbstractInsertHtmlAction, "IPreviewableAction", customizeyourweb);
    
-   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractInsertHtmlAction", AbstractInsertHtmlAction)
+   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractInsertHtmlAction", AbstractInsertHtmlAction);
 })()
 }

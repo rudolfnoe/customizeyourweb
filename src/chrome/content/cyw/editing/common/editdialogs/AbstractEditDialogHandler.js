@@ -49,7 +49,7 @@ with(customizeyourweb){
       
       loadJQuery: function(){
          CywUtils.loadJQuery()
-      },
+      }
       
    }
 

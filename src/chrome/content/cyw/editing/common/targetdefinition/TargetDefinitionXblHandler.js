@@ -73,7 +73,7 @@ with(customizeyourweb){
          var targetElement = Dialog.getNamedArgument('targetElement')
          var action = Dialog.getNamedArgument('action', true)
          Assert.paramsNotNull([targetWindow, action.getTargetDefinition()], "targetWindow or targetdefinition must not be null")
-         var targetDefinition = action.getTargetDefinition()
+         var targetDefinition = action.getTargetDefinition();
          this.initialize(targetWindow, targetElement, targetDefinition)
       },
       
@@ -99,7 +99,7 @@ with(customizeyourweb){
          Assert.notNull(this.targetDefinitionMLHandler, "setTargetDefinition must be called first")
          var targetDefinitions = this.targetDefinitionMLHandler.createDefinitions(this.targetElement)
          for (var i = 0; i < targetDefinitions.length; i++) {
-            var defString = targetDefinitions[i].getDefinitionAsString()
+            var defString = targetDefinitions[i].getDefinitionAsString();
             this.targetDefinitionML.appendItem(defString, defString)
          }
       },
@@ -133,7 +133,7 @@ with(customizeyourweb){
       handleTargetDefinitionInput: function(){
          Utils.executeDelayed('ON_TARGET_DEF_INPUT', 500, function(){
             this.targetDefinitionMLHandler.handleCursorPositionChange()
-            this.highlightCurrentTargets()
+            this.highlightCurrentTargets();
             this.notifyValueChangedListener()
          }, this)
       },
@@ -142,7 +142,7 @@ with(customizeyourweb){
          if(event.target.selectedIndex==-1)
             return
          this.setMessage("")
-         this.getTargetElementsHighlighter().updateHighlighting(this.targetDefinitionMLHandler.getCurrentTargets())
+         this.getTargetElementsHighlighter().updateHighlighting(this.targetDefinitionMLHandler.getCurrentTargets());
          this.notifyValueChangedListener()
       },
       
@@ -150,7 +150,7 @@ with(customizeyourweb){
          this.setTargetDefinitionMLHandler(this.targetDefinitionStyleML.value)
          if(this.targetElement==null)
             return
-         this.createTargetDefinitions()
+         this.createTargetDefinitions();
          this.setTargetDefinition(this.targetDefinitionMLHandler.createDefaultDefinition(this.targetElement))
       },
       
@@ -164,7 +164,7 @@ with(customizeyourweb){
          }
          var messageSet = false
          if(targetElems.length>1 && !this.allowMultiTargetDefinition){
-            this.setMessage("Expression has non-unique result", Severity.ERROR)
+            this.setMessage("Expression has non-unique result", Severity.ERROR);
             messageSet = true
          }else if (targetElems.length==0){
             this.setMessage("Expression has no result", Severity.ERROR)
@@ -175,7 +175,7 @@ with(customizeyourweb){
          }
          this.getTargetElementsHighlighter().highlight(targetElems, 99)
          if(targetElems.length>100){
-            var appendMessage = messageSet
+            var appendMessage = messageSet;
             this.setMessage("Too many target elements. Only the first 100 are highlighted.", null, appendMessage)
          }
          targetElems[0].scrollIntoView()
@@ -184,7 +184,7 @@ with(customizeyourweb){
       initEventHandlers: function(){
          this.targetDefinitionStyleML.addEventListener("select", 
                Utils.bind(function(event){this.handleTargetDefinitionStyleSelect(event)}, this), true)
-         ControlUtils.observeControl(this.targetDefinitionML, this.handleTargetDefinitionInput, this)
+         ControlUtils.observeControl(this.targetDefinitionML, this.handleTargetDefinitionInput, this);
          window.addEventListener('unload', Utils.bind(this.handleDialogClose, this), true)   
       },
       
@@ -192,7 +192,7 @@ with(customizeyourweb){
          Assert.paramsNotNull([targetWindow, targetDefinition], "targetWindow, targetDefinition must not be null")
          this.targetWindow = targetWindow
          this.targetElement = targetElement
-         this.setTargetDefinition(targetDefinition)
+         this.setTargetDefinition(targetDefinition);
          this.createTargetDefinitions()
       },
       
@@ -226,12 +226,12 @@ with(customizeyourweb){
       setDisabled: function(disabled){
          this.targetDefinitionML.disabled = disabled
          this.targetDefinitionStyleML.disabled = disabled
-         this.targetNameTB.disabled = disabled
+         this.targetNameTB.disabled = disabled;
          this.targetIsOptionalCB.disabled = disabled
       },
       
       setOldTargetDefinition: function(targetDefinitionAsString){
-         this.oldTargetDefinitionRow.collapsed = false
+         this.oldTargetDefinitionRow.collapsed = false;
          this.oldTargetDefinitionTB.value = targetDefinitionAsString
       },
       
@@ -241,12 +241,12 @@ with(customizeyourweb){
          this.targetDefinitionStyleML.value = style
          this.setTargetDefinitionMLHandler(style)
          this.setTargetNameAndOptionalFlag(targetDefinition)
-         this.notifyValueChangedListener()
+         this.notifyValueChangedListener();
          this.highlightCurrentTargets()
       },
       
       setTargetNameAndOptionalFlag: function(targetDefinition){
-         this.targetNameTB.value = StringUtils.defaultString(targetDefinition.getTargetName())
+         this.targetNameTB.value = StringUtils.defaultString(targetDefinition.getTargetName());
          this.targetIsOptionalCB.checked = targetDefinition.isTargetOptional()
       },
       
@@ -262,14 +262,14 @@ with(customizeyourweb){
          else if (stlye==TargetDefinitionStyle.JQUERY)
             constructor = JQueryTargetDefinitionXblHandler
          else 
-            throw new Error('unknown style: ' + style)
+            throw new Error('unknown style: ' + style);
          
          this.targetDefinitionMLHandler = 
             new constructor(this.targetDefinitionML, this.getTargetWin(), this.targetElement)
       },
       
       setTargetWindow: function(targetWindow){
-         this.targetWindow = targetWindow
+         this.targetWindow = targetWindow;
       }
       
    }

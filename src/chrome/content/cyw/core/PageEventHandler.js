@@ -6,8 +6,8 @@
  */
 with(customizeyourweb){
 (function(){
-	const CYW_NAMESPACE = "de_mouseless_CYW"
-   const EVENT_TYPES_LISTENING = ["pagehide", "DOMNodeInserted", "DOMNodeRemoved"]
+	const CYW_NAMESPACE = "de_mouseless_CYW";
+   const EVENT_TYPES_LISTENING = ["pagehide", "DOMNodeInserted", "DOMNodeRemoved"];
    
 	function PageEventHandler(targetWin, applicableScripts){
       this.AbstractGenericEventHandler(false)
@@ -38,8 +38,8 @@ with(customizeyourweb){
    
    PageEventHandler.setPageData = function(win, pageData){
       var topWin = win.top
-      win.top.de_mouseless_CYW = pageData
-   }
+      win.top.de_mouseless_CYW = pageData;
+   };
    
       
    PageEventHandler.prototype = {
@@ -52,7 +52,7 @@ with(customizeyourweb){
       },
       
       commonCleanUp: function(eventType){
-         this.cleanUpScript(eventType)
+         this.cleanUpScript(eventType);
          Utils.clearExecuteDelayedTimer(this.timerId)
       },
       
@@ -92,13 +92,13 @@ with(customizeyourweb){
       },
       
       handleDOMNodeInserted: function(event){
-         this.nodesAdded++
+         this.nodesAdded++;
 //         CywUtils.logDebug("Node added: " + event.relatedNode.innerHTML)
          this.handleMutationEvent(event)
       },
       
       handleDOMNodeRemoved: function(event){
-         this.nodesRemoved++
+         this.nodesRemoved++;
          this.handleMutationEvent(event)
       },
       
@@ -109,7 +109,7 @@ with(customizeyourweb){
          Utils.executeDelayed(this.timerId, this.reinitDelay, function(){
 //            CywUtils.logDebug('delayed reinit total nodes added: ' + this.nodesAdded + ", total nodes removed: " + this.nodesRemoved)
             //var perfTimer = new PerfTimer()
-            this.cleanUpScript(PageEvents.MUTATION_EVENT)
+            this.cleanUpScript(PageEvents.MUTATION_EVENT);
 //            if(perfTimer){
 //               Log.logDebug("Cleanup took " + perfTimer.stop() + "msec.")
 //            }
@@ -134,19 +134,19 @@ with(customizeyourweb){
       
       handlePageEditEnd: function(){
          //TODO check if this is correct
-         this.runAppliedScripts(PageEvents.MUTATION_EVENT, false)
+         this.runAppliedScripts(PageEvents.MUTATION_EVENT, false);
          this.registerPageEventsListener()
       },
 
       handlePageEditStart: function(){
-         this.commonCleanUp(null)
+         this.commonCleanUp(null);
          this.unregisterPageEventsListener()
       },
       
       handlePagehide: function(event){
          var targetWin = event.originalTarget.defaultView
          CywUtils.logDebug("PageEventHandler.handlePageHide: " + event.target.location.href + "  Top Win? " + (targetWin==targetWin.top))
-         this.commonCleanUp(event.type)
+         this.commonCleanUp(event.type);
          this.unregisterAllEventListener()
       },
       
@@ -179,7 +179,7 @@ with(customizeyourweb){
       },
       
       registerAllEventListener: function(){
-         EditScriptHandler.addEditListener(this.handlePageEditEvent, this)
+         EditScriptHandler.addEditListener(this.handlePageEditEvent, this);
          this.registerPageEventsListener()
       },
       
@@ -213,12 +213,12 @@ with(customizeyourweb){
       },
       
       unregisterAllEventListener: function(){
-         EditScriptHandler.removeEditListener(this.handlePageEditEvent, this)
+         EditScriptHandler.removeEditListener(this.handlePageEditEvent, this);
          this.unregisterPageEventsListener()
       },
       
       unregisterPageEventsListener: function(){
-         this.unRegisterMultipleEventListener(this.targetWin, EVENT_TYPES_LISTENING, true)
+         this.unRegisterMultipleEventListener(this.targetWin, EVENT_TYPES_LISTENING, true);
       }
 	}
    ObjectUtils.extend(PageEventHandler, AbstractGenericEventHandler)
@@ -237,7 +237,7 @@ with(customizeyourweb){
       },
 
       setDomContentLoadedEventFired: function(domContentLoadedFired){
-         this.domContentLoadedFired = domContentLoadedFired
+         this.domContentLoadedFired = domContentLoadedFired;
       }
       
    }
@@ -247,7 +247,7 @@ with(customizeyourweb){
       PAGE_SHOW: "pageshow",
       PAGE_HIDE: "pagehide",
       MUTATION_EVENT: "MUTATION_EVENT"
-   }
+   };
    Namespace.bindToNamespace("customizeyourweb", "PageEvents", PageEvents)
 })()
 }

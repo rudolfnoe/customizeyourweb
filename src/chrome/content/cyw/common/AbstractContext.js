@@ -4,8 +4,8 @@
  */
 with(customizeyourweb){
 (function(){
-   const OBJECT_WINDOW_STORAGE_NS = "customizeyourweb"
-   const CHANGE_MEMENTO_STORAGE = "ChangeMementoStorage"
+   const OBJECT_WINDOW_STORAGE_NS = "customizeyourweb";
+   const CHANGE_MEMENTO_STORAGE = "ChangeMementoStorage";
    
    function AbstractContext(targetWindow){
       //cyw clipboard for copy / paste
@@ -58,7 +58,7 @@ with(customizeyourweb){
       getChangeMementoStorage: function(){
          var changeMementoStorage = null
          if(!ObjectWindowStorage.hasObject(this.targetWindow, OBJECT_WINDOW_STORAGE_NS, CHANGE_MEMENTO_STORAGE)){
-            changeMementoStorage = {}
+            changeMementoStorage = {};
             ObjectWindowStorage.setObject(this.targetWindow, OBJECT_WINDOW_STORAGE_NS, CHANGE_MEMENTO_STORAGE, changeMementoStorage)
          }else{
             changeMementoStorage = ObjectWindowStorage.getObject(this.targetWindow, OBJECT_WINDOW_STORAGE_NS, CHANGE_MEMENTO_STORAGE)
@@ -71,11 +71,10 @@ with(customizeyourweb){
       },
       
       setActionChangeMemento: function(actionId, changeMemento){
-         var changeMementoStorage = this.getChangeMementoStorage()
-         changeMementoStorage[this.getUniqueActionId(actionId)] = changeMemento
+         var changeMementoStorage = this.getChangeMementoStorage();
+         changeMementoStorage[this.getUniqueActionId(actionId)] = changeMemento;
       }
-   }
-
+   };
    
    Namespace.bindToNamespace("customizeyourweb", "AbstractContext", AbstractContext)
 })()

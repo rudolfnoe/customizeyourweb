@@ -103,7 +103,7 @@ with(customizeyourweb){
                   this.iframe.src = "about:blank"
                }else{
                   //Disable JavaScript to prohibit focus lost
-                  this.setAllowJavaScriptOnIframe(false)
+                  this.setAllowJavaScriptOnIframe(false);
                   this.iframe.src = link.href
                }
             }
@@ -112,9 +112,9 @@ with(customizeyourweb){
          setAllowJavaScriptOnIframe: function(allowJS){
             var docShell = this.iframe.contentWindow.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
                               .getInterface(Components.interfaces.nsIWebNavigation)
-                              .QueryInterface(Components.interfaces.nsIDocShell)
+                              .QueryInterface(Components.interfaces.nsIDocShell);
             docShell.allowJavascript = allowJS
-         },
+         }
          
   }
    ObjectUtils.extend(PreviewListener, "AbstractGenericEventHandler", customizeyourweb)

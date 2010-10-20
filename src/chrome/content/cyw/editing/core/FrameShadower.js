@@ -25,7 +25,7 @@ with(customizeyourweb){
       	var shadower = doc.getElementById(SHADOWER_ID)
       	if(shadower==null){
       		shadower = this.createDiv()
-      		var body = DomUtils.getBody(doc)
+      		var body = DomUtils.getBody(doc);
             body.appendChild(shadower)
       	}
       },
@@ -49,9 +49,9 @@ with(customizeyourweb){
          div.style.cssText = "position:absolute; top:0px; left:0px; background-color:#e7eaFF; opacity:0.6; z-index:2147483646"
          div.style.height = doc.height+"px"
          div.style.width = doc.width+"px"
-         return div 
+         return div;
       }
-	}
+	};
 
 	
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "FrameShadower", FrameShadower)

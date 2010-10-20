@@ -41,7 +41,7 @@ with(customizeyourweb){
             return DialogResult.OK
          }
       }
-   }
+   };
    
    Namespace.bindToNamespace("customizeyourweb", "CommonAttributesEditDialog", CommonAttributesEditDialog)
 })()

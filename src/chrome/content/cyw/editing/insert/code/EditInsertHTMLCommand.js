@@ -21,12 +21,12 @@ with(customizeyourweb){
          if(!result){
             action.preview(editContext)
          }
-         return result
+         return result;
       }
       
    }
-   ObjectUtils.extend(EditInsertHTMLCommand, "AbstractEditInsertHtmlCommand", customizeyourweb)
+   ObjectUtils.extend(EditInsertHTMLCommand, "AbstractEditInsertHtmlCommand", customizeyourweb);
 
-   Namespace.bindToNamespace("customizeyourweb", "EditInsertHTMLCommand", EditInsertHTMLCommand)
+   Namespace.bindToNamespace("customizeyourweb", "EditInsertHTMLCommand", EditInsertHTMLCommand);
 })()
 }
