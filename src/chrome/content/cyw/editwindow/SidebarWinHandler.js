@@ -34,7 +34,6 @@ with(customizeyourweb){
        * @retuns if add or update was successfull 
        */
       addOrUpdateAction: function(action, actionTargetWindow){
-         Assert.notNull(action.getId(), "Action id is null")
       	if(byId('includePatterns').itemCount==0){
       		this.setUrlPatternWithMostLikely(actionTargetWindow)
       	}
@@ -45,6 +44,7 @@ with(customizeyourweb){
       		return false
       	}
       	this.setMessage("")
+         currentScript.setActionId(action)
          this.actionsTreeView.addOrUpdateAction(action)
          return true
       },
@@ -201,7 +201,6 @@ with(customizeyourweb){
             currentScript.setActions(this.actionsTreeView.getActions())
             currentScript.setLoadEventType(byId('loadEventType').value)
             currentScript.setBehaviorOnMutationEvent(byId('behaviorOnMutationEvent').value)
-            currentScript.setApplyToTopWindowsOnly(byId('onlyToTopWindowCB').checked)
             return currentScript
          }catch(e){
             CywUtils.logError(e)
@@ -319,7 +318,6 @@ with(customizeyourweb){
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+down", new CommandShortcut(byId('moveDownCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+v", new CommandShortcut(byId('pasteActionTreeClipboardCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "Delete", new CommandShortcut(byId('removeActionCmd')))
-         this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+z", Utils.bind(function(){this.undoLastCommand()}, this))
       },
       
       initWindow: function(){
@@ -400,7 +398,6 @@ with(customizeyourweb){
          //set other options
          byId('loadEventType').value = currentScript.getLoadEventType()
          byId('behaviorOnMutationEvent').value = currentScript.getBehaviorOnMutationEvent()
-         byId('onlyToTopWindowCB').checked = currentScript.isApplyToTopWindowsOnly()
          
          //setting of include/exclude patterns
          this.clearIncludeAndExcludePatterns()
@@ -470,16 +467,10 @@ with(customizeyourweb){
       },
       
       removeAction: function(action){
-         if(action){
+         if(action)
             this.actionsTreeView.removeAction(action)
-         }else{
-            var action = this.actionsTreeView.getSelectedAction()
-            var currentScript = this.getCurrentScript();
-            var deleteActionCmd = new DeleteActionCommand(action, this.actionsTreeView, this.getTargetWin(), currentScript)
-            deleteActionCmd.deleteFromTree()
-            this.getEditScriptHandler().addToCommandHistory(deleteActionCmd)
-            this.getEditScriptHandler().actionDeleted(action, currentScript)
-         }
+         else
+            this.actionsTreeView.removeSelected(true)
       },
       
       retargetSelectedAction: function(newTargetDefinition){
@@ -535,10 +526,6 @@ with(customizeyourweb){
                return scriptB.getLastEdited() - scriptA.getLastEdited()
             }
          })
-      },
-      
-      undoLastCommand: function(){
-         this.getEditScriptHandler().undoLastCommand()
       },
       
       updateAction: function(action){

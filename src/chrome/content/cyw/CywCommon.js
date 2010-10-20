@@ -2,15 +2,14 @@
  * Contains constants and loading of common subscripts
  */
 (function(){
-   var CywCommon = { 
+   var CywCommon = {
+      
 		//Constants
+      CYW_VERSION: "0.4.3Build201010192200",
+      
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
-      CYW_JQUERY_URL: "chrome://customizeyourweb/content/jquery/",
-      JQUERY_FILE_NAME: "jquery-1.4.1.js",
-      JQUERY_UI_FILE_NAME: "jquery-ui-1.7.2.custom.js",
-      JQUERY_CSS_SUBPATH: "css/redmond/jquery-ui-1.7.2.custom.css",
-
+		
 		DEBUG_PREF_ID: "customizeyourweb.debug",
 		//Id used to store the EditScriptHandler object in the Application storage
 		CYW_EDIT_CONTEXT_STORAGE_ID: "CYW_EDIT_CONTEXT_STORAGE_ID",
@@ -23,13 +22,10 @@
          customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "Log", logger)
       },
       
-      getJQueryUrl: function(){
-         return this.CYW_JQUERY_URL + this.JQUERY_FILE_NAME 
+      getCywVersion: function(){
+         return  this.CYW_VERSION;  
       },
       
-      /*
-       * Loads all scripts needed in every context
-       */
       init: function(){
 			
          try{
@@ -43,19 +39,13 @@
    			var exclude = ["Shortcutmanager.js"]
    			scriptLoader.loadScripts(this.CHROME_CONTENT_URL+"common/", "customizeyourweb", null, exclude, true)
    			
+   			
    			//Load Customize Your Web Scripts
    			scriptLoader.loadScript(this.CYW_CHROME_URL+ "CywEnums.js")
-   			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/AbstractContext.js")
+            scriptLoader.loadScripts(this.CYW_CHROME_URL + "actions/", null, null, true)
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ErrorConstants.js")
    			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/error/ScriptErrorHandler.js")
-   			scriptLoader.loadScript(this.CYW_CHROME_URL + "common/WhereToInsertEnum.js")
-   			scriptLoader.loadScript(this.CYW_CHROME_URL+ "core/CywUtils.js")
-   			scriptLoader.loadScript(this.CYW_CHROME_URL+ "core/CywContext.js")
-            scriptLoader.loadScripts(this.CYW_CHROME_URL + "actions/", null, null, true)
    			scriptLoader.loadScript(this.CYW_CHROME_URL+ "editing/core/SidebarContext.js")
-            
-   			// Init version
-   			this.VERSION = customizeyourweb.Utils.getExtension(this.GUI_ID).version
             
             //Create common Logger instance
             this.createLogger()

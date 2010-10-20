@@ -25,7 +25,7 @@ with(customizeyourweb){
    //Statics 
    PageEventHandler.initPage = function(event){
 		var targetWin = event.originalTarget.defaultView
-      CywUtils.logDebug("PageEventHandler.initPage: " + event.type + " " + targetWin.location.href + "  Top Win? " + (targetWin==targetWin.top))
+      Log.logDebug(event.type + " " + targetWin.location.href)
       if(EditScriptHandler.isEditing(targetWin)){
          return
       }
@@ -61,10 +61,8 @@ with(customizeyourweb){
          for (var i = 0; i < this.applicableScripts.length; i++) {
             var script = this.applicableScripts[i]
             var applyScript = false
-            if( ((script.getLoadEventType()==event.type) || 
-                (this.isPageshowEvent(event) && !this.isDomContentLoadedFired())) &&
-                // respect flag that script should only be applied on top window
-                 !(script.isApplyToTopWindowsOnly() && (this.targetWin!=event.originalTarget.defaultView.top))){
+            if( (script.getLoadEventType()==event.type) || 
+                (this.isPageshowEvent(event) && !this.isDomContentLoadedFired())){
                   applyScript=true
             }
                
@@ -144,8 +142,7 @@ with(customizeyourweb){
       },
       
       handlePagehide: function(event){
-         var targetWin = event.originalTarget.defaultView
-         CywUtils.logDebug("PageEventHandler.handlePageHide: " + event.target.location.href + "  Top Win? " + (targetWin==targetWin.top))
+//         Log.logDebug(event.type + " " + event.target.location.href)
          this.commonCleanUp(event.type)
          this.unregisterAllEventListener()
       },

@@ -1,15 +1,15 @@
 with(customizeyourweb){
 (function(){   
 	
-   function AbstractAction (id){
-   	this.id = id
+   function AbstractAction (){
+   	this.id = null
       this.repetitionBehavior = RepetitionBehavior.RUN_ONCE_SUCCESSFULLY
       this.t_actionPerformedCount = 0
-      this.t_undoMemento = null
    }
    
    AbstractAction.prototype = {
       constructor: AbstractAction,
+   	AbstractAction: AbstractAction,
    	
    	getId: function(){
    		return this.id
@@ -27,51 +27,7 @@ with(customizeyourweb){
          this.repetitionBehavior = repetitionBehavior
       },
 
-      getUndoMemento: function(){
-         if(this.t_undoMemento == null){
-            this.t_undoMemento = {}
-         }
-         return this.t_undoMemento
-      },
-      
-      /*
-       * Assures that JQuery is available in content page
-       */
-      assureJQuery: function(abstractContext){
-         var targetWindow = abstractContext.getTargetWindow()
-         if(ObjectWindowStorage.hasObject(targetWindow, "customizeyourweb", "jQuery")){
-            return ObjectWindowStorage.getObject(targetWindow, "customizeyourweb", "jQuery")
-         }
-         var $injected = JavaScriptInjecter.injectJQuery(abstractContext.getTargetDocument())
-         ObjectWindowStorage.setObject(targetWindow, "customizeyourweb", "jQuery", $injected)
-         CywUtils.logDebug('AbstractAction.assureJQuery: JQuery injected')
-         return $injected
-      },
-      
-      /*
-       * Assures injectition of jQuery UI
-       */
-      assureJQueryUI: function(abstractContext){
-         $injected = this.assureJQuery(abstractContext)
-         if(!$injected.ui){
-            JavaScriptInjecter.injectJQueryUI(abstractContext.getTargetDocument(), $injected)
-            CywUtils.logDebug('AbstractAction.assureJQuery: JQuery UI injected')
-         }
-         return $injected
-      },
-      
-      /*
-       * Default implemenation calls template method cleanUpInternal according
-       * RepetionBehavior 
-       */
       cleanUp: function(cywContext){
-         if(this.repetitionBehavior == RepetitionBehavior.RUN_ALWAYS ||
-            cywContext.isPageHideEvent()){
-            this.cleanUpInternal(cywContext)
-         }
-      },
-      
-      cleanUpInternal: function(cywContext){
          //empty default implementation
       },
 
@@ -93,11 +49,6 @@ with(customizeyourweb){
          }
       },
 
-      /*
-       * Template method which must be overridden by subclasses
-       * @param cywContext
-       * @return boolean successful: Subclasse must indicate whether the action was successfully performed or not 
-       */
       doActionInternal: function(cywContext){
    		Assert.fail('Not implemented')
    	},
@@ -139,8 +90,7 @@ with(customizeyourweb){
          return result
       },
    	
-   	undo: function(cywContext){
-         //empty default implementation
+   	undoAction: function(cywContext){
    	}
    }
    

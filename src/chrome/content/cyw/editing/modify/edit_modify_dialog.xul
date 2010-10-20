@@ -18,21 +18,19 @@
    <script src="../common/editdialogs/common_edit_dialog_include.js"/>
    <script src="../../core/CywUtils.js"/>
    <script src="edit_modify_dialog.js"/>
+   <dialogheader title="Define the details of modifying" rows="1"/>
+      
    <commandset>
       <command id="addCmd" label="Add" accesskey="a" oncommand="customizeyourweb.EditModifyDialogHandler.doAdd()" disabled="true"/>
       <command id="removeCmd" label="Remove" accesskey="r" oncommand="customizeyourweb.EditModifyDialogHandler.doRemove()" disabled="true"/>
    </commandset>
-   
-   <dialogheader title="Define the details of modifying" rows="1"/>
-   <vbox flex="1" style="overflow:auto">
-
    <tabbox id="tabbox" persist="selectedIndex" >
       <tabs>
-         <tab label="Simple" accesskey="s"/>
-         <tab label="Expert" accesskey="E"/>
+         <tab label="Simple" />
+         <tab label="Expert" />
       </tabs>
-      <tabpanels id="tabpanels" onkeydown="customizeyourweb.EditModifyDialogHandler.incrementValue(event)">
-         <tabpanel id="simpleTP" >
+      <tabpanels id="tabpanels" onkeydown="customizeyourweb.EditModifyDialogHandler.incrementValue(event)" >
+         <tabpanel id="simpleTP">
             <vbox flex="1" >
                <groupbox id="attrGB" collapsed="true">
                   <caption label="Attributes"></caption>   
@@ -44,33 +42,35 @@
                      <rows>
                         <row align="center" attrFor="text" collapsed="true" >
                            <label value="Text"/>
-                           <menulist id="simpleValueML" editable="true" attr="value" >
+                           <menulist id="simpleValueML" editable="true" attr="value" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Undefined&gt;" selected="true"/>
                               </menupopup>
                            </menulist>
                         </row>
                         <row align="center" attrFor="password" collapsed="true">
                            <label value="Password"/>
-                           <textbox type="password" attr="value" />
+                           <textbox type="password" attr="value" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center" attrFor="textarea" collapsed="true">
                            <label value="Text"/>
-                           <textbox attr="value" value="&lt;Unchanged&gt;" multiline="true" rows="4" />
+                           <textbox attr="value" value="&lt;Undefined&gt;" multiline="true" rows="4" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center" attrFor="select" collapsed="true">
                            <label value="Value"/>
-                           <menulist id="htmlSelectML" attr="value">
+                           <menulist id="htmlSelectML" attr="value" 
+                                     onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup maxheight="250px">
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Undefined&gt;" value="&lt;Undefined&gt;" selected="true"/>
                               </menupopup>
                            </menulist>
                         </row>
                         <row align="center" attrFor="checkbox, radio" collapsed="true">
                            <label value="Selected"/>
-                           <menulist attr="checked">
+                           <menulist attr="checked"
+                                     onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup maxheight="250px">
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Undefined&gt;" value="&lt;Undefined&gt;" selected="true"/>
                                  <menuitem label="Yes" value="true" />
                                  <menuitem label="No" value="false" />
                               </menupopup>
@@ -89,33 +89,24 @@
                      <rows>
                         <row align="center">
                            <label value="Width"/>
-                           <menulist styleProp="width" editable="true">
-                              <menupopup >
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
-                              </menupopup>
-                           </menulist>
+                           <textbox styleProp="width" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center">                           
                            <label value="Height"/>
-                           <menulist styleProp="height" editable="true">
-                              <menupopup >
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
-                              </menupopup>
-                            </menulist>
+                           <textbox styleProp="height" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center">
                            <label value="Color"/>
-                           <colorfield namespaceObj="customizeyourweb" flex="1" styleProp="color" />
+                           <colorfield namespaceObj="customizeyourweb" flex="1" styleProp="color" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center">                           
                            <label value="Background"/>
-                           <colorfield namespaceObj="customizeyourweb" flex="1" styleProp="background-color" />
+                           <colorfield namespaceObj="customizeyourweb" flex="1" styleProp="background-color" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center">
                            <label value="Font-family" />
-                           <menulist styleProp="font-family" editable="true"  >
+                           <menulist styleProp="font-family" editable="true"  onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
                                  <menuitem label="Arial"/>
                                  <menuitem label="Comic Sans MS"/>
                                  <menuitem label="Georgia"/>
@@ -142,38 +133,32 @@
                         </row>
                         <row align="center">
                            <label value="Border-Width"/>
-                           <menulist styleProp="border-width"  editable="true">
-                              <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
-                              </menupopup>
-                           </menulist>
+                           <textbox styleProp="border-width"  onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center" >
                            <label value="Border-Style"/>
-                           <menulist styleProp="border-style">
+                           <menulist styleProp="border-style" editable="true"  onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
-                                 <menuitem label="none" value="none"/>
-                                 <menuitem label="solid" value="solid"/>
-                                 <menuitem label="dashed" value="dashed"/>
-                                 <menuitem label="dotted" value="dotted"/>
-                                 <menuitem label="double" value="double"/>
-                                 <menuitem label="groove" value="groove"/>
-                                 <menuitem label="inset" value="inset"/>
-                                 <menuitem label="inherit" value="inherit"/>
-                                 <menuitem label="outset" value="outset"/>
-                                 <menuitem label="ridge" value="ridge"/>
+                                 <menuitem label="none" />
+                                 <menuitem label="solid"/>
+                                 <menuitem label="dashed" />
+                                 <menuitem label="dotted" />
+                                 <menuitem label="double" />
+                                 <menuitem label="groove" />
+                                 <menuitem label="inset" />
+                                 <menuitem label="inherit" />
+                                 <menuitem label="outset" />
+                                 <menuitem label="ridge" />
                               </menupopup>
                            </menulist>
                         </row>
                         <row align="center">
                            <label value="Border-Color"/>
-                           <colorfield namespaceObj="customizeyourweb" flex="1" styleProp="border-color">
-                           </colorfield>  
+                           <colorfield namespaceObj="customizeyourweb" flex="1" styleProp="border-color"  onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)"/>
                         </row>
                         <row align="center">
                            <label value="Font-Weight"/>
-                           <menulist styleProp="font-weight" editable="true" >
+                           <menulist styleProp="font-weight" editable="true" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
                                  <menuitem label="normal" />
                                  <menuitem label="bold" />
@@ -182,9 +167,8 @@
                         </row>
                         <row align="center">
                            <label value="Font-Style"/>
-                           <menulist styleProp="font-style" >
+                           <menulist styleProp="font-style" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
                                  <menuitem label="normal" value="normal"/>
                                  <menuitem label="italic" value="italic"/>
                                  <menuitem label="inherit" value="inherit"/>
@@ -193,9 +177,8 @@
                         </row>
                         <row align="center">
                            <label value="Text-Decoration"/>
-                           <menulist styleProp="text-decoration" >
+                           <menulist styleProp="text-decoration" onblur="customizeyourweb.EditModifyDialogHandler.synchronizeSimple2Expert(event)">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
                                  <menuitem label="none" value="none"/>
                                  <menuitem label="blink" value="blink"/>
                                  <menuitem label="inherit" value="inherit"/>
@@ -219,7 +202,7 @@
                   </columns>
                   <rows>
                      <row align="center">
-                        <label value="Attribute/Style" accesskey="t" control="attributeML"/>
+                        <label value="Attribute/Style"/>
                         <menulist id="attributeML" editable="true" oninput="customizeyourweb.ControlUtils.filterMenulist(this)" 
                                   onblur="customizeyourweb.EditModifyDialogHandler.initValueField()">
                            <menupopup maxheight="258px">
@@ -255,7 +238,6 @@
          </tabpanel>
       </tabpanels>
    </tabbox>
-   <targetdefinition autoInit="false"/>
+   <targetdefinition/>
    <commonactionattributes/>
-   </vbox>
 </dialog>

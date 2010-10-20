@@ -1,12 +1,9 @@
 with(customizeyourweb){
 (function(){
-   /*
-    * Iterator for actions tree
-    * @param ArrayList actionsList
-    */
-   function ActionIterator(actionsList){
+   function ActionIterator(script){
       this.currentIndex = 0
-      this.actionArray = this.createActionArray(actionsList)
+      this.script = script
+      this.actionArray = this.createActionArray()
    }
    
    ActionIterator.prototype = {
@@ -17,23 +14,22 @@ with(customizeyourweb){
        * This is a little bit a hack as both supporting the getActions method
        * TODO think about making Script a subclass of ContainerAction
        */
-      assembleContainerActionItems: function(containerAction, resultArr){
+      assembleContainerActionItems: function(containerActionOrScript, resultArr){
          //this
-         var actions = containerAction.getActions()
+         var actions = containerActionOrScript.getActions()
           for (var i = 0;i < actions.size(); i++) {
             var action = actions.get(i)
-            resultArr.push(action)
             if(action.isContainer()){
                this.assembleContainerActionItems(action, resultArr)
+            }else{
+               resultArr.push(action)
             }
          }
       },
       
-      createActionArray: function(actionsList){
+      createActionArray: function(){
          var actionArray = []
-         //Make the action list a fake container action ;-)
-         actionsList.getActions = function(){return actionsList}
-         this.assembleContainerActionItems(actionsList, actionArray)
+         this.assembleContainerActionItems(this.script, actionArray)
          return actionArray
       }, 
       

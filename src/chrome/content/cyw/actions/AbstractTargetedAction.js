@@ -1,14 +1,14 @@
 with(customizeyourweb){   
 (function(){
    
-   function AbstractTargetedAction(id, targetDefinition) {
-         this.AbstractAction(id)
+   function AbstractTargetedAction(targetDefinition) {
+         this.AbstractAction()
          this.targetDefinition = targetDefinition
-         this.allowMultiTargets = false
    }
    
    AbstractTargetedAction.prototype = {
       constructor: AbstractTargetedAction,
+      AbstractTargetedAction: AbstractTargetedAction,
       /*
        * Sets the target identifier
        */
@@ -21,14 +21,6 @@ with(customizeyourweb){
          this.targetDefinition = targetDefinition
       },
       
-      allowsMultiTargets: function(){
-         return this.allowMultiTargets
-      },
-
-      setAllowMultiTargets: function(allowMultiTargets){
-         this.allowMultiTargets = allowMultiTargets
-      },
-
       isTargetOptionalAndTargetMissing: function(cywContext){
          return this.targetDefinition.isTargetOptionalAndTargetMissing(cywContext.getTargetWindow())  
       },
@@ -44,11 +36,11 @@ with(customizeyourweb){
       getTarget : function(cywContextOrTargetWin) {
          return this.targetDefinition.getTarget(cywContextOrTargetWin)
       },
-
-      getTargets: function(/*DOMWindow | CywContext*/ cywContextOrTargetWin, /*Boolean*/ withoutError){
+      
+      getTargets: function(cywContextOrTargetWin){
          var targets = this.targetDefinition.getTargets(cywContextOrTargetWin)
-         if(targets.length==0 && !withoutError){
-            throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getTargetDefinition().getDefinitionAsString()])
+         if(targets.length==0){
+            throw ScriptErrorHandler.createError(ErrorConstants.TARGET_NOT_FOUND, [this.getDefinitionAsString()])
          }
          return targets
       },
@@ -58,8 +50,7 @@ with(customizeyourweb){
          try{
             return this.getTarget(cywContext)
          }catch(e){
-            ScriptErrorHandler.addScriptError(ErrorConstants.TARGET_NOT_FOUND, [this.getTargetDefinition().getDefinitionAsString()], 
-                                                e, cywContext.getScriptId(), this.getId(), cywContext.getTargetWindow())
+            ScriptErrorHandler.addScriptError(cywContext.getScriptId(), e, null, this, cywContext.getTargetWindow())
             return null
          }
       }

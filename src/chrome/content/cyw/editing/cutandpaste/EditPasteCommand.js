@@ -1,31 +1,30 @@
 with(customizeyourweb){
 (function(){
    function EditPasteCommand(){
-      this.AbstractCommonAttributesEditCommand()
       this.elementToInsert = null
    }
    
    EditPasteCommand.prototype = {
 
-      afterSuccessfulActionEditing: function(action, editContext){
-         if(editContext.getClipboard()==null){
-            Statusbar.setText('Nothing to paste in the clipboard.')
-            return
-         }
-         this.setUndoMemento(action.paste(editContext))
+      afterSuccessfulActionEditing: function(editContext){
+         PasteAction.paste(editContext.getClipboard(), editContext.getTargetElement(), this.determineWhere(editContext))
       },
-
+      
       createAction: function(editContext) {
          var clipboard = this.elementToInsert = editContext.getClipboard()
          Assert.notNull(clipboard,  "Nothing to paste in clipboard")
          
          //create paste action
-         return new PasteAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition(), this.determineWhere(editContext))
+         return new PasteAction(editContext.getTargetDefinition(), this.determineWhere(editContext))
       },
       
       determineWhere: function(editContext){
          var pasteCommand = editContext.getCommand()
          return pasteCommand.getAttribute('where')
+      },
+      
+      undo: function(){
+         DomUtils.removeElement(this.elementToInsert)
       }
       
    }

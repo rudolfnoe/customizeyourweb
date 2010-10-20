@@ -162,39 +162,6 @@ with(customizeyourweb){
    
    //Instance methods
    EditScriptHandler.prototype = {
-      
-      /*
-       * Called by the sidebar handler after the provided action was deleted
-       * for undoing the action modifications
-       */
-      actionDeleted: function(action, script){
-         //Undo action
-         if(ObjectUtils.instanceOf(action, IPreviewableAction)){
-            this.initEditContextCommon(null, this.targetWin, script)
-            var undoMemento = this.editContext.getActionChangeMemento(action.getId())
-            try{
-               action.undo(this.editContext, undoMemento)
-            }catch(e){
-               CywUtils.logError(e, "EditScriptHandler.actionDeleted: Undo failed", true)
-            }
-         }
-         //Remove all undos from command history
-         var newHistory = []
-         for(var i=0; i < this.editCommandHistory.length; i++){
-            var command = this.editCommandHistory[i]
-            if(!ObjectUtils.instanceOf(command, WrapperCommand) ||
-               !command.getAction().equals(action)){
-                  newHistory.push(command)
-            }
-         }
-         this.editCommandHistory = newHistory
-      },
-      
-      addToCommandHistory: function(undoableCommand){
-         Assert.isTrue(typeof undoableCommand.undo == "function", "Assertion faild at EditScriptHandler.addCommandHistory: Command must be undoable")
-         this.editCommandHistory.push(undoableCommand)   
-      },
-      
       //De/Register the edithandler for all relevant events
       addRemoveEventHandlers: function(addOrRemove){
          var isAdd = addOrRemove=="add"
@@ -234,7 +201,6 @@ with(customizeyourweb){
        * @param (Boolean) isHideSidebar: Flag indicating whether the sidebar should be closed or not  
        */
       cancelEditing: function(isHideSidebar){
-         this.undoEditing()
          this.disableEditHandler(isHideSidebar) 
       },
       
@@ -328,10 +294,28 @@ with(customizeyourweb){
             hideSidebar()
          }
       },
-      /**
-       * Creates new action
-       * @param {String} commandId
+      
+      /*
+       * Edits a selected action
        */
+      doEditAction: function(action, script){
+         if(action.isTargeted()){
+            //if targeted action highlighing is done by the dialog
+            this.unhighlightAllHighlighters()
+         }
+         var wrapperCommand = this.createWrapperCommandFromAction(action)
+         var actionTargetWin = this.getActionTargetWin()
+         this.initEditContextForEditAction(action, script)
+         var modifiedAction = wrapperCommand.doEditAction(this.editContext)
+         if(modifiedAction!=null){
+            //Editing ended sucessful
+            this.editCommandHistory.push(wrapperCommand)
+            this.updateCurrentTarget(modifiedAction, actionTargetWin)
+         }
+         this.highlightCurrentTarget()
+         return modifiedAction
+      },
+      
       doCreateAction: function(commandId){
          if(this.currentTarget==null && TARGETLESS_COMMANDS.indexOf(commandId)==-1)
            return
@@ -360,27 +344,6 @@ with(customizeyourweb){
             }
          }
          this.highlightCurrentTarget()
-      },
-      
-      /*
-       * Edits a selected action
-       */
-      doEditAction: function(action, script){
-         if(action.isTargeted()){
-            //if targeted action highlighing is done by the dialog
-            this.unhighlightAllHighlighters()
-         }
-         var wrapperCommand = this.createWrapperCommandFromAction(action)
-         var actionTargetWin = this.getActionTargetWin()
-         this.initEditContextForEditAction(action, script)
-         var modifiedAction = wrapperCommand.doEditAction(action, this.editContext)
-         if(modifiedAction!=null){
-            //Editing ended sucessful
-            this.editCommandHistory.push(wrapperCommand)
-            this.updateCurrentTarget(modifiedAction, actionTargetWin)
-         }
-         this.highlightCurrentTarget()
-         return modifiedAction
       },
       
       enableEditHandler: function(){
@@ -501,11 +464,11 @@ with(customizeyourweb){
                return
             }
             found = true
-            var targetElements = targetDefinition.getTargets(subWin)
-            var highlighter = new MultiElementHighlighter(null, false)
-            highlighter.highlight(targetElements)
+            var targetElement = targetDefinition.getTarget(subWin)
+            var highlighter = new FrameHighlighter()
+            highlighter.highlight(targetElement)
             if(first){
-               targetElements[0].scrollIntoView()
+               targetElement.scrollIntoView()
                first = false
             }
             newHighlighters.push(highlighter)
@@ -545,10 +508,10 @@ with(customizeyourweb){
          }, this) 
       },
       
-      initEditContextCommon: function(targetElement, targetWindow, script){
+      initEditContextCommon: function(targetElement, targetWindow, scriptId){
          this.editContext.setTargetElement(targetElement)
          this.editContext.setTargetWindow(targetWindow)
-         this.editContext.setScript(script)
+         this.editContext.setScriptId(scriptId)
       },
       
       /*
@@ -596,12 +559,17 @@ with(customizeyourweb){
                Assert.fail("Target window could not be determined!")
             }
          }
-         this.initEditContextCommon(targetElement, targetWindow, script)
+         this.editContext.setAction(action)
+         this.initEditContextCommon(targetElement, targetWindow, script.getId())
       },
       
       initEditContextForCreateAction: function(commandId, script){
          this.editContext.setCommand(document.getElementById(commandId))
-         this.initEditContextCommon(this.currentTarget, this.getActionTargetWin(), script)
+         this.initEditContextCommon(this.currentTarget, this.getActionTargetWin(), script.getId())
+         var targetDefinition = null
+         if(this.currentTarget)
+           targetDefinition = AbstractTargetDefinitionFactory.createDefaultDefinition(this.currentTarget)
+         this.editContext.setTargetDefinition(targetDefinition)
       },
       
       initShortcuts: function(){
@@ -623,7 +591,6 @@ with(customizeyourweb){
          this.shortcutManager.addShortcut("i", new CommandWrapper('customizeyourweb_ifElementExistsCmd'))
          this.shortcutManager.addShortcut("j", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertJSCmd")}, this))
          this.shortcutManager.addShortcut("y", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertStyleSheetCmd")}, this))
-         this.shortcutManager.addShortcut("w", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertSubwindowCmd")}, this))
          this.shortcutManager.addShortcut("l", Utils.bind(function(){this.doCreateAction("customizeyourweb_listViewCmd")}, this))
          this.shortcutManager.addShortcut("m", Utils.bind(function(){this.doCreateAction("customizeyourweb_modifyCmd")}, this))
          this.shortcutManager.addShortcut("o", Utils.bind(function(){this.doCreateAction("customizeyourweb_macroShortcutCmd")}, this))
@@ -743,16 +710,14 @@ with(customizeyourweb){
             getSidebarWinHandler().setMessage(errorMessage, Severity.ERROR)
             return
          }
-			var currentScript = getSidebarWinHandler().getCurrentScript()
-			this.initEditContextCommon(newTarget, newTargetWindow, currentScript)
          this.unhighlightMouseOverHighlighter()   
-         var wrapperCommand = new WrapperCommand(new EditRetargetCommand(), getSidebarWinHandler())
-         var retargetedAction = wrapperCommand.doEditAction(selectedAction, this.editContext)
-         if(retargetedAction){
-            this.currentTarget = retargetedAction.getTargetDefinition().getTarget(newTargetWindow)
+         var dialog = new CommonAttributesEditDialog(selectedAction, newTargetWindow, newTarget) 
+         dialog.show()
+         if(dialog.isOk()){
+            var updatedAction = dialog.getAction()
+            this.currentTarget = updatedAction.getTargetDefinition().getTarget(newTargetWindow)
             this.highlightCurrentTarget()
-            getSidebarWinHandler().updateAction(retargetedAction)
-            this.editCommandHistory.push(wrapperCommand)
+            getSidebarWinHandler().updateAction(updatedAction)
          }
       },
       
@@ -821,22 +786,10 @@ with(customizeyourweb){
          }
       },
       
-      undoEditing: function(){
-         while(this.editCommandHistory.length>0){
-            try{
-               this.undoLastCommand()
-            }catch(e){
-               CywUtils.logError (e, "Undo failed", true)
-            }
-         }
-      },
-      
       undoLastCommand: function(){
          var lastCommand = this.editCommandHistory.pop() 
-         if(lastCommand==null){
-            Statusbar.setError('No undo available')
+         if(lastCommand==null)
             return
-         }
          lastCommand.undo(this.editContext)
       },
       
@@ -870,7 +823,7 @@ with(customizeyourweb){
      
       updateCurrentTarget: function(action, actionTargetWin){
          if(action.isTargeted() && action.isTargetInPage(actionTargetWin)){
-            this.currentTarget = action.getTargetDefinition().getTargets(actionTargetWin)[0]
+            this.currentTarget = action.getTargetDefinition().getTarget(actionTargetWin)
          }else{
             this.currentTarget = null
          }

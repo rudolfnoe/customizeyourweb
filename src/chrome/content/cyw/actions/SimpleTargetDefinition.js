@@ -147,11 +147,8 @@ with(customizeyourweb){
             if(attrMatches)
                resultSet.push(potTarget)
          }
-
-         if(resultSet.length>0 && this.position!=null){
-            if(this.position=="last"){
-               return new Array(resultSet[resultSet.length-1])
-            }else if(resultSet.length>=this.position)
+         if(this.position!=null){
+            if(resultSet.length>=this.position)
                resultSet = new Array(resultSet[this.position-1])
             else
                resultSet = []

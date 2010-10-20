@@ -48,8 +48,6 @@ with(customizeyourweb){
       
       onPagehide: function(event){
          var targetWin = event.originalTarget.defaultView
-//         CywUtils.logDebug("StatusbarManager.onPagehide: " + event.originalTarget.defaultView.location.href + "  Top Win? " + (targetWin==targetWin.top))
-         var targetWin = event.originalTarget.defaultView
          var errorIconStateTabContext = this.getTabContext(targetWin)
          if(targetWin == targetWin.top){
             errorIconStateTabContext.clearErroneousWindows()

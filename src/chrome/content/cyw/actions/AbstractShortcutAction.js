@@ -5,6 +5,7 @@ with(customizeyourweb){
    const CONTEXT_IDS = [CYW_SHORTCUT_MANAGER, CYW_SHORTSTRING_MANAGER]
    
    function AbstractShortcutAction(){
+      this.AbstractAction()
       this.combinedKeyCode = null
       this.shortString = null
       this.t_shortcutManagerClientId = null
@@ -34,6 +35,7 @@ with(customizeyourweb){
    //Member methods
    AbstractShortcutAction.prototype = {
       constructor: AbstractShortcutAction,
+      AbstractShortcutAction: AbstractShortcutAction,
 
       getCombinedKeyCode: function(){
          return this.combinedKeyCode

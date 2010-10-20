@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
 
-   function CutAction (id, targetDefinition){
-      this.AbstractTargetedAction(id, targetDefinition)
+   function CutAction (targetDefinition){
+      this.AbstractTargetedAction(targetDefinition)
    }
    
    CutAction.prototype ={ 
@@ -21,7 +21,7 @@ with(customizeyourweb){
       }     
    }
    
-   ObjectUtils.extend(CutAction, "RemoveAction", customizeyourweb)
+   ObjectUtils.extend(CutAction, "AbstractTargetedAction", customizeyourweb)
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CutAction", CutAction)
 })()

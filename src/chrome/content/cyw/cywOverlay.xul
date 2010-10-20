@@ -33,8 +33,6 @@
       <command id="customizeyourweb_insertJSCmd" label="Insert JavaScript" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertHTMLCmd" label="Insert HTML" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertStyleSheetCmd" label="Insert Stylesheet" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
-      <command id="customizeyourweb_insertSubwindowCmd" label="Insert Subwindow" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
-      <command id="customizeyourweb_isolateCmd" label="Isolate" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_listViewCmd" label="List View" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_macroShortcutCmd" label="Macro Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_modifyCmd" label="Modify" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
@@ -60,7 +58,6 @@
       	<menuitem id="customizeyourweb_focusMI" command="customizeyourweb_focusCmd" acceltext="F"/>
       	<menuitem id="customizeyourweb_modifyMI" command="customizeyourweb_modifyCmd" acceltext="M"/>
       	<menuitem id="customizeyourweb_removeMI" command="customizeyourweb_removeCmd" acceltext="R"/>
-      	<menuitem id="customizeyourweb_isolateMI" command="customizeyourweb_isolateCmd"/>
       	<menuitem id="customizeyourweb_shortcutMI" command="customizeyourweb_shortcutCmd" acceltext="S"/>
          <menu label="Other shortcuts">
             <menupopup>
@@ -70,16 +67,11 @@
             </menupopup>
          </menu>
          <menuseparator/>
-         <menu label="Insert Code">
+         <menu label="Insert">
             <menupopup>
             	<menuitem id="customizeyourweb_insertJSMI" command="customizeyourweb_insertJSCmd" acceltext="J"/>
             	<menuitem id="customizeyourweb_insertHTMLMI" command="customizeyourweb_insertHTMLCmd" acceltext="H"/>
             	<menuitem id="customizeyourweb_insertStyleSheetMI" command="customizeyourweb_insertStyleSheetCmd" acceltext="Y"/>
-            </menupopup>
-         </menu>
-         <menu label="Insert Element">
-            <menupopup>
-            	<menuitem id="customizeyourweb_insertSubwindowMI" command="customizeyourweb_insertSubwindowCmd" acceltext="W"/>
             </menupopup>
          </menu>
          <menuseparator/>

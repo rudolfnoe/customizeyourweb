@@ -6,18 +6,23 @@ with(customizeyourweb){
    
    EditClickCommand.prototype = {
       doCreateAction: function(editContext){
-         var action = new ClickAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
+         var action = new ClickAction(editContext.getTargetDefinition())
          return this.editAction(action, editContext)
       },
       
-      doEditAction: function(action, editContext){
-         return this.editAction(action, editContext)
+      doEditAction: function(editContext){
+         return this.editAction(editContext.getAction(), editContext)
       },
 
       editAction: function(action, editContext){
-         var editDialog = new EditDialog(EDIT_CLICK_DIALOG_URL, "Edit Click", action, editContext)
+         var editDialog = new EditDialog(EDIT_CLICK_DIALOG_URL, "Edit Click", true, window, null, 
+                                  {action: action, targetElement:editContext.getTargetElement(), targetWindow:editContext.getTargetWindow()})
          editDialog.show()
-			return editDialog.getActionResult()
+         action = editDialog.getNamedResult("action")
+         if(action==null)
+            return
+         this.setAction(action)
+         return this.getAction()
       }
       
    }

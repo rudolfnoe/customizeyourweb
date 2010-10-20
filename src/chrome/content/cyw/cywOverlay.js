@@ -1,7 +1,7 @@
 /*
  * Customize Your Web
  * Version 0.1
- * Created by Rudolf Noé
+ * Created by Rudolf Noe
  * 25.09.2008
 */
 with(customizeyourweb){
@@ -20,6 +20,7 @@ with(customizeyourweb){
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/CywVersionManager.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ConfigDataConverter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/Migrations.js", "customizeyourweb")
+      //TODO remove the following two items
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptExporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptImporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/WebInstaller.js", "customizeyourweb")
@@ -31,12 +32,6 @@ with(customizeyourweb){
    }
 
    //Add window event listener for init
-	window.addEventListener('load',  {handleEvent: function(event){
-      //jQuery must be loaded after window is fully loaded
-      var jQueryLoader = new JQueryLoader(CywCommon.CYW_JQUERY_URL)
-      jQueryLoader.loadJQuery(CywCommon.JQUERY_FILE_NAME, customizeyourweb)
-//      jQueryLoader.loadJQueryUI(CywCommon.JQUERY_UI_FILE_NAME, customizeyourweb)
-      InitManager.init(event)
-   }}, false);
+	window.addEventListener('load',  {handleEvent: function(event){customizeyourweb.InitManager.init(event)}}, false);
 })()
 }

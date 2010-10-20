@@ -9,10 +9,10 @@
       versionComparator: Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                    .getService(Components.interfaces.nsIVersionComparator),
       
-      versionsToBeMigrated: ["0.2Build20090808", "0.3Build20091007", "0.4.1.3Build20091220", "0.5Build20100228"],
+      versionsToBeMigrated: ["0.2Build20090808", "0.3Build20091007", "0.4.1.3Build20091220"],
                    
       addonHasToBeMigrated: function(){
-         var newInstalledVersion = CywUtils.getCywVersion()
+         var newInstalledVersion = CywCommon.getCywVersion()
          var currentVersion = Prefs.getCharPref(this.VERSION_PREF)
          if(this.versionComparator.compare(newInstalledVersion, currentVersion)>0 &&
             !this.isFirstStartupAfterInstallation()){
@@ -69,17 +69,12 @@
          Migrations.convertScriptsConfgToUTF8()   
       },
       
-      
-      migrateToVersion_0_5Build20100228: function(){
-         Migrations.convertScriptStructureForV0_5()   
-      },
-      
       setUp: function(){
          this.doCommonMigration()      
       },
       
       setVersionPref: function(){
-         Prefs.setCharPref(this.VERSION_PREF, Utils.getExtension(CywCommon.GUI_ID).version)
+         Prefs.setCharPref(this.VERSION_PREF, CywCommon.getCywVersion())
       },
       
       showVersionInfoPage: function(){

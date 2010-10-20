@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function InsertStyleSheetAction (id){
-      this.AbstractAction(id)
+   function InsertStyleSheetAction (){
+      this.AbstractAction()
       this.styleSheetCode = null
    }
    
