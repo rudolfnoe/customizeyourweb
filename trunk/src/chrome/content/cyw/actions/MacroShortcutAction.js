@@ -1,10 +1,10 @@
 with(customizeyourweb){
 (function(){   
    
-   function MacroShortcutAction (){
+   function MacroShortcutAction (id){
       this.AbstractShortcutAction()
       this.AbstractContainerAction()
-      this.AbstractAction()
+      this.AbstractAction(id)
    }
    
    MacroShortcutAction.prototype = {

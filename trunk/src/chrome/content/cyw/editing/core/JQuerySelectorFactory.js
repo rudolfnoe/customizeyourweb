@@ -14,7 +14,7 @@ with(customizeyourweb){
          for (var i = strategies.length-1; i >= 0; i--) {
             var selector = strategies[i].createSelector(element)
             if(result.contains(selector)){
-               continue
+               continue;
             }
             result.addAtIndex(0, selector)
          }
@@ -26,7 +26,7 @@ with(customizeyourweb){
                      new AttributeSelectorStrategy("name"),
                      new AttributeSelectorStrategy("href"),
                      new TextContentSelectorStrategy(),
-                     new DefaultSelectorStrategy()] 
+                     new DefaultSelectorStrategy()]; 
       }
       
    }
@@ -77,11 +77,11 @@ with(customizeyourweb){
          var loopElem = element
          do{
             var predicate = this.getPredicate(loopElem) 
-            result = loopElem.tagName + (predicate!=null?predicate:"") + (result==null ? "" : ">" + result) 
+            result = loopElem.tagName + (predicate!=null?predicate:"") + (result==null ? "" : ">" + result); 
             if(this.isStopFurtherEvalutation(loopElem))
-               break
-            loopElem = loopElem.parentNode
-         }while((loopElem.nodeName!='HTML') && !(loopElem instanceof HTMLDocument))
+               break;
+            loopElem = loopElem.parentNode;
+         }while((loopElem.nodeName!='HTML') && !(loopElem instanceof HTMLDocument));
          return result
       },
       
@@ -93,7 +93,7 @@ with(customizeyourweb){
          for (var i = 0; i < elements.length; i++) {
             if(elements[i]==element){
                pos = i
-               break
+               break;
             }
          }
          if(elements.length>1){
@@ -106,13 +106,13 @@ with(customizeyourweb){
       },
       
       isStopFurtherEvalutation: function(){
-         return this.stopFurtherEvaluation
+         return this.stopFurtherEvaluation;
       }
       
-   }
-   Namespace.bindToNamespace("customizeyourweb", "DefaultSelectorStrategy", DefaultSelectorStrategy)
+   };
+   Namespace.bindToNamespace("customizeyourweb", "DefaultSelectorStrategy", DefaultSelectorStrategy);
    
-   const REPLACE_METACHAR_REGEXP = /([\[\]])/g
+   const REPLACE_METACHAR_REGEXP = /([\[\]])/g;
    /*
     * A elector strategy which uses the value of an attribute
     * @param String attrName: Name of the attribute with which value the predicate should be created
@@ -142,14 +142,14 @@ with(customizeyourweb){
                }
             }
          }else{
-            this.stopFurtherEvaluation = false
-            result = this.DefaultSelectorStrategy_getPredicate(element)
+            this.stopFurtherEvaluation = false;
+            result = this.DefaultSelectorStrategy_getPredicate(element);
          }
          return result
       },
 
       isStopFurtherEvalutation: function(){
-         return this.stopFurtherEvaluation
+         return this.stopFurtherEvaluation;
       }
       
    }
@@ -182,7 +182,7 @@ with(customizeyourweb){
       },
 
       isStopFurtherEvalutation: function(){
-         return this.stopFurtherEvaluation   
+         return this.stopFurtherEvaluation;   
       }
       
    }

@@ -2,18 +2,18 @@ with(customizeyourweb){
 (function(){
    const NUMERIC_VALUE_REG_EXP = /^(-?\d+)(.*)$/;
    const UNCHANGED_VALUE = "<Unchanged>";
-   const UPDATE_DELAY = 500
-   const STYLE_PROPS = ["border", "border-width", "border-style"]
+   const UPDATE_DELAY = 500;
+   const STYLE_PROPS = ["border", "border-width", "border-style"];
    
    function byId(id){
-      return document.getElementById(id)
-   }
+      return document.getElementById(id);
+   };
    
    // Globals: shortcuts to important controls
-   var attributeML = null
-   var stringValueTB = null
-   var colorValueCF = null
-   var attributesLB = null
+   var attributeML = null;
+   var stringValueTB = null;
+   var colorValueCF = null;
+   var attributesLB = null;
    
    var EditModifyDialogHandler = {
       //Edited Action
@@ -38,19 +38,19 @@ with(customizeyourweb){
        * Adds or updates attribute/value combination to attributes listbox on the expert tab
        */
       addToAttributesLB: function(attr, value){
-         var attrItem = Listbox.getItemByValue(attributesLB, attr)
+         var attrItem = Listbox.getItemByValue(attributesLB, attr);
          if(attrItem==null){
-            Listbox.appendMultiColumnItem(attributesLB, [attr, value], [attr, value], attr)
+            Listbox.appendMultiColumnItem(attributesLB, [attr, value], [attr, value], attr);
          }else{
-            attrItem.value = attr
-            Listbox.updateRow(attributesLB, attrItem, [attr, value], [attr, value])
+            attrItem.value = attr;
+            Listbox.updateRow(attributesLB, attrItem, [attr, value], [attr, value]);
          }
       },
       
-      addUnchangedValueToColorFields: function(){
-         var colorFields = document.getElementsByTagName('colorfield')
+      addUnchangedValueToColorFields : function(){
+         var colorFields = document.getElementsByTagName('colorfield');
          for (var i = 0; i < colorFields.length; i++) {
-            colorFields[i].insertColorAt(0, UNCHANGED_VALUE)
+            colorFields[i].insertColorAt(0, UNCHANGED_VALUE);
          }
       },
       
@@ -58,13 +58,13 @@ with(customizeyourweb){
        * Event handler for add button on expert tab
        */
       doAdd: function(){
-         var attr = attributeML.value
-         var value = this.getValueControl().value
-         this.addToAttributesLB(attr, value)
-         attributeML.value=""
-         attributeML.focus()
-         this.getValueControl().value=""
-         this.triggerUpdateTargetsDefault()
+         var attr = attributeML.value;
+         var value = this.getValueControl().value;
+         this.addToAttributesLB(attr, value);
+         attributeML.value="";
+         attributeML.focus();
+         this.getValueControl().value="";
+         this.triggerUpdateTargetsDefault();
       },
       
       /*
@@ -72,7 +72,7 @@ with(customizeyourweb){
        */
       doCancel: function(){
          if(this.undoMemento){
-            this.action.undo(this.getEditContext(), this.undoMemento)
+            this.action.undo(this.getEditContext(), this.undoMemento);
          }
       },
       
@@ -81,35 +81,35 @@ with(customizeyourweb){
        */
       doOnload: function(){
          try{
-            this.setGlobals()
-            this.action = EditDialog.getAction(true)
-            this.targetElement = EditDialog.getTargetElement()
+            this.setGlobals();
+            this.action = EditDialog.getAction(true);
+            this.targetElement = EditDialog.getTargetElement();
             
             //Init Targetdef Binding
-            this.getTargetDefinitionBinding().setAllowMultiTargetDefinition(true)
-            this.initTargetDefinitionBinding()
+            this.getTargetDefinitionBinding().setAllowMultiTargetDefinition(true);
+            this.initTargetDefinitionBinding();
             
-            var firstSelectedTarget = this.getFirstSelectedTarget()
+            var firstSelectedTarget = this.getFirstSelectedTarget();
             if(firstSelectedTarget ){
                //Clone is given so the style doesn't change any more
-               this.compTargetStyle = this.getCurrentStyle(firstSelectedTarget)
-               this.fillExpertAttributeMenulist(this.compTargetStyle)
+               this.compTargetStyle = this.getCurrentStyle(firstSelectedTarget);
+               this.fillExpertAttributeMenulist(this.compTargetStyle);
             }
             if(!this.hasMultipleTargets()){
-               this.initHtmlAttributes()
+               this.initHtmlAttributes();
             }
-            this.addUnchangedValueToColorFields()
-            this.initSimpleStyles()
+            this.addUnchangedValueToColorFields();
+            this.initSimpleStyles();
 
-            this.initFromAction(this.action)
+            this.initFromAction(this.action);
             //Shortcuts and listeners  Validators at the end!
-            this.initShortcuts()
-            this.initListeners()
-            this.initValidators()
+            this.initShortcuts();
+            this.initListeners();
+            this.initValidators();
             //
-            this.updateTargets(null, this.action)
+            this.updateTargets(null, this.action);
          }catch(e){
-            CywUtils.logError(e, "", true)
+            CywUtils.logError(e, "", true);
          }
       },
       
@@ -117,10 +117,10 @@ with(customizeyourweb){
        * Ok button event handler
        */
       doOk: function(){
-         this.synchronizeAction(this.action)
-         Dialog.setNamedResult("action", this.action)
-         Dialog.setNamedResult("changeMemento", this.undoMemento)
-         Dialog.setResult(DialogResult.OK)
+         this.synchronizeAction(this.action);
+         Dialog.setNamedResult("action", this.action);
+         Dialog.setNamedResult("changeMemento", this.undoMemento);
+         Dialog.setResult(DialogResult.OK);
       },
       
       /*
@@ -128,10 +128,10 @@ with(customizeyourweb){
        */
       doRemove: function(){
          if(!attributesLB.selectedItem)
-            return
-         var selectedAttr = attributesLB.selectedItem.value
-         this.removeAttrFromAttrList(selectedAttr)
-         this.triggerUpdateTargetsDefault()
+            return;
+         var selectedAttr = attributesLB.selectedItem.value;
+         this.removeAttrFromAttrList(selectedAttr);
+         this.triggerUpdateTargetsDefault();
       },
       
       /*
@@ -139,35 +139,35 @@ with(customizeyourweb){
        * values of the target element 
        */
       fillExpertAttributeMenulist: function(compTargetStyle){
-         var styleProps = new Array()
+         var styleProps = new Array();
          for (var i = 0; i < compTargetStyle.length; i++) {
-            styleProps.push(compTargetStyle.item(i).toString())
+            styleProps.push(compTargetStyle.item(i).toString());
          }
          //Add some styles manually
-         styleProps.push("border")
-         styleProps.push("border-color")
-         styleProps.push("border-width")
-         styleProps.push("border-style")
-         styleProps.push("margin")
-         styleProps.push("padding")
-         styleProps.push("-moz-border-colors")
-         styleProps.push("-moz-border-radius")
+         styleProps.push("border");
+         styleProps.push("border-color");
+         styleProps.push("border-width");
+         styleProps.push("border-style");
+         styleProps.push("margin");
+         styleProps.push("padding");
+         styleProps.push("-moz-border-colors");
+         styleProps.push("-moz-border-radius");
 
          //Moz-Styles are sorted at the end
          styleProps.sort(function(a, b){
-            var aIsMozStyle = StringUtils.startsWith(a, "-moz")
-            var bIsMozStyle = StringUtils.startsWith(b, "-moz")
+            var aIsMozStyle = StringUtils.startsWith(a, "-moz");
+            var bIsMozStyle = StringUtils.startsWith(b, "-moz");
             if(aIsMozStyle && !bIsMozStyle){
-               return 1
+               return 1;
             }else if(bIsMozStyle && !aIsMozStyle){
-               return -1
+               return -1;
             }else if(a == b){
-               return 0
+               return 0;
             }else{
-               return a<b?-1:1
+               return a<b?-1:1;
             }
-         })
-         ControlUtils.appendItemsToMenulist(attributeML, styleProps, styleProps)
+         });
+         ControlUtils.appendItemsToMenulist(attributeML, styleProps, styleProps);
       },
       
       /*
@@ -175,12 +175,12 @@ with(customizeyourweb){
        * the user selected a selectbox for modifying
        */
       fillHtmlSelectboxWithEntries: function(){
-         var options = this.targetElement.options
-         var htmlSelectML = byId('htmlSelectML')
+         var options = this.targetElement.options;
+         var htmlSelectML = byId('htmlSelectML');
          for (var i = 0; i < options.length; i++) {
-            var option = options[i]
-            var value = option.value?option.value:option.text
-            ControlUtils.appendItemToMenulist(htmlSelectML, option.text, value)
+            var option = options[i];
+            var value = option.value?option.value:option.text;
+            ControlUtils.appendItemToMenulist(htmlSelectML, option.text, value);
          }
       },
       
@@ -191,28 +191,28 @@ with(customizeyourweb){
        * Reason: When setting a width and re-read the value, the values are different  
        */
       getCurrentStyle: function(targetElement){
-         var clonedTargetElem = targetElement.cloneNode(true)
-         var targetWin = targetElement.ownerDocument.defaultView
-         var compTargetStyle = targetWin.getComputedStyle(clonedTargetElem, "")
+         var clonedTargetElem = targetElement.cloneNode(true);
+         var targetWin = targetElement.ownerDocument.defaultView;
+         var compTargetStyle = targetWin.getComputedStyle(clonedTargetElem, "");
          //store values for width and height
-         var width = targetElement.offsetWidth + "px"
-         var height = targetElement.offsetHeight + "px"
+         var width = targetElement.offsetWidth + "px";
+         var height = targetElement.offsetHeight + "px";
          compTargetStyle.getPropertyValueExt = function(styleAttr){
             switch (styleAttr){
-               case "width": return width
-               case "height": return height
-               default: return compTargetStyle.getPropertyValue(styleAttr)
+               case "width": return width;
+               case "height": return height;
+               default: return compTargetStyle.getPropertyValue(styleAttr);
             }
-         }
-         return compTargetStyle
+         };
+         return compTargetStyle;
       },
       
       getFirstSelectedTarget: function(){
-         var targets = this.getCurrentTargets()
+         var targets = this.getCurrentTargets();
          if(targets && targets.length>0){
-            return targets[0]
+            return targets[0];
          }else{
-            return null
+            return null;
          }
       },
       
@@ -221,11 +221,11 @@ with(customizeyourweb){
        */
       getValueControl: function(){
          if(stringValueTB.collapsed==false){
-            return stringValueTB
+            return stringValueTB;
          }else if(colorValueCF.collapsed==false){
-            return colorValueCF
+            return colorValueCF;
          }else{
-            throw new Error('All value controls invisible')
+            throw new Error('All value controls invisible');
          }
       },
       
@@ -234,14 +234,14 @@ with(customizeyourweb){
        * on the expert tab
        */
       handleSelectAttributesLB: function(){
-         byId('removeCmd').setAttribute('disabled', 'false')
-         var selectedListCells = Listbox.getSelectedListCells(attributesLB)
-         attributeML.value = selectedListCells[0].getAttribute('label') 
-         this.initValueField(selectedListCells[1].getAttribute('label'))
+         byId('removeCmd').setAttribute('disabled', 'false');
+         var selectedListCells = Listbox.getSelectedListCells(attributesLB);
+         var attr = attributeML.value = selectedListCells[0].getAttribute('label'); 
+         this.setValueField(attr, selectedListCells[1].getAttribute('label'));
       },
       
       handleTargetDefChanged: function(event){
-         this.triggerUpdateTargetsDefault()
+         this.triggerUpdateTargetsDefault();
       },
       
       /*
@@ -249,45 +249,45 @@ with(customizeyourweb){
        * the value of an control on cursor up/down in case the value is numeric  
        */
       incrementValue: function(keyEvent){
-         var keyCode = keyEvent.keyCode
+         var keyCode = keyEvent.keyCode;
          //If not cursor up/down return
          if(keyCode != 38 && keyCode != 40)
-            return
+            return;
             
-         var target = keyEvent.originalTarget
+         var target = keyEvent.originalTarget;
          //Target could also be inside binding
-         var bindingParent = document.getBindingParent(target)
+         var bindingParent = document.getBindingParent(target);
          if(bindingParent!=null)
-            target = bindingParent
+            target = bindingParent;
             
-         var value = target.value
+         var value = target.value;
          //Reg splits numeric from the unit part
-         var parsedValue = NUMERIC_VALUE_REG_EXP.exec(value)
+         var parsedValue = NUMERIC_VALUE_REG_EXP.exec(value);
          if(parsedValue==null)
-            return
-         var number = parseInt(parsedValue[1], 10)
+            return;
+         var number = parseInt(parsedValue[1], 10);
          if(keyCode==38)
-            number--
+            number--;
          else
-            number++
-         var unit = parsedValue[2]?parsedValue[2]:"px"
-         target.value = number + unit
+            number++;
+         var unit = parsedValue[2]?parsedValue[2]:"px";
+         target.value = number + unit;
       },
       
       /*
-       * Inits the dialog from the passed action
+       * Inits the dialog  from the passed action
        */
       initFromAction: function(action){
          //Anonymous inner function to fill attributes and styles in the attributes listbox
          function appendToAttrLB(attrsOrStyles){
             for (var attr in attrsOrStyles) {
-               var value = attrsOrStyles[attr]
-               Listbox.appendMultiColumnItem(attributesLB, [attr, value], [attr, value], attr)
+               var value = attrsOrStyles[attr];
+               Listbox.appendMultiColumnItem(attributesLB, [attr, value], [attr, value], attr);
             } 
          }
-         appendToAttrLB.apply(this, [action.getAttributes()])
-         appendToAttrLB.apply(this, [action.getStyles()])
-         this.synchronizeExpert2Simple()
+         appendToAttrLB.apply(this, [action.getAttributes()]);
+         appendToAttrLB.apply(this, [action.getStyles()]);
+         this.synchronizeExpert2Simple();
       },
       
       /*
@@ -296,37 +296,37 @@ with(customizeyourweb){
        * - init controls with values from the target object (this is neccessary to determin whether a value has changed)
        */
       initHtmlAttributes: function(){
-         var type = DomUtils.getElementType(this.targetElement)
+         var type = DomUtils.getElementType(this.targetElement);
          if(type == HtmlElementType.SELECT){
-            this.fillHtmlSelectboxWithEntries()
+            this.fillHtmlSelectboxWithEntries();
          }
-         var htmlAttrsRows = document.getElementsByAttribute("attrFor", "*")
+         var htmlAttrsRows = document.getElementsByAttribute("attrFor", "*");
          //As one row is used for multiple types the boundery is neccessary on the RegExp
-         var matchTypeRegExp = new RegExp("\\b" + type + "\\b", "i")
-         var found = false
+         var matchTypeRegExp = new RegExp("\\b" + type + "\\b", "i");
+         var found = false;
          for (var i = 0; i < htmlAttrsRows.length; i++) {
-            var row = htmlAttrsRows[i]
+            var row = htmlAttrsRows[i];
             if(!matchTypeRegExp.test(row.getAttribute("attrFor"))){
-               continue
+               continue;
             }
-            var controls = DomUtils.getElementsByAttribute(row, "attr", "*")
+            var controls = DomUtils.getElementsByAttribute(row, "attr", "*");
             for (var j = 0; j < controls.length; j++) {
-               var control = controls[j]
-               var attr = control.getAttribute('attr')
-               this.htmlAttrToControlMap[attr] = control
+               var control = controls[j];
+               var attr = control.getAttribute('attr');
+               this.htmlAttrToControlMap[attr] = control;
                if(control.id=="simpleValueML"){
-                  var value = this.targetElement[attr]
-                  ControlUtils.appendItemToMenulist(control, value, value)
+                  var value = this.targetElement[attr];
+                  ControlUtils.appendItemToMenulist(control, value, value);
                }
-               control.setAttribute("defaultValue", value)
-               //TODO check if default value should be set or not
+               control.setAttribute("defaultValue", value);
+               //TODO check if default value should be set or not;
 //               control[attr] = this.targetElement[attr]
             }
-            row.collapsed = false
-            found = true     
+            row.collapsed = false;
+            found = true     ;
          }
          if(found){
-            this.showHtmlAttributeGroupBox()
+            this.showHtmlAttributeGroupBox();
          }
       },
       
@@ -335,41 +335,41 @@ with(customizeyourweb){
        */
       initListeners: function(){
          //Listener for selecting simple tab
-         var selectSimpleTabListener = new EventHandlerAdapter(this.handleTabChanged, this)
-         byId('tabpanels').addEventListener("select", selectSimpleTabListener, true)
+         var selectSimpleTabListener = new EventHandlerAdapter(this.handleTabChanged, this);
+         byId('tabpanels').addEventListener("select", selectSimpleTabListener, true);
          
          //Listener for Add-Button enabling
          ControlUtils.observeControl(attributeML, function(control, controlValue){
             if(controlValue=="")
-               byId('addCmd').setAttribute("disabled", true)
+               byId('addCmd').setAttribute("disabled", true);
             else
-               byId('addCmd').setAttribute("disabled", false)
-         })
+               byId('addCmd').setAttribute("disabled", false);
+         });
          //Listener for updating window from expert tab
-         ControlUtils.observeControl(stringValueTB, this.triggerUpdateTargetsFromExpert, this)
-         ControlUtils.observeControl(byId('colorValueCF'), this.triggerUpdateTargetsFromExpert, this)
+         ControlUtils.observeControl(stringValueTB, this.triggerUpdateTargetsFromExpert, this);
+         ControlUtils.observeControl(byId('colorValueCF'), this.triggerUpdateTargetsFromExpert, this);
          
          //Listener for updating window from simple tab
-         var simpleValueChangedListener = new EventHandlerAdapter(this.triggerUpdateTargetsFromSimple, this)
-         var simpleStyleControls = document.getElementsByAttribute("styleProp", "*")
+         var simpleValueChangedListener = new EventHandlerAdapter(this.triggerUpdateTargetsFromSimple, this);
+         var simpleStyleControls = document.getElementsByAttribute("styleProp", "*");
          for (var i = 0; i < simpleStyleControls.length; i++) {
-            ControlUtils.observeControl(simpleStyleControls[i], simpleValueChangedListener)
+            ControlUtils.observeControl(simpleStyleControls[i], simpleValueChangedListener);
          }
-         var simpleAttrControls = document.getElementsByAttribute("attr", "*")
+         var simpleAttrControls = document.getElementsByAttribute("attr", "*");
          for (var i = 0; i < simpleAttrControls.length; i++) {
-            ControlUtils.observeControl(simpleAttrControls[i], simpleValueChangedListener)
+            ControlUtils.observeControl(simpleAttrControls[i], simpleValueChangedListener);
          }
          
          //Listener for updating window from simple tab
-         this.getTargetDefinitionBinding().addValueChangedListener(new EventHandlerAdapter(this.handleTargetDefChanged, this))
+         this.getTargetDefinitionBinding().addValueChangedListener(new EventHandlerAdapter(this.handleTargetDefChanged, this));
       },
       
       /*
        * Init shortcuts
        */
       initShortcuts: function(){
-         this.shortcutManager.addShortcutForElement("valueRow", 'return', byId('addCmd')) 
-         this.shortcutManager.addShortcutForElement("attributesLB", 'delete', byId('removeCmd')) 
+         this.shortcutManager.addShortcutForElement("valueRow", 'return', byId('addCmd')) ;
+         this.shortcutManager.addShortcutForElement("attributesLB", 'delete', byId('removeCmd')) ;
       },
       
       /*
@@ -377,10 +377,10 @@ with(customizeyourweb){
        * the values of the targetElement
        */
       initSimpleStyles: function(){
-         var simpleStyleElems = XPathUtils.getElements("//*[@styleProp]")
+         var simpleStyleElems = XPathUtils.getElements("//*[@styleProp]");
          for (var i = 0; i < simpleStyleElems.length; i++) {
-            var styleElem = simpleStyleElems[i]
-            simpleStyleElems[i].value=UNCHANGED_VALUE
+            var styleElem = simpleStyleElems[i];
+            simpleStyleElems[i].value=UNCHANGED_VALUE;
 //            var styleProp = styleElem.getAttribute('styleProp')
 //            if(styleProp.indexOf("border")==0){
 //               styleProp = StringUtils.insertAt(styleProp, "-top", 6)
@@ -390,33 +390,35 @@ with(customizeyourweb){
       },
       
       initValidators: function(){
-         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), EditDialog.getTargetWindow(), true)
-         Dialog.addOkValidator(okValidator)
-         okValidator.validate()
+         var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), EditDialog.getTargetWindow(), true);
+         Dialog.addOkValidator(okValidator);
+         okValidator.validate();
       },
       
       /*
        * Onblur event handler for attribute field initializing the value field
        * according the entered attribute
        */
-      initValueField: function(newValue){
-         var attr = attributeML.value
-         if(StringUtils.endsWith(attr, "color"))
-            this.setValueControl("colorValueCF")
-         else
-            this.setValueControl("stringValueTB")
-         
-         var attributes = Listbox.getValues(attributesLB)
-//         for (var i = 0; i < attributes.length; i++) {
-//            if(attributes[i][0]==attr){
-//               newValue = attributes[i][1]
-//               break
-//            }
-//         }
-         if(newValue){
-            this.getValueControl().value = newValue
-         }else{
-            this.getValueControl().value = this.compTargetStyle.getPropertyValueExt(attributeML.value)
+      handleBlurAttributeField: function(){
+         var attr = attributeML.value;
+         //Determine if value is already set, if yes use this as default value;
+         var defaultValue = null;
+         var attributes = Listbox.getValues(attributesLB);
+         for (var i = 0; i < attributes.length; i++) {
+            if(attributes[i][0]==attr){
+               defaultValue = attributes[i][1];
+               break;
+            }
+         }
+         //if no value was already set, use the computed style of the first selected element
+         var firstSeletectedTarget = this.getFirstSelectedTarget();
+         if(!defaultValue && firstSeletectedTarget){
+            var currentStyle = this.getCurrentStyle(firstSeletectedTarget);
+            this.getValueControl().value = currentStyle.getPropertyValueExt(attr);
+         }
+            
+         if(defaultValue){
+            this.setValueField(attr, defaultValue);
          }
       },
       
@@ -424,34 +426,34 @@ with(customizeyourweb){
        * Checks whether an attribute is a style attribute or not
        */
       isStyle: function(attr){
-         var convertedAttr = CssUtils.convertCssPropNameToCamelCase(attr)
-         return this.compTargetStyle[convertedAttr]!=undefined
+         var convertedAttr = CssUtils.convertCssPropNameToCamelCase(attr);
+         return this.compTargetStyle[convertedAttr]!=undefined;
       },
       
       removeAttrFromAttrList: function(attr){
-         var itemToRemove = Listbox.getItemByValue(attributesLB, attr)
+         var itemToRemove = Listbox.getItemByValue(attributesLB, attr);
          if(!itemToRemove)
-            return
-         attributesLB.removeItemAt(attributesLB.getIndexOfItem(itemToRemove))
+            return;
+         attributesLB.removeItemAt(attributesLB.getIndexOfItem(itemToRemove));
       },
       
       /*
        * set shortcuts for most used controls
        */
       setGlobals: function(){
-         attributeML = byId('attributeML')
-         stringValueTB = byId('stringValueTB')
-         colorValueCF = byId('colorValueCF')
-         attributesLB = byId('attributesLB')
+         attributeML = byId('attributeML');
+         stringValueTB = byId('stringValueTB');
+         colorValueCF = byId('colorValueCF');
+         attributesLB = byId('attributesLB');
       },
       
       /*
        * Sets a value for HTML attribute on the simple tab 
        */
       setSimpleAttrValue: function(attr, value){
-         var simpleControl = this.htmlAttrToControlMap[attr]
+         var simpleControl = this.htmlAttrToControlMap[attr];
          if(simpleControl){
-            simpleControl.value = value
+            simpleControl.value = value;
          }
       },
       
@@ -459,9 +461,9 @@ with(customizeyourweb){
        * Sets value on simple style control if existent for that style prop
        */
       setSimpleStyleValue: function(attr, value){
-         var elem = document.getElementsByAttribute("styleProp", attr)
+         var elem = document.getElementsByAttribute("styleProp", attr);
          if(elem.length>0){
-            elem[0].value = value
+            elem[0].value = value;
          }
       },         
       
@@ -469,14 +471,14 @@ with(customizeyourweb){
        * Makes the appropriate value control visible 
        */
       setValueControl: function(controlId){
-         stringValueTB.collapsed = true
-         colorValueCF.collapsed = true
+         stringValueTB.collapsed = true;
+         colorValueCF.collapsed = true;
          switch (controlId){
             case "stringValueTB": 
-               stringValueTB.collapsed = false
+               stringValueTB.collapsed = false;
                break;
             case "colorValueCF": 
-               colorValueCF.collapsed = false
+               colorValueCF.collapsed = false;
                break;
          }
       },
@@ -485,29 +487,29 @@ with(customizeyourweb){
        * Shows the group box with the HTML attributes on the simple tab 
        */
       showHtmlAttributeGroupBox: function(){
-         byId('attrGB').collapsed = false
+         byId('attrGB').collapsed = false;
       },
       
       /*
        * Synchronizes action with current values
        */
       synchronizeAction:function(action){
-         var attributes = {}
-         var styles = {}
-         var attrs = Listbox.getValues(attributesLB)
+         var attributes = {};
+         var styles = {};
+         var attrs = Listbox.getValues(attributesLB);
          for (var i = 0; i < attrs.length; i++) {
-            var attr = attrs[i][0]
-            var value = attrs[i][1]
+            var attr = attrs[i][0];
+            var value = attrs[i][1];
             if(this.isStyle(attr)){
-               styles[attr] = value
+               styles[attr] = value;
             }else{
-               attributes[attr] = value
+               attributes[attr] = value;
             }
          }
-         action.setAttributes(attributes)
-         action.setStyles(styles)
-         action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
-         byId('commonActionAttributes').setCommonAttributesOnAction(action)
+         action.setAttributes(attributes);
+         action.setStyles(styles);
+         action.setTargetDefinition(byId('targetdefinition').getTargetDefinition());
+         byId('commonActionAttributes').setCommonAttributesOnAction(action);
       },
       
       /*
@@ -516,21 +518,21 @@ with(customizeyourweb){
        */
       synchronizeExpert2Simple: function(){
          try{
-            var attributeLBItems = Listbox.getValues(attributesLB)
+            var attributeLBItems = Listbox.getValues(attributesLB);
             for (var i = 0; i < attributeLBItems.length; i++) {
-               var attributeLBItem = attributeLBItems[i]
-               var attr = attributeLBItem[0]
-               var value = attributeLBItem[1]
+               var attributeLBItem = attributeLBItems[i];
+               var attr = attributeLBItem[0];
+               var value = attributeLBItem[1];
                if(this.isStyle(attr)){
-                  value = value?value:""
-                  this.setSimpleStyleValue(attr, value)
+                  value = value?value:"";
+                  this.setSimpleStyleValue(attr, value);
                }else{
-                  value = value?value:UNCHANGED_VALUE
-                  this.setSimpleAttrValue(attr, value)
+                  value = value?value:UNCHANGED_VALUE;
+                  this.setSimpleAttrValue(attr, value);
                }
             }
          }catch(e){
-            CywUtils.logError(e, null, true)
+            CywUtils.logError(e, null, true);
          }
       },
       
@@ -540,100 +542,108 @@ with(customizeyourweb){
        */
       synchronizeSimple2Expert: function(event  ){
          try{
-            var srcControl = event.target
-            var value = event.value
+            var srcControl = event.target;
+            var value = event.value;
             if(srcControl.hasAttribute('styleProp')){
-               var styleProp = srcControl.getAttribute('styleProp')
+               var styleProp = srcControl.getAttribute('styleProp');
                if(value!=UNCHANGED_VALUE){
-                  this.addToAttributesLB(styleProp, value)
+                  this.addToAttributesLB(styleProp, value);
                }else{
-                  this.removeAttrFromAttrList(styleProp)
+                  this.removeAttrFromAttrList(styleProp);
                }
             }else if (srcControl.hasAttribute('attr')){
-               var attr = srcControl.getAttribute('attr')
+               var attr = srcControl.getAttribute('attr');
                if(value==UNCHANGED_VALUE){
-                  this.removeAttrFromAttrList(attr)
+                  this.removeAttrFromAttrList(attr);
                }else{
-                  this.addToAttributesLB(attr, value)
+                  this.addToAttributesLB(attr, value);
                }
             }else{
-               throw new Error('attr/style prop not set on simple control')
+               throw new Error('attr/style prop not set on simple control');
             }
          }catch(e){
-            CywUtils.logError(e, null, true)
+            CywUtils.logError(e, null, true);
          }
       },
       
       handleTabChanged: function(){
-         var selectedTabIndex = byId('tabpanels').selectedIndex
+         var selectedTabIndex = byId('tabpanels').selectedIndex;
          if(selectedTabIndex == 0 && this.currentSelectedTabIndex!=0){
-            this.currentSelectedTabIndex=0
-            this.synchronizeExpert2Simple()
+            this.currentSelectedTabIndex=0;
+            this.synchronizeExpert2Simple();
          }else{
-            this.currentSelectedTabIndex = selectedTabIndex
+            this.currentSelectedTabIndex = selectedTabIndex;
          }
       },
-      
+
+      setValueField: function(attr, newValue){
+         if(StringUtils.endsWith(attr, "color"))
+            this.setValueControl("colorValueCF");
+         else
+            this.setValueControl("stringValueTB");
+         this.getValueControl().value = newValue;
+      },
+     
       /*
        * Value Change event handler for expert value field which updates the target element 
        * according the entered value
        */
       triggerUpdateTargetsFromExpert: function(control, controlValue){
          Utils.executeDelayed("UPDATE_ELEMENT", UPDATE_DELAY, function(){
-            var oldAction = this.action
-            var newAction = ObjectUtils.deepClone(this.action)
-            this.synchronizeAction(newAction)
-            var attr = attributeML.value
+            var oldAction = this.action;
+            var newAction = ObjectUtils.deepClone(this.action);
+            this.synchronizeAction(newAction);
+            var attr = attributeML.value;
             if(this.isStyle(attr)){
-               var styleOrAttrs = newAction.getStyles()
+               var styleOrAttrs = newAction.getStyles();
             }else{
-               var styleOrAttrs = newAction.getAttributes()
+               var styleOrAttrs = newAction.getAttributes();
             }
             if(StringUtils.isEmpty(controlValue)){
-               delete styleOrAttrs[attr]
+               delete styleOrAttrs[attr];
             }else{
-               styleOrAttrs[attr]=controlValue
+               styleOrAttrs[attr]=controlValue;
             }
-            CywUtils.logInfo("triggerUpdateTargetsFromExpert: " + attr + "=" + styleOrAttrs[attr])
-            this.updateTargets(oldAction, newAction)   
-         }, this)
+            CywUtils.logInfo("triggerUpdateTargetsFromExpert: " + attr + "=" + styleOrAttrs[attr]);
+            this.updateTargets(oldAction, newAction)   ;
+         }, this);
       },
       
       
       triggerUpdateTargetsFromSimple: function(control, controlValue){
-         this.synchronizeSimple2Expert(control, controlValue)
-         this.triggerUpdateTargetsDefault()
+         this.synchronizeSimple2Expert(control, controlValue);
+         this.triggerUpdateTargetsDefault();
       },
          
       triggerUpdateTargetsDefault: function(){
-         CywUtils.logInfo("triggerUpdateTargetsDefault called")
+         CywUtils.logInfo("triggerUpdateTargetsDefault called");
          Utils.executeDelayed("UPDATE_ELEMENT", UPDATE_DELAY, function(){
-            var oldAction = this.action
-            var newAction = ObjectUtils.deepClone(this.action)
-            this.synchronizeAction(newAction)
-            this.updateTargets(oldAction, newAction)
-         }, this)
+            var oldAction = this.action;
+            var newAction = ObjectUtils.deepClone(this.action);
+            this.synchronizeAction(newAction);
+            this.updateTargets(oldAction, newAction);
+         }, this);
       },
       
       /*
        * Updates one (style)attr of the target element  
        */
       updateTargets: function(oldAction, newAction){
-         CywUtils.logInfo("updateTargets called")
+         CywUtils.logInfo("updateTargets called");
          try{
             if(this.undoMemento){
-               oldAction.undo(this.getEditContext(), this.undoMemento)
+               oldAction.undo(this.getEditContext(), this.undoMemento);
             }
-            this.undoMemento = newAction.preview(this.getEditContext())
-            this.action = newAction
+            this.undoMemento = newAction.preview(this.getEditContext());
+            this.action = newAction;
          }catch(e){
-            CywUtils.logError(e, "updateTargets", true)
+            CywUtils.logError(e, "updateTargets", true);
          }
-         return
+         return;
       }      
-   }
-   ObjectUtils.injectFunctions(EditModifyDialogHandler, AbstractEditDialogHandler)
-   Namespace.bindToNamespace("customizeyourweb", "EditModifyDialogHandler", EditModifyDialogHandler)
+   };
+   ObjectUtils.injectFunctions(EditModifyDialogHandler, AbstractEditDialogHandler);
+   Namespace.bindToNamespace("customizeyourweb", "EditModifyDialogHandler", EditModifyDialogHandler);
    
 })()
 }

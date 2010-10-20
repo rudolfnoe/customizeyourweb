@@ -48,9 +48,9 @@ with(customizeyourweb){
       deleteScriptFromDisk: function(script){
          var fileName = script.getFileName()
          var scriptFile = this.getConfigDir()
-         scriptFile.append(fileName)
+         scriptFile.append(fileName);
          if(scriptFile && scriptFile.exists()){
-            FileIO.remove(scriptFile)
+            FileIO.remove(scriptFile);
             CywUtils.logDebug("Script " + fileName + " has been deleted.")
          }else if(script.isPersisted()){
             throw new Error('Deletion of Script File "' + fileName + '" failed.')
@@ -199,7 +199,7 @@ with(customizeyourweb){
          
          var matchingScripts = new Set()
          var containsCompareFct = function(objSearched, elementFromList){
-            return objSearched.getId() == elementFromList.getId()
+            return objSearched.getId() == elementFromList.getId();
          }
          for (var scriptIndex = 0; scriptIndex < this.scripts.size(); scriptIndex++) {
             for (var urlIndex = 0; urlIndex < urls.length; urlIndex++) {
@@ -230,7 +230,7 @@ with(customizeyourweb){
             script.updateUrlPatternRegExp()
             script.setFileName(scriptFile.leafName)
             
-            this.scripts.add(script)
+            this.scripts.add(script);
             scriptsLoaded++
          }
          CywUtils.logDebug("CYW: " + scriptsLoaded + " Scripts loaded successfully")
@@ -245,7 +245,7 @@ with(customizeyourweb){
          for (var i = 0; i < this.scripts.size(); i++) {
             var script = this.scripts.get(i)
             if(script.equals(aScript)){
-               this.scripts.set(i, aScript)
+               this.scripts.set(i, aScript);
                newScript = false
             }
          }
@@ -264,7 +264,7 @@ with(customizeyourweb){
          //Create and write context
          var scriptContent = this.serializeScript(aScript, "Script")
          //Add xml processing for encoding
-         scriptContent = '<?xml version="1.0" encoding="UTF-8"?>\n' + scriptContent 
+         scriptContent = '<?xml version="1.0" encoding="UTF-8"?>\n' + scriptContent;
          this.writeScript(scriptFileName, scriptContent)
       },
       
@@ -303,11 +303,11 @@ with(customizeyourweb){
          scriptFile.append(fileName)
          FileIO.create(scriptFile)
          FileIO.write(scriptFile, scriptXML, null, "UTF-8");
-         CywUtils.logDebug("Script " + fileName + " is written to disk.")
+         CywUtils.logDebug("Script " + fileName + " is written to disk.");
       }
 
       
-   } 
+   };
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywConfig", CywConfig)
    

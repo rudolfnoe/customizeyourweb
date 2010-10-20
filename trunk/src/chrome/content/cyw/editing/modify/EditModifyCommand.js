@@ -1,9 +1,9 @@
-with(customizeyourweb){
-(function(){
-   const EDIT_MODIFY_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/modify/edit_modify_dialog.xul"
+//with(customizeyourweb){
+//(function(){
+   const EDIT_MODIFY_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/modify/edit_modify_dialog.xul";
    
    function EditModifyCommand(){
-      this.AbstractEditCommand()
+      this.AbstractEditCommand();
    }
    
    EditModifyCommand.prototype = {
@@ -27,10 +27,10 @@ with(customizeyourweb){
          var editDialog = new EditDialog(EDIT_MODIFY_DIALOG_URL, "EditModify", action, editContext)
          editDialog.show()
          if(editDialog.isOk()){
-            this.setUndoMemento([editDialog.getNamedResult("changeMemento")])
-            return editDialog.getNamedResult("action")
+            this.setUndoMemento([editDialog.getNamedResult("changeMemento")]);
+            return editDialog.getNamedResult("action");
          }else{
-            return null
+            return null;
          }
       }
       
@@ -38,5 +38,5 @@ with(customizeyourweb){
    ObjectUtils.extend(EditModifyCommand, "AbstractEditCommand", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "EditModifyCommand", EditModifyCommand)
-})()
-}
+//})()
+//}

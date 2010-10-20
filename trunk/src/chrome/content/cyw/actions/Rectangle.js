@@ -16,8 +16,8 @@ with(customizeyourweb){
    }
    
    Rectangle.prototype = {
-      constructor: Rectangle,   
-   }
+      constructor: Rectangle  
+   };
    
    Namespace.bindToNamespace("customizeyourweb", "Rectangle", Rectangle)
 })()

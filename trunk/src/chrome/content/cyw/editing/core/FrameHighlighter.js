@@ -78,7 +78,7 @@ with (customizeyourweb) {
 			if (this.showInfoSpan) {
 				var span = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
 				span.cywIgnore = true;
-            span.className = "infoSpan"
+            span.className = "infoSpan";
 				nodes.infoSpan = span
 			}
          return nodes

@@ -4,7 +4,7 @@ with(customizeyourweb){
 	const EDIT_WIN_SHORTCUTS = "EDIT_WIN_SHORTCUTS";
    const ACTION_SELECTION_CHANGEND_EVENT = "ACTION_SELECTION_CHANGEND_EVENT";
 	
-   var unloadHandler = {handleEvent: function(){CywSidebarWinHandler.handleUnexpectedUnload()}}
+   var unloadHandler = {handleEvent: function(){CywSidebarWinHandler.handleUnexpectedUnload();}};
    
    function byId(id){
       return document.getElementById(id)
@@ -73,7 +73,7 @@ with(customizeyourweb){
       },
 
       addShortcut: function(tabSCM, keyCombination, shortcutTarget){
-         tabSCM.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS)
+         tabSCM.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS);
          this.shortcutManager.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS)
       },
       
@@ -82,7 +82,7 @@ with(customizeyourweb){
             this.saveScript(sidebarClosedAbnormal)
          }else{
             if(this.isScriptModified())
-               this.reloadContentIfWanted(this.getTargetWin(), this.currentScriptBackup)
+               this.reloadContentIfWanted(this.getTargetWin(), this.currentScriptBackup);
             this.getEditScriptHandler().cancelEditing(!sidebarClosedAbnormal)
          }
       },
@@ -115,7 +115,7 @@ with(customizeyourweb){
       },
       
       clearIncludeAndExcludePatterns: function(){
-         this.includeUrlPatternsELB.setItems([], [])
+         this.includeUrlPatternsELB.setItems([], []);
          this.excludeUrlPatternsELB.setItems([], [])
       },
       
@@ -147,14 +147,14 @@ with(customizeyourweb){
          }
          this.initWinWithScript(newSelItem.value)
          //Then ajust ML 
-      	scriptML.removeItemAt(selIndex)
+      	scriptML.removeItemAt(selIndex);
          //Select new item in the list
       	scriptML.selectedItem = newSelItem
          
       },
       
       doOnload: function(){
-         this.initWindow()
+         this.initWindow();
          window.addEventListener("beforeunload", unloadHandler, true)
       },
       
@@ -164,7 +164,7 @@ with(customizeyourweb){
          try{
             var modifiedAction = this.getEditScriptHandler().doEditAction(selectedAction, this.getCurrentScript())
          }catch(e){
-            Log.logError(e)
+            Log.logError(e);
             this.setMessage(e.message, Severity.ERROR)
          }
          if(modifiedAction!=null)
@@ -231,14 +231,14 @@ with(customizeyourweb){
             byId('copyActionCmd').setAttribute('disabled', "false")
             byId('cutActionCmd').setAttribute('disabled', "false")
             byId('moveUpCmd').setAttribute('disabled', "false")
-            byId('moveDownCmd').setAttribute('disabled', "false")
+            byId('moveDownCmd').setAttribute('disabled', "false");
             byId('removeActionCmd').setAttribute('disabled', "false")
          }else{
             byId('copyActionCmd').setAttribute('disabled', "true")
             byId('cutActionCmd').setAttribute('disabled', "true")
             byId('moveUpCmd').setAttribute('disabled', "true")
             byId('moveDownCmd').setAttribute('disabled', "true")
-            byId('removeActionCmd').setAttribute('disabled', "true")
+            byId('removeActionCmd').setAttribute('disabled', "true");
             byId('editActionCmd').setAttribute('disabled', "true")
          }
          
@@ -250,7 +250,7 @@ with(customizeyourweb){
          }
 
          if(selectedAction && selectedItem.hasMessage()){
-            var message = selectedItem.getMessage()
+            var message = selectedItem.getMessage();
             byId('dialogheader').setMessage(message.getText(), message.getSeverity())
          }
                
@@ -262,7 +262,7 @@ with(customizeyourweb){
             var targetFound = this.getEditScriptHandler().highlightActionTargets(this.getCurrentScript(), selectedAction.getTargetDefinition())
             if(!targetFound && !selectedItem.hasMessage()){
                var errorMessage = ScriptErrorHandler.getErrorMessage(ErrorConstants.TARGET_NOT_FOUND, 
-                  [selectedAction.getTargetDefinition().getDefinitionAsString()])
+                  [selectedAction.getTargetDefinition().getDefinitionAsString()]);
                byId('dialogheader').setWarningMessage(errorMessage)
             }
          }
@@ -288,7 +288,7 @@ with(customizeyourweb){
             }
             this.initWinWithScript(selectedScriptId)
          }
-         var selectedScript = this.idToScriptMap.get(selectedScriptId)
+         var selectedScript = this.idToScriptMap.get(selectedScriptId);
          byId('deleteScriptCmd').setAttribute('disabled', !selectedScript.isPersisted())
       },
       
@@ -351,7 +351,7 @@ with(customizeyourweb){
          var urlPatternProposalsML = byId('urlPatternProposals')
          DomUtils.iterateWindows(targetWin, function(subWin){
             var urlPatterns = UrlUtils.createUrlPatterns(subWin.location.href)
-            urlPatterns.reverse()
+            urlPatterns.reverse();
             ControlUtils.appendItemsToMenulist(urlPatternProposalsML, urlPatterns, urlPatterns)
          })
          //set crop center for better view
@@ -379,7 +379,7 @@ with(customizeyourweb){
          }
          
          //First init win so that init is not done twice via selection of menulist
-         this.initWinWithScript(selectedScriptId, this.sidebarContext.currentScriptBackup)
+         this.initWinWithScript(selectedScriptId, this.sidebarContext.currentScriptBackup);
          ControlUtils.selectMenulistByValue(scriptML, selectedScriptId)
       },
       
@@ -407,7 +407,7 @@ with(customizeyourweb){
          if(currentScript.isPersisted()){
             var includePatternStrings = currentScript.getIncludeUrlPatternStrings()
             this.includeUrlPatternsELB.setItems(includePatternStrings, includePatternStrings)
-            var excludePatternStrings = currentScript.getExcludeUrlPatternStrings()
+            var excludePatternStrings = currentScript.getExcludeUrlPatternStrings();
             this.excludeUrlPatternsELB.setItems(excludePatternStrings, excludePatternStrings)
          }else if(byId('includePatterns').itemCount==0 && !DomUtils.containsFrames(this.sidebarContext.targetWin)){
             this.setUrlPatternWithMostLikely(this.sidebarContext.targetWin)
@@ -477,7 +477,7 @@ with(customizeyourweb){
             var currentScript = this.getCurrentScript();
             var deleteActionCmd = new DeleteActionCommand(action, this.actionsTreeView, this.getTargetWin(), currentScript)
             deleteActionCmd.deleteFromTree()
-            this.getEditScriptHandler().addToCommandHistory(deleteActionCmd)
+            this.getEditScriptHandler().addToCommandHistory(deleteActionCmd);
             this.getEditScriptHandler().actionDeleted(action, currentScript)
          }
       },
@@ -486,12 +486,12 @@ with(customizeyourweb){
          var selectedAction = this.actionsTreeView.getSelectedAction()   
          if(!selectedAction || !ObjectUtils.instanceOf(selectedAction, AbstractTargetedAction))
             return
-         selectedAction.setTargetDefinition(newTargetDefinition)
+         selectedAction.setTargetDefinition(newTargetDefinition);
          this.actionsTreeView.notifyActionUpdate(selectedAction)
       },
       
       saveScript: function(sidebarClosedAbnormal){
-         this.includeUrlPatternsELB.stopEditing()
+         this.includeUrlPatternsELB.stopEditing();
          this.getEditScriptHandler().saveScript(this.getCurrentScript(), sidebarClosedAbnormal)
       },
       
@@ -501,12 +501,12 @@ with(customizeyourweb){
           var selectedScript = selectDialog.getNamedResult("script") 
           if(!selectedScript)
             return
-          this.addScriptToML(selectedScript)
+          this.addScriptToML(selectedScript);
           ControlUtils.selectMenulistByValue(byId('scripts'), selectedScript.getIdAsString())
       },
       
       setUrlPatternWithMostLikely: function(win){
-         var mostLikelyPattern = UrlUtils.getMostLikelyPattern(win.location.href)
+         var mostLikelyPattern = UrlUtils.getMostLikelyPattern(win.location.href);
          byId('includePatterns').appendItem(mostLikelyPattern, mostLikelyPattern)
       },
       
@@ -542,11 +542,11 @@ with(customizeyourweb){
       },
       
       updateAction: function(action){
-         this.setMessage(null)
-         this.actionsTreeView.updateAction(action)
+         this.setMessage(null);
+         this.actionsTreeView.updateAction(action);
       }
       
-   }
+   };
    
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywSidebarWinHandler", CywSidebarWinHandler)
 })()

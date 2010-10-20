@@ -89,7 +89,7 @@
       },  
       
       saveKeyListbox: function(){
-         saveKeyListbox('keyListBox')
+         saveKeyListbox('keyListBox');
       }
    }
    

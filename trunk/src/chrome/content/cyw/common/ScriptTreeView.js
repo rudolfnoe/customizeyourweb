@@ -17,7 +17,7 @@ with(customizeyourweb){
    }
    ScriptTreeView.prototype = {
       addScript: function(script){
-         Assert.notNull(script)
+         Assert.notNull(script);
          this.addItem(new ScriptTreeItem(script))   
       },
       
@@ -30,7 +30,7 @@ with(customizeyourweb){
          var newScriptItem = new ScriptTreeItem(newScript)
          this.iterateTree(function(item){
             if(item.getScript().equals(newScript)){
-               this.replaceItem(newScriptItem, item)
+               this.replaceItem(newScriptItem, item);
                found = true
             }
          }, true)
@@ -53,7 +53,7 @@ with(customizeyourweb){
          var cols = tree.getElementsByTagName("xul:treecols")[0]
          for (var i = 1; i < colArray.length; i++) {
             var splitter = document.createElementNS(Constants.XUL_NS, "splitter")
-            splitter.className = "tree-splitter"
+            splitter.className = "tree-splitter";
             cols.insertBefore(splitter, colArray[i])
          }
       },
@@ -80,7 +80,7 @@ with(customizeyourweb){
             col.setAttribute("ordinal", colOrdinals[i])
             col.setAttribute("hidden", colHiddens[i])
             col.setAttribute("sortActive", colSortActive[i])
-            col.setAttribute("sortDirection", colSortDirection[i])
+            col.setAttribute("sortDirection", colSortDirection[i]);
             col.setAttribute("width", colWidths[i])
          }
       },
@@ -134,13 +134,13 @@ with(customizeyourweb){
             colHiddens.push(col.getAttribute("hidden"))
             colOrdinals.push(col.getAttribute("ordinal"))
             colSortActives.push(col.getAttribute("sortActive"))
-            colSortDirections.push(col.getAttribute("sortDirection"))
+            colSortDirections.push(col.getAttribute("sortDirection"));
             colWidths.push(col.getAttribute("width"))
          }
          this.setColPref(COL_HIDDENS_PREF_KEY, colHiddens)
          this.setColPref(COL_ORDINALS_PREF_KEY, colOrdinals)
          this.setColPref(COL_SORT_ACTIVE_PREF_KEY, colSortActives)
-         this.setColPref(COL_SORT_DIRECTION_PREF_KEY, colSortDirections)
+         this.setColPref(COL_SORT_DIRECTION_PREF_KEY, colSortDirections);
          this.setColPref(COL_WIDTHS_PREF_KEY, colWidths)
       },
       
@@ -149,7 +149,7 @@ with(customizeyourweb){
          for (var i = 0; i < cols.length; i++) {
             if(cols[i].element.getAttribute('sortActive') == 'true'){
                this.sort(cols[i], cols[i].element.getAttribute('sortDirection'))
-               break
+               break;
             }
          }
       }

@@ -9,7 +9,7 @@
        * Currently not used as replaced by saveErrorLogToDisc
 		 */
 		copyErrorLogToClipboard : function() {
-         var consoleContent = this.getConsoleContent()
+         var consoleContent = this.getConsoleContent();
 			// Copy to clipboard
 			const clipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
 					.getService(Components.interfaces.nsIClipboardHelper);

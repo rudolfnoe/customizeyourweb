@@ -14,7 +14,7 @@ with(customizeyourweb){
          var editDialog = new EditDialog(dialogUrl, "EditInsertHtmlCommand", action, editContext)
          editDialog.show(position)
 			return editDialog.getActionResult()
-       },
+       }
        
    }
    ObjectUtils.extend(AbstractEditInsertHtmlCommand, "AbstractEditCommand", customizeyourweb)

@@ -27,7 +27,7 @@ with(customizeyourweb){
             InsertStyleSheetAction.setStyleSheet(actionBackup.getStyleSheetCode(), editContext.getTargetDocument(), 
                   editContext.getScriptId(), actionBackup.getId())
          }else{
-            var styleElemId = InsertStyleSheetAction.getStyleSheetElementId(editContext.getScriptId(), this.getAction().getId())
+            var styleElemId = InsertStyleSheetAction.getStyleSheetElementId(editContext.getScriptId(), this.getAction().getId());
             DomUtils.removeElement(editContext.getTargetDocument().getElementById(styleElemId))
          }
       }

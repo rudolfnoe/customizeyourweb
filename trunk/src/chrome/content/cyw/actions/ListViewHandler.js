@@ -42,7 +42,7 @@ with(customizeyourweb){
          this.unRegisterMultipleEventListener(this.rootElement, EVENT_TYPES_FOR_ROOT, true)
          this.scm.destroy()
          //set current index attribute to focus the same index on cached pages
-         this.rootElement.setAttribute(CURRENT_INDEX_ATTR, this.currentIndex)
+         this.rootElement.setAttribute(CURRENT_INDEX_ATTR, this.currentIndex);
          this.updateHighlighting(-1)
       },
       fireEvent: function(){
@@ -52,7 +52,7 @@ with(customizeyourweb){
          }else{
             var win = DomUtils.getOwnerWindow(linkToOpen)
             var uiEvent = win.document.createEvent("UIEvents")
-            uiEvent.initEvent(UIEvents.PREVIEW_LINK, true, true, win, null)
+            uiEvent.initEvent(UIEvents.PREVIEW_LINK, true, true, win, null);
             linkToOpen.dispatchEvent(uiEvent)
          }
       },
@@ -107,11 +107,11 @@ with(customizeyourweb){
             var tds = item.getElementsByTagName('TD')
             for (var i = 0; i < tds.length; i++) {
                var elemWrapper = new ElementWrapper(tds[i])
-               this.currentTdTagWrappers[i] = elemWrapper
+               this.currentTdTagWrappers[i] = elemWrapper;
                elemWrapper.setStyle("background", "transparent", "important")
             }
          }
-         this.currentItemWrapper.setProperty("tabIndex", 0)
+         this.currentItemWrapper.setProperty("tabIndex", 0);
          item.focus()
       },
       initShortcuts: function(){
@@ -124,7 +124,7 @@ with(customizeyourweb){
          this.scm.addShortcut("Return", function(event){return this.openItemIn(event, this.defaultLinkTarget)}, this)
          this.scm.addShortcut("Ctrl+Return", function(event){
             return this.openItemIn(event, this.defaultLinkTarget==LinkTarget.CURRENT?LinkTarget.TAB:LinkTarget.CURRENT)
-         }, this)
+         }, this);
          this.scm.addShortcut("Space", this.toggleFirstCheckbox, this)
       },
       isFirst: function(index){
@@ -179,7 +179,7 @@ with(customizeyourweb){
          var firstCheckbox = XPathUtils.getElement(".//input[@type='checkbox']", ci)
          if(!firstCheckbox)
             return
-         firstCheckbox.click() //to also trigger other eventhandler
+         firstCheckbox.click(); //to also trigger other eventhandler
          this.updateHighlighting(this.currentIndex)
       },
       unhighlight: function(){
@@ -200,8 +200,8 @@ with(customizeyourweb){
          }
          this.focused = true
          this.currentIndex = newIndex
-         this.highlight(this.listItems[newIndex])
-         this.fireEvent()
+         this.highlight(this.listItems[newIndex]);
+         this.fireEvent();
       }
    }
    
