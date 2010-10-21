@@ -5,7 +5,8 @@
  */
 with(customizeyourweb){
 (function(){
-
+   const MLB_GUI_ID = "{c0bcf963-624b-47fe-aa78-8cc02434cf32}"
+   
    var CywUtils = {
       idCounter: 0,
       
@@ -13,8 +14,10 @@ with(customizeyourweb){
          return "customizeyourweb_" + this.idCounter++   
       },
       
-      getCywVersion: function(){
-         return Utils.getExtension(CywCommon.GUI_ID).version   
+      mlbActive: false,
+      
+      init: function(){
+         this.setMlbActive()
       },
       
       loadJQuery: function(){
@@ -33,11 +36,27 @@ with(customizeyourweb){
          Log.logInfo("CYW: " + messageString)
       },
       
+      isFirefox4: function(){
+         return Application.version.substring(0,1)>=4
+      },
 
       isMlbActive: function(){
-         return Utils.isExtensionInstalledAndEnabled("{c0bcf963-624b-47fe-aa78-8cc02434cf32}")  
+         return this.mlbActive
+      },
+      
+      setMlbActive: function(){
+         if(this.isFirefox4()){
+            ServiceRegistry.getAddonManager().getAddonByID(MLB_GUI_ID, function(addon){
+               CywUtils.mlbActive = addon && addon.isActive
+            })
+         }else{
+            this.mlbActive = Utils.isExtensionInstalledAndEnabled(MLB_GUI_ID)
+         }
       }
+      
    }
+   
+   CywUtils.init()
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywUtils", CywUtils)
 

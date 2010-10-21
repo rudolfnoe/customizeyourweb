@@ -92,7 +92,7 @@ with(customizeyourweb){
                      listItemsFiltered1.push(listItem)
                      break
                   }
-                  if(node.localName == this.listItemsJQuery){
+                  if(node.localName.toLowerCase() == this.listItemsJQuery.toLowerCase()){
                      break
                   }
                }

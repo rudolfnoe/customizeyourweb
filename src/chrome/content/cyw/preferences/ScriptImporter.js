@@ -11,7 +11,7 @@ with (customizeyourweb) {
             var versionElem = XPathUtils.getElement("CywScripts/version", xmlDoc)
             var scriptsCywVersion = versionElem.textContent
             //Deny import if imported version is greater than current version 
-            if(this.versionComparator.compare(scriptsCywVersion, CywUtils.getCywVersion())>0){
+            if(this.versionComparator.compare(scriptsCywVersion, CywCommon.getCywVersion())>0){
                var message = 'The imported script not compatible with the current version of Customize Your Web. Please update to the newest version under www.customize-your-web.de'
                alert(message)
                throw new Error(message)

@@ -259,7 +259,7 @@ with(customizeyourweb){
          //Set script file name
          var scriptFileName = this.createScriptFileName(aScript)
          aScript.setFileName(scriptFileName)
-         aScript.setVersion(CywUtils.getCywVersion())
+         aScript.setVersion(CywCommon.getCywVersion())
          
          //Create and write context
          var scriptContent = this.serializeScript(aScript, "Script")
