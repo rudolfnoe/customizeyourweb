@@ -10,6 +10,14 @@ with(customizeyourweb){
       return document.getElementById(id)
    }
    
+   /*
+    * Handler for Sidebar window
+    * TODO Add warning if Preview-Window Action is after Listview action as onpage load the Preview-Listener will not receive the 
+    * focus event and in turn no preview will be shown.
+    * ENHANCEMENT: Add small buttons for modifying URL Patterns
+    * ENHANCEMENT: Add possibility to reload and re-run script during editing (Update View)
+    * ENHANCEMENT: Don't show generic scripts (pattern "*") at the top position of the scripts select box
+    */
 	var CywSidebarWinHandler = {
       //Variables
       actionsTreeView: null,
@@ -156,6 +164,7 @@ with(customizeyourweb){
       doOnload: function(){
          this.initWindow();
          window.addEventListener("beforeunload", unloadHandler, true)
+         byId('scriptDisabled').addEventListener('CheckboxStateChange', function(){CywSidebarWinHandler.handleScriptDisabledChanged()}, false)
       },
       
       editAction: function(){
@@ -272,6 +281,11 @@ with(customizeyourweb){
           
       },
       
+      handleScriptDisabledChanged: function(){
+         var labelColor = byId('scriptDisabled').checked?"red":""
+         byId('scriptDisabled').style.color = labelColor
+      },
+      
       handleUrlPatternsChanged: function(){
          if(this.includeUrlPatternsELB.getItemCount()==0)
             this.getEditScriptHandler().unshadowFrames()
@@ -325,8 +339,12 @@ with(customizeyourweb){
       initWindow: function(){
          //Store sidebar context
          this.sidebarContext = Application.storage.get(CywCommon.CYW_EDIT_CONTEXT_STORAGE_ID, null)
-         if(this.sidebarContext==null)
-            throw new Error('No edit context in application storage')
+         if(this.sidebarContext==null){
+            this.setMessage('Press F10 to switch into edit mode.', Severity.WARNING)
+            return
+         }else{
+            this.setMessage("")
+         }
          
          //initShortcuts
          this.initShortcuts()
@@ -339,7 +357,7 @@ with(customizeyourweb){
          this.sortScripts(scripts)
          for (var i = 0; i < scripts.size(); i++) {
             var script = scripts.get(i)
-            var isAppliedScript = script.matchesWinOrSubwin(this.getTargetWin())
+            var isAppliedScript = script.matchesWinOrSubwin(this.getTargetWin()) && !script.isDisabled()
             if(firstMatchingScriptIndex == -1 && isAppliedScript){
                firstMatchingScriptIndex = i
             }

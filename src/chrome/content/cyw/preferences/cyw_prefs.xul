@@ -22,6 +22,8 @@
 	<script type="application/x-javascript" src="cyw_prefs_dialog.js"/>
 	<script type="application/x-javascript" src="ScriptExporter.js"/>
 	<script type="application/x-javascript" src="ScriptImporter.js"/>
+	<script type="application/x-javascript" src="CywVersionManager.js"/>
+	<script type="application/x-javascript" src="ScriptMigrator.js"/>
    
    <stringbundleset>
    	<!--stringbundle id="jsStrings" src="chrome://mouselessbrowsing/locale/prefs.properties"/-->

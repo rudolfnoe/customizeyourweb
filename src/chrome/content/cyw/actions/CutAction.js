@@ -12,12 +12,13 @@ with(customizeyourweb){
             return false
          }
          var target = this.getTarget(cywContext)
-         //throw error or log
          if(target.parentNode){
             cywContext.setClipboard(target)
-            target.parentNode.removeChild(target)
+            this.RemoveAction_doActionInternal(cywContext)
+            return true 
+         }else{
+            throw new Error("CutAction.doActionInternal: target has no parent node")
          }
-         return true
       }     
    }
    

@@ -1,23 +1,26 @@
 with(customizeyourweb){
 (function(){
    
+   /*
+    * Handler for common attributes dialog
+    * TODO Add help text for which action dialog is shown.
+    */
    var CommonAttributesEditDialogHandler = {
-      targetDefinitionBinding: null,
       
       doOnload: function(){
          try{
-            this.targetDefinitionBinding = byId('targetdefinition')
             var targetWindow = EditDialog.getTargetWindow()
             var targetElement = EditDialog.getTargetElement(targetElement)
-            var action = EditDialog.getAction() 
-            this.targetDefinitionBinding.initialize(targetWindow, targetElement, action.getTargetDefinition())
+            var action = EditDialog.getAction()
+            var targetDefBinding = this.getTargetDefinitionBinding()
+            targetDefBinding.initialize(targetWindow, targetElement, action.getTargetDefinition())
             var oldTargetDefinition = Dialog.getNamedArgument('oldTargetDefinition')
             if(oldTargetDefinition){
-               this.targetDefinitionBinding.setOldTargetDefinition(oldTargetDefinition)
+               targetDefBinding.setOldTargetDefinition(oldTargetDefinition)
             }
             
             //this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
-            this.targetDefinitionBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
+            targetDefBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
             this.initValidators(targetWindow, EditDialog.getAllowMultiTargetDefinition())
          }catch(e){
             CywUtils.logError(e)
@@ -26,8 +29,8 @@ with(customizeyourweb){
       
       doOk: function(){
          Dialog.setResult(DialogResult.OK)
-         var action = EditDialog.getAction()
-         action.setTargetDefinition(this.targetDefinitionBinding.getTargetDefinition())
+         var action = this.getAction()
+         action.setTargetDefinition(this.getTargetDefinition())
          Dialog.setNamedResult("action", action)
       },
       
@@ -37,7 +40,7 @@ with(customizeyourweb){
          okValidator.validate()
       }
    }
-
+   ObjectUtils.injectFunctions(CommonAttributesEditDialogHandler, AbstractEditDialogHandler);
    Namespace.bindToNamespace("customizeyourweb", "CommonAttributesEditDialogHandler", CommonAttributesEditDialogHandler)
 
    function byId(id){

@@ -1,5 +1,8 @@
 with(customizeyourweb){
 (function(){
+   /*
+    * Creates JQuery expressions as proposals for the target defintion
+    */
    var JQuerySelectorFactory = {
       /*
        * Creates JQuery Selector expressions for an element and an array of

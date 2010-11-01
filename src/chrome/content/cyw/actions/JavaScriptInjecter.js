@@ -22,7 +22,7 @@ with(customizeyourweb){
        */
       getJQueryUICode : function(){
          if(this.jQueryUICode==null){
-            var jQueryUIChromePath = CywCommon.CYW_JQUERY_URL + CywCommon.JQUERY_UI_FILE_NAME
+            var jQueryUIChromePath = CywCommon.getJQueryUIUrl()
             this.jQueryUICode = FileIO.readFromChrome(jQueryUIChromePath, "UTF-8")
          }
          return this.jQueryUICode

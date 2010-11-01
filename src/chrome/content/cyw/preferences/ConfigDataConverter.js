@@ -1,5 +1,8 @@
 with(customizeyourweb){
 (function(){
+   /*
+    * Converted the single config file to seperate config files for each script
+    */
    var ConfigDataConverter = {
 
       convertToSeperateConfigFiles: function(){

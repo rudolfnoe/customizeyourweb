@@ -2,6 +2,7 @@ with(customizeyourweb){
 (function(){
    
 	function AbstractEditCommand(){
+      //TODO: There are to memento storages. One in the edit-context and one here, do we need both?
       //Memento object storing undo data (GoF Pattern)
       //This memento is used for previewable actions (see IPreviewableAction)
       this.undoMemento = null

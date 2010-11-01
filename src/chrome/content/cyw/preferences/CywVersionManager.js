@@ -4,6 +4,9 @@
  with(customizeyourweb){
 (function(){
    
+   //Restriction on Windows, only 250 because it is counted without extension
+   const MAX_FILE_PATH_LENGTH = 250;
+
    var CywVersionManager = { 
       VERSION_PREF: "customizeyourweb.version",
       versionComparator: Components.classes["@mozilla.org/xpcom/version-comparator;1"]
@@ -19,6 +22,33 @@
             return true
          }else{
             return false
+         }
+      },
+
+      /*
+       * Backups existing script files before migration in subdirectory 
+       */
+      backupExistingScriptFiles: function(backupDirName){
+         var scriptDir = CywConfig.getConfigDir()
+         scriptDir.append(backupDirName)
+         var i = 1
+         while(scriptDir.exists()){
+            scriptDir = CywConfig.getConfigDir()
+            scriptDir.append(backupDirName + "_v" + i++)
+         }
+         DirIO.create(scriptDir)
+         var backupDirPathLength = scriptDir.path.length 
+         var scriptFiles = CywConfig.getScriptFiles()
+         for (var i = 0; i < scriptFiles.length; i++) {
+            var scriptFile = scriptFiles[i]
+            //Check for too long names which causes errors on backup on windows
+            var leafNameLength = scriptFile.leafName.length
+            var tooLong = backupDirPathLength + leafNameLength - MAX_FILE_PATH_LENGTH
+            var leafName = scriptFile.leafName
+            if(tooLong > 0){
+               leafName = leafName.substring(0, leafNameLength-tooLong) + ".xml"
+            }
+            scriptFile.copyTo(scriptDir, leafName)
          }
       },
       
@@ -40,6 +70,10 @@
          this.doCommonMigration()
       },
       
+      getVersionsToBeMigrated: function(){
+         return this.versionsToBeMigrated;
+      },
+      
       isFirstStartupAfterInstallation: function(){
          return Prefs.getCharPref(this.VERSION_PREF).length==0   
       },
@@ -56,22 +90,35 @@
        * 2. Delete persistent Script.fileName Member (is transient)
        */
       migrateToVersion_0_3Build20091007: function(){
-         var scriptList = CywConfig.getScripts()
-         for (var i = 0;i < scriptList.size(); i++) {
-            var script = scriptList.get(i)
-            script.fileName = null
-            //Version will be written on saving
-            CywConfig.saveScript(script)
+         this.backupExistingScriptFiles("backup_for_mig_to_0_3Build20091007")
+         var modifiedScripts = ScriptMigrator.migrateToVersion_0_3Build20091007(CywConfig.getScriptsAsArray())
+         CywConfig.saveScripts(modifiedScripts)
+      },
+      
+      /*
+       * Convert script files to UTF-8 
+       */
+      migrateToVersion_0_4_1_3Build20091220: function(){
+         this.backupExistingScriptFiles("backup_for_mig_to_0_4_1_3Build20091220")
+         var scriptFiles = CywConfig.getScriptFiles()
+         for (var i = 0; i < scriptFiles.length; i++) {
+            var scriptFile = scriptFiles[i]
+            var scriptContent = FileIO.read(scriptFile)
+            var xmlProcInstruction = '<?xml version="1.0" encoding="UTF-8"?>'
+            if(!StringUtils.startsWith(scriptContent, xmlProcInstruction)){
+               scriptContent = xmlProcInstruction + '\n' + scriptContent
+            }
+            FileIO.write(scriptFile, scriptContent, null, "UTF-8");
          }
       },
       
-      migrateToVersion_0_4_1_3Build20091220: function(){
-         Migrations.convertScriptsConfgToUTF8()   
-      },
-      
-      
+      /*
+       * @see ScriptMigrator migrateToVersion_0_5Build20100228
+       */
       migrateToVersion_0_5Build20100228: function(){
-         Migrations.convertScriptStructureForV0_5()   
+         this.backupExistingScriptFiles("backup_for_mig_to_0_5Build20100228")
+         var modifiedScripts = ScriptMigrator.migrateToVersion_0_5Build20100228(CywConfig.getScriptsAsArray())
+         CywConfig.saveScripts(modifiedScripts)
       },
       
       setUp: function(){

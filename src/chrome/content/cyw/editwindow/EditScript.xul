@@ -34,9 +34,6 @@
    </commandset>
    
    <popupset>
-      <menupopup id="editlistboxMPU">
-         <menuitem label="test"/>
-      </menupopup>
       <menupopup id="treeContextMPU">
          <menuitem command="copyActionCmd"/>
          <menuitem command="cutActionCmd"/>
@@ -54,7 +51,7 @@
    <tabpanels flex="1">
       <tabpanel flex="1">
          <vbox flex="1">
-            <label value="Script Selection [+] =Applied, [--]=Not Applied" accesskey="p"/>
+            <label value="Script Selection [+] = Applied, [--] = Not Applied" accesskey="p"/>
             <hbox>
                <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
                          crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Alt+Shift+P)'

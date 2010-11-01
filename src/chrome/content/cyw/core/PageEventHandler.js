@@ -9,7 +9,10 @@ with(customizeyourweb){
 	const CYW_NAMESPACE = "de_mouseless_CYW";
    const EVENT_TYPES_LISTENING = ["pagehide", "DOMNodeInserted", "DOMNodeRemoved"];
    
-	function PageEventHandler(targetWin, applicableScripts){
+	/*
+    * Main page eventhandler which controls the application of the scripts
+    */
+   function PageEventHandler(targetWin, applicableScripts){
       this.AbstractGenericEventHandler(false)
       this.appliedScripts = []
       this.applicableScripts = applicableScripts
@@ -25,7 +28,7 @@ with(customizeyourweb){
    //Statics 
    PageEventHandler.initPage = function(event){
 		var targetWin = event.originalTarget.defaultView
-      CywUtils.logDebug("PageEventHandler.initPage: " + event.type + " " + targetWin.location.href + "  Top Win? " + (targetWin==targetWin.top))
+//      CywUtils.logDebug("PageEventHandler.initPage: " + event.type + " " + targetWin.location.href + "  Top Win? " + (targetWin==targetWin.top))
       if(EditScriptHandler.isEditing(targetWin)){
          return
       }
@@ -133,7 +136,6 @@ with(customizeyourweb){
       },
       
       handlePageEditEnd: function(){
-         //TODO check if this is correct
          this.runAppliedScripts(PageEvents.MUTATION_EVENT, false);
          this.registerPageEventsListener()
       },
@@ -145,7 +147,7 @@ with(customizeyourweb){
       
       handlePagehide: function(event){
          var targetWin = event.originalTarget.defaultView
-         CywUtils.logDebug("PageEventHandler.handlePageHide: " + event.target.location.href + "  Top Win? " + (targetWin==targetWin.top))
+//         CywUtils.logDebug("PageEventHandler.handlePageHide: " + event.target.location.href + "  Top Win? " + (targetWin==targetWin.top))
          this.commonCleanUp(event.type);
          this.unregisterAllEventListener()
       },

@@ -2,17 +2,18 @@
  * Contains constants and loading of common subscripts
  */
 (function(){
+   const CYW_VERSION = "0.5Build201010211200";
+   const JQUERY_VERSION = "1.4.2";
+   const JQUERY_UI_VERSION = "1.8.5";
+
    var CywCommon = {
-      
-		//Constants
-      CYW_VERSION: "0.5Build201010211200",
       
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
       CYW_JQUERY_URL: "chrome://customizeyourweb/content/jquery/",
-      JQUERY_FILE_NAME: "jquery-1.4.1.js",
-      JQUERY_UI_FILE_NAME: "jquery-ui-1.7.2.custom.js",
-      JQUERY_CSS_SUBPATH: "css/redmond/jquery-ui-1.7.2.custom.css",
+      JQUERY_FILE_NAME: "jquery-" + JQUERY_VERSION + ".js",
+      JQUERY_UI_FILE_NAME: "jquery-ui-" + JQUERY_UI_VERSION + ".custom.js",
+      JQUERY_CSS_SUBPATH: "css/redmond/jquery-ui-" + JQUERY_UI_VERSION + ".custom.css",
 
 		DEBUG_PREF_ID: "customizeyourweb.debug",
 		//Id used to store the EditScriptHandler object in the Application storage
@@ -30,8 +31,12 @@
          return this.CYW_JQUERY_URL + this.JQUERY_FILE_NAME 
       },
       
+      getJQueryUIUrl: function(){
+         return this.CYW_JQUERY_URL + this.JQUERY_UI_FILE_NAME 
+      },
+      
       getCywVersion: function(){
-         return  this.CYW_VERSION;  
+         return  CYW_VERSION;  
       },
       
       /*

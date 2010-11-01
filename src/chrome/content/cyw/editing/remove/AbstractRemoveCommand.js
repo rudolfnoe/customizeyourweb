@@ -2,7 +2,6 @@ with (customizeyourweb) {
 (function() {
    function AbstractRemoveCommand(allowMultiTargetDefinition) {
       this.AbstractCommonAttributesEditCommand(allowMultiTargetDefinition)
-      this.removedElements = []
    }
 
    AbstractRemoveCommand.prototype = {
@@ -17,6 +16,9 @@ with (customizeyourweb) {
          this.previewAction(action, editContext)
       },
       
+      /*
+       * TODO: Why is not the memento in AbstractEditCommand used? 
+       */
       previewAction:function(action, editContext){
          var undoMemento = action.preview(editContext)
          editContext.setActionChangeMemento(action.getId(), undoMemento)

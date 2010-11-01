@@ -15,7 +15,7 @@ with(customizeyourweb){
       /*
        * Assembles all actions of a container action or script
        * This is a little bit a hack as both supporting the getActions method
-       * TODO think about making Script a subclass of ContainerAction
+       * REFACTOR think about making Script a subclass of ContainerAction
        */
       assembleContainerActionItems: function(containerAction, resultArr){
          //this

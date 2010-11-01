@@ -3,6 +3,8 @@
  * Rudolf Noe
  * 27.12.05
  */
+//Determines wether the current win get keyboard focus automatically on mouse over to enable shortcuts
+pref("customizeyourweb.autofocusOnMouseOver", true);    
 pref("customizeyourweb.autoUpatePageOnSave", true);    
 pref("customizeyourweb.debug", false);
 pref("customizeyourweb.keys.blurActiveElement", "escape");
@@ -10,6 +12,7 @@ pref("customizeyourweb.keys.blockKeyboardInputForEnteringShortString", "ctrl+spa
 pref("customizeyourweb.keys.toggleEditMode", "F10");
 pref("customizeyourweb.keys.openConfiguration", "ctrl+alt+c");
 pref("customizeyourweb.logging.level", "4");
+pref("customizeyourweb.logging.performance", false);
 pref("customizeyourweb.prefs.scriptTreeColOrdinals", "1,3,5");
 pref("customizeyourweb.prefs.scriptTreeColHiddens", "false,false,false");
 pref("customizeyourweb.prefs.scriptTreeColSortActive", "false,false,false");

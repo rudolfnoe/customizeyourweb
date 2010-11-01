@@ -9,10 +9,13 @@ with(customizeyourweb){
 (function(){
    
    const PREF_KEY_NOT_FOUND = "PREF_KEY_NOT_FOUND";
-   const FILENAME_INCOMPATIBLE_CHARS_REGEXP = /[^a-z0-9]{1,}/ig
+   const FILENAME_INCOMPATIBLE_CHARS_REGEXP = /[^a-z0-9]{1,}/ig;
    
    var CywConfig = {
+      //Flag indicating wether performance log is activated
+      perfLogActive: false,
       scripts: new ArrayList(),
+      
       
       cloneScript: function(script){
          return ObjectUtils.deepClone(script)
@@ -33,9 +36,9 @@ with(customizeyourweb){
          if(includePatternStrings.length>0){
             fileName +=   "_" + includePatternStrings[0]
          }
-         fileName = fileName.replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_") 
-         if(fileName.length>250){
-            fileName = fileName.substring(0, 250)
+         fileName = fileName.replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_")
+         if(fileName.length>60){
+            fileName = fileName.substring(0, 60)
          }
          fileName += ".xml"
          return fileName
@@ -85,10 +88,15 @@ with(customizeyourweb){
              alert(e)
              throw e
           }
+          this.initPerfLogActive()
       },
       
       isAutoUpdateOnSave: function(){
          return this.getPref("autoUpatePageOnSave") 
+      },
+      
+      isPerfLogActive: function(){
+         return this.perfLogActive 
       },
       
       getConfigDir: function() {
@@ -111,12 +119,8 @@ with(customizeyourweb){
       
       getPref: function(key){
          var key = this.completePrefKey(key)
-         //TODO think about wether this is senseful
-         var value = Application.prefs.getValue(key, PREF_KEY_NOT_FOUND)
-         if(value==PREF_KEY_NOT_FOUND){
-            throw new Error('Pref value for key "' + key + '" not found')
-         }
-         return value
+         Assert.isTrue(Application.prefs.has(key), 'Pref value for key "' + key + '" not found.') 
+         return Application.prefs.getValue(key, null)
       },
       
       getScriptFiles: function(){
@@ -238,45 +242,63 @@ with(customizeyourweb){
       },
       
       saveScript: function(aScript){
-         if(aScript==null)
-            throw new Error("Nullpointer: aScript is null")
-         aScript.updateUrlPatternRegExp()
-         var newScript = true
-         for (var i = 0; i < this.scripts.size(); i++) {
-            var script = this.scripts.get(i)
-            if(script.equals(aScript)){
-               this.scripts.set(i, aScript);
-               newScript = false
+         Assert.notNull(aScript)
+         try{
+            aScript.updateUrlPatternRegExp()
+            var newScript = true
+            for (var i = 0; i < this.scripts.size(); i++) {
+               var script = this.scripts.get(i)
+               if(script.equals(aScript)){
+                  this.scripts.set(i, aScript);
+                  newScript = false
+               }
             }
+            if(newScript){
+               this.scripts.add(aScript)
+            }else{
+               this.deleteScriptFromDisk(aScript)
+            }
+            aScript.setLastEdited((new Date()).getTime())
+            aScript.setPersisted(true)
+            //Set script file name
+            var scriptFileName = this.createScriptFileName(aScript)
+            aScript.setFileName(scriptFileName)
+            aScript.setVersion(CywCommon.getCywVersion())
+            
+            //Create and write context
+            var scriptContent = this.serializeScript(aScript, "Script")
+            //Add xml processing for encoding
+            this.writeScript(scriptFileName, scriptContent)
+         }catch(e){
+            CywUtils.logError(e, "Error on saving script", true)
+            throw e
          }
-         if(newScript){
-            this.scripts.add(aScript)
-         }else{
-            this.deleteScriptFromDisk(aScript)
-         }
-         aScript.setLastEdited((new Date()).getTime())
-         aScript.setPersisted(true)
-         //Set script file name
-         var scriptFileName = this.createScriptFileName(aScript)
-         aScript.setFileName(scriptFileName)
-         aScript.setVersion(CywCommon.getCywVersion())
-         
-         //Create and write context
-         var scriptContent = this.serializeScript(aScript, "Script")
-         //Add xml processing for encoding
-         scriptContent = '<?xml version="1.0" encoding="UTF-8"?>\n' + scriptContent;
-         this.writeScript(scriptFileName, scriptContent)
+      },
+      
+      /*
+       * Save all provided scripts
+       * @param Array[Script] scriptArr
+       */
+      saveScripts: function(scriptArr){
+         for (var i = 0; i < scriptArr.length; i++) {
+            this.saveScript(scriptArr[i])
+         }   
       },
       
       serializeScript: function(script, rootTag){
          Assert.paramsNotNull(arguments)
-         return JSerial.serialize(script, rootTag, "  ", true, "t_")
+         return  '<?xml version="1.0" encoding="UTF-8"?>\n' + 
+                  JSerial.serialize(script, rootTag, "  ", true, "t_")
       },
       
       setPref: function(key, value){
          var key = this.completePrefKey(key)
          Application.prefs.setValue(key, value)
          return value
+      },
+      
+      initPerfLogActive: function(){
+         this.perfLogActive =  this.getPref("logging.performance")
       },
       
       /*

@@ -36,7 +36,7 @@ with(customizeyourweb){
          this.modifierMask = modifierMask
       },
       
-      doActionInternal: function(cywContext){//Todo change
+      doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return false
          }
