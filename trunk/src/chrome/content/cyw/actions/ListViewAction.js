@@ -79,11 +79,12 @@ with(customizeyourweb){
       },
 
       determineListItems: function(rootElement){
-         var potListItems = $(this.listItemsJQuery, rootElement).toArray()
+         var listItemsJQuery = this.listItemsJQuery.toLowerCase()
+         var potListItems = $(listItemsJQuery, rootElement).toArray()
          //For compatibility reasons to version prio the use of jQuery
          //values of simple tags like div, td are filtered in a way
          //that only to topmost decendant is taken for the list
-         if(ArrayUtils.contains(["div", "span", "td", "table", "tr"], this.listItemsJQuery)){
+         if(ArrayUtils.contains(["div", "span", "td", "table", "tr", "li"], listItemsJQuery)){
             var listItemsFiltered1 = []
             for (var i = 0; i < potListItems.length; i++) {
                var listItem = node = potListItems[i]
@@ -92,7 +93,7 @@ with(customizeyourweb){
                      listItemsFiltered1.push(listItem)
                      break
                   }
-                  if(node.localName.toLowerCase() == this.listItemsJQuery.toLowerCase()){
+                  if(node.localName.toLowerCase() == listItemsJQuery){
                      break
                   }
                }
@@ -117,7 +118,7 @@ with(customizeyourweb){
          return resultItems
       },
 
-      doActionInternal: function(cywContext){//Todo change
+      doActionInternal: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return false
          }

@@ -24,24 +24,17 @@ with(customizeyourweb){
          //Then shadow the rest of the frame
       	var shadower = doc.getElementById(SHADOWER_ID)
       	if(shadower==null){
-      		shadower = this.createDiv()
+      		shadower = this.createShadowerDiv()
       		var body = DomUtils.getBody(doc);
             body.appendChild(shadower)
       	}
       },
       
       unshadow: function(){
-      	var doc = this.targetWin.document
-         if(!doc){
-            return
-         }
-      	var shadower = doc.getElementById(SHADOWER_ID)
-      	if(shadower!=null){
-         	shadower.parentNode.removeChild(shadower)
-      	}
+         $('#' + SHADOWER_ID, this.targetWin.document).remove()
       },
       
-      createDiv: function(){
+      createShadowerDiv: function(){
          var doc = this.targetWin.document
          var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
          div.setAttribute('id',SHADOWER_ID)

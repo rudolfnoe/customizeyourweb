@@ -27,7 +27,7 @@
          var editDialog = new EditDialog(EDIT_MODIFY_DIALOG_URL, "EditModify", action, editContext)
          editDialog.show()
          if(editDialog.isOk()){
-            this.setUndoMemento([editDialog.getNamedResult("changeMemento")]);
+            this.setUndoMemento(editDialog.getNamedResult("changeMemento"));
             return editDialog.getNamedResult("action");
          }else{
             return null;

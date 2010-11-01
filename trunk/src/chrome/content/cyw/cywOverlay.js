@@ -19,7 +19,7 @@ with(customizeyourweb){
       ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "core/", "customizeyourweb", null, ["CywInitManager.js"], true)
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/CywVersionManager.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ConfigDataConverter.js", "customizeyourweb")
-      ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/Migrations.js", "customizeyourweb")
+      ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptMigrator.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptExporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/ScriptImporter.js", "customizeyourweb")
       ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "preferences/WebInstaller.js", "customizeyourweb")
@@ -35,7 +35,6 @@ with(customizeyourweb){
       //jQuery must be loaded after window is fully loaded
       var jQueryLoader = new JQueryLoader(CywCommon.CYW_JQUERY_URL)
       jQueryLoader.loadJQuery(CywCommon.JQUERY_FILE_NAME, customizeyourweb)
-//      jQueryLoader.loadJQueryUI(CywCommon.JQUERY_UI_FILE_NAME, customizeyourweb)
       InitManager.init(event)
    }}, false);
 })()

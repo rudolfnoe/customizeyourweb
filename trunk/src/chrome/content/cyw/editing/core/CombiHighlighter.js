@@ -2,10 +2,6 @@ with(customizeyourweb){
 (function(){
    function CombiHighlighter(){
       this.highlighters = ArrayUtils.cloneArray(arguments)
-//TODO
-      //      for (var i = 0; i < this.highlighters.length; i++) {
-//            throw Error('arguments can only be highlighters')
-//      }
    }
    
    CombiHighlighter.prototype = {

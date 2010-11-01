@@ -22,6 +22,9 @@ with(customizeyourweb){
       
       this.targetWindow = null
       
+      //Load JQuery
+      CywUtils.loadJQuery()
+      
       //Manually add load listener for further initialization
       //Must be done after onload as there are dependencies to other bindings which must be fully constructed beforehand
       //Using "handler" tag in xbl didn't worked as it was called twice why whosoever
@@ -197,17 +200,11 @@ with(customizeyourweb){
       },
       
       initializeAfterLoad: function(){
-         this.loadJQuery()
-         
          if(this.autoInit){
             this.autoInitByDialogArgument() 
          }
          
          this.initEventHandlers()
-      },
-      
-      loadJQuery: function(){
-         ScriptLoader.loadJQuery(CywCommon.CHROME_CONTENT_URL + "jquery/jquery-1.4.1.js", "customizeyourweb")
       },
       
       notifyValueChangedListener: function(){

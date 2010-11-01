@@ -31,11 +31,14 @@ with(customizeyourweb){
             defaultXPath: XPathUtils.createXPath(element, [predicateStrategies.defaultStrategy])
          }
 
+         //TODO Check that exception handling!
          if(element.tagName=="A"){
             try{
-               //TODO check why this so often fails
                xPaths.text = XPathUtils.createXPath(element, [predicateStrategies.text, predicateStrategies.defaultStrategy])
-            }catch(e){}
+            }catch(e){
+               LOG.logDebug("XPathTargetDefinitionFactory.createDefinitions: Creation of XPath with text predicate failed: " + 
+                     e.message + "   Stack: " + e.stack);
+            }
          }
          
          for(var xPathType in xPaths){

@@ -15,6 +15,10 @@ with(customizeyourweb){
    var colorValueCF = null;
    var attributesLB = null;
    
+   /*
+    * Dialog handler of edit modify action
+    * TODO: If no target element is selected on opening
+    */
    var EditModifyDialogHandler = {
       //Edited Action
       action: null,
@@ -29,9 +33,6 @@ with(customizeyourweb){
       
       shortcutManager: new ShortcutManager(window, "keypress", true, false),
       
-      //shortcut to the style obj of the targetElement
-      compTargetStyle: null,
-      targetElement: null,
       undoMemento: null,
       
       /*
@@ -89,12 +90,7 @@ with(customizeyourweb){
             this.getTargetDefinitionBinding().setAllowMultiTargetDefinition(true);
             this.initTargetDefinitionBinding();
             
-            var firstSelectedTarget = this.getFirstSelectedTarget();
-            if(firstSelectedTarget ){
-               //Clone is given so the style doesn't change any more
-               this.compTargetStyle = this.getCurrentStyle(firstSelectedTarget);
-               this.fillExpertAttributeMenulist(this.compTargetStyle);
-            }
+            this.fillExpertAttributeMenulist();
             if(!this.hasMultipleTargets()){
                this.initHtmlAttributes();
             }
@@ -117,8 +113,11 @@ with(customizeyourweb){
        * Ok button event handler
        */
       doOk: function(){
-         this.synchronizeAction(this.action);
-         Dialog.setNamedResult("action", this.action);
+         var oldAction = this.action
+         var newAction = ObjectUtils.deepClone(oldAction)
+         this.synchronizeAction(newAction);
+         this.updateTargets(oldAction, newAction)
+         Dialog.setNamedResult("action", newAction);
          Dialog.setNamedResult("changeMemento", this.undoMemento);
          Dialog.setResult(DialogResult.OK);
       },
@@ -138,10 +137,11 @@ with(customizeyourweb){
        * Fills attributes menulist on expert tab with all computed style 
        * values of the target element 
        */
-      fillExpertAttributeMenulist: function(compTargetStyle){
+      fillExpertAttributeMenulist: function(){
+         var pseudoStyle = window.getComputedStyle(document.documentElement, null)
          var styleProps = new Array();
-         for (var i = 0; i < compTargetStyle.length; i++) {
-            styleProps.push(compTargetStyle.item(i).toString());
+         for (var i = 0; i < pseudoStyle.length; i++) {
+            styleProps.push(pseudoStyle.item(i).toString());
          }
          //Add some styles manually
          styleProps.push("border");
@@ -422,14 +422,6 @@ with(customizeyourweb){
          }
       },
       
-      /*
-       * Checks whether an attribute is a style attribute or not
-       */
-      isStyle: function(attr){
-         var convertedAttr = CssUtils.convertCssPropNameToCamelCase(attr);
-         return this.compTargetStyle[convertedAttr]!=undefined;
-      },
-      
       removeAttrFromAttrList: function(attr){
          var itemToRemove = Listbox.getItemByValue(attributesLB, attr);
          if(!itemToRemove)
@@ -500,7 +492,7 @@ with(customizeyourweb){
          for (var i = 0; i < attrs.length; i++) {
             var attr = attrs[i][0];
             var value = attrs[i][1];
-            if(this.isStyle(attr)){
+            if(CssUtils.isStyleProperty(attr)){
                styles[attr] = value;
             }else{
                attributes[attr] = value;
@@ -523,7 +515,7 @@ with(customizeyourweb){
                var attributeLBItem = attributeLBItems[i];
                var attr = attributeLBItem[0];
                var value = attributeLBItem[1];
-               if(this.isStyle(attr)){
+               if(CssUtils.isStyleProperty(attr)){
                   value = value?value:"";
                   this.setSimpleStyleValue(attr, value);
                }else{
@@ -594,7 +586,7 @@ with(customizeyourweb){
             var newAction = ObjectUtils.deepClone(this.action);
             this.synchronizeAction(newAction);
             var attr = attributeML.value;
-            if(this.isStyle(attr)){
+            if(CssUtils.isStyleProperty(attr)){
                var styleOrAttrs = newAction.getStyles();
             }else{
                var styleOrAttrs = newAction.getAttributes();
@@ -616,7 +608,7 @@ with(customizeyourweb){
       },
          
       triggerUpdateTargetsDefault: function(){
-         CywUtils.logInfo("triggerUpdateTargetsDefault called");
+//         CywUtils.logInfo("triggerUpdateTargetsDefault called");
          Utils.executeDelayed("UPDATE_ELEMENT", UPDATE_DELAY, function(){
             var oldAction = this.action;
             var newAction = ObjectUtils.deepClone(this.action);
@@ -629,7 +621,7 @@ with(customizeyourweb){
        * Updates one (style)attr of the target element  
        */
       updateTargets: function(oldAction, newAction){
-         CywUtils.logInfo("updateTargets called");
+//         CywUtils.logInfo("updateTargets called");
          try{
             if(this.undoMemento){
                oldAction.undo(this.getEditContext(), this.undoMemento);

@@ -1,6 +1,11 @@
 with (customizeyourweb) {
    (function() {
 
+      /*
+       * Insert subwindow (iframe) with static content or dynamic preview functionality
+       * TODO If insert subwindow is defined after listview the preview after load fails as the focus event fires before the 
+       * preview listener is set up
+       */
       function InsertSubwindowAction(id, targetDefinition) {
          this.AbstractInsertHtmlAction(id, targetDefinition)
          //Inherit from changeable action to handle saving of resizing and repositioning
@@ -114,6 +119,16 @@ with (customizeyourweb) {
             return true
          },
          
+         //If unit is in px it returns pixel value else
+         //converts % value in px
+         getUnitInPixel: function(value, unit, oneHundertPercentValue){
+            var result = value
+            if(unit=="%"){
+               result = Math.floor(oneHundertPercentValue * value / 100)
+            }
+            return result
+         },
+         
          /*
           * Inserts an Iframe element which is fixed embedded within the page
           * @return DOMElement iframe
@@ -176,32 +191,34 @@ with (customizeyourweb) {
             //Create dialog div for content which will be wrapped by jQuery
             var dialogDivId = this.getElementId(abstractContext.getScriptId())
             $iframeDialog = $injected('body').append('<div id="' + dialogDivId + '">' +
-                                       '<iframe style="height:100%; width:100%"/>' + 
+                                       '<iframe style="min-height:100%; height:100%; width:100%"/>' + 
                                      '</div>').find('#' + dialogDivId)
 
+            //Save currently focused element as with opening of dialog dialog gains focus
+            var activeElement = targetWindow.document.activeElement
+                                     
+            //Open Dialog
             $iframeDialog.dialog({title: "Preview"})
+            
+            //Put focus back to active element
+            if(activeElement){
+               activeElement.focus()
+            }
 
             //Set size
-            $iframeDialog.dialog("option", "height", this.rectangle.height + this.rectangle.heightUnit)
-            $iframeDialog.dialog("option", "width", this.rectangle.width + this.rectangle.widthUnit)
+            var $targetWindow = $(targetWindow)
+            var targetWinHeight = $targetWindow.height() 
+            var targetWinWidth = $targetWindow.width() 
+            $iframeDialog.dialog("option", "height", this.getUnitInPixel(this.rectangle.height, this.rectangle.heightUnit, targetWinHeight))
+            $iframeDialog.dialog("option", "width", this.getUnitInPixel(this.rectangle.width, this.rectangle.widthUnit, targetWinWidth))
             
             //Set position of dialog
-            var x = this.rectangle.x
-            var $targetWindow = $(targetWindow)
-            if(this.rectangle.xUnit=="%"){
-               x = Math.floor($targetWindow.width()*this.rectangle.x/100)
-            }
-            var y = this.rectangle.y
-            if(this.rectangle.yUnit=="%"){
-               y = Math.floor($targetWindow.height()*this.rectangle.y/100)
-            }
-            
 				var $dialogElement = $injected("div.ui-dialog").has("div#" + dialogDivId)
             //jQuery dialogs scrolls by default which is not as it should be ;-)
             $dialogElement.css('position', 'fixed')
-            //As the position option of dialog assumes relative positioning this has to workaround
-            $dialogElement.css('left', x)
-            $dialogElement.css('top', y)
+            //As the position option of dialog assumes relative positioning this has to be workarounded
+            $dialogElement.css('top', this.getUnitInPixel(this.rectangle.y, this.rectangle.yUnit, targetWinHeight))
+            $dialogElement.css('left', this.getUnitInPixel(this.rectangle.x, this.rectangle.xUnit, targetWinWidth))
             
             //Set height on iframe div of assuring that iframe spans the entire dialog
             //TODO Why do I have to substract 40?

@@ -237,7 +237,9 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         CywUtils.logInfo("Script.runScript: Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
+         var message = "Script.runScript: Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType()
+         CywUtils.logInfo(message)
+         var pt = new PerfTimer()
          cywContext.setScript(this)
          ScriptErrorHandler.clearScriptErrors(this.getId())
          var cachedPage = cywContext.isCachedPage()
@@ -253,6 +255,7 @@ with(customizeyourweb){
                                                 e, this.getId(), action.getId(), cywContext.getTargetWindow())
             }
    		}
+         CywUtils.logPerf("Script.runScript: " + this.getScriptLoggingName(), pt.stop())
    	},
    	
    	setActions: function(actions){

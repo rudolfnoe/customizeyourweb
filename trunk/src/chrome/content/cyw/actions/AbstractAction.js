@@ -44,7 +44,7 @@ with(customizeyourweb){
          }
          var $injected = JavaScriptInjecter.injectJQuery(abstractContext.getTargetDocument())
          ObjectWindowStorage.setObject(targetWindow, "customizeyourweb", "jQuery", $injected)
-         CywUtils.logDebug('AbstractAction.assureJQuery: JQuery injected')
+//         CywUtils.logDebug('AbstractAction.assureJQuery: JQuery injected')
          return $injected
       },
       
@@ -55,7 +55,7 @@ with(customizeyourweb){
          $injected = this.assureJQuery(abstractContext)
          if(!$injected.ui){
             JavaScriptInjecter.injectJQueryUI(abstractContext.getTargetDocument(), $injected)
-            CywUtils.logDebug('AbstractAction.assureJQuery: JQuery UI injected')
+//            CywUtils.logDebug('AbstractAction.assureJQuery: JQuery UI injected')
          }
          return $injected
       },

@@ -27,7 +27,7 @@ with(customizeyourweb){
          this.selectText = selectText
       },
       
-      doActionInternal: function(cywContext){//Todo change
+      doActionInternal: function(cywContext){
          this.registerShortcut(cywContext)
       },
       
@@ -40,7 +40,7 @@ with(customizeyourweb){
          return element.tagName=="INPUT" && ["text", "password"].indexOf(element.type.toLowerCase())!=-1 ||
                element.tagName=="TEXTAREA"   
       },
-
+      
       performShortcut: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return

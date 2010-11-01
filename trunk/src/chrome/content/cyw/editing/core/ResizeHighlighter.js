@@ -30,7 +30,7 @@ with(customizeyourweb){
             var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
             div.gripName = name 
             div.cywIgnore = true;
-            div.className = "resizeGrip";
+            div.className = "cyw_resizeGrip";
             div.style.cursor = name + "-resize"
             div.addEventListener("mousedown", this, true)
             return div;
@@ -44,7 +44,7 @@ with(customizeyourweb){
          
          var span = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
          span.cywIgnore = true;
-         span.className = "sizeInfoSpan"
+         span.className = "cyw_sizeInfoSpan"
          nodes.sizeInfoSpan = span
          
          return nodes

@@ -37,7 +37,7 @@ with(customizeyourweb){
       },
       
       undo: function(editContext, undoMemento){
-         var targetDoc = editContext.getTargetWindow()
+         var targetDoc = editContext.getTargetDocument()
          $body = $("body", targetDoc)
          $body.contents().remove()
          $body.append($(undoMemento.bodyChildren))

@@ -63,8 +63,12 @@ with(customizeyourweb){
          if(!this.rootElement){
             return
          }
-         //Todo give warning message if no items are selected
-         var listItems = $(byId("listItemsJQueryTB").value, this.rootItem).toArray()
+         var listItems = $(byId("listItemsJQueryTB").value, this.rootElement).toArray()
+         if (listItems.length == 0){
+            Dialog.setMessageInHeader("List items definition results in emty set!", Severity.WARNING)
+         }else{
+            Dialog.clearMessageInHeader()
+         }
          for (var i = 0; i < listItems.length; i++) {
             var itemWrapper = new ElementWrapper(listItems[i])
             this.listItemWrappers.push(itemWrapper)

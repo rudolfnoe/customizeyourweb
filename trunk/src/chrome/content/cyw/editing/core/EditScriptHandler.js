@@ -1,5 +1,7 @@
 /*
  * Event handler during editing a script
+ * TODO Handle event that target win can change
+ * 
  */
 with(customizeyourweb){
 (function(){
@@ -53,6 +55,7 @@ with(customizeyourweb){
     * Constructor for EditScriptHandler
     * For every tab which is currently edited a seperate EditScriptHandler will be instantiated
     * and stored in the tab context
+    * ENHANCEMENT: After canceling editing the page should be reloaded if modifications took place
     */
    function EditScriptHandler(targetWin){
       //List of highlighters which highlight elements which are the target of the currently
@@ -78,7 +81,6 @@ with(customizeyourweb){
       //a suspendableEvenHandler wraps the edit handler
       this.suspendableEventHandler = new SuspendableEventHandler(this)
       //The current target win
-      //TODO What happens if content win changes?
       this.targetWin = targetWin
    }
    
@@ -211,6 +213,7 @@ with(customizeyourweb){
          //context menu
          getEgMenuPopup()[functionName]("popupshowing", this.suspendableEventHandler, true)
          
+         //TODO Remove logging
          getSidebar()[functionName]("load", this.sidebarLoadListener, true)
          //Registering for change of edit contexts clipboard property content to de/activate paste commands
          if(isAdd){
@@ -395,9 +398,8 @@ with(customizeyourweb){
          scripts.add(Script.createNewScript(CywConfig.getNextScriptId(), this.targetWin.location.href))
          
          //init sidebar stuff
-         if(isSidebarWinOpen()){
-            this.registerActionSelectionListener()
-         }
+         this.registerActionSelectionListener()
+         
          this.initSidebarContext(scripts);
          initSidebarWin()
          
@@ -460,8 +462,9 @@ with(customizeyourweb){
 
             this.setCurrentTarget(newTarget);
             //Focus content win to enable shortcuts automatically
-            //TODO make configurable
-            newTarget.ownerDocument.defaultView.focus()
+            if(CywConfig.getPref("autofocusOnMouseOver")){
+               newTarget.ownerDocument.defaultView.focus()
+            }
          }, this);
       },
       
@@ -565,7 +568,7 @@ with(customizeyourweb){
                targetWindows.add(subWin)
             }
          })
-         //TODO check, could be more than 1
+         //TODO Handle event that more than one window can fit, e.g. for the generic URL pattern http*
          if(targetWindows.size()>0){
             targetWindow = targetWindows.get(0) 
          }else{
@@ -586,7 +589,7 @@ with(customizeyourweb){
                   }
             }
             })
-            //TODO check, could be more than 1
+            //TODO Handle case that more than one element can be selected as for multi-select actions (e.g. modify)
             if(targetElements.size()>0){
                targetElement = targetElements.get(0);
                targetWindow = targetElement.ownerDocument.defaultView 
@@ -707,7 +710,9 @@ with(customizeyourweb){
       },
       
       registerActionSelectionListener: function(){
-        getSidebarWinHandler().addActionSelectionChangedListener(this.handleActionSelectionChanged, this) 
+         if(isSidebarWinOpen()){
+            getSidebarWinHandler().addActionSelectionChangedListener(this.handleActionSelectionChanged, this)
+         }
       },
       
       reloadPage: function(win, script){
@@ -728,8 +733,9 @@ with(customizeyourweb){
          this.suspendableEventHandler.resume()
       },
 
-      //TODO disable if not action is selected
-      //TODO make it undoable
+      /*
+       * TODO: After retargeting no update of the view takes place
+       */
       retargetAction: function(newTarget){
          newTarget = newTarget?newTarget:this.currentTarget
          var newTargetWindow = DomUtils.getOwnerWindow(newTarget)
@@ -889,6 +895,9 @@ with(customizeyourweb){
       return getSidebar().contentWindow;
    }
    
+   /*
+    * TODO: Returns null if you open a tab from a tab which is in edit mode
+    */
    function getSidebarWinHandler() {
       var sidebarWindow = getSidebarWin() 
       // Verify that our sidebar is open at this moment:

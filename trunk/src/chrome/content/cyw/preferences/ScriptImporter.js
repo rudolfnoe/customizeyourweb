@@ -2,19 +2,22 @@ with (customizeyourweb) {
 	(function() {
       var WARNING_DIALOG_URL = "chrome://customizeyourweb/content/cyw/preferences/import_warning_dialog.xul"
       
+      /*
+       * Functionality to import scripts
+       */
 		var ScriptImporter = {
          
          versionComparator: Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                    .getService(Components.interfaces.nsIVersionComparator),
          
-         checkVersions: function(xmlDoc){
-            var versionElem = XPathUtils.getElement("CywScripts/version", xmlDoc)
-            var scriptsCywVersion = versionElem.textContent
+         checkVersions: function(srcVersion){
             //Deny import if imported version is greater than current version 
-            if(this.versionComparator.compare(scriptsCywVersion, CywCommon.getCywVersion())>0){
+            if(this.versionComparator.compare(srcVersion, CywCommon.getCywVersion())>0){
                var message = 'The imported script not compatible with the current version of Customize Your Web. Please update to the newest version under www.customize-your-web.de'
                alert(message)
-               throw new Error(message)
+               return false
+            }else{
+               return true
             }
          },
          
@@ -59,9 +62,32 @@ with (customizeyourweb) {
 				}
 			},
          
+         getSrcVersion: function(xmlDoc){
+            //First check wether it is single Script XML or multiple exported via export mechanism
+            var exportedScripts = XPathUtils.getElement("CywScripts", xmlDoc) != null
+            var versionElement = null
+            if(exportedScripts){
+               versionElement = XPathUtils.getElement("CywScripts/version", xmlDoc)
+            }else{
+               versionElement = XPathUtils.getElement("Script/version", xmlDoc)
+            }
+            if(!versionElement){
+               var message = "Script could not be imported as it contains no version information." + 
+                              " To import scripts these must be exported via the export mechanism."
+               alert(message)
+               throw new Error(message)
+            }
+            return versionElement.textContent
+         },
+         
          importScripts: function(scriptsContent){
-            var xmlDoc = XMLUtils.parseFromString(scriptsContent) 
-            this.checkVersions(xmlDoc)
+            var xmlDoc = XMLUtils.parseFromString(scriptsContent)
+            var srcVersion = this.getSrcVersion(xmlDoc)
+ 
+            var ok = this.checkVersions(srcVersion)
+            if(!ok){
+               return
+            }
             var confirmed = this.isConfirmedImport(scriptsContent)
             if(!confirmed){
                return
@@ -76,6 +102,9 @@ with (customizeyourweb) {
                }else{
                   this.deleteExsistingScripts(existingScripts)
                }
+            }
+            if(this.versionComparator.compare(srcVersion, CywCommon.getCywVersion())<0){
+               ScriptMigrator.migrateToCurrentVersion(importedScripts, srcVersion)
             }
             this.saveImportedScripts(importedScripts)
             alert('Scripts successfully imported.')

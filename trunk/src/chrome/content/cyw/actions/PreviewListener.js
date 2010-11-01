@@ -31,7 +31,7 @@ with(customizeyourweb){
             }
             
             this.iframe.addEventListener("load", this, true)
-            CywUtils.logDebug("PreviewListener.init")
+//            CywUtils.logDebug("PreviewListener.init")
          },
          
          /*
@@ -39,7 +39,7 @@ with(customizeyourweb){
           */
          handleLoad: function(event){
             if(this.iframe.src=="about:blank"){
-               this.insertNoPdfPreview(this.iframe.contentDocument)
+               this.insertNoPreviewHint(this.iframe.contentDocument)
             }else{
                //reenable JS after iframe is loaded
                this.setAllowJavaScriptOnIframe(true)
@@ -75,9 +75,9 @@ with(customizeyourweb){
             Utils.executeDelayed(this.timerId, 200, this.preview, this, [event.target])
          },
          
-         insertNoPdfPreview: function(document){
+         insertNoPreviewHint: function(document){
             var html = '<div style="width:100%; font-family:arial; padding:10px; vertical-align:middle; text-align:center; border:1px solid black">' +
-                  '<img src="chrome://customizeyourweb/content/common/ui/resources/warning.ico"/>Preview of PDF-Files is not supported!</div>'
+                  '<img src="chrome://customizeyourweb/content/common/ui/resources/warning.ico"/>Preview of this link is not possible!</div>'
             $("body", document).append(html)
          },
          
@@ -88,7 +88,6 @@ with(customizeyourweb){
          isPreviewTarget: function(event){
             var target = event.target
             if(!target || target.tagName!="A" ||
-                StringUtils.startsWith(target.href, "javascript:") || 
                 StringUtils.isEmpty(target.href)){
                   return false
             }else{
@@ -97,9 +96,9 @@ with(customizeyourweb){
          },
          
          preview: function(link){
-            if(this.iframe.src!= link.href){
-               if(StringUtils.endsWith(link.href, ".pdf")){
-                  //No preview of PDF Files possible
+            if(this.iframe.src != link.href){
+               if(StringUtils.endsWith(link.href, ".pdf") || !StringUtils.startsWith(link.href, "http")){
+                  //No preview possible
                   this.iframe.src = "about:blank"
                }else{
                   //Disable JavaScript to prohibit focus lost
