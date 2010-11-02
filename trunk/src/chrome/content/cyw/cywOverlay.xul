@@ -3,7 +3,7 @@
 <overlay id="customizeyourweb" 
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/x-javascript" src="./common/error/ErrorLogHandler.js"></script>
-    <script type="application/x-javascript" src="CywCommon.js"></script>
+    <!-- script type="application/x-javascript" src="CywCommon.js"></script-->
     <script type="application/x-javascript" src="cywOverlay.js"></script>
     
     <broadcasterset id="mainBroadcasterSet"> 

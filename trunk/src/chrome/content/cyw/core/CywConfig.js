@@ -10,11 +10,14 @@ with(customizeyourweb){
    
    const PREF_KEY_NOT_FOUND = "PREF_KEY_NOT_FOUND";
    const FILENAME_INCOMPATIBLE_CHARS_REGEXP = /[^a-z0-9]{1,}/ig;
-   
+   const CONFIG_CHANGED_TOPIC = "CUSTOMIZEYOURWEB_CONFIG_CHANGED";
+
    var CywConfig = {
       //Flag indicating wether performance log is activated
       perfLogActive: false,
       scripts: new ArrayList(),
+      //To detect from where observer notifcation comse from
+      id: (new Date()).getTime(),
       
       
       cloneScript: function(script){
@@ -71,7 +74,8 @@ with(customizeyourweb){
          		found = true
          		break;
          	}
-         }	
+         }
+         this.notifyObservers()
       	if(!found)
       	   throw new Error('Script with provided id not existent')
       	
@@ -88,6 +92,7 @@ with(customizeyourweb){
              alert(e)
              throw e
           }
+          this.registerConfigChangedObserver()
           this.initPerfLogActive()
       },
       
@@ -219,6 +224,25 @@ with(customizeyourweb){
          return matchingScripts
       },
       
+      /*
+       * Notification to other CywConfig in other windows
+       */
+      notifyObservers: function(){
+         Utils.notifyObservers(CONFIG_CHANGED_TOPIC, this, this.id)   
+//         CywUtils.logDebug("Observers notfied")
+      },
+      
+      /*
+       * Observe method for changing config in other chrome windows
+       */
+      observeConfigChanged: function(subject, topic, data){
+         if(this.id==data){
+            return
+         }
+         this.readConfig()
+//         CywUtils.logDebug("Reload scripts after config changed notification")
+      },
+      
       readConfig: function(){
          this.scripts = new ArrayList()
          var scriptFiles = this.getScriptFiles()
@@ -241,8 +265,13 @@ with(customizeyourweb){
          
       },
       
-      saveScript: function(aScript){
+      registerConfigChangedObserver: function(){
+         Utils.registerObserver(CONFIG_CHANGED_TOPIC, Utils.createObserverForInterface(this, this.observeConfigChanged))
+      },
+      
+      saveScript: function(aScript, notifyObservers){
          Assert.notNull(aScript)
+         notifyObservers = arguments.length>1?notifyObservers:true
          try{
             aScript.updateUrlPatternRegExp()
             var newScript = true
@@ -269,6 +298,9 @@ with(customizeyourweb){
             var scriptContent = this.serializeScript(aScript, "Script")
             //Add xml processing for encoding
             this.writeScript(scriptFileName, scriptContent)
+            if(notifyObservers){
+               this.notifyObservers()
+            }
          }catch(e){
             CywUtils.logError(e, "Error on saving script", true)
             throw e
@@ -281,7 +313,7 @@ with(customizeyourweb){
        */
       saveScripts: function(scriptArr){
          for (var i = 0; i < scriptArr.length; i++) {
-            this.saveScript(scriptArr[i])
+            this.saveScript(scriptArr[i], false)
          }   
       },
       
