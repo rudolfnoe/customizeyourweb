@@ -7,6 +7,7 @@
 pref("customizeyourweb.autofocusOnMouseOver", true);    
 pref("customizeyourweb.autoUpatePageOnSave", true);    
 pref("customizeyourweb.debug", false);
+pref("customizeyourweb.disabled", false);
 pref("customizeyourweb.keys.blurActiveElement", "escape");
 pref("customizeyourweb.keys.blockKeyboardInputForEnteringShortString", "ctrl+space");
 pref("customizeyourweb.keys.toggleEditMode", "F10");
@@ -24,5 +25,5 @@ pref("customizeyourweb.shortcut.executionDelay", "500");
 pref("customizeyourweb.simpleTargetDefinitionTags", "input, textarea, button, a, select, img");
 pref("customizeyourweb.ui.hideToolsMenu", false);
 pref("customizeyourweb.ui.hideStatusbarIcon", false);
-pref("customizeyourweb.disabled", false);
+pref("customizeyourweb.tipsDontShowAgain.navigationWithCursorKeys", false);
 pref("customizeyourweb.version", "");

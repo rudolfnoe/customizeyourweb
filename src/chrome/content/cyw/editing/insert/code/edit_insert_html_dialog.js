@@ -18,14 +18,19 @@ with(customizeyourweb){
 
       doOnload: function(){
          this.loadJQuery()
-         this.initShortcuts()
          //Get clone of action
          this.action = EditDialog.getAction(true)
          this.editContext = EditDialog.getEditContext()
          this.targetElement = EditDialog.getTargetElement()
          PresentationMapper.mapModel2Presentation(this.action, document, "value")
          byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
+         this.initListeners()
+         this.initShortcuts()
          this.initValidators(this.targetElement)
+      },
+      
+      initListeners: function(){
+         this.getTargetDefinitionBinding().addValueChangedListener(new EventHandlerAdapter(this.handleTargetDefChanged, this));
       },
       
       initShortcuts: function(){
@@ -39,6 +44,10 @@ with(customizeyourweb){
          okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), DomUtils.getOwnerWindow(targetElement)))
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
+      },
+      
+      handleTargetDefChanged: function(evemt){
+         this._updatePage();   
       },
       
       synchronizeActionWithForm: function(){

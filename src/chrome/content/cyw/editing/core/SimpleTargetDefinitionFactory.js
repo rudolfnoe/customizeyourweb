@@ -97,6 +97,8 @@ with(customizeyourweb){
          if(StringUtils.isEmpty(textContent)){
             return
          }
+         //Convert quotes in &quot;
+         textContent = textContent.replace(/["]/g, "&quot;")
          var simpleTargetDef = new SimpleTargetDefinition(element.tagName)
          simpleTargetDef.addAttributeDefinition("text", textContent)
          this.determinePosition(element, simpleTargetDef);

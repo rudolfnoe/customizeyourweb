@@ -115,7 +115,7 @@ with(customizeyourweb){
    };
    Namespace.bindToNamespace("customizeyourweb", "DefaultSelectorStrategy", DefaultSelectorStrategy);
    
-   const REPLACE_METACHAR_REGEXP = /([\[\]])/g;
+   const REPLACE_METACHAR_REGEXP = /([#;&,.+*~':"!^$\[\]()=>|/@])/g;
    /*
     * A elector strategy which uses the value of an attribute
     * @param String attrName: Name of the attribute with which value the predicate should be created
@@ -133,8 +133,7 @@ with(customizeyourweb){
          if(element.hasAttribute(this.attrName)){
             this.stopFurtherEvaluation = true
             var attrVal = element.getAttribute(this.attrName)
-            //TODO Check which replacements are neccessary
-//            attrVal = attrVal.replace(REPLACE_METACHAR_REGEXP, "\\\\$1")
+            attrVal = attrVal.replace(REPLACE_METACHAR_REGEXP, "\\\\$1")
             if(this.attrName.toLowerCase()=="id"){
                result = "#" + attrVal
             }else{
@@ -171,13 +170,26 @@ with(customizeyourweb){
       getPredicate: function(element){
          var textContent = element.textContent
          if(textContent){
-            this.stopFurtherEvaluation = true
-            var result = ":contains(" + textContent.match(/.*/) + ")"
-            //set first row of text for search
+            //set first no-empty row of text for search
+            var lines = textContent.match(/.*/g)
+            var noEmptyLine = null
+            for (var i = 0; i < lines.length; i++) {
+               var trimmedLine = StringUtils.trim(lines[i])
+               if(!StringUtils.isEmpty(trimmedLine)){
+                  noEmptyLine = trimmedLine
+                  break
+               }
+            }
+            if(noEmptyLine == null){
+               //All lines are empty
+               return null
+            }
+            var result = ":contains(" + noEmptyLine + ")"
             var posSelector = this.getPositionSelector(element, element.ownerDocument, element.tagName + result)
             if(posSelector){
                result += posSelector
             }
+            this.stopFurtherEvaluation = true
             return result
          }else{
             return null

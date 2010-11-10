@@ -133,6 +133,8 @@ with(customizeyourweb){
          this.notifyValueChangedListener()   
       },
       
+      //TODO If the targetdef changes and the dialog is commited within the 500 ms the 
+      //value change listeners will not be informed 
       handleTargetDefinitionInput: function(){
          Utils.executeDelayed('ON_TARGET_DEF_INPUT', 500, function(){
             this.targetDefinitionMLHandler.handleCursorPositionChange()

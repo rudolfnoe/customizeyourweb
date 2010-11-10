@@ -56,6 +56,8 @@ with(customizeyourweb){
     * For every tab which is currently edited a seperate EditScriptHandler will be instantiated
     * and stored in the tab context
     * ENHANCEMENT: After canceling editing the page should be reloaded if modifications took place
+    * ENHANCEMENT: Easier error reporting
+    * ENHANCEMENT: Show tip that naviagtion with cursor keys is possible
     */
    function EditScriptHandler(targetWin){
       //List of highlighters which highlight elements which are the target of the currently
@@ -72,6 +74,8 @@ with(customizeyourweb){
       this.editModeActive = false
       //Highlighter for mouseover event
       this.mouseOverHighlighter = null
+      //History of last selected childs when navigating with keys to the parent
+      this.navigateWithKeysLastSelectedChilds = []
       //Context in which information from the sidebar is stored, needed for tab change handling
       this.sidebarContext = null
       //Sidebar load listener
@@ -150,7 +154,7 @@ with(customizeyourweb){
    }
    
    //Trigger edit dialog for retargeting an action
-   //TODO check if this can be integrated in the normal doCreateAction
+   //REFACTOR check if this can be integrated in the normal doCreateAction
    EditScriptHandler.retargetAction = function(){
       this.getEditHandler(content).retargetAction();
    }
@@ -213,7 +217,6 @@ with(customizeyourweb){
          //context menu
          getEgMenuPopup()[functionName]("popupshowing", this.suspendableEventHandler, true)
          
-         //TODO Remove logging
          getSidebar()[functionName]("load", this.sidebarLoadListener, true)
          //Registering for change of edit contexts clipboard property content to de/activate paste commands
          if(isAdd){
@@ -336,33 +339,38 @@ with(customizeyourweb){
        * @param {String} commandId
        */
       doCreateAction: function(commandId){
-         if(this.currentTarget==null && TARGETLESS_COMMANDS.indexOf(commandId)==-1)
-           return
-         var currentScript = getSidebarWinHandler().getCurrentScript()
-         if(this.currentTarget!=null){
-            var match = this.checkCurrentWinMatchesToCurrentScript(currentScript)
-            if(!match){
-               alert("Action could not be added because the URL of the target window \n" +
-                     "doesn't match with the url patterns defined for the current script.")
-               return
+         try{
+            if(this.currentTarget==null && TARGETLESS_COMMANDS.indexOf(commandId)==-1)
+              return
+            var currentScript = getSidebarWinHandler().getCurrentScript()
+            if(this.currentTarget!=null){
+               var match = this.checkCurrentWinMatchesToCurrentScript(currentScript)
+               if(!match){
+                  alert("Action could not be added because the URL of the target window \n" +
+                        "doesn't match with the url patterns defined for the current script.")
+                  return
+               }
             }
-         }
-         DomUtils.blurActiveElement(this.targetWin)
-         this.unhighlightAllHighlighters()
-         var wrapperCommand = this.createWrapperCommandFromCommandId(commandId)
-         this.initEditContextForCreateAction(commandId, currentScript)
-         var newAction = wrapperCommand.doCreateAction(this.editContext)
-         if(newAction){
-            //If creation successfull
-            var successful = getSidebarWinHandler().addOrUpdateAction(newAction, this.getActionTargetWin())
-            if(successful){
-               this.editCommandHistory.push(wrapperCommand);
-               this.updateCurrentTarget(newAction, this.getActionTargetWin())
-            }else{
-               wrapperCommand.undo(this.editContext)
+            DomUtils.blurActiveElement(this.targetWin)
+            this.unhighlightAllHighlighters()
+            var wrapperCommand = this.createWrapperCommandFromCommandId(commandId)
+            this.initEditContextForCreateAction(commandId, currentScript)
+            var newAction = wrapperCommand.doCreateAction(this.editContext)
+            if(newAction){
+               //If creation successfull
+               var successful = getSidebarWinHandler().addOrUpdateAction(newAction, this.getActionTargetWin())
+               if(successful){
+                  this.editCommandHistory.push(wrapperCommand);
+                  this.updateCurrentTarget(newAction, this.getActionTargetWin())
+               }else{
+                  wrapperCommand.undo(this.editContext)
+               }
             }
+            this.highlightCurrentTarget()
+         }catch(e){
+            alert('Sorry, an unexpected error is occurred :-( \nPlease refer to the error console (Tools->Error Console) for further information.')
+            CywUtils.logError(e, null, true)
          }
-         this.highlightCurrentTarget()
       },
       
       /*
@@ -402,7 +410,7 @@ with(customizeyourweb){
          
          this.initSidebarContext(scripts);
          initSidebarWin()
-         
+         this.showTip()
       },
       
       getCurrentScript: function(){
@@ -454,6 +462,7 @@ with(customizeyourweb){
             if(getEgMenuPopup().state=="open")
                return
             //CywUtils.logDebug("Target: " + event.target.tagName)
+            this.navigateWithKeysLastSelectedChilds = []   
             this.unhighlightActionTargets()
             var newTarget = event.target
             if(this.isContainedInEditableIframe(newTarget)){
@@ -666,28 +675,39 @@ with(customizeyourweb){
                   var ownerWindow = DomUtils.getOwnerWindow(this.currentTarget) 
                   if(ownerWindow.frameElement != null &&
                      ownerWindow.frameElement.tagName == "IFRAME"){
+                     this.navigateWithKeysLastSelectedChilds = []
                      this.currentTarget = ownerWindow.frameElement
                      break;
                   }else{
                      return
                   }
                }
+               this.navigateWithKeysLastSelectedChilds.push(this.currentTarget)
                this.currentTarget = this.currentTarget.parentNode
                break;
             case "firstChild":
-               var firstChild = DomUtils.getFirstChildBy(this.currentTarget, function(node){
-                  return node.nodeType == 1
-               })
-               if(firstChild!=null)
-                  this.currentTarget = firstChild
+               var child = null
+               if(this.navigateWithKeysLastSelectedChilds.length>0 && 
+                     DomUtils.isChildOf(this.currentTarget, this.navigateWithKeysLastSelectedChilds[this.navigateWithKeysLastSelectedChilds.length-1])){
+                  child = this.navigateWithKeysLastSelectedChilds.pop()
+               }else{
+                  this.navigateWithKeysLastSelectedChilds = []
+                  child = DomUtils.getFirstChildBy(this.currentTarget, function(node){
+                     return node.nodeType == 1 && DomUtils.isVisible(node)
+                  })
+               }
+               if(child!=null)
+                  this.currentTarget = child
                break;
             case "nextSibling":
-               var sibling = DomUtils.getNextElementSibling(this.currentTarget)
+               this.navigateWithKeysLastSelectedChilds = []
+               var sibling = DomUtils.getNextElementSibling(this.currentTarget, true)
                if(sibling)
                   this.currentTarget = sibling
                break;
             case "previousSibling":
-               var sibling = DomUtils.getPreviousElementSibling(this.currentTarget)
+               this.navigateWithKeysLastSelectedChilds = []
+               var sibling = DomUtils.getPreviousElementSibling(this.currentTarget, true)
                if(sibling)
                   this.currentTarget = sibling
                break;
@@ -812,6 +832,22 @@ with(customizeyourweb){
          byId('customizeyourweb_shortcut_help_panel').openPopup(tabpanelContainer, "overlap")   
       },
       
+      /*
+       * Shows tip for user
+       */
+      showTip: function(){
+         var prefKey = "tipsDontShowAgain.navigationWithCursorKeys"
+         if(!CywConfig.getPref(prefKey)){
+            var message = "You can also use the cursor keys to select targets:\n" +
+                               "Down/Right\t-> Next sibling element\n" + 
+                               "Up/Left\t\t-> Previous sibling element\n" + 
+                               "Ctrl + Down\t-> First child element (or last selected child)\n" + 
+                               "Ctrl + Up\t\t-> Parent element\n"
+            var dontShowAgain = TipDialog.showTip(message, window)
+            CywConfig.setPref(prefKey, dontShowAgain)
+         }
+      },
+      
       suspendEventHandling: function(){
          this.suspendableEventHandler.suspend()
       },
@@ -885,7 +921,7 @@ with(customizeyourweb){
    }
    ObjectUtils.extend(EditScriptHandler, AbstractGenericEventHandler)
    
-   //TODO Refactor this
+   //REFACTOR Why?
    //Helper methods
    function getSidebar(){
       return document.getElementById("sidebar")
