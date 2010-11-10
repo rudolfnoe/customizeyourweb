@@ -46,7 +46,7 @@
                            <label value="Text"/>
                            <menulist id="simpleValueML" editable="true" attr="value" >
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" selected="true"/>
                               </menupopup>
                            </menulist>
                         </row>
@@ -56,13 +56,13 @@
                         </row>
                         <row align="center" attrFor="textarea" collapsed="true">
                            <label value="Text"/>
-                           <textbox attr="value" value="&lt;Unchanged&gt;" multiline="true" rows="4" />
+                           <textbox attr="value" value="&lt;Default&gt;" multiline="true" rows="4" />
                         </row>
                         <row align="center" attrFor="select" collapsed="true">
                            <label value="Value"/>
                            <menulist id="htmlSelectML" attr="value">
                               <menupopup maxheight="250px">
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                               </menupopup>
                            </menulist>
                         </row>
@@ -70,7 +70,7 @@
                            <label value="Selected"/>
                            <menulist attr="checked">
                               <menupopup maxheight="250px">
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                                  <menuitem label="Yes" value="true" />
                                  <menuitem label="No" value="false" />
                               </menupopup>
@@ -91,7 +91,7 @@
                            <label value="Width"/>
                            <menulist styleProp="width" editable="true">
                               <menupopup >
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                               </menupopup>
                            </menulist>
                         </row>
@@ -99,7 +99,7 @@
                            <label value="Height"/>
                            <menulist styleProp="height" editable="true">
                               <menupopup >
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                               </menupopup>
                             </menulist>
                         </row>
@@ -115,7 +115,7 @@
                            <label value="Font-family" />
                            <menulist styleProp="font-family" editable="true"  >
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                                  <menuitem label="Arial"/>
                                  <menuitem label="Comic Sans MS"/>
                                  <menuitem label="Georgia"/>
@@ -144,7 +144,7 @@
                            <label value="Border-Width"/>
                            <menulist styleProp="border-width"  editable="true">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                               </menupopup>
                            </menulist>
                         </row>
@@ -152,7 +152,7 @@
                            <label value="Border-Style"/>
                            <menulist styleProp="border-style">
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                                  <menuitem label="none" value="none"/>
                                  <menuitem label="solid" value="solid"/>
                                  <menuitem label="dashed" value="dashed"/>
@@ -184,7 +184,7 @@
                            <label value="Font-Style"/>
                            <menulist styleProp="font-style" >
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                                  <menuitem label="normal" value="normal"/>
                                  <menuitem label="italic" value="italic"/>
                                  <menuitem label="inherit" value="inherit"/>
@@ -195,7 +195,7 @@
                            <label value="Text-Decoration"/>
                            <menulist styleProp="text-decoration" >
                               <menupopup>
-                                 <menuitem label="&lt;Unchanged&gt;" value="&lt;Unchanged&gt;" selected="true"/>
+                                 <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                                  <menuitem label="none" value="none"/>
                                  <menuitem label="blink" value="blink"/>
                                  <menuitem label="inherit" value="inherit"/>

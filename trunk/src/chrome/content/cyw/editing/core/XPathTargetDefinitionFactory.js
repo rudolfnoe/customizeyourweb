@@ -25,10 +25,10 @@ with(customizeyourweb){
       createDefinitions: function(element){
          var predicateStrategies = this.getPredicateStrategies()
          var xPaths = {
-            id: XPathUtils.createXPath(element, [predicateStrategies.id, predicateStrategies.defaultStrategy]),
-            name: XPathUtils.createXPath(element, [predicateStrategies.name, predicateStrategies.defaultStrategy]),
-            href: XPathUtils.createXPath(element, [predicateStrategies.href, predicateStrategies.defaultStrategy]),
-            defaultXPath: XPathUtils.createXPath(element, [predicateStrategies.defaultStrategy])
+            id: this.createXPath(element, [predicateStrategies.id, predicateStrategies.defaultStrategy]),
+            name: this.createXPath(element, [predicateStrategies.name, predicateStrategies.defaultStrategy]),
+            href: this.createXPath(element, [predicateStrategies.href, predicateStrategies.defaultStrategy]),
+            defaultXPath: this.createXPath(element, [predicateStrategies.defaultStrategy])
          }
 
          //TODO Check that exception handling!
@@ -53,6 +53,17 @@ with(customizeyourweb){
                result.push(new XPathTargetDefinition(xPath))
          }
          return result
+      },
+      
+      createXPath: function(element, predicateStrategyArr){
+         try{
+            return XPathUtils.createXPath(element, predicateStrategyArr)         
+         }catch(e){
+            //In case of pages with namespaces this can fail
+            //TODO Find the reason for this, this is only a workaround
+            CywUtils.logWarning("XPathTargetDefinition.createXPath: " + e.message)
+            return null
+         }
       },
       
       getPredicateStrategies: function(){

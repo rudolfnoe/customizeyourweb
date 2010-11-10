@@ -27,17 +27,21 @@ with(customizeyourweb){
       },
       
       logDebug: function(messageString){
-         Log.logDebug("CYW: " + messageString)
+         Log.logDebug("CYW Debug: " + messageString)
       },
-      
+
       logError: function(error, messageString, printStackTrace){
-         Log.logError(error, "CYW: " + (messageString?messageString:""), arguments.length>=3?printStackTrace:true)
+         Log.logError(error, "CYW Error: " + (messageString?messageString:""), arguments.length>=3?printStackTrace:true)
       },
 
       logInfo: function(messageString){
-         Log.logInfo("CYW: " + messageString)
+         Log.logInfo("CYW Info: " + messageString)
       },
       
+      logWarning: function(messageString){
+         Log.logWarning("CYW Warning: " + messageString)
+      },
+
       logPerf: function(eventDescription, timeConsumed){
          if(CywConfig.isPerfLogActive()){
             CONSOLE_SERVICE.logStringMessage("CYW: " + eventDescription + " Time consumed: " + timeConsumed)      

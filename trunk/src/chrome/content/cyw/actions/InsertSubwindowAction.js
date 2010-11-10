@@ -252,6 +252,14 @@ with (customizeyourweb) {
                throw new Error('insertion preview iframe failed')
             }
          },
+         
+         isPreviewBehavior: function(){
+            return this.behavior == SubwindowBehavior.PREVIEW
+         },
+         
+         isListviewTriggerEvent: function(){
+            return (this.triggerEvent & SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE) != 0  
+         },
 			
 			//@see IPreviewableAction.preview
 			preview: function(editContext){

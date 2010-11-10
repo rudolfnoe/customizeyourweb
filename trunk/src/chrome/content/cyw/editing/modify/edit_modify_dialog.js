@@ -1,7 +1,7 @@
 with(customizeyourweb){
 (function(){
    const NUMERIC_VALUE_REG_EXP = /^(-?\d+)(.*)$/;
-   const UNCHANGED_VALUE = "<Unchanged>";
+   const UNCHANGED_VALUE = "<Default>";
    const UPDATE_DELAY = 500;
    const STYLE_PROPS = ["border", "border-width", "border-style"];
    
@@ -319,8 +319,6 @@ with(customizeyourweb){
                   ControlUtils.appendItemToMenulist(control, value, value);
                }
                control.setAttribute("defaultValue", value);
-               //TODO check if default value should be set or not;
-//               control[attr] = this.targetElement[attr]
             }
             row.collapsed = false;
             found = true     ;
@@ -360,7 +358,6 @@ with(customizeyourweb){
             ControlUtils.observeControl(simpleAttrControls[i], simpleValueChangedListener);
          }
          
-         //Listener for updating window from simple tab
          this.getTargetDefinitionBinding().addValueChangedListener(new EventHandlerAdapter(this.handleTargetDefChanged, this));
       },
       

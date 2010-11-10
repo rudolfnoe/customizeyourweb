@@ -4,6 +4,9 @@ with(customizeyourweb){
    const SLASH_REPLACE_REG_EXP = /\//g;
    const WORD_REG_EXP = /\w+/;
    
+   /*
+    * TODO If attribute contains quotes errors occurs
+    */
    function SimpleTargetDefinition(tagName){
       this.AbstractTargetDefinition()
       //Map with attribute / value pairs
@@ -29,6 +32,7 @@ with(customizeyourweb){
       //Remove whithespaces
       var result = element.textContent.replace("\n", " ")
       result = result.replace(/\t/g, "")
+      result = result.replace(/["]/g, "&quot;")
       if(!CywUtils.isMlbActive()){
          return result
       }

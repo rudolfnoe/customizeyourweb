@@ -3,7 +3,6 @@ with(customizeyourweb){
    
    /*
     * Handler for common attributes dialog
-    * TODO Add help text for which action dialog is shown.
     */
    var CommonAttributesEditDialogHandler = {
       
@@ -22,6 +21,7 @@ with(customizeyourweb){
             //this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
             targetDefBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
             this.initValidators(targetWindow, EditDialog.getAllowMultiTargetDefinition())
+            this.setTitle(action)
          }catch(e){
             CywUtils.logError(e)
          }
@@ -38,6 +38,12 @@ with(customizeyourweb){
          var okValidator = new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow, allowMultiTargetDef)
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
+      },
+      
+      setTitle: function(action){
+         var type = ObjectUtils.getType(action)
+         var actionIndex = type.lastIndexOf("Action")
+         document.title = type.substring(0, actionIndex) + " Action"
       }
    }
    ObjectUtils.injectFunctions(CommonAttributesEditDialogHandler, AbstractEditDialogHandler);

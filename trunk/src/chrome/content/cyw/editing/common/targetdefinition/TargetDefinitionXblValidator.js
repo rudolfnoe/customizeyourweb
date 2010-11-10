@@ -24,11 +24,16 @@ with(customizeyourweb){
             return false
          }
          //Target is not in page and it is not optional
-         if (!targetDef.isTargetInPage(this.targetWin) && !targetDef.isTargetOptional()){
-            return false
-         }
-         var targets = targetDef.getTargets(this.targetWin)
-         if(targets.length > 1 && !this.allowMultiTargetDef){
+         try{            
+            if (!targetDef.isTargetInPage(this.targetWin) && !targetDef.isTargetOptional()){
+               return false
+            }
+            var targets = targetDef.getTargets(this.targetWin)
+            if(targets.length > 1 && !this.allowMultiTargetDef){
+               return false
+            }
+         }catch(e){
+            //if target def is not valid return false
             return false
          }
          return true

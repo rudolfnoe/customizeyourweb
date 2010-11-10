@@ -4,7 +4,7 @@
  with(customizeyourweb){
 (function(){
    
-   //Restriction on Windows, only 250 because it is counted without extension
+   //Restriction on Windows, only 250 because it is counted without extension 
    const MAX_FILE_PATH_LENGTH = 250;
 
    var CywVersionManager = { 

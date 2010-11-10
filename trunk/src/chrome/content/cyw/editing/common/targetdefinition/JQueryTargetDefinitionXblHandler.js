@@ -15,10 +15,17 @@ with(customizeyourweb){
          return JQueryTargetDefinitionFactory.getInstance().createDefinitions(targetElement) 
       },
       
+      /*jQuery escape sequence are two backslashes, but if entered it turns into 4 backslashes as they are escaped too
+       * Therefore the correction back to two backslashes
+       */
+      getCorretedTargetDefString: function(){
+         return this.getTargetDefinitionValue().replace(/[\\]{2}/g, "\\")
+      },
+      
       getCurrentTargets: function(){
          var targetElems = null
          try{
-            targetElems = $(this.getTargetDefinitionValue(), this.getTargetDocument()).toArray()
+            targetElems = $(this.getCorretedTargetDefString(), this.getTargetDocument()).toArray()
          }catch(e){
             throw new Error('Invalid JQuery Expression:' + e.toString())
          }
@@ -26,7 +33,7 @@ with(customizeyourweb){
       },
       
       getTargetDefinition: function(){
-         return new JQueryTargetDefinition(this.getTargetDefinitionValue())      
+         return new JQueryTargetDefinition(this.getCorretedTargetDefString())      
       }
       
    }

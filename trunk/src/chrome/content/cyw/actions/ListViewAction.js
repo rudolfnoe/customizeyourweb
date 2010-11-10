@@ -141,6 +141,10 @@ with(customizeyourweb){
          }
       },
       
+      isFocusOnLoad: function(){
+         return this.focusOnLoad
+      },
+      
       performShortcut: function(cywContext){
          this.t_listViewHandler.focusListView()
       }      

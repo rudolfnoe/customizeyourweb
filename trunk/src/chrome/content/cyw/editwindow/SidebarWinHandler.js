@@ -12,8 +12,6 @@ with(customizeyourweb){
    
    /*
     * Handler for Sidebar window
-    * TODO Add warning if Preview-Window Action is after Listview action as onpage load the Preview-Listener will not receive the 
-    * focus event and in turn no preview will be shown.
     * ENHANCEMENT: Add small buttons for modifying URL Patterns
     * ENHANCEMENT: Add possibility to reload and re-run script during editing (Update View)
     * ENHANCEMENT: Don't show generic scripts (pattern "*") at the top position of the scripts select box
@@ -95,6 +93,36 @@ with(customizeyourweb){
          }
       },
       
+      /*
+       * Checks whether the current script has a Listview defined prio to a Preview subwindow
+       * as this causes that the preview will not be displayed after page load
+       */
+      checkListViewBeforePreview: function(){
+         var hasListViewActionWithFocusOnLoad = false
+         var actionIter = new ActionIterator(this.getActions())
+         while (actionIter.hasNext()) {
+            var action = actionIter.next()
+            if(ObjectUtils.instanceOf(action, ListViewAction) &&
+               action.isFocusOnLoad()){
+               hasListViewActionWithFocusOnLoad = true
+            }
+            if(ObjectUtils.instanceOf(action, InsertSubwindowAction) &&
+               action.isPreviewBehavior() &&
+               action.isListviewTriggerEvent() &&
+               hasListViewActionWithFocusOnLoad){
+                  var promptReply = PromptService.confirmYesNo(window, "Listview before Insert Subwindow?", 
+                                                          "The insert subwindow action must be placed before the listview action in the actions list " + 
+                                                          "in order that the preview works properly.  Would you like to correct this?")
+                  if(promptReply==PromptReply.NO){
+                     return true
+                  }else{
+                     return false
+                  }
+             }
+         }
+         return true
+      },
+      
       checkTargetDefinitionForAction: function(event){
          var actionTreeViewItem = event.item
          if(actionTreeViewItem.hasMessage() || !ObjectUtils.instanceOf(actionTreeViewItem, AbstractActionTreeItem)){
@@ -102,6 +130,7 @@ with(customizeyourweb){
          }
          var action = actionTreeViewItem.getAction()
          if(!ObjectUtils.instanceOf(action, AbstractTargetedAction) ||
+            ObjectUtils.instanceOf(action, IfElementExistsAction) ||
             ObjectUtils.instanceOf(action, RemoveAction) ||
             ObjectUtils.instanceOf(action, CutAction)){
                return
@@ -185,6 +214,9 @@ with(customizeyourweb){
          byId(id).focus()
       },
       
+      /*
+       * Returns array list of current actions
+       */
       getActions: function(){
          return this.actionsTreeView.getActions() 
       },
@@ -510,6 +542,10 @@ with(customizeyourweb){
       
       saveScript: function(sidebarClosedAbnormal){
          this.includeUrlPatternsELB.stopEditing();
+         var ok = this.checkListViewBeforePreview()
+         if(!ok){
+            return
+         }
          this.getEditScriptHandler().saveScript(this.getCurrentScript(), sidebarClosedAbnormal)
       },
       

@@ -1,4 +1,4 @@
-//TODO refactor
+//REFACTOR
 (function(){
 	function SidebarContext(editScriptHandler, scripts, targetWin) {
 		this.editScriptHandler = editScriptHandler

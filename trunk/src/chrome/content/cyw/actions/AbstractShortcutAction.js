@@ -57,9 +57,8 @@ with(customizeyourweb){
          }
       },
       
-      /*TODO refactor, in case renaming of methods for better understanding*/
+      /*REFACTOR Better names needed*/
       abstractPerform: function(cywContext){
-         //TODO refactor!!!
          var result = this.performShortcut(cywContext)
          if(!result)
             return ShortcutManager.SUPPRESS_KEY
