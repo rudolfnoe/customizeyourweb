@@ -11,11 +11,14 @@ with(customizeyourweb){
        * Common edit method
        */
       editAction: function(action, editContext, dialogUrl, position){
+         return this.editInDialog(action, editContext, dialogUrl, position)
+       },
+       
+       editInDialog: function(action, editContext, dialogUrl, position){
          var editDialog = new EditDialog(dialogUrl, "EditInsertHtmlCommand", action, editContext)
          editDialog.show(position)
-			return editDialog.getActionResult()
+         return editDialog.getActionResult()
        }
-       
    }
    ObjectUtils.extend(AbstractEditInsertHtmlCommand, "AbstractEditCommand", customizeyourweb)
 

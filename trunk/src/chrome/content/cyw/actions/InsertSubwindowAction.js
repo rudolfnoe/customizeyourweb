@@ -3,8 +3,6 @@ with (customizeyourweb) {
 
       /*
        * Insert subwindow (iframe) with static content or dynamic preview functionality
-       * TODO If insert subwindow is defined after listview the preview after load fails as the focus event fires before the 
-       * preview listener is set up
        */
       function InsertSubwindowAction(id, targetDefinition) {
          this.AbstractInsertHtmlAction(id, targetDefinition)
@@ -96,7 +94,9 @@ with (customizeyourweb) {
          cleanUpInternal: function(cywContext){
             this.savePropertyChanges(cywContext.getScriptId(), this.id)
             //Explicit destroy is neccessary otherwise listeners keep alive and causes errors
-            this.previewListener.destroy()
+            if(this.previewListener){
+               this.previewListener.destroy()
+            }
             this.removeSubwindow(cywContext);
          },
          
@@ -115,7 +115,7 @@ with (customizeyourweb) {
             if(!iframe){
                return false
             }
-            this.initIframe(iframe)
+            this.initIframe(iframe, true)
             return true
          },
          
@@ -168,12 +168,14 @@ with (customizeyourweb) {
          /*
           * Inits the iframe depending on its behavior
           */
-         initIframe: function(iframe){
+         initIframe: function(iframe, installPreviewListener){
             if(this.behavior == SubwindowBehavior.STATIC) {
-              iframe.src = this.url
+               iframe.src = this.url
             }else if(this.behavior == SubwindowBehavior.PREVIEW) {
-               this.previewListener = new PreviewListener(iframe, this.triggerEvent)
-               this.previewListener.init()
+               if(installPreviewListener){
+                  this.previewListener = new PreviewListener(iframe, this.triggerEvent)
+                  this.previewListener.init()
+               }
             }else {
                throw new Error('unknown behavior value')
             }
@@ -261,10 +263,13 @@ with (customizeyourweb) {
             return (this.triggerEvent & SubwindowTriggerEvent.ON_LISTVIEW_ITEM_CHANGE) != 0  
          },
 			
-			//@see IPreviewableAction.preview
+			//@see AbstractPreviewableAction.preview
 			preview: function(editContext){
 				var iframe = this.insertIframeHtml(editContext)
-				return {}
+            if(!iframe){
+               return false
+            }
+            this.initIframe(iframe, false)
 			},
          
          removeSubwindow: function(abstractContext){
@@ -332,7 +337,6 @@ with (customizeyourweb) {
       }
       ObjectUtils.extend(InsertSubwindowAction, "AbstractInsertHtmlAction", customizeyourweb)
       ObjectUtils.extend(InsertSubwindowAction, "AbstractChangeableAction", customizeyourweb)
-      ObjectUtils.extend(InsertSubwindowAction, "IPreviewableAction", customizeyourweb)
       customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertSubwindowAction", InsertSubwindowAction)
 
       SubwindowBehavior = {

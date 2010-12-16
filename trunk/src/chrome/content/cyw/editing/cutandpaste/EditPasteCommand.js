@@ -12,10 +12,9 @@ with(customizeyourweb){
             Statusbar.setText('Nothing to paste in the clipboard.')
             return
          }
-         this.setUndoMemento(action.paste(editContext))
       },
 
-      createAction: function(editContext) {
+     createAction: function(editContext) {
          var clipboard = this.elementToInsert = editContext.getClipboard()
          Assert.notNull(clipboard,  "Nothing to paste in clipboard")
          

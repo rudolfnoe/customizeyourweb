@@ -175,14 +175,11 @@ with(customizeyourweb){
        */
       actionDeleted: function(action, script){
          //Undo action
-         if(ObjectUtils.instanceOf(action, IPreviewableAction)){
-            this.initEditContextCommon(null, this.targetWin, script)
-            var undoMemento = this.editContext.getActionChangeMemento(action.getId())
-            try{
-               action.undo(this.editContext, undoMemento)
-            }catch(e){
-               CywUtils.logError(e, "EditScriptHandler.actionDeleted: Undo failed", true)
-            }
+         this.initEditContextCommon(null, this.targetWin, script)
+         try{
+            action.undo(this.editContext)
+         }catch(e){
+            CywUtils.logError(e, "EditScriptHandler.actionDeleted: Undo failed", true)
          }
          //Remove all undos from command history
          var newHistory = []
@@ -259,7 +256,7 @@ with(customizeyourweb){
       
       /*
        * Calls doCreateAction with the resize command id
-       * Is call from the resize highighlighter on resize end
+       * Is called from the resize highighlighter on resize end
        */
       createResizeAction: function(){
          this.doCreateAction("customizeyourweb_resizeCmd") 
@@ -632,7 +629,8 @@ with(customizeyourweb){
          this.shortcutManager.addShortcut("c", Utils.bind(function(){this.doCreateAction("customizeyourweb_clickCmd")}, this))
          this.shortcutManager.addShortcut("f", Utils.bind(function(){this.doCreateAction("customizeyourweb_focusCmd")}, this))
          this.shortcutManager.addShortcut("h", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertHTMLCmd")}, this))
-         this.shortcutManager.addShortcut("i", new CommandWrapper('customizeyourweb_ifElementExistsCmd'))
+         this.shortcutManager.addShortcut("e", new CommandWrapper('customizeyourweb_ifElementExistsCmd'))
+         this.shortcutManager.addShortcut("i", new CommandWrapper('customizeyourweb_isolateCmd'))
          this.shortcutManager.addShortcut("j", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertJSCmd")}, this))
          this.shortcutManager.addShortcut("y", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertStyleSheetCmd")}, this))
          this.shortcutManager.addShortcut("w", Utils.bind(function(){this.doCreateAction("customizeyourweb_insertSubwindowCmd")}, this))
@@ -775,8 +773,13 @@ with(customizeyourweb){
          var wrapperCommand = new WrapperCommand(new EditRetargetCommand(), getSidebarWinHandler())
          var retargetedAction = wrapperCommand.doEditAction(selectedAction, this.editContext)
          if(retargetedAction){
-            this.currentTarget = retargetedAction.getTargetDefinition().getTarget(newTargetWindow)
-            this.highlightCurrentTarget()
+            var targets = retargetedAction.getTargets(this.editContext, true)
+            if(targets.length>0){
+               this.currentTarget = targets[0]
+               this.highlightCurrentTarget()
+            }else{
+               this.currentTarget = null
+            }
             getSidebarWinHandler().updateAction(retargetedAction);
             this.editCommandHistory.push(wrapperCommand)
          }

@@ -53,7 +53,7 @@
                      <radio id="staticRB" label="Static: " value="STATIC"/>
                      <!-- hbox align="center" flex="1"-->
                         <label value="URL"/>
-                        <textbox id="urlTB" flex="1" model="url"/>
+                        <textbox id="urlTB" flex="1" model="url" oninput="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()"/>
                      <!-- /hbox-->
                   </row>
                </rows>
@@ -79,7 +79,7 @@
                </row>
                <row align="center">
                   <label value="Position"/>
-                  <menulist id="positionML" model="postion" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
+                  <menulist id="positionML" model="position" onselect="customizeyourweb.EditInsertSubwindowDialogHandler.triggerPreview()">
                      <menupopup>
                         <menuitem label="After selected element" value="after" />
                         <menuitem label="Before selected element" value="before"/>

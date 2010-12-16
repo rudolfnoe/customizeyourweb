@@ -1,5 +1,6 @@
 with(customizeyourweb){
 (function(){
+
    var EditInsertSubwindowDialogHandler = {
       action: null,
       editContext: null,
@@ -9,13 +10,8 @@ with(customizeyourweb){
       targetDefinitionBackup: null,
       targetElement: null,
       
-      undoMemento: null,
-      
-      
       doCancel: function(){
-         if(this.undoMemento != null){
-            this.action.undo(this.editContext, this.undoMemento)
-         }
+         this.action.undo(this.editContext)
       },
       
       doOk: function(){
@@ -49,7 +45,7 @@ with(customizeyourweb){
       
       synchronizeActionWithForm: function(){
          var url = byId("urlTB").value
-         if(!StringUtils.startsWith(url, "http://")){
+         if(!StringUtils.startsWith(url, "http")){
             byId("urlTB").value = "http://" + url
          }
          PresentationMapper.mapPresentation2Model(document, this.action)
@@ -118,11 +114,9 @@ with(customizeyourweb){
       
       _triggerPreview: function(){
          try{
-   			if(this.undoMemento != null){
-               this.action.undo(this.editContext, this.undoMemento)
-            }
+            this.action.undo(this.editContext)
             this.synchronizeActionWithForm()
-            this.undoMemento = this.action.preview(this.editContext)
+            this.action.preview(this.editContext)
          }catch(e){
             Log.logError(e)
          }

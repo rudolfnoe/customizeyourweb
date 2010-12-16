@@ -11,26 +11,25 @@ with(customizeyourweb){
          if(!this.isTargetInPage(cywContext.getTargetWindow())){
             return false
          }
-         var undoMemento = this.removeElements(cywContext);
-         cywContext.setActionChangeMemento(this.getId(), undoMemento)
+         this.removeElements(cywContext);
          return true
       },
       
       preview: function(editContext){
-         return this.removeElements(editContext)
+         this.removeElements(editContext)
       },
       
       removeElements:function(abstractContext){
          var targets = this.getTargets(abstractContext)
          var undoMemento = []
-         for(key in targets){
-            undoMemento.push(new RemovedElement(targets[key]))
+         for(i in targets){
+            undoMemento.push(new RemovedElement(targets[i]))
          }
          $(targets, abstractContext.getTargetDocument()).remove()
-         return undoMemento
+         abstractContext.setActionChangeMemento(this.getId(), undoMemento)
       },
       
-      undo: function(editContext, undoMemento){
+      undoInternal: function(editContext, undoMemento){
          var removedElements = undoMemento
          for(key in removedElements){
             removedElements[key].undoRemoval()
@@ -38,8 +37,8 @@ with(customizeyourweb){
       }
       
    }
+   ObjectUtils.extend(RemoveAction, "AbstractPreviewableAction", customizeyourweb)
    ObjectUtils.extend(RemoveAction, "AbstractTargetedAction", customizeyourweb)
-   ObjectUtils.extend(RemoveAction, "IPreviewableAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "RemoveAction", RemoveAction)
 })()

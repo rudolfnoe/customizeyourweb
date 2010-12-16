@@ -6,8 +6,9 @@ with(customizeyourweb){
       
    function AbstractInsertHtmlAction(id, targetDefinition, position){
       this.AbstractTargetedAction(id, targetDefinition)
+      this.t_elementId = null
       //Position where the element should be inserted relative to the target element
-      this.position = position?position:WhereToInsertEnum.AFTER
+      this.position = position || WhereToInsertEnum.AFTER
    }
    
    /*
@@ -80,10 +81,10 @@ with(customizeyourweb){
       constructor: AbstractInsertHtmlAction,
 
       getElementId: function(scriptId){
-         if(!this.elementId){
-            this.elementId = "cyw_id_" + scriptId + "_" + this.getId();
+         if(!this.t_elementId){
+            this.t_elementId = "cyw_id_" + scriptId + "_" + this.getId();
          }
-         return this.elementId
+         return this.t_elementId
       },
 
       getPosition: function(){
@@ -130,21 +131,21 @@ with(customizeyourweb){
        * @return Object: memento containing all information needed for undoing the modifications
        */
        preview: function(editContext){
-         throw new Error('IPreviewableAction.preview must be implemented')
+         throw new Error('AbstractPreviewableAction.preview must be implemented')
        },
        
        /*
         * Undos the modifications done by calling preview
+        * As InsertHtml doesn't write an undo memento in the context undo is direcly implemented
         * @param EditContext
-        * @param Object undoMemento see preview
         */
-       undo: function(editContext, undoMemento){
-         $('[' + MARKER_ATTR + '=' + this.getElementId() + ']', editContext.getTargetDocument()).remove();
+       undo: function(editContext){
+         $('[' + MARKER_ATTR + '=' + this.getElementId(editContext.getScriptId()) + ']', editContext.getTargetDocument()).remove();
        }
    }
    
+   ObjectUtils.extend(AbstractInsertHtmlAction, "AbstractPreviewableAction", customizeyourweb);
    ObjectUtils.extend(AbstractInsertHtmlAction, "AbstractTargetedAction", customizeyourweb);
-   ObjectUtils.extend(AbstractInsertHtmlAction, "IPreviewableAction", customizeyourweb);
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractInsertHtmlAction", AbstractInsertHtmlAction);
 })()

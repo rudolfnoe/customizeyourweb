@@ -28,20 +28,26 @@
             this.actionBackup = existingAction
          }else{
             //no backup! as actionbackup must be real reference to action for undo
-            this.action = action
             this.commandType="create"
          }
+         this.action = action
          return action
       },
       
-      doEditAction: function(action, editContext){
+      doEditAction: function(currentAction, editContext){
          this.commandType="edit"
          //Current action instance is used as backup
-         this.actionBackup = action
+         this.actionBackup = currentAction
+         //undo action
+         currentAction.undo(editContext)
          
          //Editing gets clone of original action so in case of canceling the action in the action tree stays unmodifed 
-         this.action = cyw.ObjectUtils.deepClone(action)
-         return this.editCommand.doEditAction(this.action, editContext)
+         this.action = this.editCommand.doEditAction(cyw.ObjectUtils.deepClone(currentAction), editContext)
+         if(!this.action){
+            //editing cancelled, restore old state
+            currentAction.preview(editContext)
+         }
+         return this.action
       },
       
       getExistingActionById: function(aAction){

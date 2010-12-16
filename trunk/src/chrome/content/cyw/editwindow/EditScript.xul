@@ -100,7 +100,7 @@
             <tree id="actionsTreeView" flex="10" seltype="single" context="treeContextMPU" 
                   onselect="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
                   onclick="customizeyourweb.CywSidebarWinHandler.handleActionTreeSelect(event)"
-                  ondblclick="document.getElementById('editBU').click()"
+                  ondblclick="document.getElementById('editActionBtn').click()"
                   hidecolumnpicker="true"
                   style="min-height:100px"
                   tooltiptext="List of actions which will be executed after page load / page change (Alt+Shift+A)">
@@ -119,10 +119,10 @@
                </columns>
                <rows>
                   <row>
-                     <button id="editBU" class="button" command="editActionCmd" tooltiptext="Enter, Alt+Shift+E">
+                     <button id="editActionBtn" class="button" command="editActionCmd" tooltiptext="Enter, Alt+Shift+E">
                         <html:u>E</html:u>dit
                      </button>
-                     <button class="button" command="removeActionCmd" tooltiptext="Del, Alt+Shift+R">
+                     <button id="deleteActionBtn" class="button" command="removeActionCmd" tooltiptext="Del, Alt+Shift+R">
                         <html:u>R</html:u>emove
                      </button>
                      <button command="moveUpCmd" tooltiptext="Ctrl+Arrow up"/>
@@ -171,10 +171,10 @@
                <html:u>D</html:u>elete Script
             </button>
             <spacer flex="1"/>
-            <button class="button" command="saveCmd" tooltiptext="Ctrl+S, Alt+Shift+S">
+            <button id="saveBtn" class="button" command="saveCmd" tooltiptext="Ctrl+S, Alt+Shift+S">
                <html:u>S</html:u>ave
             </button>
-            <button class="button" command="cancelCmd" tooltiptext="Alt+Shift+C">
+            <button id="cancelBtn" class="button" command="cancelCmd" tooltiptext="Alt+Shift+C">
                <html:u>C</html:u>ancel
             </button>
          </row>

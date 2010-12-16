@@ -1,6 +1,7 @@
 with(customizeyourweb){
 (function(){
    function EditFocusCommand(){
+      this.AbstractCommonAttributesEditCommand()
    }
    
    EditFocusCommand.prototype = {

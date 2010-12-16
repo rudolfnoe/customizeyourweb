@@ -50,22 +50,24 @@ with(customizeyourweb){
          }
          var changeMemento = multiElementWrapper.getChangeMemento()
          abstractContext.setActionChangeMemento(this.getId(), changeMemento)
-         return changeMemento
       },
       
       preview: function(editContext){
-         return this.modifyElements(editContext, true)
+         this.modifyElements(editContext, true)
       },
       
-      undo: function(editContext, undoMemento){
+      /*
+       * FIXME Multi-Step undo doesn't work for value of textfield
+       */
+      undoInternal: function(editContext, undoMemento){
          var multiElementWrapper = new MultiElementWrapper(this.getTargets(editContext, true))
          multiElementWrapper.setChangeMemento(undoMemento)
          multiElementWrapper.restore()
       }
    }
    
+   ObjectUtils.extend(ModifyAction, "AbstractPreviewableAction", customizeyourweb)
    ObjectUtils.extend(ModifyAction, "AbstractTargetedAction", customizeyourweb)
-   ObjectUtils.extend(ModifyAction, "IPreviewableAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "ModifyAction", ModifyAction)
 })()

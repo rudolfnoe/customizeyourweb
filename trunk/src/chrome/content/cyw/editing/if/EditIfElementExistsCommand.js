@@ -1,6 +1,7 @@
 with(customizeyourweb){
 (function(){
    function EditIfElementExistsCommand(){
+      this.AbstractCommonAttributesEditCommand()
    }
    
    EditIfElementExistsCommand.prototype = {

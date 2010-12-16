@@ -32,11 +32,9 @@ with(customizeyourweb){
        */
        preview: function(editContext){
           this.insertHtml(this.htmlCode, editContext)
-          return null
        }
    }
    ObjectUtils.extend(InsertHTMLAction, "AbstractInsertHtmlAction", customizeyourweb)
-   ObjectUtils.extend(InsertHTMLAction, "IPreviewableAction", customizeyourweb)
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "InsertHTMLAction", InsertHTMLAction)
 })()

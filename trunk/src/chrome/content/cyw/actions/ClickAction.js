@@ -2,6 +2,9 @@ with(customizeyourweb){
 (function(){   
    var AbstractTargetedAction = customizeyourweb.AbstractTargetedAction
       
+   /*
+    * TODO Not all modifiers are working
+    */
    function ClickAction (id, targetDefinition){
       this.AbstractTargetedAction(id, targetDefinition)
       this.button = 0 //Default left click

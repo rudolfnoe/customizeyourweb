@@ -1,6 +1,10 @@
 with(customizeyourweb){
 (function(){   
    
+   /*
+    * TODO Listview action doesn't work properly under https://developer.mozilla.org/en-US/search?q=opendialog
+    * The list view means there are two divs but there is only one per item
+    */
    function ListViewAction (id, targetDefinition){
       this.AbstractTargetedAction(id, targetDefinition)
       //Do this second as default repetition behavior will be overridden

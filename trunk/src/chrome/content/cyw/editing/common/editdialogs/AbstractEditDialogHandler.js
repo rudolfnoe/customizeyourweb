@@ -5,8 +5,8 @@ with(customizeyourweb){
     * Is added to subclasses with ObjectUtils.injectFunctions
     */
    var AbstractEditDialogHandler = {
-      getAction: function(clone){
-         return EditDialog.getAction(clone)
+      getAction: function(){
+         return EditDialog.getAction()
       },
       
       getCurrentTargets: function(){
@@ -34,7 +34,7 @@ with(customizeyourweb){
       },
       
       initTargetDefinitionBinding: function(){
-         var action = this.getAction(true)
+         var action = this.getAction()
          var targets = action.getTargets(this.getTargetWindow(), true)
          var targetElement = null
          if(targets.length==1){

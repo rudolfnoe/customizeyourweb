@@ -2,24 +2,12 @@ with(customizeyourweb){
 (function(){
    
 	function AbstractEditCommand(){
-      //TODO: There are to memento storages. One in the edit-context and one here, do we need both?
-      //Memento object storing undo data (GoF Pattern)
-      //This memento is used for previewable actions (see IPreviewableAction)
-      this.undoMemento = null
    }
    
    AbstractEditCommand.prototype = {
       constructor: AbstractEditCommand,
       AbstractEditCommand: AbstractEditCommand,
       
-      getUndoMemento: function(){
-         return this.undoMemento
-      },
-
-      setUndoMemento: function(undoMemento){
-         this.undoMemento = undoMemento
-      },
-
       doCreateAction: function(){
          throw new Error('Must be implemented')
       },
@@ -56,11 +44,9 @@ with(customizeyourweb){
        * @param AbstractAction actionBackup: Only provided for undoing editing. This is the action in the state before it was modified
        */
       undo: function(editContext, action, actionBackup){
-         if(ObjectUtils.instanceOf(action, IPreviewableAction)){
-            action.undo(editContext, this.undoMemento)
-            if(actionBackup){
-               actionBackup.preview(editContext)
-            }
+         action.undo(editContext)
+         if(actionBackup){
+            actionBackup.preview(editContext)
          }
       }
    }

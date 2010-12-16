@@ -24,7 +24,7 @@
    </commandset>
    
    <dialogheader title="Define the details of modifying" rows="1"/>
-   <vbox flex="1" style="overflow:auto">
+   <vbox flex="1" style="overflow:auto;">
 
    <tabbox id="tabbox" persist="selectedIndex" >
       <tabs>
