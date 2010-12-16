@@ -11,7 +11,7 @@ with(customizeyourweb){
 
       doCreateAction: function(editContext){
          var insertHTMLAction = new InsertSubwindowAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
-         return this.editAction(insertHTMLAction, editContext, EDIT_INSERT_SUBWINDOW_DIALOG_URL)
+         return this.editInDialog(insertHTMLAction, editContext, EDIT_INSERT_SUBWINDOW_DIALOG_URL)
       },
       
       doEditAction: function(action, editContext){

@@ -38,7 +38,7 @@ with(customizeyourweb){
       
       undo: function(){
          this.actionsTreeView.addItem(this.actionTreeItem, this.parentTreeItem, this.indexOfItem)
-         if(ObjectUtils.instanceOf(this.action, IPreviewableAction)){
+         if(ObjectUtils.instanceOf(this.action, AbstractPreviewableAction)){
             var editContext = new EditContext(this.targetWindow)
             editContext.setScript(this.script)
             this.action.preview(editContext)

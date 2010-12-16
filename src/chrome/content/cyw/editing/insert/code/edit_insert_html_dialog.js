@@ -19,7 +19,7 @@ with(customizeyourweb){
       doOnload: function(){
          this.loadJQuery()
          //Get clone of action
-         this.action = EditDialog.getAction(true)
+         this.action = EditDialog.getAction()
          this.editContext = EditDialog.getEditContext()
          this.targetElement = EditDialog.getTargetElement()
          PresentationMapper.mapModel2Presentation(this.action, document, "value")

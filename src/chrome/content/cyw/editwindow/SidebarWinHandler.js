@@ -123,6 +123,9 @@ with(customizeyourweb){
          return true
       },
       
+      /*
+       * TODO Check if warning should be displayed for isolate action
+       */
       checkTargetDefinitionForAction: function(event){
          var actionTreeViewItem = event.item
          if(actionTreeViewItem.hasMessage() || !ObjectUtils.instanceOf(actionTreeViewItem, AbstractActionTreeItem)){

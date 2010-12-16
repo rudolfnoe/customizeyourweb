@@ -21,14 +21,13 @@ with(customizeyourweb){
    }
    
    //statics
-   EditDialog.getAction = function(clone){
-      return Dialog.getNamedArgument('action', clone)
+   /*
+    * Get a clone version of the 
+    */
+   EditDialog.getAction = function(){
+      return Dialog.getNamedArgument('action')
    }
    
-   EditDialog.getAllowMultiTargetDefinition = function(){
-      return Dialog.getNamedArgument('allowMultiTargetDefinition')
-   }
-	
 	EditDialog.getEditContext = function(){
 		return Dialog.getNamedArgument('editContext')
 	}

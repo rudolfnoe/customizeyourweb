@@ -40,6 +40,14 @@
                ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "core/CywInitManager.js", NS)
                ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "ui/", NS)
                
+               //FIXME Do it right
+               try{
+                  ScriptLoader.loadScript("chrome://customizeyourweb/content/test/TestScriptActions.js/", NS)
+               }catch(e){
+                  //Script is only in testmode available}
+               }
+               
+               
                //Load JQuery
                var jQueryLoader = new JQueryLoader(CywCommon.CYW_JQUERY_URL)
                jQueryLoader.loadJQuery(CywCommon.JQUERY_FILE_NAME, customizeyourweb)

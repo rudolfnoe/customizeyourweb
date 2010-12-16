@@ -5,7 +5,6 @@ with(customizeyourweb){
    	this.id = id
       this.repetitionBehavior = RepetitionBehavior.RUN_ONCE_SUCCESSFULLY
       this.t_actionPerformedCount = 0
-      this.t_undoMemento = null
    }
    
    AbstractAction.prototype = {
@@ -22,18 +21,15 @@ with(customizeyourweb){
       getRepetitionBehavior: function(){
          return this.repetitionBehavior
       },
+      
+      isPreviewable: function(){
+         return ObjectUtils.instanceOf(this, AbstractPreviewableAction)   
+      },
 
       setRepetitionBehavior: function(repetitionBehavior){
          this.repetitionBehavior = repetitionBehavior
       },
 
-      getUndoMemento: function(){
-         if(this.t_undoMemento == null){
-            this.t_undoMemento = {}
-         }
-         return this.t_undoMemento
-      },
-      
       /*
        * Assures that JQuery is available in content page
        */
@@ -130,6 +126,14 @@ with(customizeyourweb){
          return false   
       },
       
+      preview: function(editContext){
+         //Empty default implementation
+      },
+
+      undo: function(editContext){
+         //Empty default implementation
+      },
+      
       toString: function(){
          var typeName = ObjectUtils.getType(this)
          var actionIndex = typeName.lastIndexOf('Action')
@@ -137,11 +141,8 @@ with(customizeyourweb){
          if(this.id)
             result += " [" + this.getId() + "]"
          return result
-      },
+      }
    	
-   	undo: function(cywContext){
-         //empty default implementation
-   	}
    }
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractAction", AbstractAction)

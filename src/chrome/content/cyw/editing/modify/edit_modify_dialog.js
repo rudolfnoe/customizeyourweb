@@ -33,8 +33,6 @@ with(customizeyourweb){
       
       shortcutManager: new ShortcutManager(window, "keypress", true, false),
       
-      undoMemento: null,
-      
       /*
        * Adds or updates attribute/value combination to attributes listbox on the expert tab
        */
@@ -72,9 +70,7 @@ with(customizeyourweb){
        * Event handler for cancel button
        */
       doCancel: function(){
-         if(this.undoMemento){
-            this.action.undo(this.getEditContext(), this.undoMemento);
-         }
+         this.action.undo(this.getEditContext());
       },
       
       /*
@@ -83,7 +79,7 @@ with(customizeyourweb){
       doOnload: function(){
          try{
             this.setGlobals();
-            this.action = EditDialog.getAction(true);
+            this.action = EditDialog.getAction();
             this.targetElement = EditDialog.getTargetElement();
             
             //Init Targetdef Binding
@@ -118,7 +114,6 @@ with(customizeyourweb){
          this.synchronizeAction(newAction);
          this.updateTargets(oldAction, newAction)
          Dialog.setNamedResult("action", newAction);
-         Dialog.setNamedResult("changeMemento", this.undoMemento);
          Dialog.setResult(DialogResult.OK);
       },
       
@@ -620,10 +615,10 @@ with(customizeyourweb){
       updateTargets: function(oldAction, newAction){
 //         CywUtils.logInfo("updateTargets called");
          try{
-            if(this.undoMemento){
-               oldAction.undo(this.getEditContext(), this.undoMemento);
+            if(oldAction){
+               oldAction.undo(this.getEditContext());
             }
-            this.undoMemento = newAction.preview(this.getEditContext());
+            newAction.preview(this.getEditContext());
             this.action = newAction;
          }catch(e){
             CywUtils.logError(e, "updateTargets", true);

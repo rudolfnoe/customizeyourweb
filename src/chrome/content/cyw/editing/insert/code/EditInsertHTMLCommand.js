@@ -11,17 +11,11 @@ with(customizeyourweb){
 
       doCreateAction: function(editContext){
          var insertHTMLAction = new InsertHTMLAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
-         return this.editAction(insertHTMLAction, editContext, EDIT_INSERT_HTML_DIALOG_URL)
+         return this.editInDialog(insertHTMLAction, editContext, EDIT_INSERT_HTML_DIALOG_URL)
       },
       
       doEditAction: function(action, editContext){
-         var result = this.editAction(action, editContext, EDIT_INSERT_HTML_DIALOG_URL)
-         //result is null if editing was cancelled
-         //old state must be recreated
-         if(!result){
-            action.preview(editContext)
-         }
-         return result;
+         return this.editAction(action, editContext, EDIT_INSERT_HTML_DIALOG_URL)
       }
       
    }

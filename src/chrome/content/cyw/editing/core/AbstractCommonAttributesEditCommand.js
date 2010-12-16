@@ -1,9 +1,8 @@
 with(customizeyourweb){
 (function(){
    
-   function AbstractCommonAttributesEditCommand(allowMultiTargetDefinition){
+   function AbstractCommonAttributesEditCommand(){
       this.AbstractEditCommand()
-      this.allowMultiTargetDefinition = arguments.length>=1?allowMultiTargetDefinition:false
    }
    
    AbstractCommonAttributesEditCommand.prototype = {
@@ -61,7 +60,7 @@ with(customizeyourweb){
       },
 
       editCommonActionAttributes: function(action, editContext){
-         var dialog = new CommonAttributesEditDialog(action, editContext, this.allowMultiTargetDefinition) 
+         var dialog = new CommonAttributesEditDialog(action, editContext) 
          dialog.show()
          return dialog.getActionResult();
       }

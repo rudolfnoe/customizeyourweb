@@ -3,6 +3,7 @@ with(customizeyourweb){
    
    /*
     * Handler for common attributes dialog
+    * ENHANCEMENT Button for preview
     */
    var CommonAttributesEditDialogHandler = {
       
@@ -19,8 +20,8 @@ with(customizeyourweb){
             }
             
             //this.targetDefinitionBinding.setOldTargetDefinition(action.getTargetDefinition())
-            targetDefBinding.setAllowMultiTargetDefinition(EditDialog.getAllowMultiTargetDefinition())
-            this.initValidators(targetWindow, EditDialog.getAllowMultiTargetDefinition())
+            targetDefBinding.setAllowMultiTargetDefinition(action.allowsMultiTargets())
+            this.initValidators(targetWindow, action.allowsMultiTargets())
             this.setTitle(action)
          }catch(e){
             CywUtils.logError(e)

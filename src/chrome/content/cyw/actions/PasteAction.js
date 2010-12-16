@@ -39,19 +39,16 @@ with(customizeyourweb){
       },
       
       preview: function(editContext){
-         return this.paste(editContext)
+         this.paste(editContext)
       },
       
-      undo: function(editContext, undoMemento){
-         if(!undoMemento){
-            return
-         }
+      undoInternal: function(editContext, undoMemento){
          editContext.setClipboard(DomUtils.removeElement(undoMemento))
       }
    }
    
+   ObjectUtils.extend(PasteAction, "AbstractPreviewableAction", customizeyourweb)
    ObjectUtils.extend(PasteAction, "AbstractTargetedAction", customizeyourweb)
-   ObjectUtils.extend(PasteAction, "IPreviewableAction", customizeyourweb)
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "PasteAction", PasteAction)
    
