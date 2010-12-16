@@ -5,13 +5,14 @@
 
 		<em:id>customizeyourweb@mouseless.de</em:id>
 		<em:name>Customize Your Web</em:name>
-	   <em:version>0.4.3Build201010192200</em:version>
+	   <em:version>0.4.3.1Build201012161000</em:version>
 		<em:description>Customize your web :-)</em:description>
 		<em:creator>Rudolf Noe</em:creator>
 		<em:homepageURL>www.mouseless.de</em:homepageURL>
       <em:iconURL>chrome://customizeyourweb/skin/cyw.ico</em:iconURL>
       <em:optionsURL>chrome://customizeyourweb/content/cyw/preferences/cyw_prefs.xul</em:optionsURL>
       <em:type>2</em:type>		
+      <em:unpack>true</em:unpack>		
 
 		<em:targetApplication>
 			<Description>
