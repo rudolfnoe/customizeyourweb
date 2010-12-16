@@ -8,7 +8,6 @@ with(customizeyourweb){
       doOnload: function(){
          var action = EditDialog.getAction()
          byId('buttonML').value = action.getButton()
-         byId('doubleClickCB').checked = action.isDoubleClick() 
          var modifierMask = action.getModifierMask()
          byId('ctrlCB').checked = (modifierMask & Event.CONTROL_MASK)?true:false
          byId('altCB').checked = (modifierMask & Event.ALT_MASK)?true:false
@@ -18,10 +17,8 @@ with(customizeyourweb){
       },
       
       doOk: function(){
-         Dialog.setResult(DialogResult.OK)
          var action = Dialog.getNamedArgument("action")
          action.setButton(byId('buttonML').value)
-         action.setDoubleClick(byId('doubleClickCB').checked) 
          var modifierMask = (byId('ctrlCB').checked?Event.CONTROL_MASK:0) +
                               (byId('altCB').checked?Event.ALT_MASK:0) +
                               (byId('shiftCB').checked?Event.SHIFT_MASK:0) +
@@ -33,7 +30,6 @@ with(customizeyourweb){
       
       handleClick: function(event){
          byId('buttonML').value = event.button
-         byId('doubleClickCB').checked = (event.detail==2) 
          byId('ctrlCB').checked = event.ctrlKey
          byId('altCB').checked = event.altKey
          byId('shiftCB').checked = event.shiftKey

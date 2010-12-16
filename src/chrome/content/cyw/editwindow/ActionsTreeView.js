@@ -12,7 +12,7 @@ with(customizeyourweb){
          /*
           * if action already in tree update item
           */
-         var existingItem = this.getItemForAction(action)
+         var existingItem = this._getItemForAction(action)
          if(existingItem!=null){
             this.updateAction(action)
             return
@@ -100,9 +100,9 @@ with(customizeyourweb){
          return getChildActions(this.getRootItem())
       },
       
-      getItemForAction: function(action, item){
+      _getItemForAction: function(action, item){
          if(item==null)
-            return this.getItemForAction(action, this.getRootItem())
+            return this._getItemForAction(action, this.getRootItem())
          if(!item.isContainer())
             throw new Error("item must be container")
          var childItems = item.getChildren()
@@ -111,7 +111,7 @@ with(customizeyourweb){
             if(action.equals(childItem.getAction()))
                return childItem
             if(childItem.isContainer()){
-               var result = this.getItemForAction(action, childItem)
+               var result = this._getItemForAction(action, childItem)
                if(result)
                   return result
             }
@@ -156,7 +156,7 @@ with(customizeyourweb){
       },
       
       notifyActionUpdate:function(action){
-         this.notifyUpdate(this.getItemForAction(action))
+         this.notifyUpdate(this._getItemForAction(action))
       },
       
       pasteClipboard: function(){
@@ -177,7 +177,7 @@ with(customizeyourweb){
          clipboardActions.addAtIndex(0, clonedClipboard.getAction())
           for (var i = 0;i < clipboardActions.size(); i++) {
             var clipboardAction = clipboardActions.get(i) 
-            if(this.getItemForAction(clipboardAction)){
+            if(this._getItemForAction(clipboardAction)){
                //action with same id is already in tree
                clipboardAction.setId(this.script.getNextActionId())
             }
@@ -189,7 +189,7 @@ with(customizeyourweb){
       },
       
       removeAction: function(action){
-         return this.removeItem(this.getItemForAction(action))
+         this.removeItem(this._getItemForAction(action))
       },
       
       setActions: function(actions, scriptErrorArray){
@@ -198,7 +198,7 @@ with(customizeyourweb){
       },
       
       setImageSrc: function(action, imgSrc){
-         this.getItemForAction(action).setImageSrc(imgSrc)
+         this._getItemForAction(action).setImageSrc(imgSrc)
       },
       
       setScriptErrors: function(errorArray){
@@ -216,7 +216,7 @@ with(customizeyourweb){
       },
       
       updateAction: function(action){
-         var treeViewItem = this.getItemForAction(action)
+         var treeViewItem = this._getItemForAction(action)
          if(treeViewItem==null)
             throw new Error('Action not in treeview')
          treeViewItem.clearMessage()   

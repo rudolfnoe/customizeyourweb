@@ -7,6 +7,7 @@ with(customizeyourweb){
    
    AbstractTargetDefinition.prototype = {
       constructor: AbstractTargetDefinition,   
+      AbstractTargetDefinition: AbstractTargetDefinition,
       
       getTargetName: function(){
          return this.targetName
@@ -34,11 +35,11 @@ with(customizeyourweb){
       },
 
       getDefinitionAsString: function(){
-         throw new Error('must be implemented')
+         throw new Error('not implemented')
       },
       
       getDefinitionStyle: function(){
-         throw new Error('must be implemented')
+         throw new Error('not implemented')
       },
       
       getTarget: function(cywContextOrTargetWin){
@@ -54,16 +55,7 @@ with(customizeyourweb){
       },
       
       getTargets: function(cywContextOrTargetWin){
-			var targets = this.getTargetsInternal(this.getTargetWin(cywContextOrTargetWin))
-			if(!targets){
-				return []
-			} else{
-	         return targets 
-			}
-      },
-      
-      getTargetsInternal: function(targetWin){
-         throw new Error('must be implemented')   
+         return this.getTargetsInternal(this.getTargetWin(cywContextOrTargetWin))
       },
       
       isTargetInPage: function(targetWin){
@@ -75,7 +67,6 @@ with(customizeyourweb){
    Namespace.bindToNamespace("customizeyourweb", "AbstractTargetDefinition", AbstractTargetDefinition)
    
    var TargetDefinitionStyle = {
-      JQUERY: "JQUERY",
       SIMPLE: "SIMPLE",
       XPATH: "XPATH"
    }

@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
       
-   function InsertJSAction (id){
-      this.AbstractAction(id)
+   function InsertJSAction (){
+      this.AbstractAction()
       this.jsCode = null
    }
    
@@ -22,8 +22,7 @@ with(customizeyourweb){
          var sandbox = new Components.utils.Sandbox(win)
          sandbox.window = win
          sandbox.document = win.document
-         sandbox.$ = $
-         sandbox.__proto__= sandbox.window
+         sandbox.__proto__=sandbox.window
          Components.utils.evalInSandbox("(function(){" + this.jsCode + "})()", sandbox)
          return true
       }     

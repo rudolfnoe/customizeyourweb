@@ -37,7 +37,7 @@ with(customizeyourweb){
          if(!StringUtils.endsWith(saveAsNsIFile.path, ".xml")){
             saveAsNsIFile = FileIO.open(saveAsNsIFile.path+".xml")
          }
-         FileIO.write(saveAsNsIFile, scriptContent, null, "UTF-8");
+         FileIO.write(saveAsNsIFile, scriptContent)
       }
    }
 

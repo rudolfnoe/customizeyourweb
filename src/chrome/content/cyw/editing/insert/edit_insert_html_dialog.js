@@ -2,35 +2,34 @@ with(customizeyourweb){
 (function(){
    var EditInsertHTMLDialogHandler = {
       action: null,
-      editContext: null,
+      htmlMarkerId: null,
       targetElement: null,
       
-      
       doCancel: function(){
-         this.action.undo(this.editContext)
+         if(this.targetElement){
+            InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         }
       },
       
       doOk: function(){
          Dialog.setResult(DialogResult.OK)
-         this.synchronizeActionWithForm()
+         this.action.setWhereToInsert(byId('whereML').value)
+         this.action.setHtmlCode(byId('htmlCodeTB').value)
          Dialog.setNamedResult("action", this.action)
       },
 
       doOnload: function(){
-         this.loadJQuery()
-         //Get clone of action
-         this.action = EditDialog.getAction(true)
-         this.editContext = EditDialog.getEditContext()
-         this.targetElement = EditDialog.getTargetElement()
-         PresentationMapper.mapModel2Presentation(this.action, document, "value")
-         byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
-         this.initListeners()
+         //move to left
          this.initShortcuts()
+         this.action = EditDialog.getAction()
+         this.targetElement = EditDialog.getTargetElement()
+         this.htmlMarkerId = Dialog.getNamedArgument("htmlMarkerId")
+         if(this.action.getWhereToInsert()!=null){
+            byId('whereML').value = StringUtils.defaultString(this.action.getWhereToInsert())
+         }
+         byId('htmlCodeTB').value = StringUtils.defaultString(this.action.getHtmlCode())
+         byId('whereML').addEventListener("select", Utils.bind(this.updatePage, this), true)
          this.initValidators(this.targetElement)
-      },
-      
-      initListeners: function(){
-         this.getTargetDefinitionBinding().addValueChangedListener(new EventHandlerAdapter(this.handleTargetDefChanged, this));
       },
       
       initShortcuts: function(){
@@ -45,28 +44,19 @@ with(customizeyourweb){
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
       },
-      
-      handleTargetDefChanged: function(evemt){
-         this._updatePage();   
-      },
-      
-      synchronizeActionWithForm: function(){
-         PresentationMapper.mapPresentation2Model(document, this.action, "value")
-         this.action.setTargetDefinition(byId('targetdefinition').getTargetDefinition())
-      },
 
       updatePage: function(){
          Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, this._updatePage, this)         
       },
       
       _updatePage: function(){
-         this.action.undo(this.editContext)
-         this.synchronizeActionWithForm()
-         this.action.preview(this.editContext)
+         InsertHTMLAction.removeInsertedHtml(this.targetElement, this.htmlMarkerId)
+         this.action.setHtmlCode(byId('htmlCodeTB').value)
+         this.action.setWhereToInsert(byId('whereML').value)
+         InsertHTMLAction.insertHTML(this.targetElement, this.action, this.htmlMarkerId)
       }
    }
-   ObjectUtils.injectFunctions(EditInsertHTMLDialogHandler, AbstractEditDialogHandler)
-   
+
    Namespace.bindToNamespace("customizeyourweb", "EditInsertHTMLDialogHandler", EditInsertHTMLDialogHandler)
    
    //helper

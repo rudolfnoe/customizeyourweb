@@ -34,8 +34,8 @@
                   <shortstringinputbox namespaceObj="customizeyourweb"/>
                </row>
                <row align="center">
-                  <label value="List items tag name (or jQuery)"/>
-                  <textbox id="listItemsJQueryTB" oninput="customizeyourweb.EditListViewDialogHandler.updateHighlighting()"/>
+                  <label value="List items tag name"/>
+                  <textbox id="listItemsTagNameTB" oninput="customizeyourweb.EditListViewDialogHandler.updateHighlighting()"/>
                </row>
                <row align="center">
                   <label value="Highlight background-color"/>

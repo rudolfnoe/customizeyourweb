@@ -8,14 +8,15 @@ with(customizeyourweb){
       
       doCreateAction: function(editContext){
          var element = editContext.getTargetElement()
+         this.setTargetElement(element)
          var commandData = editContext.getCommandData()
-         var existingAction = this.getExistingAction(ModifyAction, editContext.getDefaultTargetDefinition())
+         var existingAction = this.getExistingAction(ModifyAction, editContext.getTargetDefinition())
          var modifyAction = null, styles = null
          if(existingAction){
             modifyAction = existingAction
             styles = existingAction.getStyles()
          }else{
-            modifyAction = new ModifyAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
+            modifyAction = new ModifyAction(editContext.getTargetDefinition())
             styles = {}
          }
          var elementWrapper = new ElementWrapper(element)
@@ -33,7 +34,8 @@ with(customizeyourweb){
          if(!hasChanged)
             return null
          modifyAction.setStyles(styles)
-         this.setUndoMemento([elementWrapper.getChangeMemento()])
+         this.setChangeMemento(elementWrapper.getChangeMemento())
+         this.setAction(modifyAction)
          return modifyAction
       }
    }

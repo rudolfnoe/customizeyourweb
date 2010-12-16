@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){   
    
-   function ShortcutAction (id, targetDefinition){
-      this.AbstractTargetedAction(id, targetDefinition)
+   function ShortcutAction (targetDefinition){
+      this.AbstractTargetedAction(targetDefinition)
       //LinkTarget is defined in LinkWrapper
       this.linkTarget = LinkTarget.CURRENT
       this.selectText = true
@@ -27,7 +27,7 @@ with(customizeyourweb){
          this.selectText = selectText
       },
       
-      doActionInternal: function(cywContext){
+      doActionInternal: function(cywContext){//Todo change
          this.registerShortcut(cywContext)
       },
       
@@ -40,7 +40,7 @@ with(customizeyourweb){
          return element.tagName=="INPUT" && ["text", "password"].indexOf(element.type.toLowerCase())!=-1 ||
                element.tagName=="TEXTAREA"   
       },
-      
+
       performShortcut: function(cywContext){
          if(this.isTargetOptionalAndTargetMissing(cywContext)){
             return
@@ -63,7 +63,7 @@ with(customizeyourweb){
             (new LinkWrapper(element)).open(this.linkTarget)
             return
          }else{
-            var clickAction = new ClickAction(null, this.getTargetDefinition())
+            var clickAction = new ClickAction(this.getTargetDefinition())
             clickAction.doAction(cywContext)
          }
       }      

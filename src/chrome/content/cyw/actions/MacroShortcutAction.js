@@ -1,10 +1,8 @@
 with(customizeyourweb){
 (function(){   
    
-   function MacroShortcutAction (id){
+   function MacroShortcutAction (){
       this.AbstractShortcutAction()
-      this.AbstractContainerAction()
-      this.AbstractAction(id)
    }
    
    MacroShortcutAction.prototype = {
@@ -28,7 +26,6 @@ with(customizeyourweb){
    ObjectUtils.extend(MacroShortcutAction, "AbstractShortcutAction", customizeyourweb)
    ObjectUtils.extend(MacroShortcutAction, "AbstractContainerAction", customizeyourweb)
    ObjectUtils.extend(MacroShortcutAction, "AbstractNamedAction", customizeyourweb)   
-   ObjectUtils.extend(MacroShortcutAction, "AbstractAction", customizeyourweb)
       
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "MacroShortcutAction", MacroShortcutAction)

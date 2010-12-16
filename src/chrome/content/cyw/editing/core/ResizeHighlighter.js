@@ -30,7 +30,7 @@ with(customizeyourweb){
             var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
             div.gripName = name 
             div.cywIgnore = true;
-            div.className = "cyw_resizeGrip";
+            div.className = "resizeGrip";
             div.style.cursor = name + "-resize"
             div.addEventListener("mousedown", this, true)
             return div;
@@ -44,7 +44,7 @@ with(customizeyourweb){
          
          var span = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
          span.cywIgnore = true;
-         span.className = "cyw_sizeInfoSpan"
+         span.className = "sizeInfoSpan"
          nodes.sizeInfoSpan = span
          
          return nodes
@@ -83,13 +83,13 @@ with(customizeyourweb){
          else if (this.resizeDirection=="v")
             this.setNewHeight(event.pageY)
          else {
-            this.setNewWidth(event.pageX);
+            this.setNewWidth(event.pageX)
             this.setNewHeight(event.pageY)
          }
          var t = this.getTargetElement()
          var offsets = DomUtils.getOffsetToBody(t)
          DomUtils.moveTo(this.getNodes().sizeInfoSpan, offsets.x + t.offsetWidth, offsets.y)
-         this.setSizeInfoText(t.offsetWidth, t.offsetHeight);
+         this.setSizeInfoText(t.offsetWidth, t.offsetHeight)
          this.removeSelection(event)         
       },
 
@@ -114,7 +114,7 @@ with(customizeyourweb){
          var sizeInfoSpan = this.getNodes().sizeInfoSpan
          sizeInfoSpan.style.display = "inline"
          with(this.originalBounds){
-            DomUtils.moveTo(sizeInfoSpan, x+w, y);
+            DomUtils.moveTo(sizeInfoSpan, x+w, y)
             this.setSizeInfoText(x, y)
          }
          this.notifyObservers("resizestart")
@@ -129,13 +129,13 @@ with(customizeyourweb){
          this.addOrRemoveEventListeners("remove", this.targetElement)
          this.removeSelection(event)
          Utils.stopEvent(event)
-         this.getNodes().sizeInfoSpan.style.display = "none";
+         this.getNodes().sizeInfoSpan.style.display = "none"
          this.notifyObservers("resizeend")
       },
       
       notifyObservers: function(type){
          var event = {type:type}
-         event.target = this.targetElement;
+         event.target = this.targetElement
          this.notifyListeners(event)
       },
       
@@ -164,7 +164,7 @@ with(customizeyourweb){
       },
       
       setSizeInfoText: function(x, y){
-         var span = this.getNodes().sizeInfoSpan;
+         var span = this.getNodes().sizeInfoSpan
          span.innerHTML = "x: " + x + ", y: " + y
       }
       

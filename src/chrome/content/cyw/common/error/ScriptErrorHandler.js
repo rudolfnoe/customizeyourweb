@@ -1,9 +1,9 @@
 with (customizeyourweb) {
 (function() {
 	const ERROR_MESSAGE_STRINGBUNDLE_ID = "customizeyourweb_error_messages";
-   const ERROR_MESSAGE_STRINGBUNDLE_PATH = "chrome://customizeyourweb/locale/error_messages.properties";
+   const ERROR_MESSAGE_STRINGBUNDLE_PATH = "chrome://customizeyourweb/locale/error_messages.properties"
 	const SCRIPT_ERROR_HANDLER_STORAGE_ID = "customizeyourweb_ScriptErrorHandler";
-   const EVENT_TYPE_SCRIPT_ERROR = "scriptError";
+   const EVENT_TYPE_SCRIPT_ERROR = "scriptError"
 
 	function ScriptErrorHandler() {
       this.eventSource = new GenericEventSource()
@@ -13,8 +13,8 @@ with (customizeyourweb) {
 	}
 
 	//Static methods
-	ScriptErrorHandler.addScriptError = function(messageId, replaceParamArray, cause, scriptId, actionId, targetWin) {
-		this.getInstance().addScriptError(messageId, replaceParamArray, cause, scriptId, actionId, targetWin);
+	ScriptErrorHandler.addScriptError = function(scriptId, errorOrId, replaceParamArray, action, targetWin) {
+		this.getInstance().addScriptError(scriptId, errorOrId, replaceParamArray, action, targetWin)
 	}
    
    ScriptErrorHandler.addScriptErrorListener = function(eventHandler){
@@ -31,32 +31,32 @@ with (customizeyourweb) {
    },
 
 	ScriptErrorHandler.clearScriptErrors = function(scriptId) {
-		this.getInstance().clearScriptErrors(scriptId);
+		this.getInstance().clearScriptErrors(scriptId)
 	}
 
 	ScriptErrorHandler.createError = function(errorId, replaceParamArray) {
 		if (!ErrorConstants[errorId])
-			throw new Error('unknown error id');
-		var error = new Error(this.getErrorMessage(errorId, replaceParamArray));
-		error.id = errorId;
-      error.severity = Severity.ERROR;
-		return error;
+			throw new Error('unknown error id')
+		var error = new Error(this.getErrorMessage(errorId, replaceParamArray))
+		error.id = errorId
+      error.severity = Severity.ERROR
+		return error
 	}
 
    ScriptErrorHandler.createWarning= function(errorId, replaceParamArray) {
 		if (!ErrorConstants[errorId])
-			throw new Error('unknown error id');
-		return new Message(this.getErrorMessage(errorId, replaceParamArray), Severity.WARNING);
+			throw new Error('unknown error id')
+		return new Message(this.getErrorMessage(errorId, replaceParamArray), Severity.WARNING)
 	}
    
 
 	ScriptErrorHandler.getErrorMessage = function(errorId, replaceParamArray) {
-      this.assureErrorMessageStringbundle();
-		return Utils.getString(ERROR_MESSAGE_STRINGBUNDLE_ID, errorId, replaceParamArray);
+      this.assureErrorMessageStringbundle()
+		return Utils.getString(ERROR_MESSAGE_STRINGBUNDLE_ID, errorId, replaceParamArray)
 	}
 
 	ScriptErrorHandler.getErrorsForScript = function(scriptId) {
-		return this.getInstance().getErrorsForScript(scriptId);
+		return this.getInstance().getErrorsForScript(scriptId)
 	}
 
    ScriptErrorHandler.getInstance = function() {
@@ -68,20 +68,23 @@ with (customizeyourweb) {
 		return instance
 	},
 
+	ScriptErrorHandler.logError = function(error, message) {
+		CywUtils.logError(error, message)
+	},
+
    //Member mthods
 	ScriptErrorHandler.prototype = {
 		constructor : ScriptErrorHandler,
 
-		addScriptError : function(messageId, replaceParamArray, cause, scriptId, actionId, targetWin) {
-			var err = ScriptErrorHandler.createError(messageId, replaceParamArray)
-         err.cause = cause.stack
-         err.scriptId = scriptId
-			if (actionId)
-				err.actionId = actionId
+		addScriptError : function(scriptId, errorOrId, replaceParamArray, action, targetWin) {
+			var err = ObjectUtils.instanceOf(errorOrId, String) ? 
+               ScriptErrorHandler.createError(errorOrId, replaceParamArray) : errorOrId
+			if (action)
+				err.actionId = action.getId()
          err.severity = Severity.ERROR
 			this.getErrorsForScript(scriptId).push(err)
-			CywUtils.logError(err, null, cause==null);
-
+			// Make this configurable
+			ScriptErrorHandler.logError(err)
          //Notify Listeners
          this.eventSource.notifyListeners({type:EVENT_TYPE_SCRIPT_ERROR, targetWin: targetWin})
 		},
@@ -97,9 +100,9 @@ with (customizeyourweb) {
 		},
 
 		clearScriptErrors : function(scriptId) {
-			delete this.scriptErrors[scriptId];
+			delete this.scriptErrors[scriptId]
 		}
-	};
+	}
 
 	Namespace.bindToNamespace("customizeyourweb", "ScriptErrorHandler", ScriptErrorHandler)
 })()

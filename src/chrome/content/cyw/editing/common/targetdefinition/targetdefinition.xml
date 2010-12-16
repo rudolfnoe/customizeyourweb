@@ -17,16 +17,15 @@
                         <xul:label value="Definition style"/>
                         <xul:menulist anonid="targetDefinitionStyleML">
                            <xul:menupopup>
-                              <xul:menuitem label="Simple" value="SIMPLE"/>
                               <xul:menuitem label="XPath" value="XPATH"/>
-                              <xul:menuitem label="jQuery" value="JQUERY"/>
+                              <xul:menuitem label="Simple" value="SIMPLE"/>
                            </xul:menupopup>
                         </xul:menulist>
                      </xul:row>
                      <xul:row align="center">
-                        <xul:label value="Expression" accesskey="x" control="targetDefinitionML"/>
+                        <xul:label value="Expression"/>
                         <xul:hbox>
-                           <xul:menulist id="targetDefinitionML" anonid="targetDefinitionML" flex="1" minwidth="300px" editable="true" 
+                           <xul:menulist anonid="targetDefinitionML" flex="1" minwidth="300px" editable="true" 
                                          onkeyup="document.getBindingParent(this).handler.handleCursorPositionChange(event)"
                                          onselect="document.getBindingParent(this).handler.handleTargetDefinitionSelect(event)">
                               <xul:menupopup></xul:menupopup>
@@ -70,15 +69,11 @@
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/core/CywUtils.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/TargetDefinitionXblValidator.js", customizeyourweb)
-               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/AbstractTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/XPathTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/SimpleTargetDefinitionXblHandler.js", customizeyourweb)
-               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/common/targetdefinition/JQueryTargetDefinitionXblHandler.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractTargetDefinitionFactory.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/SimpleTargetDefinitionFactory.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/XPathTargetDefinitionFactory.js", customizeyourweb)
-               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/JQuerySelectorFactory.js", customizeyourweb)
-               customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/JQueryTargetDefinitionFactory.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/AbstractHighlighter.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/FrameHighlighter.js", customizeyourweb)
                customizeyourweb.ScriptLoader.loadScript("chrome://customizeyourweb/content/cyw/editing/core/MultiElementHighlighter.js", customizeyourweb)
@@ -101,13 +96,6 @@
             <method name="createTargetDefinitions">
                <body>this.handler.createTargetDefinitions()</body>
             </method>
-            <method name="initialize">
-               <parameter name="targetWindow"/>
-               <parameter name="targetElement"/>
-               <parameter name="targetDefinition"/>
-               <body>this.handler.initialize(targetWindow, targetElement, targetDefinition)</body>
-            </method>
-            
             <method name="getTargetDefinition">
                <body>return this.handler.getTargetDefinition()</body>
             </method>
@@ -128,17 +116,13 @@
                <parameter name="allowMultiTargetDef"/>
                <body>this.handler.setAllowMultiTargetDefinition(allowMultiTargetDef)</body>
             </method>
-            <method name="setDisabled">
-               <parameter name="disabled"/>
-               <body>this.handler.setDisabled(disabled)</body>
-            </method>
             <method name="setTargetElement">
                <parameter name="targetElement"/>
                <body>this.handler.setTargetElement(targetElement)</body>
             </method>
             <method name="setOldTargetDefinition">
-               <parameter name="targetDefinitionAsString"/>
-               <body>this.handler.setOldTargetDefinition(targetDefinitionAsString)</body>
+               <parameter name="targetDefinition"/>
+               <body>this.handler.setOldTargetDefinition(targetDefinition)</body>
             </method>
             <method name="setTargetDefinition">
                <parameter name="targetDefinition"/>

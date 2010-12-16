@@ -6,17 +6,15 @@
 <page id="cywEditScriptSidebar" title="Edit Script"
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
    xmlns:html="http://www.w3.org/1999/xhtml"
-   onload="customizeyourweb.CywSidebarWinHandler.doOnload(event)">
+   onload="customizeyourweb.CywSidebarWinHandler.doOnload(event)" >
    <script src="../CywCommon.js"/>
    <script src="../core/CywConfig.js"/>
    <script src="../core/CywContext.js"/>
    <script src="../core/CywUtils.js"/>
-   <script src="../editing/core/EditContext.js"/>
    <script src="AbstractActionTreeItem.js"/>
    <script src="ActionLeafTreeItem.js"/>
    <script src="ActionContainerTreeItem.js"/>
    <script src="ActionsTreeView.js"/>
-   <script src="DeleteActionCommand.js"/>
    <script src="SidebarWinHandler.js"/>
 
    <commandset>
@@ -34,6 +32,9 @@
    </commandset>
    
    <popupset>
+      <menupopup id="editlistboxMPU">
+         <menuitem label="test"/>
+      </menupopup>
       <menupopup id="treeContextMPU">
          <menuitem command="copyActionCmd"/>
          <menuitem command="cutActionCmd"/>
@@ -41,7 +42,6 @@
       </menupopup>
    </popupset>
    
-   <vbox flex="1" style="overflow:auto">
    <dialogheader title="Edit Script Properties" style="margin-top:0px" rows="2"/>
    <tabbox flex="1">
       <tabs>
@@ -51,7 +51,7 @@
    <tabpanels flex="1">
       <tabpanel flex="1">
          <vbox flex="1">
-            <label value="Script Selection [+] = Applied, [--] = Not Applied" accesskey="p"/>
+            <label value="Script Selection [+] =Applied, [--]=Not Applied" accesskey="p"/>
             <hbox>
                <menulist id="scripts" editable="false" persist="value" onselect="customizeyourweb.CywSidebarWinHandler.handleScriptSelect(event)" flex="1" 
                          crop="center" tooltiptext='Select a script to edit or "New Script" for creating a new one (Alt+Shift+P)'
@@ -91,8 +91,8 @@
             </menulist>
 
             <label value="Include URL Patterns (* = any string)" accesskey="U"  style="margin-top:7px"/>
-            <richlistbox id="includePatterns" minheight="30px" height="100px" flex="1" selType="single" 
-                         tooltiptext="List of URL patterns for which the script will be applied (Alt+Shift+U)" style="overflow:auto">
+            <richlistbox id="includePatterns" height="100px" flex="1" selType="single" 
+                         tooltiptext="List of URL patterns for which the script will be applied (Alt+Shift+U)">
                <!-- will be dynamically filled -->
             </richlistbox>
 
@@ -153,7 +153,6 @@
                   <menuitem label="Run script only once on page load" value="RUN_NEVER"/>
                </menupopup>
             </menulist>
-            <checkbox id="onlyToTopWindowCB" label="Do not apply to subwindows (iframes)"/>
          </vbox>
       </tabpanel>
    </tabpanels>
@@ -180,5 +179,4 @@
          </row>
       </rows>
    </grid>
-   </vbox>
 </page>

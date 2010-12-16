@@ -19,21 +19,25 @@
    <dialogheader title="Define the details of the click action" rows="1"/>
    <vbox>
       <label value="Click here:"/>
-      <vbox style="border:1px solid grey; -moz-border-radius:4px;" onclick="customizeyourweb.EditClickDialogHandler.handleClick(event)"
->
-         <spacer height="40px"/>
-      </vbox>
-      <hbox flex="1" align="center" style="margin-top:7px">
-         <label value="Button"/>
-         <menulist id="buttonML" editable="false" flex="1">
-            <menupopup>
-               <menuitem label="Left" value="0"/>
-               <menuitem label="Right" value="2"/>
-               <menuitem label="Middle" value="1"/>
-            </menupopup>
-         </menulist>
-         <checkbox id="doubleClickCB" label="Double Click"/>
-      </hbox>
+      <vbox style="border:1px solid grey; -moz-border-radius:4px;" onclick="customizeyourweb.EditClickDialogHandler.handleClick(event)"><spacer height="40px"/></vbox>
+      <grid flex="1" style="margin-top:7px">
+         <columns>
+            <column></column>
+            <column flex="1"></column>
+         </columns>
+         <rows>
+            <row align="center">
+               <label value="Button"/>
+               <menulist id="buttonML" editable="false">
+                  <menupopup>
+                     <menuitem label="Left" value="0"/>
+                     <menuitem label="Right" value="2"/>
+                     <menuitem label="Middle" value="1"/>
+                  </menupopup>
+               </menulist>
+            </row>
+         </rows>
+      </grid>
       <groupbox style="margin-top:7px">
          <caption label="Modifiers"/>
          <grid flex="1">
