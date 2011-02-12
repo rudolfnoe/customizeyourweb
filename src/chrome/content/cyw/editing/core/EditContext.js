@@ -1,19 +1,17 @@
 with(customizeyourweb){
 (function(){
-   function EditContext(targetWin){
-      this.AbstractContext(targetWin)
-      //Reference to the xul command element which was triggered
+   function EditContext(){
+      this.action = null
+      this.clipboard = null
       this.command = null
-      //Arbitrary Data which could be with addiontial information for the editing command
-      //Currently only used for the resize command
       this.commandData = null,
-      //Reference to the element which was selected by the user
+      this.scriptId = null,
+      this.targetDefinition = null
       this.targetElement = null
+      this.targetWindow = null
    }
    
    EditContext.prototype = {
-		constructor: EditContext,
-		
       getAction: function(){
          return this.action
       },
@@ -22,6 +20,14 @@ with(customizeyourweb){
          this.action = action
       },
 
+      getClipboard: function(){
+         return this.clipboard
+      },
+
+      setClipboard: function(clipboard){
+         this.clipboard = clipboard
+      },
+      
       getCommand: function(){
          return this.command
       },
@@ -38,16 +44,24 @@ with(customizeyourweb){
          this.commandData = commandData
       },
       
-      getNextActionId: function(){
-         return this.getScript().getNextActionId() 
+      getScriptId: function(){
+         return this.scriptId
       },
 
-      getDefaultTargetDefinition: function(){
-         if(this.targetElement){
-            return AbstractTargetDefinitionFactory.createDefaultDefinition(this.targetElement)
-         }else{
-            return null
-         }
+      setScriptId: function(scriptId){
+         this.scriptId = scriptId
+      },
+
+      getTargetDefinition: function(){
+         return this.targetDefinition
+      },
+
+      setTargetDefinition: function(targetDefinition){
+         this.targetDefinition = targetDefinition
+      },
+      
+      getTargetDocument: function(){
+         return this.targetWindow.document
       },
 
       getTargetElement: function(){
@@ -56,10 +70,18 @@ with(customizeyourweb){
 
       setTargetElement: function(targetElement){
          this.targetElement = targetElement
+      },
+      
+      getTargetWindow: function(){
+         return this.targetWindow
+      },
+
+      setTargetWindow: function(targetWindow){
+         this.targetWindow = targetWindow
       }
-     
+      
    }
-   ObjectUtils.extend(EditContext, "AbstractContext", customizeyourweb)
+
    Namespace.bindToNamespace("customizeyourweb", "EditContext", EditContext)
 })()
 }

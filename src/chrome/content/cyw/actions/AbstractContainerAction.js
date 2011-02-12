@@ -6,6 +6,7 @@ with(customizeyourweb){
    
    AbstractContainerAction.prototype = {
       constructor: AbstractContainerAction,
+      AbstractContainerAction: AbstractContainerAction,
       
       getActions: function(){
          return this.actions
@@ -17,12 +18,6 @@ with(customizeyourweb){
 
       addChild: function(action){
          this.actions.add(action)
-      },
-      
-      cleanUp: function(cywContext){
-          for (var i = 0;i < this.getActions().size(); i++) {
-            this.getActions().get(i).cleanUp(cywContext)
-         }
       },
       
       doChildActions: function(cywContext){
@@ -41,6 +36,8 @@ with(customizeyourweb){
       }
       
    }
+   ObjectUtils.extend(AbstractContainerAction, "AbstractAction", customizeyourweb)
+   
    Namespace.bindToNamespace("customizeyourweb", "AbstractContainerAction", AbstractContainerAction)
 })()
 }

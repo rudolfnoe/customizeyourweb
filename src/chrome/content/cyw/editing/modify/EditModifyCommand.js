@@ -1,37 +1,58 @@
-//with(customizeyourweb){
-//(function(){
-   const EDIT_MODIFY_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/modify/edit_modify_dialog.xul";
+with(customizeyourweb){
+(function(){
+   const EDIT_MODIFY_DIALOG_URL = CywCommon.CYW_CHROME_URL + "editing/modify/edit_modify_dialog.xul"
    
    function EditModifyCommand(){
-      this.AbstractEditCommand();
+      //A change memento object of the MultiElementWrapper class acodring the memento pattern of 
+      //the Gang of Four
+      this.changeMemento = null
+      this.targetElement = null
    }
    
    EditModifyCommand.prototype = {
       constructor: EditModifyCommand,
 
+      setChangeMemento: function(changeMemento){
+         this.changeMemento = [changeMemento]
+      },
+
+      setTargetElement: function(targetElement){
+         this.targetElement = targetElement
+      },
+
       doCreateAction: function(editContext){
-         var action = new ModifyAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition()) 
+         var action = new ModifyAction(editContext.getTargetDefinition()) 
          return this.editAction(action, editContext)
       },
       
-      doEditAction: function(action, editContext){
-         var result = this.editAction(action, editContext)
-         if(!result){
-            //Editing was canceled
-            action.preview(editContext)
-         }
-         return result
+      doEditAction: function(editContext){
+         return this.editAction(editContext.getAction(), editContext)
       },
       
       editAction: function(action, editContext){
-         var editDialog = new EditDialog(EDIT_MODIFY_DIALOG_URL, "EditModify", action, editContext)
+         this.targetElement = editContext.getTargetElement()
+         var editDialog = new EditDialog(EDIT_MODIFY_DIALOG_URL, "EditModify", true, window, null, 
+                                  {action: action, targetElement:this.targetElement, targetWindow:editContext.getTargetWindow()})
          editDialog.show()
-         return editDialog.getActionResult()
-      }
+         if(editDialog.getResult()==DialogResult.OK){
+            this.changeMemento = [editDialog.getNamedResult("changeMemento")]
+            this.setAction(editDialog.getNamedResult("action"))
+            return this.getAction()
+         }else{
+            return null
+         }
+      },
       
+      undo: function(){
+         if(this.targetElement){
+            var elementWrapper = new MultiElementWrapper([this.targetElement])
+            elementWrapper.setChangeMemento(this.changeMemento)
+            elementWrapper.restore()
+         }
+      }
    }
    ObjectUtils.extend(EditModifyCommand, "AbstractEditCommand", customizeyourweb)
 
    Namespace.bindToNamespace("customizeyourweb", "EditModifyCommand", EditModifyCommand)
-//})()
-//}
+})()
+}

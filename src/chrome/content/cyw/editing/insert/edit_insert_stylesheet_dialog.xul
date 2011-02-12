@@ -11,17 +11,12 @@
     onload="customizeyourweb.EditInsertStyleSheetDialogHandler.doOnload()"
     persist="screenX screenY width height"
     title="Edit Stylesheet">
-   <script src="chrome://customizeyourweb/content/cyw/CywCommon.js"/>
-   <script src="../../common/editdialogs/common_edit_dialog_include.js"/>
-   <script src="StyleSheetHighlighter.js"/>
-   <script src="../../core/AbstractHighlighter.js"/>
-   <script src="../../core/FrameHighlighter.js"/>
-   <script src="../../core/MultiElementHighlighter.js"/>
+   <script src="../../CywCommon.js"/>
    <script src="edit_insert_stylesheet_dialog.js"/>
    <vbox flex="1">
-      <hbox align="center" flex="1">
+      <hbox align="center">
          <label value="Exisiting Stylesheets"/>
-         <menulist id="exisitingStyleSheetsML" flex="1">
+         <menulist id="exisitingStyleSheetsML">
             <menupopup>
             </menupopup>
          </menulist>

@@ -62,7 +62,7 @@ with (customizeyourweb) {
 			function createEdge() {
 				var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
 				div.cywIgnore = true;
-				div.className = "cyw_highlightFrame";
+				div.className = "highlightFrame";
             if(color)
                div.style.setProperty("background-color", color, "")
 				return div;
@@ -78,7 +78,7 @@ with (customizeyourweb) {
 			if (this.showInfoSpan) {
 				var span = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
 				span.cywIgnore = true;
-            span.className = "cyw_infoSpan";
+            span.className = "infoSpan"
 				nodes.infoSpan = span
 			}
          return nodes

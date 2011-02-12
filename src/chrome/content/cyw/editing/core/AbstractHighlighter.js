@@ -56,7 +56,7 @@ with(customizeyourweb){
          for(var firstNodeName in this.getNodes()){
             firstNode = this.getNodes()[firstNodeName]
             if(firstNode)
-               break;
+               break
          }
          return firstNode
       },
@@ -106,7 +106,8 @@ with(customizeyourweb){
             ElementObserver.unregisterObserver(this.styleObserverId)
          }
       }         
-   };
+
+   }
 
    Namespace.bindToNamespace("customizeyourweb", "AbstractHighlighter", AbstractHighlighter)
 })()

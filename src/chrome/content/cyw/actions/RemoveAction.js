@@ -1,8 +1,7 @@
 with(customizeyourweb){
 (function(){
-   function RemoveAction (id, targetDefinition){
-      this.AbstractTargetedAction(id, targetDefinition)
-      this.setAllowMultiTargets(true)
+   function RemoveAction (targetDefinition){
+      this.AbstractTargetedAction(targetDefinition)
    }
 
    RemoveAction.prototype = {
@@ -11,35 +10,18 @@ with(customizeyourweb){
          if(!this.isTargetInPage(cywContext.getTargetWindow())){
             return false
          }
-         this.removeElements(cywContext);
+         var targets = this.getTargets(cywContext)
+         for (var i = 0; i < targets.length; i++) {
+            var target = targets[i]
+            if(target.parentNode){
+               target.parentNode.removeChild(target)
+            }
+         }         
          return true
-      },
-      
-      preview: function(editContext){
-         this.removeElements(editContext)
-      },
-      
-      removeElements:function(abstractContext){
-         var targets = this.getTargets(abstractContext)
-         var undoMemento = []
-         for(i in targets){
-            undoMemento.push(new RemovedElement(targets[i]))
-         }
-         $(targets, abstractContext.getTargetDocument()).remove()
-         abstractContext.setActionChangeMemento(this.getId(), undoMemento)
-      },
-      
-      undoInternal: function(editContext, undoMemento){
-         var removedElements = undoMemento
-         for(key in removedElements){
-            removedElements[key].undoRemoval()
-         }
       }
-      
    }
-   ObjectUtils.extend(RemoveAction, "AbstractPreviewableAction", customizeyourweb)
    ObjectUtils.extend(RemoveAction, "AbstractTargetedAction", customizeyourweb)
-   
+
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "RemoveAction", RemoveAction)
 })()
 }

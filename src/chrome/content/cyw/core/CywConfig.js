@@ -9,16 +9,10 @@ with(customizeyourweb){
 (function(){
    
    const PREF_KEY_NOT_FOUND = "PREF_KEY_NOT_FOUND";
-   const FILENAME_INCOMPATIBLE_CHARS_REGEXP = /[^a-z0-9]{1,}/ig;
-   const CONFIG_CHANGED_TOPIC = "CUSTOMIZEYOURWEB_CONFIG_CHANGED";
-
+   const FILENAME_INCOMPATIBLE_CHARS_REGEXP = /[^a-z0-9]{1,}/ig
+   
    var CywConfig = {
-      //Flag indicating wether performance log is activated
-      perfLogActive: false,
       scripts: new ArrayList(),
-      //To detect from where observer notifcation comse from
-      id: (new Date()).getTime(),
-      
       
       cloneScript: function(script){
          return ObjectUtils.deepClone(script)
@@ -39,9 +33,9 @@ with(customizeyourweb){
          if(includePatternStrings.length>0){
             fileName +=   "_" + includePatternStrings[0]
          }
-         fileName = fileName.replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_")
-         if(fileName.length>60){
-            fileName = fileName.substring(0, 60)
+         fileName = fileName.replace(FILENAME_INCOMPATIBLE_CHARS_REGEXP, "_") 
+         if(fileName.length>250){
+            fileName = fileName.substring(0, 250)
          }
          fileName += ".xml"
          return fileName
@@ -54,9 +48,9 @@ with(customizeyourweb){
       deleteScriptFromDisk: function(script){
          var fileName = script.getFileName()
          var scriptFile = this.getConfigDir()
-         scriptFile.append(fileName);
+         scriptFile.append(fileName)
          if(scriptFile && scriptFile.exists()){
-            FileIO.remove(scriptFile);
+            FileIO.remove(scriptFile)
             CywUtils.logDebug("Script " + fileName + " has been deleted.")
          }else if(script.isPersisted()){
             throw new Error('Deletion of Script File "' + fileName + '" failed.')
@@ -74,8 +68,7 @@ with(customizeyourweb){
          		found = true
          		break;
          	}
-         }
-         this.notifyObservers()
+         }	
       	if(!found)
       	   throw new Error('Script with provided id not existent')
       	
@@ -92,16 +85,10 @@ with(customizeyourweb){
              alert(e)
              throw e
           }
-          this.registerConfigChangedObserver()
-          this.initPerfLogActive()
       },
       
       isAutoUpdateOnSave: function(){
          return this.getPref("autoUpatePageOnSave") 
-      },
-      
-      isPerfLogActive: function(){
-         return this.perfLogActive 
       },
       
       getConfigDir: function() {
@@ -124,8 +111,12 @@ with(customizeyourweb){
       
       getPref: function(key){
          var key = this.completePrefKey(key)
-         Assert.isTrue(Application.prefs.has(key), 'Pref value for key "' + key + '" not found.') 
-         return Application.prefs.getValue(key, null)
+         //TODO think about wether this is senseful
+         var value = Application.prefs.getValue(key, PREF_KEY_NOT_FOUND)
+         if(value==PREF_KEY_NOT_FOUND){
+            throw new Error('Pref value for key "' + key + '" not found')
+         }
+         return value
       },
       
       getScriptFiles: function(){
@@ -144,10 +135,6 @@ with(customizeyourweb){
       
       getScripts: function(){
          return this.scripts
-      },
-      
-      getScriptsAsArray: function(){
-         return this.scripts.toArray()
       },
       
       /* 
@@ -187,17 +174,6 @@ with(customizeyourweb){
          return null
       },
       
-      //Return script by id
-      getScriptById: function(scriptId){
-         for (var i = 0; i < this.scripts.size(); i++) {
-            var script = this.scripts.get(i)
-            if(script.getId()==scriptId){
-               return script
-            }
-         }
-         return null
-      },
-      
       /*Returns array of cloned scripts which "matches" at least one url of 
        * the target win and it frames. Matches includes both matching the URL pattern or having the same domain
        */
@@ -208,7 +184,7 @@ with(customizeyourweb){
          
          var matchingScripts = new Set()
          var containsCompareFct = function(objSearched, elementFromList){
-            return objSearched.getId() == elementFromList.getId();
+            return objSearched.getId() == elementFromList.getId()
          }
          for (var scriptIndex = 0; scriptIndex < this.scripts.size(); scriptIndex++) {
             for (var urlIndex = 0; urlIndex < urls.length; urlIndex++) {
@@ -222,25 +198,6 @@ with(customizeyourweb){
             }
          }
          return matchingScripts
-      },
-      
-      /*
-       * Notification to other CywConfig in other windows
-       */
-      notifyObservers: function(){
-         Utils.notifyObservers(CONFIG_CHANGED_TOPIC, this, this.id)   
-//         CywUtils.logDebug("Observers notfied")
-      },
-      
-      /*
-       * Observe method for changing config in other chrome windows
-       */
-      observeConfigChanged: function(subject, topic, data){
-         if(this.id==data){
-            return
-         }
-         this.readConfig()
-//         CywUtils.logDebug("Reload scripts after config changed notification")
       },
       
       readConfig: function(){
@@ -258,69 +215,47 @@ with(customizeyourweb){
             script.updateUrlPatternRegExp()
             script.setFileName(scriptFile.leafName)
             
-            this.scripts.add(script);
+            this.scripts.add(script)
             scriptsLoaded++
          }
          CywUtils.logDebug("CYW: " + scriptsLoaded + " Scripts loaded successfully")
          
       },
       
-      registerConfigChangedObserver: function(){
-         Utils.registerObserver(CONFIG_CHANGED_TOPIC, Utils.createObserverForInterface(this, this.observeConfigChanged))
-      },
-      
-      saveScript: function(aScript, notifyObservers){
-         Assert.notNull(aScript)
-         notifyObservers = arguments.length>1?notifyObservers:true
-         try{
-            aScript.updateUrlPatternRegExp()
-            var newScript = true
-            for (var i = 0; i < this.scripts.size(); i++) {
-               var script = this.scripts.get(i)
-               if(script.equals(aScript)){
-                  this.scripts.set(i, aScript);
-                  newScript = false
-               }
+      saveScript: function(aScript){
+         if(aScript==null)
+            throw new Error("Nullpointer: aScript is null")
+         aScript.updateUrlPatternRegExp()
+         var newScript = true
+         for (var i = 0; i < this.scripts.size(); i++) {
+            var script = this.scripts.get(i)
+            if(script.equals(aScript)){
+               this.scripts.set(i, aScript)
+               newScript = false
             }
-            if(newScript){
-               this.scripts.add(aScript)
-            }else{
-               this.deleteScriptFromDisk(aScript)
-            }
-            aScript.setLastEdited((new Date()).getTime())
-            aScript.setPersisted(true)
-            //Set script file name
-            var scriptFileName = this.createScriptFileName(aScript)
-            aScript.setFileName(scriptFileName)
-            aScript.setVersion(CywCommon.getCywVersion())
-            
-            //Create and write context
-            var scriptContent = this.serializeScript(aScript, "Script")
-            //Add xml processing for encoding
-            this.writeScript(scriptFileName, scriptContent)
-            if(notifyObservers){
-               this.notifyObservers()
-            }
-         }catch(e){
-            CywUtils.logError(e, "Error on saving script", true)
-            throw e
          }
-      },
-      
-      /*
-       * Save all provided scripts
-       * @param Array[Script] scriptArr
-       */
-      saveScripts: function(scriptArr){
-         for (var i = 0; i < scriptArr.length; i++) {
-            this.saveScript(scriptArr[i], false)
-         }   
+         if(newScript){
+            this.scripts.add(aScript)
+         }else{
+            this.deleteScriptFromDisk(aScript)
+         }
+         aScript.setLastEdited((new Date()).getTime())
+         aScript.setPersisted(true)
+         //Set script file name
+         var scriptFileName = this.createScriptFileName(aScript)
+         aScript.setFileName(scriptFileName)
+         aScript.setVersion(CywCommon.getCywVersion())
+         
+         //Create and write context
+         var scriptContent = this.serializeScript(aScript, "Script")
+         //Add xml processing for encoding
+         scriptContent = '<?xml version="1.0" encoding="UTF-8"?>\n' + scriptContent 
+         this.writeScript(scriptFileName, scriptContent)
       },
       
       serializeScript: function(script, rootTag){
          Assert.paramsNotNull(arguments)
-         return  '<?xml version="1.0" encoding="UTF-8"?>\n' + 
-                  JSerial.serialize(script, rootTag, "  ", true, "t_")
+         return JSerial.serialize(script, rootTag, "  ", true, "t_")
       },
       
       setPref: function(key, value){
@@ -328,40 +263,17 @@ with(customizeyourweb){
          Application.prefs.setValue(key, value)
          return value
       },
-      
-      initPerfLogActive: function(){
-         this.perfLogActive =  this.getPref("logging.performance")
-      },
-      
-      /*
-       * Updates only one specific action and saves the changes to disk
-       * @param scriptId
-       * @param actionId
-       * @param changedPropertiesMap: Object containing the properties of the changed action
-       */
-      updateAction: function(scriptId, actionId, changedPropertiesMap){
-         Assert.paramsNotNull(arguments)
-         var script = this.getScriptById(scriptId)
-         if(!script){
-            throw new Error('Unkown script Id')
-         }
-         var action = script.getActionById(actionId)
-         for(var prop in changedPropertiesMap){
-            PresentationMapper.setPropertyInModel(action, prop, changedPropertiesMap[prop])
-         }
-         this.saveScript(script)
-      },
 
       writeScript: function(fileName, scriptXML){
          var scriptFile = this.getConfigDir()
          scriptFile.append(fileName)
          FileIO.create(scriptFile)
          FileIO.write(scriptFile, scriptXML, null, "UTF-8");
-         CywUtils.logDebug("Script " + fileName + " is written to disk.");
+         CywUtils.logDebug("Script " + fileName + " is written to disk.")
       }
 
       
-   };
+   } 
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywConfig", CywConfig)
    

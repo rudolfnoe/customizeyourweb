@@ -88,17 +88,17 @@ with(customizeyourweb){
          for (var i = 0;i < this.includeUrlPatterns.size(); i++) {
             if(this.includeUrlPatterns.get(i).matchUrl(url)){
                matchInclude = true
-               break;
+               break
             }
          }
          if(!matchInclude)
-            return false;
+            return false
             
          for (var i = 0;i < this.excludeUrlPatterns.size(); i++) {
             if(this.excludeUrlPatterns.get(i).matchUrl(url))
-               return false;
+               return false
          }
-         return true;
+         return true
       },
 
       setExcludeUrlPatterns: function(patternsArray){
@@ -125,8 +125,8 @@ with(customizeyourweb){
          }
       }
       
-   };
+   }
    
-   Namespace.bindToNamespace("customizeyourweb", "TargetWinDefinition", TargetWinDefinition);
+   Namespace.bindToNamespace("customizeyourweb", "TargetWinDefinition", TargetWinDefinition)
 })()
 }

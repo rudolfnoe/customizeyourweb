@@ -13,6 +13,7 @@ with(customizeyourweb){
 	var InitManager = {
 		eventHandlersActive: false,
 		intializedOnceDone: false,
+      prefObserver: null,
 		shortcutManager: new ShortcutManager(window, "keydown", true),
       
       assureAIOSCompatibility: function(){
@@ -54,10 +55,10 @@ with(customizeyourweb){
          return document.getElementById('customizeyourweb_disableCustomizeYourWeb')
       },
 		
-		init: function(){
+		init: function(event){
          //Load configuration first
 			CywConfig.init()
-         this.intializeOnce()
+         this.intializedOnce()
          this.disableAll()
          var disabled = Prefs.getBoolPref("customizeyourweb.disabled")
          if(!disabled){
@@ -78,7 +79,7 @@ with(customizeyourweb){
          }
       },
       
-      intializeOnce: function(){
+      intializedOnce: function(){
 			if(!this.intializedOnceDone){
    		   this.registerObservers()
             this.assureAIOSCompatibility()
@@ -93,7 +94,8 @@ with(customizeyourweb){
 		
 		registerObservers: function(){
 			//Add preferences-observer
-	      Utils.registerObserver(CywCommon.PREF_OBSERVER, Utils.createObserverForInterface(InitManager))
+	      this.prefObserver = Utils.createObserverForInterface(InitManager)
+	      Utils.registerObserver(CywCommon.PREF_OBSERVER, this.prefObserver)
 		},
 		
 		initEventHandlers: function(addOrRemoveListenerFunction){

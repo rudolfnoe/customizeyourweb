@@ -5,8 +5,8 @@ with(customizeyourweb){
    function Script (id){
       Assert.paramsNotNull(arguments)
    	this.id = id
+      this.t_actionIdCounter = -1 
    	this.actions = new ArrayList()
-      this.applyToTopWindowsOnly = false
       this.disabled = false
       this.t_fileName = null
       this.guiId = Utils.createGUIId()
@@ -17,6 +17,7 @@ with(customizeyourweb){
       this.targetWinDefinition = new TargetWinDefinition()
       //Version of CYW with which is this script written the last time
       this.version = null
+   	//Unique id of script to identify, timestamp is enough
    	this.loadEventType = LoadEventTypes.DOM_CONTENT_LOADED
       this.behaviorOnMutationEvent = RunBehaviorOnMutationEvent.RUN_ALWAYS 
       //Default is true as after reading config it should be true
@@ -58,14 +59,6 @@ with(customizeyourweb){
       	return this.actions
       },
       
-      isApplyToTopWindowsOnly: function(){
-         return this.applyToTopWindowsOnly
-      },
-
-      setApplyToTopWindowsOnly: function(applyToTopWindowsOnly){
-         this.applyToTopWindowsOnly = applyToTopWindowsOnly
-      },
-
       isDisabled: function(){
          return this.disabled
       },
@@ -131,21 +124,6 @@ with(customizeyourweb){
          this.version = version
       },
       
-      /*
-       * Returns action by id
-       */
-      getActionById: function(actionId){
-         Assert.notNull(actionId)
-         var actionIter = new ActionIterator(this.getActions())
-         while(actionIter.hasNext){
-            var action = actionIter.next()
-            if(action.getId()==actionId){
-               return action
-            }
-         }
-         return null
-      },
-      
       equals: function(otherScript){
          //Do not test constructor as this is not if script was cloned
          if(otherScript==null)
@@ -154,15 +132,17 @@ with(customizeyourweb){
       },
       
       getNextActionId: function(){
-         var maxActionId = 0
-         var actionIter = new ActionIterator(this.getActions())
-         while(actionIter.hasNext()){
-            var actionId = actionIter.next().getId()
-            if(maxActionId<actionId){
-               maxActionId = actionId
+         if(this.t_actionIdCounter==-1){
+            this.t_actionIdCounter = 0
+            var actionIter = new ActionIterator(this)
+            while(actionIter.hasNext()){
+               var actionId = actionIter.next().getId()
+               if(this.t_actionIdCounter<actionId)
+                  this.t_actionIdCounter = actionId            
             }
          }
-         return maxActionId + 1
+         this.t_actionIdCounter++
+         return this.t_actionIdCounter
       },
       
       getScriptLoggingName: function(){
@@ -209,17 +189,17 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         cywContext.setScript(this)
          for (var i = 0;i < this.actions.size(); i++) {
             var action = this.actions.get(i)
             try{
                action.cleanUp(cywContext)
             }catch(e){
-               ScriptErrorHandler.addScriptError(ErrorConstants.CLEAN_UP_FAILED, [action.getId(), e.message], 
-                                                e, this.getId(), action.getId(), cywContext.getTargetWindow())
+               ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.CLEAN_UP_FAILED, 
+                                                 [action.getId(), e.message], action, 
+                                                 cywContext.getTargetWindow())
             }
          }
-         CywUtils.logDebug("Script.cleanUp: Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
+         CywUtils.logDebug("Script " + this.getScriptLoggingName() + " cleaned up on " + cywContext.getPageEventType())
             
       },
    	
@@ -237,10 +217,8 @@ with(customizeyourweb){
          if(this.isRunNeverOnMutationEvent(cywContext)){
             return
          }
-         var message = "Script.runScript: Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType()
-         CywUtils.logInfo(message)
-         var pt = new PerfTimer()
-         cywContext.setScript(this)
+         CywUtils.logInfo("Script " + this.getScriptLoggingName() + " runs on " + cywContext.getPageEventType())
+         cywContext.setScriptId(this.getId())
          ScriptErrorHandler.clearScriptErrors(this.getId())
          var cachedPage = cywContext.isCachedPage()
    		for (var i = 0; i < this.actions.size(); i++) {
@@ -251,11 +229,14 @@ with(customizeyourweb){
                else
    			      action.doAction(cywContext)
             }catch(e){
-               ScriptErrorHandler.addScriptError(ErrorConstants.ACTION_FAILED, [action.getId(), e.message], 
-                                                e, this.getId(), action.getId(), cywContext.getTargetWindow())
+               if(Log.isDebug()){
+                  CywUtils.logError(e)
+               }
+               ScriptErrorHandler.addScriptError(this.getId(), ErrorConstants.ACTION_FAILED, 
+                                                   [action.getId(), e.message], action,
+                                                   cywContext.getTargetWindow())
             }
    		}
-         CywUtils.logPerf("Script.runScript: " + this.getScriptLoggingName(), pt.stop())
    	},
    	
    	setActions: function(actions){

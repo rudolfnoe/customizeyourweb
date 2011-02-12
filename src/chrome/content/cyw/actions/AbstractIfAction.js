@@ -1,18 +1,14 @@
 with(customizeyourweb){
 (function(){
-   function AbstractIfAction(){
+   function AbstractIfAction(targetDefinition){
+      this.AbstractAction()
       this.AbstractContainerAction()
    }
    
    AbstractIfAction.prototype = {
       constructor: AbstractIfAction,
+      AbstractIfAction: AbstractIfAction,
       
-      cleanUp: function(cywContext){
-         if(this.isTrue(cywContext)){
-            this.AbstractContainerAction_cleanUp(cywContext)
-         }
-      },
-
       doActionInternal: function(cywContext){
          if(this.isTrue(cywContext)){
             this.doChildActions(cywContext)

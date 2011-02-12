@@ -16,7 +16,7 @@ with(customizeyourweb){
          ScriptErrorHandler.addScriptErrorListener(this.scriptErrorListener)
          this.pageHideListener = new EventHandlerAdapter(this.onPagehide, this)
          document.getElementById('content').addEventListener("pagehide", this.pageHideListener, true)
-         this.tabSelectListener = new EventHandlerAdapter(this.onTabSelect, this);
+         this.tabSelectListener = new EventHandlerAdapter(this.onTabSelect, this)
          Application.activeWindow.events.addListener("TabSelect", this.tabSelectListener)
       },
       
@@ -30,8 +30,8 @@ with(customizeyourweb){
       },
       
       hideStatusbar: function(){
-         CywConfig.setPref("ui.hideStatusbarIcon", true);
-         this.showHideStatusIcon();
+         CywConfig.setPref("ui.hideStatusbarIcon", true)
+         this.showHideStatusIcon()
       },
       
       init: function(){
@@ -39,16 +39,14 @@ with(customizeyourweb){
          var isCYWDisabled = CywConfig.getPref("disabled")
          this.setDisabledState(isCYWDisabled)
          if(!this.listenerActive){
-            this.createAndRegisterEventListener();
+            this.createAndRegisterEventListener()
             this.listenerActive = true
          }
-         var suspendOrResume = isCYWDisabled?"suspend":"resume";
+         var suspendOrResume = isCYWDisabled?"suspend":"resume"
          this.suspendOrResumeEventListener(suspendOrResume)
       },
       
       onPagehide: function(event){
-         var targetWin = event.originalTarget.defaultView
-//         CywUtils.logDebug("StatusbarManager.onPagehide: " + event.originalTarget.defaultView.location.href + "  Top Win? " + (targetWin==targetWin.top))
          var targetWin = event.originalTarget.defaultView
          var errorIconStateTabContext = this.getTabContext(targetWin)
          if(targetWin == targetWin.top){
@@ -104,8 +102,8 @@ with(customizeyourweb){
 
       suspendOrResumeEventListener: function(suspendOrResume){
          this.pageHideListener[suspendOrResume]()
-         this.scriptErrorListener[suspendOrResume]();
-         this.tabSelectListener[suspendOrResume]();
+         this.scriptErrorListener[suspendOrResume]()
+         this.tabSelectListener[suspendOrResume]()
       }
       
    }

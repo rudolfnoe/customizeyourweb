@@ -6,7 +6,7 @@
 	<property name="build_dir" location="./build" />
 	<property name="dist_dir" location="./dist" />
 	<property name="backup_dir" location="../backup" />
-	<property name="version" value="0_5Build201010211200"/>
+	<property name="version" value="0_4_3_2Build201102101800"/>
 	<property name="version_file_name" value="${ant.project.name}_${version}.xpi"/>
 	<property name="standard_profile_dir" value="C:\Dokumente und Einstellungen\Rudolf\Anwendungsdaten\Mozilla\Firefox\Profiles\c3clocq0.Standard"/>
 	<property name="standard_extension_dir" value="${standard_profile_dir}\extensions"></property>
@@ -17,9 +17,8 @@
 	<target name="createDistributionXPI">
 		<delete dir="${dist_dir}"/>
 		<mkdir dir="${dist_dir}"/>
-		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**/*.js, **/*.css" 
-		   excludes="chrome/content/test/**, chrome/content/jquery/development-bundle/**, chrome/content/jquery/jQueryViewport.js,
-		    **/Shortcutmanager.js"/>
+		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**" 
+		   excludes="chrome/content/lib/**, chrome/content/test/**, **/Shortcutmanager.js"/>
 		<!-- Make backup-copy -->
 		<copy todir="${backup_dir}/src">
 			<fileset dir="${src_dir}"/>
@@ -29,7 +28,7 @@
 		<ftp server="wp1067403.wp026.webpack.hosteurope.de"
 	       remotedir="www/joomla/resources"
 	       userid="ftp1067403-rudolfnoe"
-	       password="bikefahrn"
+	       password="${passwordFTP}"
 	       depends="yes">
 			<fileset dir="${dist_dir}">
 				<include name="*.xpi"/>

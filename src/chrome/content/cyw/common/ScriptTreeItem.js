@@ -43,7 +43,7 @@ with(customizeyourweb){
             return
          }
          throw new Error('unknonw column for setCellValue')
-      }
+      },
       
    }
    ObjectUtils.extend(ScriptTreeItem, "AbstractLeafTreeItem", customizeyourweb)

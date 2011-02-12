@@ -24,17 +24,24 @@ with(customizeyourweb){
          //Then shadow the rest of the frame
       	var shadower = doc.getElementById(SHADOWER_ID)
       	if(shadower==null){
-      		shadower = this.createShadowerDiv()
-      		var body = DomUtils.getBody(doc);
+      		shadower = this.createDiv()
+      		var body = DomUtils.getBody(doc)
             body.appendChild(shadower)
       	}
       },
       
       unshadow: function(){
-         $('#' + SHADOWER_ID, this.targetWin.document).remove()
+      	var doc = this.targetWin.document
+         if(!doc){
+            return
+         }
+      	var shadower = doc.getElementById(SHADOWER_ID)
+      	if(shadower!=null){
+         	shadower.parentNode.removeChild(shadower)
+      	}
       },
       
-      createShadowerDiv: function(){
+      createDiv: function(){
          var doc = this.targetWin.document
          var div = doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
          div.setAttribute('id',SHADOWER_ID)
@@ -42,9 +49,9 @@ with(customizeyourweb){
          div.style.cssText = "position:absolute; top:0px; left:0px; background-color:#e7eaFF; opacity:0.6; z-index:2147483646"
          div.style.height = doc.height+"px"
          div.style.width = doc.width+"px"
-         return div;
+         return div 
       }
-	};
+	}
 
 	
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "FrameShadower", FrameShadower)

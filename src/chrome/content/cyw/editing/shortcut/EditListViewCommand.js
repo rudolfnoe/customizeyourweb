@@ -8,23 +8,27 @@ with(customizeyourweb){
       doCreateAction: function(editContext){
          var targetElement = editContext.getTargetElement()
          var rootElement = this.getRootElement(targetElement)
-			editContext.setTargetElement(rootElement)
          var action = null
-         action = new ListViewAction(editContext.getNextActionId(), AbstractTargetDefinitionFactory.createDefaultDefinition(rootElement))
+         action = new ListViewAction(AbstractTargetDefinitionFactory.createDefaultDefinition(rootElement))
          action.setRepetitionBehavior(RepetitionBehavior.RUN_ALWAYS)
          action.setHighlightCss("background-color: " + Prefs.getPref("customizeyourweb.listview.bgcolor-focused"))
-         action.setListItemsJQuery(this.getListItemTagName(rootElement))   
-         return this.editAction(action, editContext)
+         action.setListItemsTagName(this.getListItemTagName(rootElement))   
+         return this.editAction(action, rootElement, editContext.getTargetWindow())
       },
          
-      doEditAction: function(action, editContext){
-         return this.editAction(action, editContext)
+      doEditAction: function(editContext){
+         return this.editAction(editContext.getAction(), editContext.getTargetElement(), editContext.getTargetWindow())
       },
 
-      editAction: function(action, editContext){
-         var editDialog = new EditDialog(EDIT_LISTVIEW_DIALOG_URL, "EditListView", action, editContext)
+      editAction: function(action, targetElement, targetWindow){
+         var editDialog = new EditDialog(EDIT_LISTVIEW_DIALOG_URL, "EditListView", true, window, null, 
+               {action: action, targetElement:targetElement, targetWindow: targetWindow})
          editDialog.show()
-         return editDialog.getActionResult()
+         action = editDialog.getNamedResult("action")
+         if(action==null)
+            return
+         this.setAction(action)
+         return this.getAction()
       },
       
       getListItemTagName: function(rootElement){

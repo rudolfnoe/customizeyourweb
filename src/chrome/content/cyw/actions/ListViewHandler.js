@@ -42,19 +42,8 @@ with(customizeyourweb){
          this.unRegisterMultipleEventListener(this.rootElement, EVENT_TYPES_FOR_ROOT, true)
          this.scm.destroy()
          //set current index attribute to focus the same index on cached pages
-         this.rootElement.setAttribute(CURRENT_INDEX_ATTR, this.currentIndex);
+         this.rootElement.setAttribute(CURRENT_INDEX_ATTR, this.currentIndex)
          this.updateHighlighting(-1)
-      },
-      fireEvent: function(){
-         var linkToOpen = this.getLinkToOpen()
-         if(!linkToOpen){
-            return
-         }else{
-            var win = DomUtils.getOwnerWindow(linkToOpen)
-            var uiEvent = win.document.createEvent("UIEvents")
-            uiEvent.initEvent(UIEvents.PREVIEW_LINK, true, true, win, null);
-            linkToOpen.dispatchEvent(uiEvent)
-         }
       },
       focusListView: function(){
          if(!this.focused){
@@ -69,16 +58,6 @@ with(customizeyourweb){
       },
       getLastIndex: function(){
          return this.listItems.length-1
-      },
-      getLinkToOpen: function(){
-         var links = this.getCurrentItem().getElementsByTagName('a')
-         if(links.length==0){
-            return null
-         }else if(links.length >= this.linkNoToOpen){
-            return links[this.linkNoToOpen-1]
-         }else{
-            throw new Error("Link number to open exceeds number of available links within the item. Please correct ListView configuration.")
-         }
       },
       handleBlur: function(event){
          Utils.executeDelayed((new Date()).getTime(), 100, this.checkBlur, this, [event])
@@ -107,11 +86,11 @@ with(customizeyourweb){
             var tds = item.getElementsByTagName('TD')
             for (var i = 0; i < tds.length; i++) {
                var elemWrapper = new ElementWrapper(tds[i])
-               this.currentTdTagWrappers[i] = elemWrapper;
+               this.currentTdTagWrappers[i] = elemWrapper
                elemWrapper.setStyle("background", "transparent", "important")
             }
          }
-         this.currentItemWrapper.setProperty("tabIndex", 0);
+         this.currentItemWrapper.setProperty("tabIndex", 0)
          item.focus()
       },
       initShortcuts: function(){
@@ -124,7 +103,7 @@ with(customizeyourweb){
          this.scm.addShortcut("Return", function(event){return this.openItemIn(event, this.defaultLinkTarget)}, this)
          this.scm.addShortcut("Ctrl+Return", function(event){
             return this.openItemIn(event, this.defaultLinkTarget==LinkTarget.CURRENT?LinkTarget.TAB:LinkTarget.CURRENT)
-         }, this);
+         }, this)
          this.scm.addShortcut("Space", this.toggleFirstCheckbox, this)
       },
       isFirst: function(index){
@@ -161,8 +140,8 @@ with(customizeyourweb){
          if(event.originalTarget != ci){//Focus is somewhere within the item
             return ShortcutManager.DO_NOT_SUPPRESS_KEY
          }
-         var linkToOpen = this.getLinkToOpen()
-         if(!linkToOpen){
+         var links = ci.getElementsByTagName('a')
+         if(links.length==0){
             var mouseEvent = new MouseEvent("mousedown")
             mouseEvent.dispatch(ci)
             mouseEvent.setType("click")
@@ -170,8 +149,10 @@ with(customizeyourweb){
             mouseEvent.setType("mouseup")
             mouseEvent.dispatch(ci)
             return
-         }else {
-            (new LinkWrapper(linkToOpen).open(linkTarget))
+         }else if((links.length+1) >= this.linkNoToOpen){
+            (new LinkWrapper(links[this.linkNoToOpen-1])).open(linkTarget)
+         }else{
+            throw new Error("Link number to open exceeds number of available links within the item. Please correct ListView configuration.")
          }
       },
       toggleFirstCheckbox: function(){
@@ -179,7 +160,7 @@ with(customizeyourweb){
          var firstCheckbox = XPathUtils.getElement(".//input[@type='checkbox']", ci)
          if(!firstCheckbox)
             return
-         firstCheckbox.click(); //to also trigger other eventhandler
+         firstCheckbox.click() //to also trigger other eventhandler
          this.updateHighlighting(this.currentIndex)
       },
       unhighlight: function(){
@@ -197,11 +178,11 @@ with(customizeyourweb){
          if(newIndex==-1){
             this.focused = false
             return
+         }else{
+            this.focused = true
          }
-         this.focused = true
          this.currentIndex = newIndex
-         this.highlight(this.listItems[newIndex]);
-         this.fireEvent();
+         this.highlight(this.listItems[newIndex])
       }
    }
    

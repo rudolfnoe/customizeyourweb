@@ -3,10 +3,13 @@ with(customizeyourweb){
 
    var EditInsertStyleSheetDialogHandler = {
       action: null,
+      httpRequest: null,
+      scriptId: null,
       labelToStylesheetMap: new Map(),
+      targetDocument: null,
       
       doCancel: function(){
-         this.action.undo(EditDialog.getEditContext())
+         this.setStyleSheetCodeInPage(this.action.getStyleSheetCode())
       },
       
       doInsertStyleSheetContent: function(){
@@ -14,22 +17,12 @@ with(customizeyourweb){
          var stlyeSheetKey = styleML.selectedItem.value
          var styleSheet = this.labelToStylesheetMap.get(stlyeSheetKey)
          var cssRules = styleSheet.cssRules
-         var insertString = ""
+         var rules = []
          for (var i = 0; i < cssRules.length; i++) {
-            var rule = cssRules[i]
-            if(!rule instanceof CSSStyleRule){
-               continue
-            }
-            insertString += rule.selectorText + "{\n"
-            var style = rule.style
-            for (var j = 0; j < style.length; j++) {
-               var prop = style.item(j)
-               insertString += "   " + prop + ": " + style.getPropertyValue(prop) + ";\n" 
-            }
-            insertString += "}\n\n"
+            rules[i] = cssRules.item(i).cssText
          }
          var styleSheetCodeTB = byId('styleSheetCodeTB')
-         styleSheetCodeTB.value = styleSheetCodeTB.value + "\n\n" + insertString
+         styleSheetCodeTB.value = styleSheetCodeTB.value + "\n" + rules.join('\n\n')
          styleSheetCodeTB.focus()
       },
       
@@ -40,24 +33,20 @@ with(customizeyourweb){
       },
 
       doOnload: function(){
-         try{
-            this.initShortcuts()
-            this.action = EditDialog.getAction()
-            byId('styleSheetCodeTB').value = StringUtils.defaultString(this.action.getStyleSheetCode())
-            this.initValidators()
-            var targetDocument = EditDialog.getTargetDocument()
-            this.fillExisitingStyleSheetsML(targetDocument)
-            StyleSheetHighlighter.init(byId('styleSheetCodeTB'), targetDocument)
-            this.setStyleSheetCodeInPage(this.action, byId('styleSheetCodeTB').value)
-            byId('styleSheetCodeTB').focus()
-         }catch(e){
-            CywUtils.logError(e, null, true)
-         }
+         this.initShortcuts()
+         this.action = Dialog.getNamedArgument("action")
+         this.scriptId = Dialog.getNamedArgument("scriptId") 
+         this.targetDocument = Dialog.getNamedArgument("targetDocument")
+         byId('styleSheetCodeTB').value = StringUtils.defaultString(this.action.getStyleSheetCode())
+         this.fillExisitingStyleSheetsML()
+         this.initValidators()
+         byId('styleSheetCodeTB').focus()
       },
       
-      fillExisitingStyleSheetsML: function(targetDocument){
+      fillExisitingStyleSheetsML: function(){
+         //var styleSheetElements = XPathUtils.getElements("//link[@rel='stylesheet']", this.targetDocument)
          var styleML = this.getExistingStyleSheetsML()
-         var styleSheets = targetDocument.styleSheets
+         var styleSheets = this.targetDocument.styleSheets
          for (var i = 0; i < styleSheets.length; i++) {
             var styleSheet = styleSheets[i]
             var href = styleSheet.href
@@ -75,6 +64,11 @@ with(customizeyourweb){
          return byId('exisitingStyleSheetsML')
       },
       
+      handleStyleSheetLoaded: function(){
+         var styleSheetCodeTB = byId('styleSheetCodeTB')
+         styleSheetCodeTB.value = styleSheetCodeTB.value + "\n" + this.httpRequest.getResponseText() 
+      }, 
+      
       initShortcuts: function(){
          this.scm = new ShortcutManager(window, "keydown", true)
          this.scm.addShortcutForElement("styleSheetCodeTB", "ctrl+Return", Dialog.acceptDialog)
@@ -86,16 +80,21 @@ with(customizeyourweb){
          okValidator.validate()
       },
       
-      setStyleSheetCodeInPage: function(action, styleSheetCode){
-         var editContext = EditDialog.getEditContext()
-         action.undo(editContext)
-         action.setStyleSheetCode(styleSheetCode)
-         action.preview(editContext)
+      setStyleSheetCodeInPage: function(styleSheetCode){
+         if(StringUtils.isEmpty(styleSheetCode)){
+            var styleSheetElemId = InsertStyleSheetAction.getStyleSheetElementId(this.scriptId, this.action.getId())
+            var styleSheetElement = this.targetDocument.getElementById(styleSheetElemId)
+            if(styleSheetElement){
+               DomUtils.removeElement(styleSheetElement)
+            }
+         }else{
+            InsertStyleSheetAction.setStyleSheet(styleSheetCode, this.targetDocument, this.scriptId, this.action.getId())
+         }
       },
       
       updatePage: function(){
          Utils.executeDelayed("UPDATE_PAGE_TIMER", 200, function(){
-            this.setStyleSheetCodeInPage(this.action, byId('styleSheetCodeTB').value)         
+            this.setStyleSheetCodeInPage(byId('styleSheetCodeTB').value)         
          }, this)
       }
    }

@@ -9,14 +9,13 @@ with(customizeyourweb){
          var action = null
          var targetElement = editContext.getTargetElement()
          var commandId = editContext.getCommand().id
-         var actionId = editContext.getNextActionId()
          if(commandId=="customizeyourweb_shortcutCmd"){
-            action = new ShortcutAction(actionId, editContext.getDefaultTargetDefinition())
+            action = new ShortcutAction(editContext.getTargetDefinition())
          }else if(commandId=="customizeyourweb_macroShortcutCmd"){
-            action = new MacroShortcutAction(actionId);
+            action = new MacroShortcutAction()
             targetElement = null
          }else if(commandId=="customizeyourweb_toggleVisibilityShortcutCmd"){
-            action = new ToggleVisibilityShortcutAction(actionId, editContext.getDefaultTargetDefinition())
+            action = new ToggleVisibilityShortcutAction(editContext.getTargetDefinition())
          }else{
             throw new Error ('unkown shortcut command id')
          }
@@ -24,19 +23,26 @@ with(customizeyourweb){
          return this.editAction(action, editContext)
       },
          
-      doEditAction: function(action, editContext){
-         return this.editAction(action, editContext)
+      doEditAction: function(editContext){
+         return this.editAction(editContext.getAction(), editContext)
       },
 
       editAction: function(action, editContext){
-         var editDialog = new EditDialog(EDIT_SHORTCUT_DIALOG_URL, "EditShortcut", action, editContext)
+         var editDialog = new EditDialog(EDIT_SHORTCUT_DIALOG_URL, "EditShortcut", true, window, null, 
+                                {action: action, targetElement:editContext.getTargetElement(), targetWindow:editContext.getTargetWindow()})
          editDialog.show()
-         return editDialog.getActionResult();
+         action = editDialog.getNamedResult("action")
+         if(action==null)
+            return
+         this.setAction(action)
+         return this.getAction()
       }
       
    }
+   
+   
    ObjectUtils.extend(EditShortcutCommand, "AbstractEditCommand", customizeyourweb)
 
-   Namespace.bindToNamespace("customizeyourweb", "EditShortcutCommand", EditShortcutCommand)
+   customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "EditShortcutCommand", EditShortcutCommand)
 })()
 }
