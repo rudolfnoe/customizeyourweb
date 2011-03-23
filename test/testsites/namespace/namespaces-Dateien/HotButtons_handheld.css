@@ -1,0 +1,28 @@
+
+table.hotbuttons {
+   border: 0px solid #ffffff;
+   border-spacing: 3px;
+   border-collapse: separate;
+}
+
+a.hotbuttons, td.hotbuttons {
+   padding: 4px 6px;
+   background-image: url('/prod/images/flamebg.gif');
+   background-position: bottom;
+   background-repeat: repeat-x;
+   text-align: center;
+}
+
+a.hotbuttons, td.hotbuttons a {
+   text-decoration: none;
+   font-family: Arial, Helvetica;
+   font-size: 17px;
+   font-weight: bold;
+   white-space: nowrap;
+   color: #ffff99;
+}
+
+a.hotbuttons:visited, td.hotbuttons a:visited {
+   color: #ffff99;
+}
+

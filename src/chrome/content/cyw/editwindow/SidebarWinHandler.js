@@ -168,9 +168,9 @@ with(customizeyourweb){
       },
       
       deleteScript: function(){
-      	var confirm = PromptService.confirmYesNo(window, "Delete Script?", "Would you like to delete the currently selected script?")
-      	if(confirm==PromptReply.NO)
-      	   return
+         if(!this.isConfirmDeleteScript()){
+            return
+         }
       	var scriptML = byId('scripts')
       	var scriptId = scriptML.value
       	this.getEditScriptHandler().deleteScript(scriptId)
@@ -491,6 +491,15 @@ with(customizeyourweb){
             }
          }
          return false
+      },
+      
+      /*
+       * Ask for confirmation of script deletion
+       * Seperate function for automatic testing (will be replaced during testing)
+       */
+      isConfirmDeleteScript: function(){
+         var confirm = PromptService.confirmYesNo(window, "Delete Script?", "Would you like to delete the currently selected script?")
+         return confirm==PromptReply.YES? true:false
       },
       
       isScriptModified: function(){

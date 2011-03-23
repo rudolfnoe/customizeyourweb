@@ -1,0 +1,22 @@
+
+table.hotbuttons {
+   border: 0px solid #ffffff;
+   border-spacing: 3px;
+   border-collapse: separate;
+}
+
+a.hotbuttons, td.hotbuttons {
+   border: 1px solid #000000;
+   padding: 4px 6px;
+   text-align: center;
+}
+
+a.hotbuttons, td.hotbuttons a {
+   text-decoration: none;
+   font-family: Arial, Helvetica;
+   font-size: 17px;
+   font-weight: bold;
+   white-space: nowrap;
+   color: #990000;
+}
+

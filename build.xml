@@ -17,7 +17,7 @@
 	<target name="createDistributionXPI">
 		<delete dir="${dist_dir}"/>
 		<mkdir dir="${dist_dir}"/>
-		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**/*.js, **/*.css" 
+		<zip destfile="${dist_dir}/${version_file_name}" update="true" basedir="${src_dir}" includes="**/*.*"
 		   excludes="chrome/content/test/**, chrome/content/jquery/development-bundle/**, chrome/content/jquery/jQueryViewport.js,
 		    **/Shortcutmanager.js"/>
 		<!-- Make backup-copy -->

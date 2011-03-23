@@ -22,9 +22,9 @@
                //Load scripts for main window
                ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "common/WhereToInsertEnum.js", NS)
                ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "editing/core/", NS, null, ["EditScriptHandler.js"])
-               var excludeArr = ["TargetDefinitionXblHandler.js", "common_edit_dialog_include.js"] 
-               ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "editing/common/", NS, null, 
-                     excludeArr, true)
+               var excludeArr = ["TargetDefinitionXblHandler.js", "common_edit_dialog_include.js"]
+               ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "editing/common/", NS, null, excludeArr, true)
+               
                var includeArr = [/.*Command.js/]
                ScriptLoader.loadScripts(CywCommon.CYW_CHROME_URL + "editing/", NS, includeArr, null, true)
                ScriptLoader.loadScript(CywCommon.CYW_CHROME_URL + "editing/core/EditScriptHandler.js", NS)
@@ -46,7 +46,6 @@
                }catch(e){
                   //Script is only in testmode available}
                }
-               
                
                //Load JQuery
                var jQueryLoader = new JQueryLoader(CywCommon.CYW_JQUERY_URL)
