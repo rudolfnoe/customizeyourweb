@@ -167,7 +167,7 @@
       </columns>
       <rows>
          <row >
-            <button class="button" command="deleteScriptCmd" tooltiptext="Alt+Shift+D">
+            <button id="deleteBtn" class="button" command="deleteScriptCmd" tooltiptext="Alt+Shift+D">
                <html:u>D</html:u>elete Script
             </button>
             <spacer flex="1"/>

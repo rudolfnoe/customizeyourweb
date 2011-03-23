@@ -1,0 +1,843 @@
+/*
+   CSS for HTML Style Sheets
+   http://www.HTMLStyleSheets.com/
+   Copyright (c) 2008 Accilent(R) Corp.
+   Provided AS IS; no warranties are expressed or implied.
+*/
+
+body {
+   background-color: #ffffff;
+   font-family: Verdana, Tahoma, Geneva, Helvetica, Arial, sans-serif;
+   font-size: 10pt;
+   line-height: 120%;
+   letter-spacing: +0.6px;
+}
+
+a#toplogo, a#toplogo *, td#toptitle, td#toptitle *, .nav {
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+tr.nav td table tr td * {
+   font-family: Tahoma, Geneva, Helvetica, Arial, sans-serif;
+}
+
+tr.subtitle th {
+   font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+}
+
+.monospaced, code, code.blockcode span.line, code.blockcode span.output, kbd, samp {
+   font-family: Arial Terminal, Lucida Console, Courier New, Courier, monospace;
+}
+
+br {
+}
+
+thead {
+   text-align: center;
+}
+
+tbody {
+   text-align: left;
+}
+
+/* with class="..." */
+
+.blockcode * {
+   margin: 0;
+}
+
+.center {
+   text-align: center;
+}
+
+.collapse {
+   white-space: normal;
+}
+
+.floatLeft {
+   float: left;
+}
+
+.floatRight {
+   float: right;
+}
+
+.greenbg {
+   background-color: #ccffcc;
+}
+
+.indent {
+   margin-left: 3em;
+}
+
+.label {
+   text-align: right;
+}
+
+.nobr {
+   white-space: nowrap;
+}
+
+.normal {
+   font-weight: normal;
+}
+
+.bold {
+   font-weight: bold;
+}
+
+.redbg {
+   background-color: #ffcccc;
+}
+
+.greenbg {
+   background-color: #ccffcc;
+}
+
+.red {
+   color: #cc0000;
+}
+
+.green {
+   color: #00cc00;
+}
+
+.small {
+   font-size: 11pt;
+}
+
+.smallcaps {
+   font-variant: small-caps;
+}
+
+.warning {
+   background-color: #ffff00;
+   padding: 0 3px;
+}
+
+.value {
+   text-align: left;
+}
+
+.x-small {
+   font-size: 8pt;
+}
+
+p.caption {
+   margin-bottom: 0;
+   text-align: center;
+}
+
+span.outlined {
+   border: 1px solid #000000;
+   padding: 0 .2em;
+   white-space: pre;
+}
+
+span.optional {
+   color: #666666;
+}
+
+a.sup {
+   text-decoration: none;
+}
+
+li {
+   list-style-position: inside;
+}
+
+code {
+   border: 1px solid #000000;
+   background-color: #cccccc;
+   padding: 0 .2em !important;
+   font-size: 1em;
+   letter-spacing: -.8px;
+}
+
+code.blockcode {
+   display: block;
+   border: none;
+   background-color: #cccccc;
+   overflow: auto;
+   margin: .2em 4% 1em 4%;
+   border: 1px solid #000000;
+   white-space: nowrap;
+   width: 90%; #
+   width: 800px;
+   padding: 6px; #
+   padding-bottom: 20px;
+}
+
+code.blockcode span.line, code.blockcode span.output {
+   font-size: .9em;
+   white-space: pre;
+}
+
+code.blockcode span.line {
+   font-weight: bold;
+}
+
+code.blockcode span.output {
+   color: #333333;
+}
+
+span.initlets {
+   display: block;
+   margin-top: 15px;
+   margin-bottom: 6px;
+   padding: 2px 0px;
+   border-style: solid;
+   border-width: 2px 0px 1px 0px;
+   border-color: #339933 #000000 #33cc33 #000000;
+   text-align: center;
+}
+
+p.toplink {
+   margin-top: 0px;
+   margin-bottom: 0px;
+   padding-top: 0px;
+   text-align: center;
+}
+
+.toplink a {
+   border-style: solid;
+   border-width: 1px 0px 1px 0px;
+   padding: 0;
+   font-size: 8pt;
+   text-decoration: none;
+}
+
+pre {
+   margin-left: 3em;
+}
+
+img {
+   border: 0;
+}
+
+dt {
+   margin-top:  8px;
+}
+
+dd {
+}
+
+li {
+   padding-left: 2px;
+   padding-bottom: 3px;
+}
+
+/* list styles */
+
+.lsn {
+   list-style: none;
+   padding-left: 0;
+}
+
+h, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9 {
+   margin: .1em 0 .5em 0;
+   font-size: 11pt;
+   font-weight: bold;
+}
+
+li.* { /* li w/o class="h#" */
+   font-size: 12pt;
+   font-weight: normal;
+}
+
+a#toplogo {
+   font-size: 24pt;
+   font-weight: bold;
+   color: #009900;
+   white-space: nowrap;
+   text-decoration: none;
+}
+
+dt {
+   font-weight: bold;
+}
+
+table {
+   border-spacing: 0px;
+   border-collapse: collapse;
+}
+
+tr {
+   vertical-align: top;
+}
+
+table.border {
+   border-width: 4px;
+   border-spacing: 0px;
+   border-style: outset;
+   border-color: #999999;
+   border-collapse: separate;
+   background-color: #bbffbb;
+   color: #000000;
+   padding: 0;
+}
+
+th.border, td.border {
+   border-width: 3px;
+   padding: 1px 4px;
+   -moz-border-radius: 3px;
+}
+
+th.border {
+   border-style: outset;
+   border-color: #006600;
+   background-color: #99ff99;
+}
+
+td.border {
+   border-style: inset;
+   border-color: #333333;
+   background-color: #99ff99;
+}
+
+table.center {
+   margin: 0 auto;
+   /* center block elements using equal left and right margins */
+}
+
+tr.headings {
+   vertical-align: bottom;
+}
+
+tr.middle, td.middle {
+   vertical-align: middle;
+}
+
+table.w100pct, table#topbar {
+   width: 100%;
+}
+
+table#topbar {
+   margin-bottom: 6px;
+}
+
+table#topbar * {
+   margin: 0;
+   padding: 0;
+   border-width: 0;
+}
+
+td.navtitle {
+   background-color: #99ff99;
+   font-size: 8pt;
+   vertical-align: bottom;
+}
+
+td#topleft {
+   text-align: right;
+}
+
+td#toptitle, td#toptitle *, td#topright, td#topright * {
+   margin: 0;
+   background-color: #99ff99;
+   vertical-align: middle;
+   text-align: center;
+   font-size: 18pt;
+   color: #003300;
+}
+
+td#topright {
+   width: 10%;
+}
+
+p.altfmts {
+   font-size: 10pt;
+}
+
+table.nav {
+   width: 100%;
+   border-width: 3px 0px;
+   border-style: solid;
+   border-color: #ffffff;
+}
+
+tr.nav {
+   vertical-align: bottom;
+}
+
+table.nav td {
+   padding: 0;
+}
+
+tr.nav {
+   width: 100%;
+}
+
+tr.nav td {
+   border-width: 0;
+   padding: 1px;
+   background-color: #66ee66;
+}
+
+tr.nav td table tr {
+   margin: 0;
+   width: 100%;
+   border-style: none;
+   background-color: #66ee66;
+}
+
+tr.nav td table tr td * {
+   width: auto;
+   margin: 1px 2px 0 0;
+   border: none;
+   border-right: 1px solid #000000;
+   background-color: #66ee66;
+   padding: 4px 12px;
+   font-size: 85%;
+   text-align: auto;
+   white-space: nowrap;
+}
+
+tr.nav td table tr td a {
+   color: #003300;
+   text-decoration: none;
+}
+
+tr.nav td table tr td a:active {
+   background-color: #66ee66;
+   color: #000000;
+}
+
+/* ":hover" must come after ":active" */
+tr.nav td table tr td a:hover {
+   border: none;
+   border-right: 1px solid #000000;
+   background-color: #99ff99;
+   color: #000000;
+}
+
+tr.tabs {
+   width: 100%;
+   margin: 0;
+   border-width: 0;
+   padding: 0 0 4px 0;
+   background-color: #ffffff;
+}
+
+tr.tabs td {
+   display: inline;
+   margin: 0 2px 0 0;
+   border-width: 0;
+   list-style: none;
+}
+
+tr.tabs td * {
+   width: 8em;
+   margin: 0;
+   _border: 1px solid #000000;
+   border-bottom: none;
+   padding: 0;
+   text-align: center;
+   font-size: 8pt;
+   font-weight: bold;
+   text-decoration: none;
+   white-space: nowrap;
+   -moz-border-radius-topleft: 13px;
+   -moz-border-radius-topright: 13px;
+   -moz-outline: 0px solid #000000;
+   -moz-outline-radius-topleft: 13px;
+   -moz-outline-radius-topright: 13px;
+}
+/* TO DO: square border needs hidden from Firefox only */
+
+tr.tabs td a {
+   border-bottom: 1px solid #999999;
+   padding: 4px 12px;
+   background-color: #339933;
+   color: #ffffff;
+}
+
+tr.tabs td span {
+   border-bottom: none;
+   padding-bottom: 6px;
+   background-color: #66ee66;
+   color: #003300;
+}
+
+/* ":hover" must come after ":active" */
+tr.tabs td a:hover {
+   margin-top: 0;
+   padding-bottom: 5px;
+   border-color: #000000;
+   background-color: #99ff99;
+   color: #000000;
+}
+
+table.body {
+   width: 100%;
+   margin-top: 0;
+   border: 1px solid #000000;
+}
+
+/* with id="..." */
+
+col#leftcol {
+   width: 168px;
+}
+
+col#midcol {
+   width: 95%;
+}
+
+col#rightcol {
+   width: 128px;
+}
+
+td#leftside, td.content {
+   border: 1px solid #000000;
+   border-collapse: collapse;
+}
+
+td#leftside, td#rightside {
+   padding: 0px 4px;
+}
+
+td#leftside ul, td#leftside li {
+   margin-top: 4pt;
+   padding-left: 0;
+}
+
+#leftside li {
+   border: 1px solid #000000;
+}
+
+.nav li, .nav a {
+   background-color: #99ff99;
+   list-style: none;
+   white-space: nowrap;
+}
+
+.nav img {
+   vertical-align: middle
+}
+
+.nav li a {
+   display: block;
+}
+
+.nav a, .nav span {
+   border: 1px solid #000000;
+   padding: 1px 6px;
+   color: #000000;
+   text-decoration: none;
+}
+
+.nav a:visited {
+   color: #000000;
+}
+
+/* ":hover" must come after ":active" */
+.nav a:hover, .nav span {
+   background-color: #66cc66;
+   color: #000000;
+}
+
+p.nav {
+   margin-top: 5px;
+   padding-top: 2px;
+   line-height: 140%;
+}
+
+#leftside li a {
+   border: 0;
+}
+
+td#rightside {
+   padding-right: 0;
+   text-align: center;
+}
+
+td.content {
+   padding: 6px 4px;
+   text-align: left;
+}
+
+table.subpage {
+   width: 100%;
+   margin-bottom: 20px;
+}
+
+tr.subtitle th {
+   background-color: #009900;
+   font-size: 14pt;
+   color: #ffffff;
+   font-weight: bold;
+}
+
+td.subpage {
+   padding: 0px 4px !important;
+}
+
+p {
+   margin: .3em .1em 1.2em 0;
+}
+
+/* XHTML 2 */
+
+/*
+@namespace url("http://www.w3.org/2002/06/xhtml2/");
+*/
+
+section, h, nl, label, l, blockcode, separator, di
+                { display: block; }
+section, h, nl, label, l, blockcode, di
+                { unicode-bidi: embed }
+nl              { margin: 1.33em 0 }
+summary, standby, handler
+                { display: none }
+separator       { border-bottom: thin #000000 solid; border: 1px;
+                  inset; width 100%}
+
+/* level 1 heading */
+body h, h1 {
+  font-size: 1.3em;
+}
+
+/* level 2 heading */
+section h, h2 {
+  font-size: 1.2em;
+}
+
+/* level 3 heading */
+section section h, h3 {
+  font-size: 1.1em;
+}
+
+/* level 4 heading and other block elements */
+section section section h, h4, p, blockquote, ul, ol, dl
+{
+  font-size: 1em;
+  line-height: 1.17em;
+}
+
+/* level 5 heading */
+section section section section h, h5 {
+  font-size: .9em;
+  line-height: 1.17em;
+}
+
+/* level 6+ heading */
+section section section section section h, h6 {
+  font-size: .8em;
+  line-height: 1em;
+}
+
+*[edit="deleted"]  { display: none }
+/* no special presentation by default
+*[edit="inserted"] {  }
+*[edit="changed"]  {  }
+*[edit="moved"]    {  }
+*/
+
+/* experimental navigation list style */
+
+nl {
+  height: 1.5em;
+  overflow: hidden;
+  margin: 0;
+  line-height: normal !important;
+  white-space: nowrap;
+  text-align: start;
+  cursor: default;
+  border-width: 2px !important;
+  border-style: inset !important;
+  vertical-align: baseline;
+  padding: 0;
+}
+
+nl:hover { height: auto; overflow: visible; }
+
+nl > li, nl > label {
+  display: block;
+  min-height: 1em;
+  line-height: normal !important;
+}
+nl > li, nl > label {
+  padding: 0 5px 0 3px;
+}
+nl > li {
+  margin-left: 1em;
+}
+nl > label {
+  font-weight: bold;
+}
+
+nl > nl > label {
+  display: block;
+  line-height: normal !important;
+  font-style: italic;
+  font-weight: bold;
+}
+
+nl > nl > li {
+  padding-left: 2em;
+  font-style: normal;
+  font-weight: normal;
+}
+
+@media print {
+  h             { page-break-after: avoid; page-break-inside: avoid }
+  blockcode
+                { page-break-inside: avoid }
+}
+
+@media aural {
+  h {
+     voice-family: paul, male;
+     stress: 20;
+     richness: 90;
+     pitch: x-low;
+     pitch-range: 90;
+  }
+
+  section h {
+     pitch: x-low;
+     pitch-range: 80;
+  }
+
+  section section h {
+     pitch: low;
+     pitch-range: 70;
+  }
+
+  section section section h {
+     pitch: medium;
+     pitch-range: 60;
+  }
+
+  section section section section h {
+     pitch: medium;
+     pitch-range: 50;
+  }
+
+  section section section section section h {
+     pitch: medium;
+     pitch-range: 40;
+  }
+
+  blockcode {
+     pitch: medium; pitch-range: 0; stress: 0; richness: 80
+  }
+}
+
+/* inherited elements */
+
+html, body, div, p, h1, h2, h3, h4, h5, h6,
+address, blockquote, pre, ol, ul, dl, dt, dd
+                { display: block }
+li              { display: list-item }
+head, style, link, meta
+                { display: none }
+table           { display: table }
+tr              { display: table-row }
+thead           { display: table-header-group }
+tbody           { display: table-row-group }
+tfoot           { display: table-footer-group }
+col             { display: table-column }
+colgroup        { display: table-column-group }
+td, th          { display: table-cell;
+                  padding 2px }
+caption         { display: table-caption }
+table:hover summary { display: block }
+th              { font-weight: bolder; text-align: center }
+caption         { text-align: center }
+body            { padding: 8px }
+strong          { font-weight: bolder }
+blockquote      { margin-left: 4em; margin-right: 4em }
+cite, em, q, var, address
+                { font-style: italic }
+pre             { white-space: pre }
+.sub, .sup,
+sub, sup        { font-size: smaller }
+.sub,
+sub             { vertical-align: sub }
+.sup,
+sup             { vertical-align: super }
+ul              { margin: 1.5em .1em 1.2em 0 }
+ol              { margin: 2em .1em 1.2em 0 }
+dd              { margin-left: 2em }
+ol              { list-style-type: decimal }
+ol ul, ul ol, ul ul, ol ol
+                { margin-top: 0; margin-bottom: 0 }
+
+abbr[title]     { border-bottom: dotted 1px }
+:link           { text-decoration: underline; color: blue; }
+:focus          { outline: thin dotted invert }
+
+/* Hover effects should be default */
+
+:link:hover,:link:visited   { color: #b7f }
+
+/* begin bidirectionality settings (do not change) */
+
+*[dir="ltr"]    { direction: ltr; unicode-bidi: embed }
+*[dir="rtl"]    { direction: rtl; unicode-bidi: embed }
+*[dir="lro"]    { direction: ltr; unicode-bidi: bidi-override }
+*[dir="rlo"]    { direction: rtl; unicode-bidi: bidi-override }
+
+/* block-level elements */
+body, div, p, hr, h1, h2, h3, h4, h5, h6,
+address, blockquote, pre, ol, ul, li, di, dt, dd,
+table, thead, tbody, tfoot, tr, td, th,
+col, colgroup, caption, object, summary, standby, blockcode
+                { unicode-bidi: embed }
+/* end bidi settings */
+
+@media print {
+  h1, h2, h3, h4, h5, h6
+                { page-break-after: avoid; page-break-inside: avoid }
+  blockquote, pre
+                { page-break-inside: avoid }
+  ul, ol, dl    { page-break-before: avoid }
+}
+
+@media aural {
+  h1, h2, h3, h4, h5, h6
+                { voice-family: paul, male; stress: 20; richness: 90 }
+  h1            { pitch: x-low; pitch-range: 90 }
+  h2            { pitch: x-low; pitch-range: 80 }
+  h3            { pitch: low; pitch-range: 70 }
+  h4            { pitch: medium; pitch-range: 60 }
+  h5            { pitch: medium; pitch-range: 50 }
+  h6            { pitch: medium; pitch-range: 40 }
+  li, dt, dd    { pitch: medium; richness: 60 }
+  dt            { stress: 80 }
+  pre, code     { pitch: medium; pitch-range: 0; stress: 0; richness: 80 }
+  em            { pitch: medium; pitch-range: 60; stress: 60; richness: 50 }
+  strong        { pitch: medium; pitch-range: 60; stress: 90; richness: 90 }
+  dfn           { pitch: high; pitch-range: 60; stress: 60 }
+  :link         { voice-family: harry, male }
+  :visited      { voice-family: betty, female }
+  :active       { voice-family: betty, female; pitch-range: 80; pitch: x-high }
+}
+
+.calday1 {
+   border-width: 4px;
+   border-bottom: 0;
+   padding: 2px;
+   border-style: inset;
+   border-color: #999999;
+   background-color: #ffffff;
+   text-align: right;
+   font-weight: bold;
+}
+
+.calday2 {
+   border-width: 4px;
+   border-top: 0;
+   padding: 2px;
+   border-style: inset;
+   border-color: #999999;
+   background-color: #ffffff;
+   text-align: center;
+}
+
+.print, .nothandheld, .screen {
+   display: none;
+}
+

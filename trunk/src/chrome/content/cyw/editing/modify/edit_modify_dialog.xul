@@ -89,7 +89,7 @@
                      <rows>
                         <row align="center">
                            <label value="Width"/>
-                           <menulist styleProp="width" editable="true">
+                           <menulist id="widthML" styleProp="width" editable="true">
                               <menupopup >
                                  <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                               </menupopup>
@@ -97,7 +97,7 @@
                         </row>
                         <row align="center">                           
                            <label value="Height"/>
-                           <menulist styleProp="height" editable="true">
+                           <menulist id="heightML" styleProp="height" editable="true">
                               <menupopup >
                                  <menuitem label="&lt;Default&gt;" value="&lt;Default&gt;" selected="true"/>
                               </menupopup>
