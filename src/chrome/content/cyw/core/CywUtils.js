@@ -36,13 +36,9 @@ with(customizeyourweb){
       },
       
       setMlbActive: function(){
-         if(this.isFirefox4()){
-            ServiceRegistry.getAddonManager().getAddonByID(MLB_GUI_ID, function(addon){
-               CywUtils.mlbActive = addon && addon.isActive
-            })
-         }else{
-            this.mlbActive = Utils.isExtensionInstalledAndEnabled(MLB_GUI_ID)
-         }
+         ServiceRegistry.getAddonManager().getAddonByID(MLB_GUI_ID, function(addon){
+            CywUtils.mlbActive = addon && addon.isActive
+         })
       }
       
    }

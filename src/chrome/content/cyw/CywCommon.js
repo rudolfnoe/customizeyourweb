@@ -5,7 +5,7 @@
    var CywCommon = {
       
 		//Constants
-      CYW_VERSION: "0.4.3.2Build201102101800",
+      CYW_VERSION: "0.4.3.3Build201201122030",
       
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
