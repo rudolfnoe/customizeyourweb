@@ -15,13 +15,12 @@ with(customizeyourweb){
       },
       
       doOnload: function(){
-         this.loadJQuery()
          this.action = EditDialog.getAction()
          if(this.action.getCombinedKeyCode()!=null){
             byId("keyCombinationKIB").setCombinedValue(this.action.getCombinedKeyCode())
          }
          byId("shortstringinputbox").value = StringUtils.defaultString(this.action.getShortString())
-         byId("listItemsJQueryTB").value = this.action.getListItemsJQuery()
+         byId("listItemsTagNameTB").value = this.action.getListItemsTagName()
          var higlightCssObj = CssUtils.parseCssText(this.action.getHighlightCss())
          byId('highlightBackgroundCF').value = higlightCssObj["background-color"]
          byId('defaultLinkTargetML').value = this.action.getDefaultLinkTarget()
@@ -35,10 +34,9 @@ with(customizeyourweb){
       },
       
       doOk: function(){
-         Dialog.setResult(DialogResult.OK)
          this.action.setCombinedKeyCode(byId("keyCombinationKIB").getCombinedValue())
          this.action.setShortString(byId("shortstringinputbox").value) 
-         this.action.setListItemsJQuery(byId("listItemsJQueryTB").value)
+         this.action.setListItemsTagName(byId("listItemsTagNameTB").value)
          this.action.setHighlightCss(this.getHighlightCss())
          this.action.setDefaultLinkTarget(byId('defaultLinkTargetML').value)
          this.action.setNoOfHeaderRows(byId('noOfHeaderRowsTB').value) 
@@ -63,12 +61,7 @@ with(customizeyourweb){
          if(!this.rootElement){
             return
          }
-         var listItems = $(byId("listItemsJQueryTB").value, this.rootElement).toArray()
-         if (listItems.length == 0){
-            Dialog.setMessageInHeader("List items definition results in emty set!", Severity.WARNING)
-         }else{
-            Dialog.clearMessageInHeader()
-         }
+         var listItems = this.rootElement.getElementsByTagName(byId("listItemsTagNameTB").value)
          for (var i = 0; i < listItems.length; i++) {
             var itemWrapper = new ElementWrapper(listItems[i])
             this.listItemWrappers.push(itemWrapper)
@@ -79,7 +72,7 @@ with(customizeyourweb){
       initValidators: function(targetWindow){
          var okValidator = new AndValidator()
          okValidator.addValidator(new TargetDefinitionXblValidator(byId('targetdefinition'), targetWindow))
-         okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('listItemsJQueryTB')))
+         okValidator.addValidator(ValidatorFactory.createTextboxNotEmptyValidator(byId('listItemsTagNameTB')))
          Dialog.addOkValidator(okValidator)
          okValidator.validate()
       },
@@ -91,7 +84,6 @@ with(customizeyourweb){
          this.listItemWrappers = []
       }
    }
-   ObjectUtils.injectFunctions(EditListViewDialogHandler, AbstractEditDialogHandler)
 
    Namespace.bindToNamespace("customizeyourweb", "EditListViewDialogHandler", EditListViewDialogHandler)
 })()

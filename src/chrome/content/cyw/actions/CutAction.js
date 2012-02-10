@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
 
-   function CutAction (id, targetDefinition){
-      this.AbstractTargetedAction(id, targetDefinition)
+   function CutAction (targetDefinition){
+      this.AbstractTargetedAction(targetDefinition)
    }
    
    CutAction.prototype ={ 
@@ -12,17 +12,16 @@ with(customizeyourweb){
             return false
          }
          var target = this.getTarget(cywContext)
+         //throw error or log
          if(target.parentNode){
             cywContext.setClipboard(target)
-            this.RemoveAction_doActionInternal(cywContext)
-            return true 
-         }else{
-            throw new Error("CutAction.doActionInternal: target has no parent node")
+            target.parentNode.removeChild(target)
          }
+         return true
       }     
    }
    
-   ObjectUtils.extend(CutAction, "RemoveAction", customizeyourweb)
+   ObjectUtils.extend(CutAction, "AbstractTargetedAction", customizeyourweb)
 
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CutAction", CutAction)
 })()

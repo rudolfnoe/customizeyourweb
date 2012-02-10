@@ -13,10 +13,9 @@ with(customizeyourweb){
    SimpleTargetDefinitionFactory.instance = null
    
    SimpleTargetDefinitionFactory.getInstance = function(){
-      if(!SimpleTargetDefinitionFactory.instance){
-         SimpleTargetDefinitionFactory.instance = new SimpleTargetDefinitionFactory();
-      }
-      return SimpleTargetDefinitionFactory.instance;
+      if(!SimpleTargetDefinitionFactory.instance)
+         SimpleTargetDefinitionFactory.instance = new SimpleTargetDefinitionFactory()
+      return SimpleTargetDefinitionFactory.instance
    }
 
    SimpleTargetDefinitionFactory.prototype = {
@@ -33,10 +32,10 @@ with(customizeyourweb){
             var value = keyValueMap[key]
             if(key.toLowerCase()=="tag"){
                targetDef.setTagName(value)
-               continue;
+               continue
             }else if(key.toLowerCase()=="pos"){
                targetDef.setPosition(value)
-               continue;
+               continue
             }
             targetDef.addAttributeDefinition(key, value)
          }
@@ -61,10 +60,9 @@ with(customizeyourweb){
          var appliedAttrs = []
          for (var i = 0; i < NONE_UNIQUE_ATTRIBUTES.length; i++) {
             var attrName = NONE_UNIQUE_ATTRIBUTES[i]
-            if(!element.hasAttribute(attrName) && !element[attrName]){
-               continue;
-            }
-            attrFound = true;
+            if(!element.hasAttribute(attrName) && !element[attrName])
+               continue
+            attrFound = true
             appliedAttrs.push(attrName)
          }
          if(attrFound)
@@ -74,7 +72,7 @@ with(customizeyourweb){
       createDefinitionsWithUniqueAttrs: function(element, resultArray){
          for (var i = 0; i < UNIQUE_ATTRIBUTES.length; i++) {
             if(!element.hasAttribute(UNIQUE_ATTRIBUTES[i]))
-               continue;
+               continue
             else{
                resultArray.push(this.createSimpleTargetDefinition(element, [UNIQUE_ATTRIBUTES[i]]))
             }
@@ -85,7 +83,7 @@ with(customizeyourweb){
          var simpleTargetDef = new SimpleTargetDefinition(element.tagName)
          for (var i = 0; i < attributeArray.length; i++) {
             var attrName = attributeArray[i]
-            var attrValue = SimpleTargetDefinition.getAttributeValue(element, attrName);
+            var attrValue = SimpleTargetDefinition.getAttributeValue(element, attrName)
             simpleTargetDef.addAttributeDefinition(attrName, attrValue)
          }
          this.determinePosition(element, simpleTargetDef)
@@ -97,11 +95,9 @@ with(customizeyourweb){
          if(StringUtils.isEmpty(textContent)){
             return
          }
-         //Convert quotes in &quot;
-         textContent = textContent.replace(/["]/g, "&quot;")
          var simpleTargetDef = new SimpleTargetDefinition(element.tagName)
          simpleTargetDef.addAttributeDefinition("text", textContent)
-         this.determinePosition(element, simpleTargetDef);
+         this.determinePosition(element, simpleTargetDef)
          resultArray.push(simpleTargetDef)
       },
       
@@ -114,7 +110,7 @@ with(customizeyourweb){
          var found = false
          for (var i = 0; i < potTargets.length; i++) {
             if(potTargets[i]==element){
-               simpleTargetDef.setPosition(i+1);
+               simpleTargetDef.setPosition(i+1)
                found = true
             }
          }
@@ -137,10 +133,10 @@ with(customizeyourweb){
             var token = tokens[i]
             var indexOfEquals = token.indexOf('=')
             var key = token.substring(0, indexOfEquals)
-            var value = token.substring(indexOfEquals+2, token.length-1);
+            var value = token.substring(indexOfEquals+2, token.length-1)
             keyValueMap[key] = value
          }
-         return keyValueMap;
+         return keyValueMap
       }
       
    }

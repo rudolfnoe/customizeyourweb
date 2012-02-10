@@ -24,7 +24,7 @@ with(customizeyourweb){
          if(this.isContainer()){
              for (var i = 0;i < this.getChildren().size(); i++) {
                var child = this.getChildren().get(i)
-               result.add(child.getAction());
+               result.add(child.getAction())
                result.addAll(child.getDescendantActions())
             }
          }
@@ -36,7 +36,7 @@ with(customizeyourweb){
       },
 
       setMessage: function(message){
-         this.message = message;
+         this.message = message
          this.updateImgSrc()
       },
       
@@ -76,10 +76,10 @@ with(customizeyourweb){
          else if(this.message.isWarning)
             this.setImageSrc(WARNING_ICON_PATH)
          else
-            this.setImageSrc(null);
+            this.setImageSrc(null)
       }
       
-   };
+   }
    
    customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "AbstractActionTreeItem", AbstractActionTreeItem)
 })()

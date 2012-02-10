@@ -1,13 +1,12 @@
 with(customizeyourweb){
 (function(){
    function EditFocusCommand(){
-      this.AbstractCommonAttributesEditCommand()
    }
    
    EditFocusCommand.prototype = {
 
       createAction: function(editContext) {
-         return new FocusAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition()) 
+         return new FocusAction(editContext.getTargetDefinition()) 
       }
       
    }

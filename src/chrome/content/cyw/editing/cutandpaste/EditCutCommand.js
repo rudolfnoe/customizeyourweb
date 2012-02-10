@@ -2,24 +2,18 @@ with(customizeyourweb){
 (function(){
    function EditCutCommand(){
       this.AbstractRemoveCommand()
-      this.clipboardBackup = null
    }
    
    EditCutCommand.prototype = {
-      
-      afterSuccessfulActionEditing: function(action, editContext){
-         this.clipboardBackup = editContext.getClipboard() 
-         editContext.setClipboard(action.getTarget(editContext.getTargetWindow()))
-         this.AbstractRemoveCommand_afterSuccessfulActionEditing(action, editContext)
+      afterSuccessfulActionEditing: function(editContext){
+         //To resuse it
+         editContext.setClipboard(editContext.getTargetElement())
+         //call superclass method
+         this.AbstractRemoveCommand_afterSuccessfulActionEditing(editContext)
       },
       
       createAction: function(editContext) {
-         return new CutAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
-      },
-      
-      undo: function(editContext, action, actionBackup){
-         editContext.setClipboard(this.clipboardBackup)
-         this.AbstractRemoveCommand_undo(editContext, action, actionBackup)
+         return new CutAction(editContext.getTargetDefinition())
       }
       
    }

@@ -1,8 +1,8 @@
 with(customizeyourweb){
 (function(){
 
-   function CopyAction (id, targetDefinition){
-      this.AbstractTargetedAction(id, targetDefinition)
+   function CopyAction (targetDefinition){
+      this.AbstractTargetedAction(targetDefinition)
    }
    
    CopyAction.prototype ={ 
