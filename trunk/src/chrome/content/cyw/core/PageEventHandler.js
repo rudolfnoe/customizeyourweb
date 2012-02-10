@@ -56,6 +56,9 @@ with(customizeyourweb){
       
       commonCleanUp: function(eventType){
          this.cleanUpScript(eventType);
+         //Bugfix for FF4, as otherwise if page is loaded on history back from chache the page data
+         //is kept and there it is stored that the domconentenloaded event was fired
+         this.setPageData(null)
          Utils.clearExecuteDelayedTimer(this.timerId)
       },
       
@@ -146,8 +149,8 @@ with(customizeyourweb){
       },
       
       handlePagehide: function(event){
+         Log.logDebug('CYW: pagehide')
          var targetWin = event.originalTarget.defaultView
-//         CywUtils.logDebug("PageEventHandler.handlePageHide: " + event.target.location.href + "  Top Win? " + (targetWin==targetWin.top))
          this.commonCleanUp(event.type);
          this.unregisterAllEventListener()
       },
@@ -211,7 +214,11 @@ with(customizeyourweb){
       },
       
       setPageData: function(pageData){
-         var egNamespaceObj = Namespace.bindToNamespace(CYW_NAMESPACE, "pageData", pageData, this.targetWin)      
+         if(this.targetWin[CYW_NAMESPACE]!=null && pageData==null ){
+            this.targetWin[CYW_NAMESPACE].pageData = null
+         }else{
+            Namespace.bindToNamespace(CYW_NAMESPACE, "pageData", pageData, this.targetWin)
+         }
       },
       
       unregisterAllEventListener: function(){

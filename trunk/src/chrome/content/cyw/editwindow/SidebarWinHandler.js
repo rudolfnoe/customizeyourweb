@@ -472,7 +472,6 @@ with(customizeyourweb){
          this.actionsTreeView.addListener("add", this.checkTargetDefinitionForAction, this)   
          this.actionsTreeView.addListener("update", this.checkTargetDefinitionForAction, this)
          this.actionsTreeView.setActions(currentScript.getActions(), ScriptErrorHandler.getErrorsForScript(scriptId))
-         
          //After actions tree is filled shadowing fo
 
          //Save backup for detecting changes
@@ -562,11 +561,14 @@ with(customizeyourweb){
       },
       
       selectScript: function(){
-          var selectDialog = new Dialog(CywCommon.CYW_CHROME_URL+"editwindow/select_script_dialog.xul", "SelectScript", true, window, "all")
-          selectDialog.show()
-          var selectedScript = selectDialog.getNamedResult("script") 
-          if(!selectedScript)
-            return
+          var selectDialog = new Dialog(CywCommon.CYW_CHROME_URL+"editwindow/select_script_dialog.xul", "SelectScript", true, window, "all");
+          selectDialog.show();
+          var selectedScriptId = selectDialog.getNamedResult("scriptId");
+          if(!selectedScriptId){
+            return;
+          }
+          //Refer to top window as only this one has an initialized CywConfig
+          var selectedScript = top.customizeyourweb.CywConfig.getScriptById(selectedScriptId);
           this.addScriptToML(selectedScript);
           ControlUtils.selectMenulistByValue(byId('scripts'), selectedScript.getIdAsString())
       },

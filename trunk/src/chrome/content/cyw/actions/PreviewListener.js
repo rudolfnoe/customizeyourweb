@@ -62,7 +62,10 @@ with(customizeyourweb){
          handleMouseout: function(event){
             this.currentTarget = null
             event.target.removeEventListener("mouseout", this, true)
-            if(!$.contains(event.target, event.relatedTarget)){
+
+            //First check if releted target is null, then mouse was moved out of content window
+            if(!event.relatedTarget || 
+               !$.contains(event.target, event.relatedTarget)){
                Utils.clearExecuteDelayedTimer(this.timerId)
             }
          },

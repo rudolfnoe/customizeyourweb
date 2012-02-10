@@ -64,8 +64,10 @@ with (customizeyourweb) {
          /*
           * Binds listener for resizing and repositioning
           */
-         registerChangeListener: function(dialogElement, $injected){
-            var $widget = $injected(dialogElement)
+         registerChangeListener: function(dialogElement){
+            //We have to use the jquery object from the cyw namespace as otherwise
+            //security issues would arise see https://bugzilla.mozilla.org/show_bug.cgi?id=632512
+            var $widget = $(dialogElement, dialogElement.ownerDocument)
             var $iframe = $widget.find("iframe") 
             //Binding must apply to the widget element of the dialog (see $(dialog).dialog("widget"))!!! 
             $widget.bind('resizestart', function(event, uiEvent) {
@@ -243,7 +245,7 @@ with (customizeyourweb) {
             var dialogElement = this.insertJQueryUIDialog(abstractContext, $injected)
             
             //Bind listener 
-            this.registerChangeListener(dialogElement, $injected)
+            this.registerChangeListener(dialogElement)
             
             //Iframe reference must be fetched with the global $ otherwise PreviewListener 
             //has security exceptions when accessing doc shell

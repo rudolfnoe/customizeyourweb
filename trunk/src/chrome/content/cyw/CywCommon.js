@@ -2,17 +2,17 @@
  * Contains constants and loading of common subscripts
  */
 (function(){
-   const CYW_VERSION = "0.5Build201010211200";
-   const JQUERY_VERSION = "1.4.2";
-   const JQUERY_UI_VERSION = "1.8.5";
+   const CYW_VERSION = "0.5Build201202110030";
+   const JQUERY_VERSION = "1.6.2";
+   const JQUERY_UI_VERSION = "1.8.16";
 
    var CywCommon = {
       
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
       CYW_JQUERY_URL: "chrome://customizeyourweb/content/jquery/",
-      JQUERY_FILE_NAME: "jquery-" + JQUERY_VERSION + ".js",
-      JQUERY_UI_FILE_NAME: "jquery-ui-" + JQUERY_UI_VERSION + ".custom.js",
+      JQUERY_FILE_NAME: "jquery-" + JQUERY_VERSION + ".min.js",
+      JQUERY_UI_FILE_NAME: "jquery-ui-" + JQUERY_UI_VERSION + ".custom.min.js",
       JQUERY_CSS_SUBPATH: "css/redmond/jquery-ui-" + JQUERY_UI_VERSION + ".custom.css",
 
 		DEBUG_PREF_ID: "customizeyourweb.debug",
