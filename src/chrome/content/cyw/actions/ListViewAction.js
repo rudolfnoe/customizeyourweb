@@ -78,7 +78,8 @@ with(customizeyourweb){
          var potListItems = rootElement.getElementsByTagName(this.listItemsTagName)
          var listItemsFiltered1 = []
          for (var i = 0; i < potListItems.length; i++) {
-            var listItem = node = potListItems[i]
+            var node = potListItems[i]
+            var listItem = node
             while(node = node.parentNode){
                if(node == rootElement){
                   listItemsFiltered1.push(listItem)
@@ -122,6 +123,8 @@ with(customizeyourweb){
          this.superCleanUp(cywContext)
          if(this.t_listViewHandler){
             this.t_listViewHandler.destroy()
+            //Avoid mem leak
+            this.t_listViewHandler = null
          }
       },
       
