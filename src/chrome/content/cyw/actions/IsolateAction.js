@@ -43,7 +43,16 @@ with(customizeyourweb){
          var targetDoc = editContext.getTargetDocument()
          $body = $("body", targetDoc)
          $body.contents().remove()
-         $body.append($(undoMemento.bodyChildren))
+         var bodyChildren = undoMemento.bodyChildren
+         try{
+         for (var i = 0; i < bodyChildren.length; i++) {
+            $body.append(bodyChildren[i])
+         }
+         }catch(e){
+            //Undo of script-tag-removal fails
+            alert('The undo of this action failed.');
+            Log.logError(e, 'Undo of IsolateAction failed');
+         }
          undoMemento.removedElementWrapper.undoRemoval()
       }
    }

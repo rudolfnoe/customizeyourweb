@@ -49,7 +49,9 @@ with(customizeyourweb){
       },
       
       isFirefox4: function(){
-         return Application.version.substring(0,1)>=4
+         var version = Application.version;
+         var indexFirstDot = version.indexOf(".");
+         return parseInt(version.substring(0,indexFirstDot)) > 4;
       },
       
       isMlbActive: function(){

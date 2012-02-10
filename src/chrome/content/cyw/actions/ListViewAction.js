@@ -91,7 +91,8 @@ with(customizeyourweb){
          if(ArrayUtils.contains(["div", "span", "td", "table", "tr", "li"], listItemsJQuery)){
             var listItemsFiltered1 = []
             for (var i = 0; i < potListItems.length; i++) {
-               var listItem = node = potListItems[i]
+               var node = potListItems[i]
+               var listItem = node 
                while(node = node.parentNode){
                   if(node == rootElement){
                      listItemsFiltered1.push(listItem)
@@ -139,9 +140,13 @@ with(customizeyourweb){
       },
       
       cleanUp: function(cywContext){
+         //Avoid memory leaks
+         this.t_listItemsBackup = null
          this.superCleanUp(cywContext)
          if(this.t_listViewHandler){
             this.t_listViewHandler.destroy()
+            //Avoid memory leaks
+            this.t_listViewHandler = null
          }
       },
       

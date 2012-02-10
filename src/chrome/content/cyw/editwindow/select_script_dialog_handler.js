@@ -6,12 +6,12 @@ with(customizeyourweb){
       },
       
       doOk: function(){
-         var selectedScript = this.getScriptsTree().getTreeView().getSelectedScript() 
+         var selectedScript = this.getScriptsTree().getTreeView().getSelectedScript()
          if(selectedScript==null){
             alert('No script was selected.')
             return false
          }
-         Dialog.setNamedResult("script", selectedScript)
+         Dialog.setNamedResult("scriptId", selectedScript.getId())
       },
       
       getScriptsTree: function(){
