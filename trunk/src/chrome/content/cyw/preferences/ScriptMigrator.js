@@ -43,7 +43,7 @@ with(customizeyourweb){
             }
          }, InsertHTMLAction))
          
-         //Change listItemsTagName memger into listItemsJQuery 
+         //Change listItemsTagName member into listItemsJQuery 
          modifiedScripts.addAll(this.convertScripts(scripts, function(action){
             if(action.listItemsTagName){
                action.setListItemsJQuery(action.listItemsTagName)

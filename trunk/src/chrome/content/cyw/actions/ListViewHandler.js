@@ -115,10 +115,12 @@ with(customizeyourweb){
          item.focus()
       },
       initShortcuts: function(){
-         this.scm.addShortcut("Up", this.moveUp, this)
-         this.scm.addShortcut("k", this.moveUp, this)
-         this.scm.addShortcut("Down", this.moveDown, this)
-         this.scm.addShortcut("j", this.moveDown, this)
+         this.scm.addShortcut("Up", function(){this.moveUp(1)}, this)
+         this.scm.addShortcut("k", function(){this.moveUp(1)}, this)
+         this.scm.addShortcut("PAGE_UP", function(){this.moveUp(10)}, this)
+         this.scm.addShortcut("Down", function(){this.moveDown(1)}, this)
+         this.scm.addShortcut("j", function(){this.moveDown(1)}, this)
+         this.scm.addShortcut("PAGE_DOWN", function(){this.moveDown(10)}, this)
          this.scm.addShortcut("Home", this.moveFirst, this)
          this.scm.addShortcut("End", this.moveLast, this)
          this.scm.addShortcut("Return", function(event){return this.openItemIn(event, this.defaultLinkTarget)}, this)
@@ -136,25 +138,45 @@ with(customizeyourweb){
       isTableRowTag: function(item){
          return item.tagName=="TR"
       },
-      moveDown: function(){
+      moveDown: function(count){
+         if(DomUtils.isActiveElementEditable(this.rootElement.ownerDocument)){
+            return ShortcutManager.DO_NOT_SUPPRESS_KEY;
+         }
          if(this.isLast(this.currentIndex))
             return
-         this.updateHighlighting(this.currentIndex+1) 
+         if(this.currentIndex + count > this.getLastIndex()){
+            this.moveLast();
+         }else{
+            this.updateHighlighting(this.currentIndex+count)
+         }
       },
       moveFirst: function(){
+         if(DomUtils.isActiveElementEditable(this.rootElement.ownerDocument)){
+            return ShortcutManager.DO_NOT_SUPPRESS_KEY;
+         }
          if(this.isFirst(this.currentIndex))
             return
          this.updateHighlighting(this.getFirstIndex())
       },
       moveLast: function(){
+         if(DomUtils.isActiveElementEditable(this.rootElement.ownerDocument)){
+            return ShortcutManager.DO_NOT_SUPPRESS_KEY;
+         }
          if(this.isLast(this.currentIndex))
             return
          this.updateHighlighting(this.getLastIndex())
       },
-      moveUp: function(){
+      moveUp: function(count){
+         if(DomUtils.isActiveElementEditable(this.rootElement.ownerDocument)){
+            return ShortcutManager.DO_NOT_SUPPRESS_KEY;
+         }
          if(this.isFirst(this.currentIndex))
             return
-         this.updateHighlighting(this.currentIndex-1) 
+         if(this.currentIndex - count < 0){
+            this.moveFirst();
+         }else{
+            this.updateHighlighting(this.currentIndex - count)
+         }
       },
       openItemIn: function(event, linkTarget){
          var ci = this.getCurrentItem()
