@@ -48,24 +48,14 @@ with(customizeyourweb){
          }
       },
       
-      isFirefox4: function(){
-         var version = Application.version;
-         var indexFirstDot = version.indexOf(".");
-         return parseInt(version.substring(0,indexFirstDot)) > 4;
-      },
-      
       isMlbActive: function(){
          return this.mlbActive
       },
       
       setMlbActive: function(){
-         if(this.isFirefox4()){
-            ServiceRegistry.getAddonManager().getAddonByID(MLB_GUI_ID, function(addon){
-               CywUtils.mlbActive = addon && addon.isActive
-            })
-         }else{
-            this.mlbActive = Utils.isExtensionInstalledAndEnabled(MLB_GUI_ID)
-         }
+         ServiceRegistry.getAddonManager().getAddonByID(MLB_GUI_ID, function(addon){
+            CywUtils.mlbActive = addon && addon.isActive
+         })
       }
       
    }
