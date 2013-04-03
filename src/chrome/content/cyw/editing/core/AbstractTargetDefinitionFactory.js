@@ -21,14 +21,7 @@ with(customizeyourweb){
    }
    
    AbstractTargetDefinitionFactory.createDefaultDefinition = function(element){
-      //FIXME On pages with namespaces the creation of xpath or simple definitions fails, backup is JQuery
-      //See XPathUtils.createXPath
-      try{
-         return this.getFactoryFor(element).createDefaultDefinition(element)
-      }catch(e){
-         CywUtils.logWarning("AbstractTargetDefinitionFactory.createDefaultDefinitione failed: " + e.message)
-      }
-      return JQueryTargetDefinitionFactory.getInstance().createDefaultDefinition(element)
+      return this.getFactoryFor(element).createDefaultDefinition(element)
    }
    
    AbstractTargetDefinitionFactory.createDefinitions = function(element){

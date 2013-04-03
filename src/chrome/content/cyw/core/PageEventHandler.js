@@ -6,13 +6,10 @@
  */
 with(customizeyourweb){
 (function(){
-	const CYW_NAMESPACE = "de_mouseless_CYW";
-   const EVENT_TYPES_LISTENING = ["pagehide", "DOMNodeInserted", "DOMNodeRemoved"];
+	const CYW_NAMESPACE = "de_mouseless_CYW"
+   const EVENT_TYPES_LISTENING = ["pagehide", "DOMNodeInserted", "DOMNodeRemoved"]
    
-	/*
-    * Main page eventhandler which controls the application of the scripts
-    */
-   function PageEventHandler(targetWin, applicableScripts){
+	function PageEventHandler(targetWin, applicableScripts){
       this.AbstractGenericEventHandler(false)
       this.appliedScripts = []
       this.applicableScripts = applicableScripts
@@ -28,7 +25,7 @@ with(customizeyourweb){
    //Statics 
    PageEventHandler.initPage = function(event){
 		var targetWin = event.originalTarget.defaultView
-//      CywUtils.logDebug("PageEventHandler.initPage: " + event.type + " " + targetWin.location.href + "  Top Win? " + (targetWin==targetWin.top))
+      Log.logDebug(event.type + " " + targetWin.location.href)
       if(EditScriptHandler.isEditing(targetWin)){
          return
       }
@@ -41,8 +38,8 @@ with(customizeyourweb){
    
    PageEventHandler.setPageData = function(win, pageData){
       var topWin = win.top
-      win.top.de_mouseless_CYW = pageData;
-   };
+      win.top.de_mouseless_CYW = pageData
+   }
    
       
    PageEventHandler.prototype = {
@@ -55,10 +52,7 @@ with(customizeyourweb){
       },
       
       commonCleanUp: function(eventType){
-         this.cleanUpScript(eventType);
-         //Bugfix for FF4, as otherwise if page is loaded on history back from chache the page data
-         //is kept and there it is stored that the domconentenloaded event was fired
-         this.setPageData(null)
+         this.cleanUpScript(eventType)
          Utils.clearExecuteDelayedTimer(this.timerId)
       },
       
@@ -67,10 +61,8 @@ with(customizeyourweb){
          for (var i = 0; i < this.applicableScripts.length; i++) {
             var script = this.applicableScripts[i]
             var applyScript = false
-            if( ((script.getLoadEventType()==event.type) || 
-                (this.isPageshowEvent(event) && !this.isDomContentLoadedFired())) &&
-                // respect flag that script should only be applied on top window
-                 !(script.isApplyToTopWindowsOnly() && (this.targetWin!=event.originalTarget.defaultView.top))){
+            if( (script.getLoadEventType()==event.type) || 
+                (this.isPageshowEvent(event) && !this.isDomContentLoadedFired())){
                   applyScript=true
             }
                
@@ -98,13 +90,13 @@ with(customizeyourweb){
       },
       
       handleDOMNodeInserted: function(event){
-         this.nodesAdded++;
+         this.nodesAdded++
 //         CywUtils.logDebug("Node added: " + event.relatedNode.innerHTML)
          this.handleMutationEvent(event)
       },
       
       handleDOMNodeRemoved: function(event){
-         this.nodesRemoved++;
+         this.nodesRemoved++
          this.handleMutationEvent(event)
       },
       
@@ -115,7 +107,7 @@ with(customizeyourweb){
          Utils.executeDelayed(this.timerId, this.reinitDelay, function(){
 //            CywUtils.logDebug('delayed reinit total nodes added: ' + this.nodesAdded + ", total nodes removed: " + this.nodesRemoved)
             //var perfTimer = new PerfTimer()
-            this.cleanUpScript(PageEvents.MUTATION_EVENT);
+            this.cleanUpScript(PageEvents.MUTATION_EVENT)
 //            if(perfTimer){
 //               Log.logDebug("Cleanup took " + perfTimer.stop() + "msec.")
 //            }
@@ -139,19 +131,19 @@ with(customizeyourweb){
       },
       
       handlePageEditEnd: function(){
-         this.runAppliedScripts(PageEvents.MUTATION_EVENT, false);
+         //TODO check if this is correct
+         this.runAppliedScripts(PageEvents.MUTATION_EVENT, false)
          this.registerPageEventsListener()
       },
 
       handlePageEditStart: function(){
-         this.commonCleanUp(null);
+         this.commonCleanUp(null)
          this.unregisterPageEventsListener()
       },
       
       handlePagehide: function(event){
-         Log.logDebug('CYW: pagehide')
-         var targetWin = event.originalTarget.defaultView
-         this.commonCleanUp(event.type);
+//         Log.logDebug(event.type + " " + event.target.location.href)
+         this.commonCleanUp(event.type)
          this.unregisterAllEventListener()
       },
       
@@ -184,7 +176,7 @@ with(customizeyourweb){
       },
       
       registerAllEventListener: function(){
-         EditScriptHandler.addEditListener(this.handlePageEditEvent, this);
+         EditScriptHandler.addEditListener(this.handlePageEditEvent, this)
          this.registerPageEventsListener()
       },
       
@@ -214,20 +206,16 @@ with(customizeyourweb){
       },
       
       setPageData: function(pageData){
-         if(this.targetWin[CYW_NAMESPACE]!=null && pageData==null ){
-            this.targetWin[CYW_NAMESPACE].pageData = null
-         }else{
-            Namespace.bindToNamespace(CYW_NAMESPACE, "pageData", pageData, this.targetWin)
-         }
+         var egNamespaceObj = Namespace.bindToNamespace(CYW_NAMESPACE, "pageData", pageData, this.targetWin)      
       },
       
       unregisterAllEventListener: function(){
-         EditScriptHandler.removeEditListener(this.handlePageEditEvent, this);
+         EditScriptHandler.removeEditListener(this.handlePageEditEvent, this)
          this.unregisterPageEventsListener()
       },
       
       unregisterPageEventsListener: function(){
-         this.unRegisterMultipleEventListener(this.targetWin, EVENT_TYPES_LISTENING, true);
+         this.unRegisterMultipleEventListener(this.targetWin, EVENT_TYPES_LISTENING, true)
       }
 	}
    ObjectUtils.extend(PageEventHandler, AbstractGenericEventHandler)
@@ -246,7 +234,7 @@ with(customizeyourweb){
       },
 
       setDomContentLoadedEventFired: function(domContentLoadedFired){
-         this.domContentLoadedFired = domContentLoadedFired;
+         this.domContentLoadedFired = domContentLoadedFired
       }
       
    }
@@ -256,7 +244,7 @@ with(customizeyourweb){
       PAGE_SHOW: "pageshow",
       PAGE_HIDE: "pagehide",
       MUTATION_EVENT: "MUTATION_EVENT"
-   };
+   }
    Namespace.bindToNamespace("customizeyourweb", "PageEvents", PageEvents)
 })()
 }

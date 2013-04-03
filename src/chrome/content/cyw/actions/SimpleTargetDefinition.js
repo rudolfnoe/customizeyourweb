@@ -1,12 +1,9 @@
 with(customizeyourweb){
 (function(){
    const ATTRITBUTES_FOR_XPATH = "name, id, href";
-   const SLASH_REPLACE_REG_EXP = /\//g;
-   const WORD_REG_EXP = /\w+/;
+   const SLASH_REPLACE_REG_EXP = /\//g
+   const WORD_REG_EXP = /\w+/
    
-   /*
-    * TODO If attribute contains quotes errors occurs
-    */
    function SimpleTargetDefinition(tagName){
       this.AbstractTargetDefinition()
       //Map with attribute / value pairs
@@ -20,29 +17,28 @@ with(customizeyourweb){
       if(attrName=="form"){
          return element.form?element.form.name:null
       }else if(attrName=="text"){
-         return this.getTextContent(element); 
+         return this.getTextContent(element) 
       }
-      var attrValue = element.getAttribute(attrName);
+      var attrValue = element.getAttribute(attrName)
       if(!attrValue)
-         attrValue = element[attrName];
-      return attrValue;
+         attrValue = element[attrName]
+      return attrValue
    }
    
    SimpleTargetDefinition.getTextContent = function(element){
       //Remove whithespaces
       var result = element.textContent.replace("\n", " ")
       result = result.replace(/\t/g, "")
-      result = result.replace(/["]/g, "&quot;")
       if(!CywUtils.isMlbActive()){
          return result
       }
       var idSpans = DomUtils.getElementsByTagNameAndAttribute(element, "span", "mlb_binding_key", "*")
       if(idSpans.length==0){
-         return result;
+         return result
       }else{
-         var id = idSpans[0].textContent;
-         var indexOfId = result.lastIndexOf(id);
-         return result.substring(0, indexOfId);
+         var id = idSpans[0].textContent
+         var indexOfId = result.lastIndexOf(id)
+         return result.substring(0, indexOfId)
       }
    }
    
@@ -76,7 +72,7 @@ with(customizeyourweb){
          var attrCounter = 0
          for(var attrName in this.attributeDefinitions){
             if(!ArrayUtils.contains(ATTRITBUTES_FOR_XPATH, attrName) && attrName!="text")
-               continue;
+               continue
             if(attrCounter==0)
                xPathExp += "["
             else            
@@ -133,29 +129,26 @@ with(customizeyourweb){
             var attrMatches = true
             for (var attrName in this.attributeDefinitions) {
                if(ArrayUtils.contains(ATTRITBUTES_FOR_XPATH, attrName))
-                  continue;
+                  continue
 
                var attrValueDef = this.attributeDefinitions[attrName]
                var currentAttrValue = SimpleTargetDefinition.getAttributeValue(potTarget, attrName) 
 
                if(this.isAttrValuePrefixDef(attrValueDef) && 
                   StringUtils.startsWith(currentAttrValue, this.getAttributeValueDefPrefix(attrValueDef))){
-                     continue;
+                     continue
                }else if(attrValueDef==currentAttrValue){
-                  continue;
+                  continue
                }
                
                attrMatches = false
-               break;
+               break
             }
             if(attrMatches)
                resultSet.push(potTarget)
          }
-
-         if(resultSet.length>0 && this.position!=null){
-            if(this.position=="last"){
-               return new Array(resultSet[resultSet.length-1])
-            }else if(resultSet.length>=this.position)
+         if(this.position!=null){
+            if(resultSet.length>=this.position)
                resultSet = new Array(resultSet[this.position-1])
             else
                resultSet = []
@@ -164,7 +157,7 @@ with(customizeyourweb){
       },
       
       isAttrValuePrefixDef: function(attrValueDefinition){
-         return StringUtils.endsWith(attrValueDefinition, '*');
+         return StringUtils.endsWith(attrValueDefinition, '*')
       }
       
    }

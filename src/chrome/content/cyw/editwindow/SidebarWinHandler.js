@@ -4,18 +4,12 @@ with(customizeyourweb){
 	const EDIT_WIN_SHORTCUTS = "EDIT_WIN_SHORTCUTS";
    const ACTION_SELECTION_CHANGEND_EVENT = "ACTION_SELECTION_CHANGEND_EVENT";
 	
-   var unloadHandler = {handleEvent: function(){CywSidebarWinHandler.handleUnexpectedUnload();}};
+   var unloadHandler = {handleEvent: function(){CywSidebarWinHandler.handleUnexpectedUnload()}}
    
    function byId(id){
       return document.getElementById(id)
    }
    
-   /*
-    * Handler for Sidebar window
-    * ENHANCEMENT: Add small buttons for modifying URL Patterns
-    * ENHANCEMENT: Add possibility to reload and re-run script during editing (Update View)
-    * ENHANCEMENT: Don't show generic scripts (pattern "*") at the top position of the scripts select box
-    */
 	var CywSidebarWinHandler = {
       //Variables
       actionsTreeView: null,
@@ -40,7 +34,6 @@ with(customizeyourweb){
        * @retuns if add or update was successfull 
        */
       addOrUpdateAction: function(action, actionTargetWindow){
-         Assert.notNull(action.getId(), "Action id is null")
       	if(byId('includePatterns').itemCount==0){
       		this.setUrlPatternWithMostLikely(actionTargetWindow)
       	}
@@ -51,6 +44,7 @@ with(customizeyourweb){
       		return false
       	}
       	this.setMessage("")
+         currentScript.setActionId(action)
          this.actionsTreeView.addOrUpdateAction(action)
          return true
       },
@@ -79,7 +73,7 @@ with(customizeyourweb){
       },
 
       addShortcut: function(tabSCM, keyCombination, shortcutTarget){
-         tabSCM.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS);
+         tabSCM.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS)
          this.shortcutManager.addShortcut(keyCombination, shortcutTarget, null, EDIT_WIN_SHORTCUTS)
       },
       
@@ -88,44 +82,11 @@ with(customizeyourweb){
             this.saveScript(sidebarClosedAbnormal)
          }else{
             if(this.isScriptModified())
-               this.reloadContentIfWanted(this.getTargetWin(), this.currentScriptBackup);
+               this.reloadContentIfWanted(this.getTargetWin(), this.currentScriptBackup)
             this.getEditScriptHandler().cancelEditing(!sidebarClosedAbnormal)
          }
       },
       
-      /*
-       * Checks whether the current script has a Listview defined prio to a Preview subwindow
-       * as this causes that the preview will not be displayed after page load
-       */
-      checkListViewBeforePreview: function(){
-         var hasListViewActionWithFocusOnLoad = false
-         var actionIter = new ActionIterator(this.getActions())
-         while (actionIter.hasNext()) {
-            var action = actionIter.next()
-            if(ObjectUtils.instanceOf(action, ListViewAction) &&
-               action.isFocusOnLoad()){
-               hasListViewActionWithFocusOnLoad = true
-            }
-            if(ObjectUtils.instanceOf(action, InsertSubwindowAction) &&
-               action.isPreviewBehavior() &&
-               action.isListviewTriggerEvent() &&
-               hasListViewActionWithFocusOnLoad){
-                  var promptReply = PromptService.confirmYesNo(window, "Listview before Insert Subwindow?", 
-                                                          "The insert subwindow action must be placed before the listview action in the actions list " + 
-                                                          "in order that the preview works properly.  Would you like to correct this?")
-                  if(promptReply==PromptReply.NO){
-                     return true
-                  }else{
-                     return false
-                  }
-             }
-         }
-         return true
-      },
-      
-      /*
-       * TODO Check if warning should be displayed for isolate action
-       */
       checkTargetDefinitionForAction: function(event){
          var actionTreeViewItem = event.item
          if(actionTreeViewItem.hasMessage() || !ObjectUtils.instanceOf(actionTreeViewItem, AbstractActionTreeItem)){
@@ -133,7 +94,6 @@ with(customizeyourweb){
          }
          var action = actionTreeViewItem.getAction()
          if(!ObjectUtils.instanceOf(action, AbstractTargetedAction) ||
-            ObjectUtils.instanceOf(action, IfElementExistsAction) ||
             ObjectUtils.instanceOf(action, RemoveAction) ||
             ObjectUtils.instanceOf(action, CutAction)){
                return
@@ -155,7 +115,7 @@ with(customizeyourweb){
       },
       
       clearIncludeAndExcludePatterns: function(){
-         this.includeUrlPatternsELB.setItems([], []);
+         this.includeUrlPatternsELB.setItems([], [])
          this.excludeUrlPatternsELB.setItems([], [])
       },
       
@@ -168,9 +128,9 @@ with(customizeyourweb){
       },
       
       deleteScript: function(){
-         if(!this.isConfirmDeleteScript()){
-            return
-         }
+      	var confirm = PromptService.confirmYesNo(window, "Delete Script?", "Would you like to delete the currently selected script?")
+      	if(confirm==PromptReply.NO)
+      	   return
       	var scriptML = byId('scripts')
       	var scriptId = scriptML.value
       	this.getEditScriptHandler().deleteScript(scriptId)
@@ -187,16 +147,15 @@ with(customizeyourweb){
          }
          this.initWinWithScript(newSelItem.value)
          //Then ajust ML 
-      	scriptML.removeItemAt(selIndex);
+      	scriptML.removeItemAt(selIndex)
          //Select new item in the list
       	scriptML.selectedItem = newSelItem
          
       },
       
       doOnload: function(){
-         this.initWindow();
+         this.initWindow()
          window.addEventListener("beforeunload", unloadHandler, true)
-         byId('scriptDisabled').addEventListener('CheckboxStateChange', function(){CywSidebarWinHandler.handleScriptDisabledChanged()}, false)
       },
       
       editAction: function(){
@@ -205,7 +164,7 @@ with(customizeyourweb){
          try{
             var modifiedAction = this.getEditScriptHandler().doEditAction(selectedAction, this.getCurrentScript())
          }catch(e){
-            Log.logError(e);
+            Log.logError(e)
             this.setMessage(e.message, Severity.ERROR)
          }
          if(modifiedAction!=null)
@@ -217,9 +176,6 @@ with(customizeyourweb){
          byId(id).focus()
       },
       
-      /*
-       * Returns array list of current actions
-       */
       getActions: function(){
          return this.actionsTreeView.getActions() 
       },
@@ -245,7 +201,6 @@ with(customizeyourweb){
             currentScript.setActions(this.actionsTreeView.getActions())
             currentScript.setLoadEventType(byId('loadEventType').value)
             currentScript.setBehaviorOnMutationEvent(byId('behaviorOnMutationEvent').value)
-            currentScript.setApplyToTopWindowsOnly(byId('onlyToTopWindowCB').checked)
             return currentScript
          }catch(e){
             CywUtils.logError(e)
@@ -275,14 +230,14 @@ with(customizeyourweb){
             byId('copyActionCmd').setAttribute('disabled', "false")
             byId('cutActionCmd').setAttribute('disabled', "false")
             byId('moveUpCmd').setAttribute('disabled', "false")
-            byId('moveDownCmd').setAttribute('disabled', "false");
+            byId('moveDownCmd').setAttribute('disabled', "false")
             byId('removeActionCmd').setAttribute('disabled', "false")
          }else{
             byId('copyActionCmd').setAttribute('disabled', "true")
             byId('cutActionCmd').setAttribute('disabled', "true")
             byId('moveUpCmd').setAttribute('disabled', "true")
             byId('moveDownCmd').setAttribute('disabled', "true")
-            byId('removeActionCmd').setAttribute('disabled', "true");
+            byId('removeActionCmd').setAttribute('disabled', "true")
             byId('editActionCmd').setAttribute('disabled', "true")
          }
          
@@ -294,7 +249,7 @@ with(customizeyourweb){
          }
 
          if(selectedAction && selectedItem.hasMessage()){
-            var message = selectedItem.getMessage();
+            var message = selectedItem.getMessage()
             byId('dialogheader').setMessage(message.getText(), message.getSeverity())
          }
                
@@ -306,7 +261,7 @@ with(customizeyourweb){
             var targetFound = this.getEditScriptHandler().highlightActionTargets(this.getCurrentScript(), selectedAction.getTargetDefinition())
             if(!targetFound && !selectedItem.hasMessage()){
                var errorMessage = ScriptErrorHandler.getErrorMessage(ErrorConstants.TARGET_NOT_FOUND, 
-                  [selectedAction.getTargetDefinition().getDefinitionAsString()]);
+                  [selectedAction.getTargetDefinition().getDefinitionAsString()])
                byId('dialogheader').setWarningMessage(errorMessage)
             }
          }
@@ -314,11 +269,6 @@ with(customizeyourweb){
          //Notify listeners
          this.notifyListeners({type:ACTION_SELECTION_CHANGEND_EVENT, selectedAction:selectedAction})
           
-      },
-      
-      handleScriptDisabledChanged: function(){
-         var labelColor = byId('scriptDisabled').checked?"red":""
-         byId('scriptDisabled').style.color = labelColor
       },
       
       handleUrlPatternsChanged: function(){
@@ -337,7 +287,7 @@ with(customizeyourweb){
             }
             this.initWinWithScript(selectedScriptId)
          }
-         var selectedScript = this.idToScriptMap.get(selectedScriptId);
+         var selectedScript = this.idToScriptMap.get(selectedScriptId)
          byId('deleteScriptCmd').setAttribute('disabled', !selectedScript.isPersisted())
       },
       
@@ -368,18 +318,13 @@ with(customizeyourweb){
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+down", new CommandShortcut(byId('moveDownCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+v", new CommandShortcut(byId('pasteActionTreeClipboardCmd')))
          this.shortcutManager.addShortcutForElement('actionsTreeView', "Delete", new CommandShortcut(byId('removeActionCmd')))
-         this.shortcutManager.addShortcutForElement('actionsTreeView', "ctrl+z", Utils.bind(function(){this.undoLastCommand()}, this))
       },
       
       initWindow: function(){
          //Store sidebar context
          this.sidebarContext = Application.storage.get(CywCommon.CYW_EDIT_CONTEXT_STORAGE_ID, null)
-         if(this.sidebarContext==null){
-            this.setMessage('Press F10 to switch into edit mode.', Severity.WARNING)
-            return
-         }else{
-            this.setMessage("")
-         }
+         if(this.sidebarContext==null)
+            throw new Error('No edit context in application storage')
          
          //initShortcuts
          this.initShortcuts()
@@ -392,7 +337,7 @@ with(customizeyourweb){
          this.sortScripts(scripts)
          for (var i = 0; i < scripts.size(); i++) {
             var script = scripts.get(i)
-            var isAppliedScript = script.matchesWinOrSubwin(this.getTargetWin()) && !script.isDisabled()
+            var isAppliedScript = script.matchesWinOrSubwin(this.getTargetWin())
             if(firstMatchingScriptIndex == -1 && isAppliedScript){
                firstMatchingScriptIndex = i
             }
@@ -404,7 +349,7 @@ with(customizeyourweb){
          var urlPatternProposalsML = byId('urlPatternProposals')
          DomUtils.iterateWindows(targetWin, function(subWin){
             var urlPatterns = UrlUtils.createUrlPatterns(subWin.location.href)
-            urlPatterns.reverse();
+            urlPatterns.reverse()
             ControlUtils.appendItemsToMenulist(urlPatternProposalsML, urlPatterns, urlPatterns)
          })
          //set crop center for better view
@@ -432,7 +377,7 @@ with(customizeyourweb){
          }
          
          //First init win so that init is not done twice via selection of menulist
-         this.initWinWithScript(selectedScriptId, this.sidebarContext.currentScriptBackup);
+         this.initWinWithScript(selectedScriptId, this.sidebarContext.currentScriptBackup)
          ControlUtils.selectMenulistByValue(scriptML, selectedScriptId)
       },
       
@@ -453,14 +398,13 @@ with(customizeyourweb){
          //set other options
          byId('loadEventType').value = currentScript.getLoadEventType()
          byId('behaviorOnMutationEvent').value = currentScript.getBehaviorOnMutationEvent()
-         byId('onlyToTopWindowCB').checked = currentScript.isApplyToTopWindowsOnly()
          
          //setting of include/exclude patterns
          this.clearIncludeAndExcludePatterns()
          if(currentScript.isPersisted()){
             var includePatternStrings = currentScript.getIncludeUrlPatternStrings()
             this.includeUrlPatternsELB.setItems(includePatternStrings, includePatternStrings)
-            var excludePatternStrings = currentScript.getExcludeUrlPatternStrings();
+            var excludePatternStrings = currentScript.getExcludeUrlPatternStrings()
             this.excludeUrlPatternsELB.setItems(excludePatternStrings, excludePatternStrings)
          }else if(byId('includePatterns').itemCount==0 && !DomUtils.containsFrames(this.sidebarContext.targetWin)){
             this.setUrlPatternWithMostLikely(this.sidebarContext.targetWin)
@@ -472,6 +416,7 @@ with(customizeyourweb){
          this.actionsTreeView.addListener("add", this.checkTargetDefinitionForAction, this)   
          this.actionsTreeView.addListener("update", this.checkTargetDefinitionForAction, this)
          this.actionsTreeView.setActions(currentScript.getActions(), ScriptErrorHandler.getErrorsForScript(scriptId))
+         
          //After actions tree is filled shadowing fo
 
          //Save backup for detecting changes
@@ -490,15 +435,6 @@ with(customizeyourweb){
             }
          }
          return false
-      },
-      
-      /*
-       * Ask for confirmation of script deletion
-       * Seperate function for automatic testing (will be replaced during testing)
-       */
-      isConfirmDeleteScript: function(){
-         var confirm = PromptService.confirmYesNo(window, "Delete Script?", "Would you like to delete the currently selected script?")
-         return confirm==PromptReply.YES? true:false
       },
       
       isScriptModified: function(){
@@ -531,50 +467,37 @@ with(customizeyourweb){
       },
       
       removeAction: function(action){
-         if(action){
+         if(action)
             this.actionsTreeView.removeAction(action)
-         }else{
-            var action = this.actionsTreeView.getSelectedAction()
-            var currentScript = this.getCurrentScript();
-            var deleteActionCmd = new DeleteActionCommand(action, this.actionsTreeView, this.getTargetWin(), currentScript)
-            deleteActionCmd.deleteFromTree()
-            this.getEditScriptHandler().addToCommandHistory(deleteActionCmd);
-            this.getEditScriptHandler().actionDeleted(action, currentScript)
-         }
+         else
+            this.actionsTreeView.removeSelected(true)
       },
       
       retargetSelectedAction: function(newTargetDefinition){
          var selectedAction = this.actionsTreeView.getSelectedAction()   
          if(!selectedAction || !ObjectUtils.instanceOf(selectedAction, AbstractTargetedAction))
             return
-         selectedAction.setTargetDefinition(newTargetDefinition);
+         selectedAction.setTargetDefinition(newTargetDefinition)
          this.actionsTreeView.notifyActionUpdate(selectedAction)
       },
       
       saveScript: function(sidebarClosedAbnormal){
-         this.includeUrlPatternsELB.stopEditing();
-         var ok = this.checkListViewBeforePreview()
-         if(!ok){
-            return
-         }
+         this.includeUrlPatternsELB.stopEditing()
          this.getEditScriptHandler().saveScript(this.getCurrentScript(), sidebarClosedAbnormal)
       },
       
       selectScript: function(){
-          var selectDialog = new Dialog(CywCommon.CYW_CHROME_URL+"editwindow/select_script_dialog.xul", "SelectScript", true, window, "all");
-          selectDialog.show();
-          var selectedScriptId = selectDialog.getNamedResult("scriptId");
-          if(!selectedScriptId){
-            return;
-          }
-          //Refer to top window as only this one has an initialized CywConfig
-          var selectedScript = top.customizeyourweb.CywConfig.getScriptById(selectedScriptId);
-          this.addScriptToML(selectedScript);
+          var selectDialog = new Dialog(CywCommon.CYW_CHROME_URL+"editwindow/select_script_dialog.xul", "SelectScript", true, window, "all")
+          selectDialog.show()
+          var selectedScript = selectDialog.getNamedResult("script") 
+          if(!selectedScript)
+            return
+          this.addScriptToML(selectedScript)
           ControlUtils.selectMenulistByValue(byId('scripts'), selectedScript.getIdAsString())
       },
       
       setUrlPatternWithMostLikely: function(win){
-         var mostLikelyPattern = UrlUtils.getMostLikelyPattern(win.location.href);
+         var mostLikelyPattern = UrlUtils.getMostLikelyPattern(win.location.href)
          byId('includePatterns').appendItem(mostLikelyPattern, mostLikelyPattern)
       },
       
@@ -605,16 +528,12 @@ with(customizeyourweb){
          })
       },
       
-      undoLastCommand: function(){
-         this.getEditScriptHandler().undoLastCommand()
-      },
-      
       updateAction: function(action){
-         this.setMessage(null);
-         this.actionsTreeView.updateAction(action);
+         this.setMessage(null)
+         this.actionsTreeView.updateAction(action)
       }
       
-   };
+   }
    
 	customizeyourweb.Namespace.bindToNamespace("customizeyourweb", "CywSidebarWinHandler", CywSidebarWinHandler)
 })()

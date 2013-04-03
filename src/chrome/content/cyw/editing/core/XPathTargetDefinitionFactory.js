@@ -25,20 +25,17 @@ with(customizeyourweb){
       createDefinitions: function(element){
          var predicateStrategies = this.getPredicateStrategies()
          var xPaths = {
-            id: this.createXPath(element, [predicateStrategies.id, predicateStrategies.defaultStrategy]),
-            name: this.createXPath(element, [predicateStrategies.name, predicateStrategies.defaultStrategy]),
-            href: this.createXPath(element, [predicateStrategies.href, predicateStrategies.defaultStrategy]),
-            defaultXPath: this.createXPath(element, [predicateStrategies.defaultStrategy])
+            id: XPathUtils.createXPath(element, [predicateStrategies.id, predicateStrategies.defaultStrategy]),
+            name: XPathUtils.createXPath(element, [predicateStrategies.name, predicateStrategies.defaultStrategy]),
+            href: XPathUtils.createXPath(element, [predicateStrategies.href, predicateStrategies.defaultStrategy]),
+            defaultXPath: XPathUtils.createXPath(element, [predicateStrategies.defaultStrategy])
          }
 
-         //TODO Check that exception handling!
          if(element.tagName=="A"){
             try{
+               //TODO check why this so often fails
                xPaths.text = XPathUtils.createXPath(element, [predicateStrategies.text, predicateStrategies.defaultStrategy])
-            }catch(e){
-               LOG.logDebug("XPathTargetDefinitionFactory.createDefinitions: Creation of XPath with text predicate failed: " + 
-                     e.message + "   Stack: " + e.stack);
-            }
+            }catch(e){}
          }
          
          for(var xPathType in xPaths){
@@ -53,17 +50,6 @@ with(customizeyourweb){
                result.push(new XPathTargetDefinition(xPath))
          }
          return result
-      },
-      
-      createXPath: function(element, predicateStrategyArr){
-         try{
-            return XPathUtils.createXPath(element, predicateStrategyArr)         
-         }catch(e){
-            //In case of pages with namespaces this can fail
-            //TODO Find the reason for this, this is only a workaround
-            CywUtils.logWarning("XPathTargetDefinition.createXPath: " + e.message)
-            return null
-         }
       },
       
       getPredicateStrategies: function(){

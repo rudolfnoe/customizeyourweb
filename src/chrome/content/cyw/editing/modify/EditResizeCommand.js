@@ -6,35 +6,36 @@ with(customizeyourweb){
    EditResizeCommand.prototype = {
       constructor: EditResizeCommand,
       
-      /*
-       * REFACTOR Change EditScriptHandler that it decides wether to create or edit an action
-       * Then no extra handling here an in the wrapper command is neccessary
-       */
       doCreateAction: function(editContext){
          var element = editContext.getTargetElement()
+         this.setTargetElement(element)
          var commandData = editContext.getCommandData()
-         var existingAction = this.getExistingAction(ModifyAction, editContext.getDefaultTargetDefinition())
+         var existingAction = this.getExistingAction(ModifyAction, editContext.getTargetDefinition())
          var modifyAction = null, styles = null
          if(existingAction){
-            modifyAction = ObjectUtils.deepClone(existingAction)
-            styles = modifyAction.getStyles()
+            modifyAction = existingAction
+            styles = existingAction.getStyles()
          }else{
-            modifyAction = new ModifyAction(editContext.getNextActionId(), editContext.getDefaultTargetDefinition())
+            modifyAction = new ModifyAction(editContext.getTargetDefinition())
             styles = {}
          }
+         var elementWrapper = new ElementWrapper(element)
          var hasChanged = false
          if(commandData.offsetWidth!=element.offsetWidth){
             hasChanged = true
-            styles.width = element.offsetWidth + "px"
+            var width = styles.width = element.offsetWidth + "px"
+            elementWrapper.setStyle("width", width, "important")
          }
          if(commandData.offsetHeight!=element.offsetHeight){
             hasChanged = true
-            styles.height = element.offsetHeight + "px"
+            var height = styles.height = element.offsetHeight + "px"
+            elementWrapper.setStyle("height", height, "important")
          }
          if(!hasChanged)
             return null
          modifyAction.setStyles(styles)
-         modifyAction.preview(editContext)
+         this.setChangeMemento(elementWrapper.getChangeMemento())
+         this.setAction(modifyAction)
          return modifyAction
       }
    }

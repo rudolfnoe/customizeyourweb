@@ -2,42 +2,42 @@ with(customizeyourweb){
 (function(){
    const CYW_SHORTCUT_MANAGER = "cywActionShortcutManager";
    const CYW_SHORTSTRING_MANAGER = "cywActionShortstringManager";
-   const CONTEXT_IDS = [CYW_SHORTCUT_MANAGER, CYW_SHORTSTRING_MANAGER];
+   const CONTEXT_IDS = [CYW_SHORTCUT_MANAGER, CYW_SHORTSTRING_MANAGER]
    
    function AbstractShortcutAction(){
+      this.AbstractAction()
       this.combinedKeyCode = null
       this.shortString = null
       this.t_shortcutManagerClientId = null
       //Reference to cywContext need as cyw is need on shortcut execution
-      this.t_cywContext = null
+      this.t_cywContext = null      
    }
    
    //Static methods
    AbstractShortcutAction.getShortcutManager = function(targetWin){
       var contentWin = targetWin.top
       var scm = TabContextManager.getContext(contentWin, CYW_SHORTCUT_MANAGER)
-      if(scm == null){
+      if(scm == null)
          scm = TabContextManager.setContext(contentWin, CYW_SHORTCUT_MANAGER, 
-                                            new ShortcutManager(Firefox.getBrowserForContentWin(targetWin), "keydown", false));
-      }
-      return scm;
+                                            new ShortcutManager(Firefox.getBrowserForContentWin(targetWin), "keydown", false))
+      return scm
    }
    
    AbstractShortcutAction.getShortStringManager = function(targetWin){
       var contentWin = targetWin.top
       var ssm = TabContextManager.getContext(contentWin, CYW_SHORTSTRING_MANAGER)
-      if(ssm == null){
+      if(ssm == null)
          ssm = TabContextManager.setContext(contentWin, CYW_SHORTSTRING_MANAGER, 
             new ShortStringManager(Firefox.getBrowserForContentWin(targetWin), 
                                     CywConfig.getPref("shortcut.executionDelay"), 
-                                    CywConfig.getPref("keys.blockKeyboardInputForEnteringShortString")));
-      }
-      return ssm;
+                                    CywConfig.getPref("keys.blockKeyboardInputForEnteringShortString")))
+      return ssm
    }
    
    //Member methods
    AbstractShortcutAction.prototype = {
       constructor: AbstractShortcutAction,
+      AbstractShortcutAction: AbstractShortcutAction,
 
       getCombinedKeyCode: function(){
          return this.combinedKeyCode
@@ -59,8 +59,9 @@ with(customizeyourweb){
          }
       },
       
-      /*REFACTOR Better names needed*/
+      /*TODO refactor, in case renaming of methods for better understanding*/
       abstractPerform: function(cywContext){
+         //TODO refactor!!!
          var result = this.performShortcut(cywContext)
          if(!result)
             return ShortcutManager.SUPPRESS_KEY
@@ -102,8 +103,8 @@ with(customizeyourweb){
          for (var i = 0; i < CONTEXT_IDS.length; i++) {
             var scm = TabContextManager.getContext(contentWin, CONTEXT_IDS[i])
             if(scm != null){
-               scm.destroy();
-               TabContextManager.removeContext(contentWin, CONTEXT_IDS[i]);
+               scm.destroy()
+               TabContextManager.removeContext(contentWin, CONTEXT_IDS[i])
             }
          }
       },
@@ -113,8 +114,9 @@ with(customizeyourweb){
       },
       
       superCleanUp: function(cywContext){
-         //TODO Mem leak
+         //Delete cywContext to avoid memory leak
          this.t_cywContext = null
+      
          var targetWin = cywContext.getTargetWindow()
          if(targetWin.top == targetWin)
             this.destroyAllShortcutManager(targetWin)
@@ -165,6 +167,6 @@ with(customizeyourweb){
       }
    }
 
-   Namespace.bindToNamespace("customizeyourweb", "AbstractShortcutAction", AbstractShortcutAction);
+   Namespace.bindToNamespace("customizeyourweb", "AbstractShortcutAction", AbstractShortcutAction)
 })()
 }

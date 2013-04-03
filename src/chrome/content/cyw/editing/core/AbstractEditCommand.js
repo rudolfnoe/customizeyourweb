@@ -2,52 +2,47 @@ with(customizeyourweb){
 (function(){
    
 	function AbstractEditCommand(){
+      this.action = null
    }
    
    AbstractEditCommand.prototype = {
       constructor: AbstractEditCommand,
       AbstractEditCommand: AbstractEditCommand,
       
-      doCreateAction: function(){
-         throw new Error('Must be implemented')
+      //TODO finish implementation
+      disableMenuItem: function(commandId, targetElement){
+         return false 
       },
+      
+   	getAction: function(){
+   		return this.action
+   	},
 
-      doEditAction: function(){
-         throw new Error('Must be implemented')
+      setAction: function(action){
+   		this.action = action
+   	},
+   	
+      doCreateAction: function(){
+         throw new Error('Not yet implemented')
       },
       
       /*
-       * Returns already exisiting action based on the action type and the target defintion
        * @param function actionType: Constructor Function
-       * @param AbstractTargetDefinition targetdefinition: The target definition of the action 
-       * @returns AbstractAction: The action according the provided action type and target definition
        */
       getExistingAction: function(actionType, targetDefinition){
-         Assert.paramsNotNull(arguments)
+         if(!actionType || !targetDefinition)
+            throw new Error ('NullPointerException')
+         //TODO maybe consider first and second level actions
          var actions = EditScriptHandler.getSidebarWinHandler().getActions()
-         var actionIter = new ActionIterator(actions)
-         var exisitingAction = null
-         while(actionIter.hasNext()){
-            var action = actionIter.next()
-            if(action.constructor==actionType && ObjectUtils.deepEquals(action.getTargetDefinition(), targetDefinition)){
-               exisitingAction = action
-            }
+         for (var i = actions.size()-1; i >= 0; i--) {
+            var action = actions.get(i)
+            if(action.constructor==actionType && ObjectUtils.deepEquals(action.getTargetDefinition(), targetDefinition))
+               return action
          }
-         return exisitingAction
       },
       
-      /*
-       * Default Implementation
-       * Use the new undo mechanism of IPreviableAction
-       * @param EditContext editContext
-       * @param AbstractAction action: The action which was create/edited by the step which should be undone
-       * @param AbstractAction actionBackup: Only provided for undoing editing. This is the action in the state before it was modified
-       */
-      undo: function(editContext, action, actionBackup){
-         action.undo(editContext)
-         if(actionBackup){
-            actionBackup.preview(editContext)
-         }
+      undo: function(){
+         //Empty default implementation
       }
    }
    

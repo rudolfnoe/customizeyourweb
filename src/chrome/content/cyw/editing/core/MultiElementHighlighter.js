@@ -14,11 +14,10 @@ with (customizeyourweb) {
    }
 
    MultiElementHighlighter.prototype = {
-      highlight: function(elements, maxItems){
-         maxItems = maxItems?maxItems:99999
-         for (var i = 0; i < elements.length && i<=maxItems; i++) {
+      highlight: function(elements){
+         for (var i = 0; i < elements.length; i++) {
             var highlighter = new FrameHighlighter(this.showNumber, this.color)
-            this.highlighters.push(highlighter);
+            this.highlighters.push(highlighter)
             highlighter.highlight(elements[i], i+1)
          }
       },
@@ -31,7 +30,7 @@ with (customizeyourweb) {
       },
       
       updateHighlighting: function(newElementsToHighlight){
-         this.unhighlight();
+         this.unhighlight()
          this.highlight(newElementsToHighlight)
       }
    };

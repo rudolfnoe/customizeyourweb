@@ -3,7 +3,7 @@
 <overlay id="customizeyourweb" 
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/x-javascript" src="./common/error/ErrorLogHandler.js"></script>
-    <!-- script type="application/x-javascript" src="CywCommon.js"></script-->
+    <script type="application/x-javascript" src="CywCommon.js"></script>
     <script type="application/x-javascript" src="cywOverlay.js"></script>
     
     <broadcasterset id="mainBroadcasterSet"> 
@@ -33,8 +33,6 @@
       <command id="customizeyourweb_insertJSCmd" label="Insert JavaScript" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertHTMLCmd" label="Insert HTML" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_insertStyleSheetCmd" label="Insert Stylesheet" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
-      <command id="customizeyourweb_insertSubwindowCmd" label="Insert Subwindow" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
-      <command id="customizeyourweb_isolateCmd" label="Isolate" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_listViewCmd" label="List View" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_macroShortcutCmd" label="Macro Shortcut" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_modifyCmd" label="Modify" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>
@@ -42,10 +40,10 @@
                accesskey="c"/>
       <command id="customizeyourweb_openIssueList" label="Report Bug" oncommand="customizeyourweb.EventHandler.openIssueList()" 
                accesskey="b"/>
-      <command id="customizeyourweb_pasteBeforeCmd" label="Paste Before" where="before" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
-      <command id="customizeyourweb_pasteAfterCmd" label="Paste After" where="after" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
-      <command id="customizeyourweb_pasteFirstChildCmd" label="Paste as First Child" where="firstChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
-      <command id="customizeyourweb_pasteLastChildCmd" label="Paste as Last Child" where="lastChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteBeforeCmd" label="Paste before" where="before" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteAfterCmd" label="Paste after" where="after" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteFirstChildCmd" label="Paste as first child" where="firstChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
+      <command id="customizeyourweb_pasteLastChildCmd" label="Paste as last child" where="lastChild" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)" observes="customizeyourweb_pasteBC"/>   	
       <command id="customizeyourweb_removeCmd" label="Remove" oncommand="customizeyourweb.EditScriptHandler.doCreateAction(event)"/>   	
       <command id="customizeyourweb_retargetActionCmd" label="Retarget Action" oncommand="customizeyourweb.EditScriptHandler.retargetAction()" disabled="true"/>   	
       <command id="customizeyourweb_saveErrorLogToDisc" label="Save Log to Disc..." oncommand="customizeyourweb.ErrorLogHandler.saveErrorLogToDisc()"/>   	
@@ -56,13 +54,12 @@
    
    <popupset>
       <menupopup id="cywEditPopup" >
-      	<menuitem id="customizeyourweb_removeMI" command="customizeyourweb_removeCmd" acceltext="R"/>
-      	<menuitem id="customizeyourweb_modifyMI" command="customizeyourweb_modifyCmd" acceltext="M"/>
-      	<menuitem id="customizeyourweb_isolateMI" command="customizeyourweb_isolateCmd" acceltext="I"/>
       	<menuitem id="customizeyourweb_clickMI" command="customizeyourweb_clickCmd" acceltext="C"/>
       	<menuitem id="customizeyourweb_focusMI" command="customizeyourweb_focusCmd" acceltext="F"/>
+      	<menuitem id="customizeyourweb_modifyMI" command="customizeyourweb_modifyCmd" acceltext="M"/>
+      	<menuitem id="customizeyourweb_removeMI" command="customizeyourweb_removeCmd" acceltext="R"/>
       	<menuitem id="customizeyourweb_shortcutMI" command="customizeyourweb_shortcutCmd" acceltext="S"/>
-         <menu label="Other Shortcuts">
+         <menu label="Other shortcuts">
             <menupopup>
             	<menuitem id="customizeyourweb_macroShortcutMI" command="customizeyourweb_macroShortcutCmd"  acceltext="O"/>
             	<menuitem id="customizeyourweb_listViewMI" command="customizeyourweb_listViewCmd"  acceltext="L"/>
@@ -70,7 +67,17 @@
             </menupopup>
          </menu>
          <menuseparator/>
-         <menuitem id="customizeyourweb_copyMI" command="customizeyourweb_copyCmd"  acceltext="Ctrl+C"/>
+         <menu label="Insert">
+            <menupopup>
+            	<menuitem id="customizeyourweb_insertJSMI" command="customizeyourweb_insertJSCmd" acceltext="J"/>
+            	<menuitem id="customizeyourweb_insertHTMLMI" command="customizeyourweb_insertHTMLCmd" acceltext="H"/>
+            	<menuitem id="customizeyourweb_insertStyleSheetMI" command="customizeyourweb_insertStyleSheetCmd" acceltext="Y"/>
+            </menupopup>
+         </menu>
+         <menuseparator/>
+         	<menuitem id="customizeyourweb_ifElementExistsMI" command="customizeyourweb_ifElementExistsCmd" acceltext="I"/>
+         <menuseparator/>
+      	<menuitem id="customizeyourweb_copyMI" command="customizeyourweb_copyCmd"  acceltext="Ctrl+C"/>
       	<menuitem id="customizeyourweb_cutMI" command="customizeyourweb_cutCmd" acceltext="Ctrl+X"/>
          <menu label="Paste..." observes="customizeyourweb_pasteBC">
             <menupopup>
@@ -80,21 +87,6 @@
             	<menuitem id="customizeyourweb_pasteLastChildMI" command="customizeyourweb_pasteLastChildCmd" />
             </menupopup>
          </menu>
-         <menuseparator/>
-         <menu label="Insert Code">
-            <menupopup>
-            	<menuitem id="customizeyourweb_insertJSMI" command="customizeyourweb_insertJSCmd" acceltext="J"/>
-            	<menuitem id="customizeyourweb_insertHTMLMI" command="customizeyourweb_insertHTMLCmd" acceltext="H"/>
-            	<menuitem id="customizeyourweb_insertStyleSheetMI" command="customizeyourweb_insertStyleSheetCmd" acceltext="Y"/>
-            </menupopup>
-         </menu>
-         <menu label="Insert Element">
-            <menupopup>
-            	<menuitem id="customizeyourweb_insertSubwindowMI" command="customizeyourweb_insertSubwindowCmd" acceltext="W"/>
-            </menupopup>
-         </menu>
-         <menuseparator/>
-         	<menuitem id="customizeyourweb_ifElementExistsMI" command="customizeyourweb_ifElementExistsCmd" acceltext="E"/>
          <menuseparator/>
       	<menuitem id="customizeyourweb_retargetActionMI" command="customizeyourweb_retargetActionCmd" acceltext="T"/>
       </menupopup>

@@ -9,11 +9,6 @@
 (function(){
    const STRINGBUNDLE_ID = "jsStrings"
    
-   /*
-    * Handler for prefs dialog
-    * ENHANCEMENT: Add config option for default target def style 
-    * ENHANCEMENT: Add id to script overview 
-    */
    var CywPrefsDialogHandler = {
       //Shortcutmanager for ScriptsTree-Element
       scriptsTreeScm: null,
@@ -94,7 +89,7 @@
       },  
       
       saveKeyListbox: function(){
-         saveKeyListbox('keyListBox');
+         saveKeyListbox('keyListBox')
       }
    }
    
