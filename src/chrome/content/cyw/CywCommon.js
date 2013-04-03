@@ -5,7 +5,7 @@
    var CywCommon = {
       
 		//Constants
-      CYW_VERSION: "0.4.3.4Build201202102300",
+      CYW_VERSION: "0.4.3.5Build201304032200",
       
 		CHROME_CONTENT_URL: "chrome://customizeyourweb/content/",
 		CYW_CHROME_URL: "chrome://customizeyourweb/content/cyw/",
@@ -30,11 +30,13 @@
 			
          try{
    			//Load script loader all the rest
-   			var tempScriptLoaderNS = new Object()
+            if (!window.customizeyourweb) {
+               window.customizeyourweb = new Object()
+            }
             var sm = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].
                         getService(Components.interfaces.mozIJSSubScriptLoader)
-            sm.loadSubScript(this.CHROME_CONTENT_URL + "common/script/ScriptLoader.js", tempScriptLoaderNS);
-   			var scriptLoader = tempScriptLoaderNS.ScriptLoader
+            sm.loadSubScript(this.CHROME_CONTENT_URL + "common/script/ScriptLoader.js", window.customizeyourweb);
+            var scriptLoader = window.customizeyourweb.ScriptLoader            
             scriptLoader.loadBaseClasses(this.CHROME_CONTENT_URL + "common", "customizeyourweb")
    			var exclude = ["Shortcutmanager.js"]
    			scriptLoader.loadScripts(this.CHROME_CONTENT_URL+"common/", "customizeyourweb", null, exclude, true)
